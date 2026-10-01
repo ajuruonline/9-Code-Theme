@@ -1,0 +1,55 @@
+9 POST MANAGER v4.0.0 — WORDPRESS-NATIVE FRONT-END WORKSPACE
+Release date: 22 August 2026
+
+PURPOSE
+9 Post Manager is now designed to remain useful even when Advanced Custom Fields is not installed. WordPress itself is the source of truth: post fields, Gutenberg/9 Elements content, taxonomies, registered/unregistered post meta, media and lightweight Site Fields. ACF is retained only as an optional legacy compatibility adapter.
+
+PRIMARY MOBILE WORKFLOW
+1. Browse an editable singular post/page/CPT on the front end.
+2. Tap the bottom-centre 9P control (beside 9C when Category Manager is active).
+3. 9P opens an isolated full-screen editing workspace above the theme/plugin UI.
+4. Work through compact tabs: Post, Site Fields, Content / Blocks, Media, Categories, Post Options / Plugins, optional Legacy ACF and Advanced.
+5. The Update button remains in a fixed bottom command dock; Phone Draft Recovery remains available for interruptions.
+6. Close from the persistent bottom Close control. After a successful save, closing refreshes the front page.
+
+WORDPRESS-NATIVE SITE FIELDS
+Administrators can define only the fields a post type needs without installing a field-builder. Supported v4 field types: text, long text, formatted text, URL, email, number, whole number, on/off, choice list, image and file. Definitions live in one Post Manager schema option; values are registered WordPress post meta and therefore remain normal WordPress data.
+
+POST OPTIONS / PLUGIN CONTROLS
+Post Manager surfaces native post options such as author, date/schedule, parent, menu order, template, post format, password, comments, pingbacks and sticky state. It also inventories discoverable post-specific plugin/meta data, including shallow settings arrays commonly used by side tabs, drawers and per-post overrides. Private plugin settings can be edited manually but are excluded from AI fill unless the owning plugin exposes a semantic 9CF provider.
+
+MEDIA
+The Media workspace includes the featured image and WordPress image attachments detected in saved post content. Images can be replaced through the Media Library. Content-image replacement creates a recovery snapshot before changing the stored post.
+
+9CF / AI
+9CF v2 remains the provider-neutral AI exchange contract. It works without ACF and continues to use stable field IDs plus numbered F001/F002 progress codes. Safe AI Apply retains per-field stale/conflict checks, validation, protected-field handling and an import audit trail.
+
+.9PM DESIGN
+Portable `.9pm` designs now load without ACF. New packages may use `field_contract` and stable 9CF field IDs. Elementor placeholders may use `{{field:alias}}`. Legacy `acf_contract`, ACF keys and `{{acf:alias}}` continue to work on older ACF sites.
+
+POST / CATEGORY BACKUP
+New `.9post.zip` backups contain post-owned data only; they do not bundle the theme, plugins or whole-site options.
+- One post: data only or post + media.
+- Category/term: all editable UI post types attached to that taxonomy, split automatically into 100-post parts.
+- Media archives store original attached files plus old generated-size URL mappings so WordPress can regenerate sizes and relink content after restore.
+- Site Field definitions travel with the backup and can be recreated by an administrator.
+- Taxonomy hierarchy is reconstructed when possible.
+- Sequential category parts repair cross-post URLs and hierarchical parents as later parts arrive.
+- Plugin provider hooks allow post-specific data stored outside post meta to opt into the package.
+
+RESTORE SAFETY
+The default mode is Safe Restore. It updates only a post already associated with the same source fingerprint, or the exact original post when restoring on the same site. It does not silently overwrite an unrelated post merely because the slug matches. An explicit Replace Matching Slug mode is available when desired; Duplicate creates new copies.
+
+Backup/restore safety includes post-data checksums, media checksums, archive/path validation, 256 MB archive guard, 64 MB per-media guard, ~220 MB media-payload guard, 4 MB manifest guard and 8 MB per-post JSON guard. Media ID relinking is semantic: ordinary numeric plugin values are never changed merely because they equal an attachment ID.
+
+SISTER WORKFLOW
+9 Category Manager remains the Structure sister and 9 Post Manager remains Content. When both are active, 9C and 9P sit together at bottom centre. v4 detects the current bottom-centre Nine Action Menu and lifts the administrator sister controls above it instead of covering it.
+
+LEGACY ACF
+Nothing intentionally deletes or migrates existing ACF data. If ACF is active, the old ACF editor/render bridge loads as compatibility functionality. If ACF is absent, the renderer module is not loaded and Post Manager's WordPress-native/9CF/.9pm workflow continues normally.
+
+BOUNDARIES
+Post Manager can generically manage WordPress core post data, Gutenberg, taxonomies, registered/unregistered post meta, Site Fields and post media. A third-party plugin that stores post data only in its own custom SQL tables or a remote service must expose a 9PM/9CF backup/field provider hook; v4 intentionally does not guess at arbitrary private storage.
+
+UPGRADE
+Install v4.0.0 over the existing 9 Post Manager plugin. Existing 9CF, `.9pm`, Category Manager and ACF compatibility data are retained. Take a normal hosting/site backup before the first production upgrade, then test one representative post backup/restore before relying on category-scale restore.

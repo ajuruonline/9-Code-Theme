@@ -1,0 +1,24 @@
+{
+  "format": "nine-ai-package/v2",
+  "target": {
+    "site_fingerprint": "COPY_FROM_FRESH_SITE_AI_FILE",
+    "manifest_hash": "COPY_FROM_FRESH_SITE_AI_FILE"
+  },
+  "package_name": "Lecturer Management Article",
+  "notes": "Create as draft for human review.",
+  "items": [
+    {
+      "entity": "post",
+      "operation": "upsert",
+      "post_type": "post",
+      "title": "Lecturer Management in the AI Era",
+      "slug": "lecturer-management-ai-era",
+      "status": "draft",
+      "excerpt": "A practical overview of managing lecturers with modern digital and AI-assisted workflows.",
+      "content": "<!-- wp:heading --><h2 class=\"wp-block-heading\">Introduction</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Replace this sample with the finished AI-created content.</p><!-- /wp:paragraph -->",
+      "terms": {"category": ["Lecturer Management"]},
+      "acf": {},
+      "meta": {"_nine_ai_source": "9 AI Manager"}
+    }
+  ]
+}

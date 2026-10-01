@@ -1,0 +1,29 @@
+{
+  "format": "9block",
+  "format_version": 1,
+  "slug": "nine-content-section",
+  "name": "Content Section",
+  "version": "1.0.0",
+  "description": "A clean reusable content section for 9Page.",
+  "job": "Present one titled content section.",
+  "category": "content",
+  "runtime": "declarative",
+  "fields": [
+    {
+      "key": "title",
+      "label": "Title",
+      "type": "text",
+      "default": "Section title"
+    },
+    {
+      "key": "content",
+      "label": "Content",
+      "type": "richtext",
+      "default": "Add your content here."
+    }
+  ],
+  "template": "<section class=\"n9be-content-section\"><h2>{{title}}</h2><div>{{content}}</div></section>",
+  "style": ".n9block-nine-content-section .n9be-content-section{padding:clamp(18px,4vw,34px);border:1px solid #dedede;border-radius:16px;background:#fff}.n9block-nine-content-section h2{margin-top:0}",
+  "semantic_role": "content",
+  "host_navigation": false
+}

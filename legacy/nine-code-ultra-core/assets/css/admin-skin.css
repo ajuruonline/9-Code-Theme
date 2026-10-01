@@ -1,0 +1,943 @@
+/*
+ * 9 Code Ultra Admin Workspace — v3.2 Ultron Five-Skin System
+ * Presentation-only wp-admin skin. It deliberately avoids changing plugin
+ * component layout primitives or the content canvas inside page/post editors.
+ */
+
+body.ncu-admin-skin{
+  --ncu-admin-canvas:#ffffff;
+  --ncu-admin-surface:#ffffff;
+  --ncu-admin-surface-2:#f7f7f7;
+  --ncu-admin-surface-3:#efefef;
+  --ncu-admin-text:#0a0a0a;
+  --ncu-admin-muted:#5c5c5c;
+  --ncu-admin-border:#d9d9d9;
+  --ncu-admin-border-strong:#b8b8b8;
+  --ncu-admin-shell:#070707;
+  --ncu-admin-shell-2:#141414;
+  --ncu-admin-shell-sub:#000000;
+  --ncu-admin-shell-hover:#1d1d1d;
+  --ncu-admin-shell-border:#2b2b2b;
+  --ncu-admin-shell-text:#ffffff;
+  --ncu-admin-shell-muted:#a7a7a7;
+  --ncu-admin-shell-active-bg:#ffffff;
+  --ncu-admin-shell-active-text:#070707;
+  --ncu-admin-focus:#000000;
+  --ncu-admin-danger:#b42318;
+  --ncu-admin-warning:#9a6700;
+  --ncu-admin-success:#1f7a3f;
+  --ncu-admin-info:#555555;
+  --ncu-admin-radius:10px;
+  --ncu-admin-shadow:0 8px 24px rgba(23,23,23,.07);
+  --ncu-admin-mono:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  --ncu-admin-ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --ncu-admin-canvas-pattern:none;
+  --ncu-command-bg:#0d1117;
+  --ncu-command-bg-2:#161b22;
+  --ncu-command-bg-3:#010409;
+  --ncu-command-text:#f5f5f5;
+  --ncu-command-muted:#949494;
+  --ncu-command-border:#353535;
+  --ncu-command-border-strong:#4e4e4e;
+  --ncu-command-hover:#252525;
+  background-color:var(--ncu-admin-canvas);
+  background-image:var(--ncu-admin-canvas-pattern);
+  color:var(--ncu-admin-text);
+  font-family:var(--ncu-admin-ui);
+}
+
+/* GitHub reference: cool repository canvas + dark code shell. */
+body.ncu-admin-skin.ncu-admin-skin--github{
+  --ncu-admin-canvas:#f8f8f8;
+  --ncu-admin-surface:#ffffff;
+  --ncu-admin-surface-2:#f8f8f8;
+  --ncu-admin-surface-3:#f1f1f1;
+  --ncu-admin-text:#232323;
+  --ncu-admin-muted:#626262;
+  --ncu-admin-border:#d6d6d6;
+  --ncu-admin-border-strong:#b7b7b7;
+  --ncu-admin-shell:#0d1117;
+  --ncu-admin-shell-2:#161b22;
+  --ncu-admin-shell-sub:#010409;
+  --ncu-admin-shell-hover:#252525;
+  --ncu-admin-shell-border:#353535;
+  --ncu-admin-shell-text:#f5f5f5;
+  --ncu-admin-shell-muted:#949494;
+  --ncu-admin-shell-active-bg:#f5f5f5;
+  --ncu-admin-shell-active-text:#0d1117;
+  --ncu-admin-focus:#232323;
+}
+
+/* Future Workspace: full dark, layered graphite, subtle technical grid. */
+body.ncu-admin-skin.ncu-admin-skin--future{
+  --ncu-admin-canvas:#090a0c;
+  --ncu-admin-surface:#111318;
+  --ncu-admin-surface-2:#0d0f13;
+  --ncu-admin-surface-3:#181b21;
+  --ncu-admin-text:#f6f6f6;
+  --ncu-admin-muted:#a7a7a7;
+  --ncu-admin-border:#2e2e2e;
+  --ncu-admin-border-strong:#464646;
+  --ncu-admin-shell:#050506;
+  --ncu-admin-shell-2:#0d0f12;
+  --ncu-admin-shell-sub:#020203;
+  --ncu-admin-shell-hover:#171a20;
+  --ncu-admin-shell-border:#2a2a2a;
+  --ncu-admin-shell-text:#fafafa;
+  --ncu-admin-shell-muted:#a1a1a1;
+  --ncu-admin-shell-active-bg:#f6f6f6;
+  --ncu-admin-shell-active-text:#090a0c;
+  --ncu-admin-focus:#ffffff;
+  --ncu-admin-shadow:0 14px 38px rgba(0,0,0,.30);
+  --ncu-admin-canvas-pattern:linear-gradient(rgba(255,255,255,.024) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.024) 1px,transparent 1px);
+  background-size:24px 24px;
+  --ncu-command-bg:#090a0c;
+  --ncu-command-bg-2:#111318;
+  --ncu-command-bg-3:#050506;
+  --ncu-command-text:#f6f6f6;
+  --ncu-command-muted:#a7a7a7;
+  --ncu-command-border:#2e2e2e;
+  --ncu-command-border-strong:#464646;
+  --ncu-command-hover:#181b21;
+}
+
+/* ChatGPT reference: warm, quiet, soft and content-forward. */
+body.ncu-admin-skin.ncu-admin-skin--chatgpt{
+  --ncu-admin-canvas:#f7f7f5;
+  --ncu-admin-surface:#ffffff;
+  --ncu-admin-surface-2:#f1f1ef;
+  --ncu-admin-surface-3:#e9e9e6;
+  --ncu-admin-text:#242421;
+  --ncu-admin-muted:#6b6b66;
+  --ncu-admin-border:#e2e2de;
+  --ncu-admin-border-strong:#c8c8c2;
+  --ncu-admin-shell:#171717;
+  --ncu-admin-shell-2:#242424;
+  --ncu-admin-shell-sub:#101010;
+  --ncu-admin-shell-hover:#2d2d2d;
+  --ncu-admin-shell-border:#353535;
+  --ncu-admin-shell-text:#f7f7f5;
+  --ncu-admin-shell-muted:#aaa9a3;
+  --ncu-admin-shell-active-bg:#343434;
+  --ncu-admin-shell-active-text:#ffffff;
+  --ncu-admin-focus:#242421;
+  --ncu-command-bg:#ffffff;
+  --ncu-command-bg-2:#f7f7f5;
+  --ncu-command-bg-3:#ffffff;
+  --ncu-command-text:#242421;
+  --ncu-command-muted:#6b6b66;
+  --ncu-command-border:#e2e2de;
+  --ncu-command-border-strong:#c8c8c2;
+  --ncu-command-hover:#f1f1ef;
+}
+
+/* Gemini reference: cool airy workspace with restrained intelligent focus. */
+body.ncu-admin-skin.ncu-admin-skin--gemini{
+  --ncu-admin-canvas:#f7f7f7;
+  --ncu-admin-surface:#ffffff;
+  --ncu-admin-surface-2:#efefef;
+  --ncu-admin-surface-3:#eeeeee;
+  --ncu-admin-text:#202124;
+  --ncu-admin-muted:#636363;
+  --ncu-admin-border:#d8d8d8;
+  --ncu-admin-border-strong:#bfbfbf;
+  --ncu-admin-shell:#1f2125;
+  --ncu-admin-shell-2:#2d2d2d;
+  --ncu-admin-shell-sub:#17191d;
+  --ncu-admin-shell-hover:#373737;
+  --ncu-admin-shell-border:#454545;
+  --ncu-admin-shell-text:#f8f9fa;
+  --ncu-admin-shell-muted:#b8b8b8;
+  --ncu-admin-shell-active-bg:#f2f2f2;
+  --ncu-admin-shell-active-text:#202124;
+  --ncu-admin-focus:#111111;
+  --ncu-admin-info:#111111;
+  --ncu-command-bg:#ffffff;
+  --ncu-command-bg-2:#f7f7f7;
+  --ncu-command-bg-3:#ffffff;
+  --ncu-command-text:#202124;
+  --ncu-command-muted:#636363;
+  --ncu-command-border:#d8d8d8;
+  --ncu-command-border-strong:#bfbfbf;
+  --ncu-command-hover:#efefef;
+}
+
+/* White Future: white canvas, black technical shell, fine dark linework. */
+body.ncu-admin-skin.ncu-admin-skin--white_future{
+  --ncu-admin-canvas:#ffffff;
+  --ncu-admin-surface:#ffffff;
+  --ncu-admin-surface-2:#f7f7f7;
+  --ncu-admin-surface-3:#efefef;
+  --ncu-admin-text:#0a0a0a;
+  --ncu-admin-muted:#5c5c5c;
+  --ncu-admin-border:#d9d9d9;
+  --ncu-admin-border-strong:#ababab;
+  --ncu-admin-shell:#070707;
+  --ncu-admin-shell-2:#141414;
+  --ncu-admin-shell-sub:#000000;
+  --ncu-admin-shell-hover:#1d1d1d;
+  --ncu-admin-shell-border:#2b2b2b;
+  --ncu-admin-shell-text:#ffffff;
+  --ncu-admin-shell-muted:#a7a7a7;
+  --ncu-admin-shell-active-bg:#ffffff;
+  --ncu-admin-shell-active-text:#070707;
+  --ncu-admin-focus:#000000;
+  --ncu-admin-canvas-pattern:linear-gradient(rgba(0,0,0,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.018) 1px,transparent 1px);
+  background-size:28px 28px;
+  --ncu-command-bg:#ffffff;
+  --ncu-command-bg-2:#fafafa;
+  --ncu-command-bg-3:#ffffff;
+  --ncu-command-text:#0a0a0a;
+  --ncu-command-muted:#5c5c5c;
+  --ncu-command-border:#d9d9d9;
+  --ncu-command-border-strong:#ababab;
+  --ncu-command-hover:#f2f2f2;
+}
+
+/* --- Shell ------------------------------------------------------------- */
+body.ncu-admin-skin #wpwrap,
+body.ncu-admin-skin #wpcontent,
+body.ncu-admin-skin #wpbody,
+body.ncu-admin-skin #wpbody-content{background-color:var(--ncu-admin-canvas);background-image:var(--ncu-admin-canvas-pattern)}
+body.ncu-admin-skin #wpcontent{min-height:100vh}
+body.ncu-admin-skin #wpfooter{color:var(--ncu-admin-muted);border-top:1px solid var(--ncu-admin-border);padding-top:13px}
+body.ncu-admin-skin #wpfooter a{color:var(--ncu-admin-text);text-decoration:none}
+body.ncu-admin-skin #wpfooter a:hover{text-decoration:underline}
+
+body.ncu-admin-skin #wpadminbar{
+  background:var(--ncu-admin-shell)!important;
+  border-bottom:1px solid var(--ncu-admin-shell-border);
+  box-shadow:0 1px 0 rgba(255,255,255,.03);
+}
+body.ncu-admin-skin #wpadminbar .ab-item,
+body.ncu-admin-skin #wpadminbar a.ab-item,
+body.ncu-admin-skin #wpadminbar > #wp-toolbar span.ab-label,
+body.ncu-admin-skin #wpadminbar > #wp-toolbar span.noticon{color:var(--ncu-admin-shell-text)!important}
+body.ncu-admin-skin #wpadminbar .ab-top-menu>li.hover>.ab-item,
+body.ncu-admin-skin #wpadminbar.nojq .quicklinks .ab-top-menu>li>.ab-item:focus,
+body.ncu-admin-skin #wpadminbar:not(.mobile) .ab-top-menu>li:hover>.ab-item,
+body.ncu-admin-skin #wpadminbar:not(.mobile) .ab-top-menu>li>.ab-item:focus{background:var(--ncu-admin-shell-2)!important;color:var(--ncu-admin-shell-text)!important}
+body.ncu-admin-skin #wpadminbar .menupop .ab-sub-wrapper,
+body.ncu-admin-skin #wpadminbar .shortlink-input{background:var(--ncu-admin-shell-2)!important;border:1px solid var(--ncu-admin-shell-border);box-shadow:0 14px 36px rgba(0,0,0,.28)}
+body.ncu-admin-skin #wpadminbar .quicklinks .menupop ul.ab-sub-secondary,
+body.ncu-admin-skin #wpadminbar .quicklinks .menupop ul.ab-sub-secondary .ab-submenu{background:var(--ncu-admin-shell)}
+body.ncu-admin-skin #wpadminbar .ab-submenu .ab-item{color:var(--ncu-admin-shell-text)!important}
+body.ncu-admin-skin #wpadminbar .ab-submenu .ab-item:hover,
+body.ncu-admin-skin #wpadminbar .ab-submenu .ab-item:focus{color:var(--ncu-admin-shell-text)!important;background:var(--ncu-admin-shell-hover)!important}
+body.ncu-admin-skin #wpadminbar #wp-admin-bar-ncu-command-palette>.ab-item{font-family:var(--ncu-admin-mono);font-size:11px;letter-spacing:.04em}
+
+body.ncu-admin-skin #adminmenuback,
+body.ncu-admin-skin #adminmenuwrap,
+body.ncu-admin-skin #adminmenu{background:var(--ncu-admin-shell)!important}
+body.ncu-admin-skin #adminmenuwrap{border-right:1px solid var(--ncu-admin-shell-border)}
+body.ncu-admin-skin #adminmenu{padding-top:8px}
+body.ncu-admin-skin #adminmenu a{color:var(--ncu-admin-shell-text);font-size:13px}
+body.ncu-admin-skin #adminmenu div.wp-menu-image:before{color:var(--ncu-admin-shell-muted)}
+body.ncu-admin-skin #adminmenu .wp-menu-image img{filter:grayscale(1) brightness(1.35);opacity:.88!important}
+body.ncu-admin-skin #adminmenu .wp-has-current-submenu>a.wp-has-current-submenu .wp-menu-image img,body.ncu-admin-skin #adminmenu .current a.menu-top .wp-menu-image img{filter:grayscale(1) brightness(.18);opacity:1!important}
+body.ncu-admin-skin #adminmenu li.menu-top{margin:2px 7px}
+body.ncu-admin-skin #adminmenu li.menu-top>a.menu-top{
+  border-radius:7px;
+  min-height:36px;
+  transition:background .12s ease,color .12s ease;
+}
+body.ncu-admin-skin #adminmenu li.menu-top:hover>a.menu-top,
+body.ncu-admin-skin #adminmenu li.opensub>a.menu-top,
+body.ncu-admin-skin #adminmenu li>a.menu-top:focus{background:var(--ncu-admin-shell-2)!important;color:var(--ncu-admin-shell-text)!important}
+body.ncu-admin-skin #adminmenu li.menu-top:hover div.wp-menu-image:before,
+body.ncu-admin-skin #adminmenu li.opensub div.wp-menu-image:before,
+body.ncu-admin-skin #adminmenu li>a.menu-top:focus div.wp-menu-image:before{color:#fff}
+body.ncu-admin-skin #adminmenu .wp-has-current-submenu>a.wp-has-current-submenu,
+body.ncu-admin-skin #adminmenu .current a.menu-top,
+body.ncu-admin-skin #adminmenu .wp-menu-open>a.menu-top{
+  background:var(--ncu-admin-shell-active-bg)!important;
+  color:var(--ncu-admin-shell-active-text)!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.18);
+}
+body.ncu-admin-skin #adminmenu .wp-has-current-submenu>a.wp-has-current-submenu div.wp-menu-image:before,
+body.ncu-admin-skin #adminmenu .current a.menu-top div.wp-menu-image:before,
+body.ncu-admin-skin #adminmenu .wp-menu-open>a.menu-top div.wp-menu-image:before{color:var(--ncu-admin-shell-active-text)!important}
+body.ncu-admin-skin #adminmenu .wp-submenu{
+  background:var(--ncu-admin-shell-sub)!important;
+  border:1px solid var(--ncu-admin-shell-border);
+  border-radius:9px;
+  box-shadow:0 14px 34px rgba(0,0,0,.32);
+  padding:6px;
+}
+body.ncu-admin-skin #adminmenu .wp-has-current-submenu .wp-submenu{border:0;border-radius:7px;box-shadow:none;margin:3px 0 6px;padding:4px;background:var(--ncu-admin-shell-sub)!important}
+body.ncu-admin-skin #adminmenu .wp-submenu a{color:var(--ncu-admin-shell-muted);padding:6px 10px;border-radius:6px}
+body.ncu-admin-skin #adminmenu .wp-submenu a:focus,
+body.ncu-admin-skin #adminmenu .wp-submenu a:hover,
+body.ncu-admin-skin #adminmenu .wp-submenu li.current a{background:var(--ncu-admin-shell-hover);color:var(--ncu-admin-shell-text)}
+body.ncu-admin-skin #adminmenu li.wp-menu-separator{height:1px;margin:9px 12px;background:var(--ncu-admin-shell-hover)}
+body.ncu-admin-skin #collapse-menu{color:var(--ncu-admin-shell-muted);margin:8px 7px;width:calc(100% - 14px);border-radius:7px}
+body.ncu-admin-skin #collapse-menu:hover{background:var(--ncu-admin-shell-hover);color:var(--ncu-admin-shell-text)}
+body.ncu-admin-skin #adminmenu .awaiting-mod,
+body.ncu-admin-skin #adminmenu .update-plugins{background:var(--ncu-admin-shell-active-bg);color:var(--ncu-admin-shell-active-text);border:1px solid var(--ncu-admin-shell-muted);box-shadow:none}
+
+/* --- Workspace context strip ------------------------------------------ */
+body.ncu-admin-skin .ncu-workspace-context{
+  min-height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin:0 20px 4px 0;
+  padding:10px 14px;
+  color:var(--ncu-admin-text);
+  background:var(--ncu-admin-surface);
+  border:1px solid var(--ncu-admin-border);
+  border-top:0;
+  border-radius:0 0 var(--ncu-admin-radius) var(--ncu-admin-radius);
+  box-shadow:var(--ncu-admin-shadow);
+}
+body.ncu-admin-skin .ncu-workspace-context__identity{display:flex;align-items:center;gap:10px;min-width:0}
+body.ncu-admin-skin .ncu-workspace-context__identity span{display:grid;min-width:0;line-height:1.12}
+body.ncu-admin-skin .ncu-workspace-context__identity small{font:700 9px/1.2 var(--ncu-admin-mono);letter-spacing:.12em;color:var(--ncu-admin-muted)}
+body.ncu-admin-skin .ncu-workspace-context__identity strong{max-width:54vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:var(--ncu-admin-text)}
+body.ncu-admin-skin .ncu-workspace-context__actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+body.ncu-admin-skin .ncu-workspace-env,
+body.ncu-admin-skin .ncu-workspace-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+  box-sizing:border-box;
+  border:1px solid var(--ncu-admin-border);
+  border-radius:6px;
+  background:var(--ncu-admin-surface);
+  color:var(--ncu-admin-text);
+  font:600 11px/1 var(--ncu-admin-mono);
+  text-decoration:none;
+  padding:6px 9px;
+  cursor:pointer;
+}
+body.ncu-admin-skin .ncu-workspace-env{color:var(--ncu-admin-muted);background:var(--ncu-admin-surface-2);letter-spacing:.06em}
+body.ncu-admin-skin .ncu-workspace-action:hover,
+body.ncu-admin-skin .ncu-workspace-action:focus{border-color:var(--ncu-admin-border-strong);background:var(--ncu-admin-text);color:var(--ncu-admin-surface);outline:none;box-shadow:none}
+
+/* --- Page composition ------------------------------------------------- */
+body.ncu-admin-skin #wpbody-content>.wrap,
+body.ncu-admin-skin #wpbody-content>.update-nag,
+body.ncu-admin-skin #wpbody-content>.notice{max-width:1600px}
+body.ncu-admin-skin .wrap{color:var(--ncu-admin-text)}
+body.ncu-admin-skin .wrap>h1,
+body.ncu-admin-skin .wrap>h2,
+body.ncu-admin-skin h1.wp-heading-inline{
+  color:var(--ncu-admin-text);
+  letter-spacing:-.025em;
+  font-weight:720;
+}
+body.ncu-admin-skin .wrap>h1:first-child,
+body.ncu-admin-skin h1.wp-heading-inline{font-size:24px;margin-top:22px;margin-bottom:14px}
+body.ncu-admin-skin .subsubsub{margin-top:4px;color:var(--ncu-admin-muted);font-family:var(--ncu-admin-mono);font-size:11px}
+body.ncu-admin-skin .subsubsub a{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin .subsubsub a.current{color:var(--ncu-admin-text);font-weight:700}
+body.ncu-admin-skin .user-admin-color-wrap{display:none!important}
+body.ncu-admin-skin .description,
+body.ncu-admin-skin .form-wrap p,
+body.ncu-admin-skin p.description{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin hr{border-color:var(--ncu-admin-border)}
+body.ncu-admin-skin code,
+body.ncu-admin-skin kbd,
+body.ncu-admin-skin samp{font-family:var(--ncu-admin-mono)}
+body.ncu-admin-skin code{background:var(--ncu-admin-surface-3);color:var(--ncu-admin-text);border:1px solid var(--ncu-admin-border);border-radius:5px;padding:2px 5px}
+
+/* --- Native 9 Code control-center surfaces ----------------------------- */
+body.ncu-admin-skin .ncu-admin{color:var(--ncu-admin-text)}
+body.ncu-admin-skin .ncu-admin__hero{background:var(--ncu-admin-shell)!important;color:var(--ncu-admin-shell-text)!important;border:1px solid var(--ncu-admin-shell-border);border-radius:var(--ncu-admin-radius)!important;box-shadow:var(--ncu-admin-shadow)}
+body.ncu-admin-skin .ncu-admin__hero h1{color:var(--ncu-admin-shell-text)!important}
+body.ncu-admin-skin .ncu-admin__hero p{color:var(--ncu-admin-shell-muted)!important}
+body.ncu-admin-skin .ncu-badge{background:var(--ncu-admin-shell-active-bg)!important;color:var(--ncu-admin-shell-active-text)!important;border:1px solid var(--ncu-admin-shell-muted);border-radius:6px!important;font:700 10px/1 var(--ncu-admin-mono);letter-spacing:.04em}
+body.ncu-admin-skin .ncu-panel,
+body.ncu-admin-skin .ncu-status-strip,
+body.ncu-admin-skin .ncu-dashboard-card,
+body.ncu-admin-skin .ncu-health-list,
+body.ncu-admin-skin .ncu-style-family,
+body.ncu-admin-skin .ncu-style-card,
+body.ncu-admin-skin .ncu-dark-palette-card,
+body.ncu-admin-skin .ncu-style-search-empty{
+  background:var(--ncu-admin-surface)!important;
+  color:var(--ncu-admin-text)!important;
+  border-color:var(--ncu-admin-border)!important;
+  border-radius:var(--ncu-admin-radius)!important;
+  box-shadow:var(--ncu-admin-shadow);
+}
+body.ncu-admin-skin .ncu-panel>summary,
+body.ncu-admin-skin .ncu-style-family>summary,
+body.ncu-admin-skin .ncu-builder-explain>div,
+body.ncu-admin-skin .ncu-popup-editor,
+body.ncu-admin-skin .ncu-doctor-summary,
+body.ncu-admin-skin .ncu-audit-list p{
+  background:var(--ncu-admin-surface-2)!important;
+  color:var(--ncu-admin-text)!important;
+  border-color:var(--ncu-admin-border)!important;
+}
+body.ncu-admin-skin .ncu-panel-heading p,
+body.ncu-admin-skin .ncu-style-library-heading p,
+body.ncu-admin-skin .ncu-style-family>summary small,
+body.ncu-admin-skin .ncu-style-card__title small,
+body.ncu-admin-skin .ncu-dashboard-card p,
+body.ncu-admin-skin .ncu-admin small{color:var(--ncu-admin-muted)!important}
+body.ncu-admin-skin .ncu-dashboard-card{box-sizing:border-box;min-height:168px;transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease}
+body.ncu-admin-skin .ncu-dashboard-card:hover{transform:translateY(-2px);border-color:var(--ncu-admin-text)!important;color:var(--ncu-admin-text)!important}
+body.ncu-admin-skin .ncu-dashboard-card .dashicons{color:var(--ncu-admin-text)!important}
+body.ncu-admin-skin .ncu-health-row{border-color:var(--ncu-admin-border)!important}
+body.ncu-admin-skin .ncu-style-family>summary b,
+body.ncu-admin-skin .ncu-style-live-chip{background:var(--ncu-admin-surface)!important;color:var(--ncu-admin-text)!important;border-color:var(--ncu-admin-border)!important}
+body.ncu-admin-skin .ncu-style-card.is-selected,
+body.ncu-admin-skin .ncu-dark-palette-card.is-selected{border-color:var(--ncu-admin-text)!important;box-shadow:0 0 0 1px var(--ncu-admin-text),var(--ncu-admin-shadow)!important}
+body.ncu-admin-skin .ncu-media-preview{background:var(--ncu-admin-surface-2)!important;border-color:var(--ncu-admin-border-strong)!important}
+body.ncu-admin-skin .ncu-admin pre{background:var(--ncu-admin-shell-sub)!important;color:var(--ncu-admin-shell-text)!important;border:1px solid var(--ncu-admin-shell-border);border-radius:7px!important;font-family:var(--ncu-admin-mono)}
+body.ncu-admin-skin .ncu-admin-skin-preview{background:var(--ncu-admin-surface)!important;color:var(--ncu-admin-text)!important;border-color:var(--ncu-admin-border)!important}
+body.ncu-admin-skin .ncu-admin-skin-preview>small{color:var(--ncu-admin-muted)!important}
+
+/* --- Panels / cards / dashboards ------------------------------------- */
+body.ncu-admin-skin .postbox,
+body.ncu-admin-skin .stuffbox,
+body.ncu-admin-skin .card,
+body.ncu-admin-skin .health-check-accordion,
+body.ncu-admin-skin .welcome-panel,
+body.ncu-admin-skin #dashboard-widgets .postbox,
+body.ncu-admin-skin .theme,
+body.ncu-admin-skin .plugin-card{
+  background:var(--ncu-admin-surface);
+  color:var(--ncu-admin-text);
+  border:1px solid var(--ncu-admin-border)!important;
+  border-radius:var(--ncu-admin-radius)!important;
+  box-shadow:var(--ncu-admin-shadow)!important;
+  overflow:hidden;
+}
+body.ncu-admin-skin .postbox .postbox-header,
+body.ncu-admin-skin .stuffbox .postbox-header,
+body.ncu-admin-skin .health-check-accordion-heading,
+body.ncu-admin-skin .plugin-card-top{
+  background:var(--ncu-admin-surface);
+  border-bottom:1px solid var(--ncu-admin-border);
+}
+body.ncu-admin-skin .postbox .hndle,
+body.ncu-admin-skin .stuffbox .hndle,
+body.ncu-admin-skin .postbox h2,
+body.ncu-admin-skin .postbox h3{color:var(--ncu-admin-text)}
+body.ncu-admin-skin .postbox-header .handle-actions button{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin .welcome-panel{padding:0 20px 18px}
+body.ncu-admin-skin .welcome-panel::before{display:none}
+body.ncu-admin-skin .ncu-client-welcome__brand small{display:block;margin-bottom:3px;color:var(--ncu-admin-muted);font:700 9px/1.2 var(--ncu-admin-mono);letter-spacing:.12em}
+body.ncu-admin-skin .ncu-client-welcome__meta{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+body.ncu-admin-skin .ncu-client-welcome__meta code{background:var(--ncu-admin-surface-2);color:var(--ncu-admin-muted);border:1px solid var(--ncu-admin-border);border-radius:5px;padding:4px 6px;font:700 9px/1 var(--ncu-admin-mono);letter-spacing:.05em}
+body.ncu-admin-skin .welcome-panel-header{background:transparent}
+body.ncu-admin-skin #dashboard-widgets-wrap .postbox-container{padding-right:10px}
+body.ncu-admin-skin .activity-block{border-bottom-color:var(--ncu-admin-border)}
+body.ncu-admin-skin .dashboard-comment-wrap,
+body.ncu-admin-skin #activity-widget #the-comment-list .comment-item{background:transparent}
+
+/* --- Buttons / controls ---------------------------------------------- */
+body.ncu-admin-skin .button,
+body.ncu-admin-skin .button-secondary,
+body.ncu-admin-skin .button-link,
+body.ncu-admin-skin .page-title-action{
+  border-radius:6px;
+}
+body.ncu-admin-skin .button,
+body.ncu-admin-skin .button-secondary,
+body.ncu-admin-skin .page-title-action{
+  background:var(--ncu-admin-surface);
+  border-color:var(--ncu-admin-border-strong);
+  color:var(--ncu-admin-text);
+  box-shadow:0 1px 0 rgba(0,0,0,.03);
+}
+body.ncu-admin-skin .button:hover,
+body.ncu-admin-skin .button-secondary:hover,
+body.ncu-admin-skin .page-title-action:hover{background:var(--ncu-admin-surface-2);border-color:var(--ncu-admin-text);color:var(--ncu-admin-text)}
+body.ncu-admin-skin .button-primary,
+body.ncu-admin-skin .wp-core-ui .button-primary{
+  background:var(--ncu-admin-text)!important;
+  border-color:var(--ncu-admin-text)!important;
+  color:var(--ncu-admin-surface)!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+body.ncu-admin-skin .button-primary:hover,
+body.ncu-admin-skin .button-primary:focus{filter:brightness(.88)}
+body.ncu-admin-skin input[type=text],
+body.ncu-admin-skin input[type=password],
+body.ncu-admin-skin input[type=email],
+body.ncu-admin-skin input[type=url],
+body.ncu-admin-skin input[type=number],
+body.ncu-admin-skin input[type=search],
+body.ncu-admin-skin input[type=tel],
+body.ncu-admin-skin input[type=date],
+body.ncu-admin-skin input[type=datetime-local],
+body.ncu-admin-skin input[type=time],
+body.ncu-admin-skin select,
+body.ncu-admin-skin textarea{
+  background:var(--ncu-admin-surface);
+  color:var(--ncu-admin-text);
+  border-color:var(--ncu-admin-border-strong);
+  border-radius:6px;
+  box-shadow:inset 0 1px 0 rgba(23,23,23,.02);
+}
+body.ncu-admin-skin input:focus,
+body.ncu-admin-skin select:focus,
+body.ncu-admin-skin textarea:focus{
+  border-color:var(--ncu-admin-focus)!important;
+  box-shadow:0 0 0 1px var(--ncu-admin-focus)!important;
+  outline:2px solid transparent!important;
+}
+body.ncu-admin-skin input[type=checkbox],
+body.ncu-admin-skin input[type=radio]{border-color:var(--ncu-admin-border-strong);background:var(--ncu-admin-surface)}
+body.ncu-admin-skin input[type=checkbox]:checked,
+body.ncu-admin-skin input[type=radio]:checked{border-color:var(--ncu-admin-text);background:var(--ncu-admin-text)}
+body.ncu-admin-skin input[type=checkbox]:checked:before,
+body.ncu-admin-skin input[type=radio]:checked:before{filter:grayscale(1) brightness(5)}
+body.ncu-admin-skin .wp-color-result{border-color:var(--ncu-admin-border-strong);border-radius:6px;background:var(--ncu-admin-surface)}
+body.ncu-admin-skin .search-box input[name=s],
+body.ncu-admin-skin.ncu-admin-enhance-tables .tablenav .actions select{min-height:32px}
+body.ncu-admin-skin .submit{border-top:1px solid var(--ncu-admin-border);padding-top:14px}
+
+/* --- Data tables ------------------------------------------------------ */
+body.ncu-admin-skin.ncu-admin-enhance-tables .wp-list-table,
+body.ncu-admin-skin.ncu-admin-enhance-tables .widefat{
+  border:1px solid var(--ncu-admin-border);
+  border-radius:var(--ncu-admin-radius);
+  border-collapse:separate;
+  border-spacing:0;
+  overflow:hidden;
+  background:var(--ncu-admin-surface);
+  color:var(--ncu-admin-text);
+  box-shadow:var(--ncu-admin-shadow);
+}
+body.ncu-admin-skin.ncu-admin-enhance-tables .wp-list-table thead td,
+body.ncu-admin-skin.ncu-admin-enhance-tables .wp-list-table thead th,
+body.ncu-admin-skin.ncu-admin-enhance-tables .wp-list-table tfoot td,
+body.ncu-admin-skin.ncu-admin-enhance-tables .wp-list-table tfoot th,
+body.ncu-admin-skin.ncu-admin-enhance-tables .widefat thead td,
+body.ncu-admin-skin.ncu-admin-enhance-tables .widefat thead th{
+  background:var(--ncu-admin-surface-2);
+  border-bottom:1px solid var(--ncu-admin-border);
+  color:var(--ncu-admin-muted);
+  font:700 10px/1.3 var(--ncu-admin-mono);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+body.ncu-admin-skin.ncu-admin-enhance-tables .widefat td,
+body.ncu-admin-skin.ncu-admin-enhance-tables .widefat th{color:var(--ncu-admin-text);border-bottom-color:var(--ncu-admin-border)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .striped>tbody>:nth-child(odd),
+body.ncu-admin-skin.ncu-admin-enhance-tables ul.striped>:nth-child(odd){background:var(--ncu-admin-surface-2)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .wp-list-table tbody tr:hover{background:var(--ncu-admin-surface-3)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .row-actions{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .row-actions a{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .row-actions a:hover{color:var(--ncu-admin-text)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .tablenav{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .tablenav .tablenav-pages .button,
+body.ncu-admin-skin.ncu-admin-enhance-tables .tablenav .tablenav-pages span.current-page{border-radius:5px}
+body.ncu-admin-skin.ncu-admin-enhance-tables .view-switch a:before{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin.ncu-admin-enhance-tables .view-switch a.current:before{color:var(--ncu-admin-text)}
+
+/* --- Tabs / navigation ----------------------------------------------- */
+body.ncu-admin-skin .nav-tab-wrapper,
+body.ncu-admin-skin h2.nav-tab-wrapper,
+body.ncu-admin-skin h1.nav-tab-wrapper{border-bottom:1px solid var(--ncu-admin-border)}
+body.ncu-admin-skin .nav-tab{
+  margin-left:0;margin-right:5px;
+  border:1px solid transparent;
+  border-bottom:0;
+  border-radius:7px 7px 0 0;
+  background:transparent;
+  color:var(--ncu-admin-muted);
+}
+body.ncu-admin-skin .nav-tab:hover{background:var(--ncu-admin-surface-2);color:var(--ncu-admin-text)}
+body.ncu-admin-skin .nav-tab-active,
+body.ncu-admin-skin .nav-tab-active:hover{background:var(--ncu-admin-surface);color:var(--ncu-admin-text);border-color:var(--ncu-admin-border)}
+body.ncu-admin-skin #screen-meta{background:var(--ncu-admin-surface);border-color:var(--ncu-admin-border);color:var(--ncu-admin-text);box-shadow:var(--ncu-admin-shadow)}
+body.ncu-admin-skin #screen-meta-links .show-settings{background:var(--ncu-admin-surface);border-color:var(--ncu-admin-border);color:var(--ncu-admin-muted);border-radius:0 0 6px 6px}
+
+/* --- Notices = IDE diagnostics --------------------------------------- */
+body.ncu-admin-skin .notice,
+body.ncu-admin-skin div.error,
+body.ncu-admin-skin div.updated,
+body.ncu-admin-skin .update-nag{
+  background:var(--ncu-admin-surface);
+  color:var(--ncu-admin-text);
+  border:1px solid var(--ncu-admin-border);
+  border-left-width:3px;
+  border-radius:7px;
+  box-shadow:0 3px 12px rgba(23,23,23,.04);
+}
+body.ncu-admin-skin .notice-success,
+body.ncu-admin-skin div.updated{border-left-color:var(--ncu-admin-success)}
+body.ncu-admin-skin .notice-error,
+body.ncu-admin-skin div.error{border-left-color:var(--ncu-admin-danger)}
+body.ncu-admin-skin .notice-warning,
+body.ncu-admin-skin .update-nag{border-left-color:var(--ncu-admin-warning)}
+body.ncu-admin-skin .notice-info{border-left-color:var(--ncu-admin-info)}
+body.ncu-admin-skin .notice-dismiss:before{color:var(--ncu-admin-muted)}
+body.ncu-admin-skin .notice-dismiss:hover:before{color:var(--ncu-admin-text)}
+
+/* --- Core modal surfaces --------------------------------------------- */
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-modal,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-frame,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-frame-content,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-frame-menu,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-sidebar,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-toolbar,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-modal-content,
+body.ncu-admin-skin.ncu-admin-enhance-modals .components-modal__frame,
+body.ncu-admin-skin.ncu-admin-enhance-modals .components-popover__content{
+  background:var(--ncu-admin-surface);
+  color:var(--ncu-admin-text);
+  border-color:var(--ncu-admin-border);
+}
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-modal{border-radius:var(--ncu-admin-radius);overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-frame-title h1,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-menu>a,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-frame a{color:var(--ncu-admin-text)}
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-menu>a.active,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-menu>a:hover{background:var(--ncu-admin-surface-3)}
+body.ncu-admin-skin.ncu-admin-enhance-modals .attachments-browser .media-toolbar,
+body.ncu-admin-skin.ncu-admin-enhance-modals .media-frame-toolbar{border-color:var(--ncu-admin-border)}
+body.ncu-admin-skin.ncu-admin-enhance-modals .attachment .thumbnail{background:var(--ncu-admin-surface-2);border-radius:7px;overflow:hidden}
+body.ncu-admin-skin.ncu-admin-enhance-modals .attachment.details{box-shadow:inset 0 0 0 3px var(--ncu-admin-text)}
+
+/* --- Block/Site editor chrome only. Never target .editor-styles-wrapper. */
+body.ncu-admin-skin.ncu-admin-editor-chrome .interface-interface-skeleton__header,
+body.ncu-admin-skin.ncu-admin-editor-chrome .edit-post-header,
+body.ncu-admin-skin.ncu-admin-editor-chrome .edit-site-header,
+body.ncu-admin-skin.ncu-admin-editor-chrome .interface-interface-skeleton__sidebar,
+body.ncu-admin-skin.ncu-admin-editor-chrome .edit-post-sidebar,
+body.ncu-admin-skin.ncu-admin-editor-chrome .editor-post-publish-panel,
+body.ncu-admin-skin.ncu-admin-editor-chrome .editor-post-publish-panel__header,
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-panel,
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-panel__body{
+  background:var(--ncu-admin-surface);
+  color:var(--ncu-admin-text);
+  border-color:var(--ncu-admin-border);
+}
+body.ncu-admin-skin.ncu-admin-editor-chrome .interface-interface-skeleton__header{box-shadow:0 1px 0 var(--ncu-admin-border)}
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-panel__body-title button,
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-panel__body-toggle,
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-button{color:var(--ncu-admin-text)}
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-button.is-primary{background:var(--ncu-admin-text);color:var(--ncu-admin-surface);box-shadow:none}
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-button.is-secondary{box-shadow:inset 0 0 0 1px var(--ncu-admin-border-strong);color:var(--ncu-admin-text)}
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-text-control__input,
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-select-control__input,
+body.ncu-admin-skin.ncu-admin-editor-chrome .components-textarea-control__input{background:var(--ncu-admin-surface);color:var(--ncu-admin-text);border-color:var(--ncu-admin-border-strong)}
+body.ncu-admin-skin.ncu-admin-editor-chrome .interface-interface-skeleton__footer{background:var(--ncu-admin-surface);border-color:var(--ncu-admin-border)}
+
+/* --- Compact density -------------------------------------------------- */
+body.ncu-admin-skin.ncu-admin-density--compact .postbox .inside{padding:9px 12px 12px}
+body.ncu-admin-skin.ncu-admin-density--compact .postbox-header h2{padding-top:9px;padding-bottom:9px}
+body.ncu-admin-skin.ncu-admin-density--compact .widefat td,
+body.ncu-admin-skin.ncu-admin-density--compact .widefat th{padding-top:8px;padding-bottom:8px}
+body.ncu-admin-skin.ncu-admin-density--compact .form-table th{padding-top:14px;padding-bottom:14px}
+body.ncu-admin-skin.ncu-admin-density--compact .form-table td{padding-top:10px;padding-bottom:10px}
+
+/* --- Command palette -------------------------------------------------- */
+html.ncu-command-open{overflow:hidden}
+.ncu-command-palette[hidden]{display:none!important}
+.ncu-command-palette{position:fixed;inset:0;z-index:1000000;display:grid;place-items:start center;padding:10vh 18px 18px}
+.ncu-command-palette__backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;background:rgba(1,4,9,.62);backdrop-filter:blur(3px);cursor:default}
+.ncu-command-palette__dialog{position:relative;z-index:1;width:min(680px,96vw);max-height:min(620px,78vh);display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;background:var(--ncu-command-bg);color:var(--ncu-command-text);border:1px solid var(--ncu-command-border);border-radius:12px;box-shadow:0 28px 90px rgba(0,0,0,.34);overflow:hidden;font-family:var(--ncu-admin-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif)}
+.ncu-command-palette__head{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--ncu-command-border);background:var(--ncu-command-bg-2)}
+.ncu-command-palette__mark{display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--ncu-command-border-strong);border-radius:7px;background:var(--ncu-command-text);color:var(--ncu-command-bg);font:900 11px/1 var(--ncu-admin-mono,monospace)}
+.ncu-command-palette__head>div{display:grid;line-height:1.15}.ncu-command-palette__head strong{font-size:13px}.ncu-command-palette__head small{margin-top:3px;color:var(--ncu-command-muted);font:500 10px/1.2 var(--ncu-admin-mono,monospace)}
+.ncu-command-palette kbd{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:20px;padding:0 5px;border:1px solid var(--ncu-command-border-strong);border-radius:5px;background:var(--ncu-command-hover);color:var(--ncu-command-muted);box-shadow:none;font:600 9px/1 var(--ncu-admin-mono,monospace)}
+.ncu-command-palette__search{display:block;padding:10px 12px;border-bottom:1px solid var(--ncu-command-border);background:var(--ncu-command-bg)}
+.ncu-command-palette__search input{box-sizing:border-box;width:100%;height:40px;margin:0;padding:0 12px;border:1px solid var(--ncu-command-border-strong)!important;border-radius:7px!important;background:var(--ncu-command-bg-3)!important;color:var(--ncu-command-text)!important;box-shadow:none!important;outline:none!important;font:500 13px/1 var(--ncu-admin-mono,monospace)}
+.ncu-command-palette__search input:focus{border-color:var(--ncu-command-text)!important;box-shadow:0 0 0 1px var(--ncu-command-text)!important}
+.ncu-command-palette__results{overflow:auto;padding:8px}
+.ncu-command-group{padding:9px 8px 5px;color:var(--ncu-command-muted);font:700 9px/1 var(--ncu-admin-mono,monospace);letter-spacing:.12em}
+.ncu-command-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 10px;border:1px solid transparent;border-radius:7px;color:var(--ncu-command-text)!important;text-decoration:none!important}
+.ncu-command-item>span{display:grid;gap:2px;min-width:0}.ncu-command-item strong{color:var(--ncu-command-text);font-size:12px}.ncu-command-item small{color:var(--ncu-command-muted);font:500 10px/1.2 var(--ncu-admin-mono,monospace)}
+.ncu-command-item:hover,.ncu-command-item:focus,.ncu-command-item.is-active{background:var(--ncu-command-hover);border-color:var(--ncu-command-border);outline:none}.ncu-command-item.is-active kbd{color:var(--ncu-command-text);border-color:var(--ncu-command-border-strong)}
+.ncu-command-empty{padding:28px 14px;text-align:center;color:var(--ncu-command-muted);font:500 11px/1.4 var(--ncu-admin-mono,monospace)}
+.ncu-command-palette__foot{display:flex;align-items:center;gap:14px;padding:9px 12px;border-top:1px solid var(--ncu-command-border);background:var(--ncu-command-bg-2);color:var(--ncu-command-muted);font:500 9px/1 var(--ncu-admin-mono,monospace)}
+.ncu-command-palette__foot span{display:flex;align-items:center;gap:4px}
+
+/* --- Skin personality refinements ----------------------------------- */
+/* GitHub: tighter repository cards and low-shadow controls. */
+body.ncu-admin-skin--github .postbox,
+body.ncu-admin-skin--github .stuffbox,
+body.ncu-admin-skin--github .card{border-radius:min(8px,var(--ncu-admin-radius));box-shadow:0 1px 2px rgba(35,35,35,.04)}
+body.ncu-admin-skin--github .button,
+body.ncu-admin-skin--github input,
+body.ncu-admin-skin--github select,
+body.ncu-admin-skin--github textarea{border-radius:6px}
+
+body.ncu-admin-skin--chatgpt #adminmenu .wp-has-current-submenu>a.wp-has-current-submenu .wp-menu-image img,body.ncu-admin-skin--chatgpt #adminmenu .current a.menu-top .wp-menu-image img{filter:grayscale(1) brightness(4);opacity:1!important}
+
+/* Future: dark workspace consistency without touching editor content. */
+body.ncu-admin-skin--future a{color:#dbdbdb}
+body.ncu-admin-skin--future a:hover{color:#fff}
+body.ncu-admin-skin--future .alternate,
+body.ncu-admin-skin--future .striped>tbody>:nth-child(odd),
+body.ncu-admin-skin--future ul.striped>:nth-child(odd){background:#0d0f13}
+body.ncu-admin-skin--future .wp-list-table a.row-title,
+body.ncu-admin-skin--future .widefat a{color:#f6f6f6}
+body.ncu-admin-skin--future .plugin-update-tr.active td,
+body.ncu-admin-skin--future .plugins .active th.check-column,
+body.ncu-admin-skin--future .plugins .active td{background:#111318;color:#f6f6f6}
+body.ncu-admin-skin--future .plugin-update-tr .update-message{background:#181b21;color:#dbdbdb}
+body.ncu-admin-skin--future .theme-browser .theme .theme-name{background:#111318;color:#f6f6f6}
+body.ncu-admin-skin--future .postbox,
+body.ncu-admin-skin--future .stuffbox,
+body.ncu-admin-skin--future .card{box-shadow:0 14px 34px rgba(0,0,0,.22)}
+
+/* ChatGPT: warmer space, softer edges and flatter informational hierarchy. */
+body.ncu-admin-skin--chatgpt .postbox,
+body.ncu-admin-skin--chatgpt .stuffbox,
+body.ncu-admin-skin--chatgpt .card{border-radius:max(12px,var(--ncu-admin-radius));box-shadow:0 5px 18px rgba(36,36,33,.05)}
+body.ncu-admin-skin--chatgpt .button,
+body.ncu-admin-skin--chatgpt input,
+body.ncu-admin-skin--chatgpt select,
+body.ncu-admin-skin--chatgpt textarea{border-radius:10px}
+body.ncu-admin-skin--chatgpt .ncu-workspace-context{border-radius:0 0 14px 14px}
+
+/* Gemini: cool elevation and a very restrained focus cue. */
+body.ncu-admin-skin--gemini .postbox,
+body.ncu-admin-skin--gemini .stuffbox,
+body.ncu-admin-skin--gemini .card{box-shadow:0 8px 24px rgba(0,0,0,.06)}
+body.ncu-admin-skin--gemini .button-primary,
+body.ncu-admin-skin--gemini .wp-core-ui .button-primary{box-shadow:0 0 0 1px rgba(0,0,0,.16)!important}
+body.ncu-admin-skin--gemini .ncu-workspace-env{border-color:#d4d4d4}
+
+/* White Future: outline-first, very white, technical and shadow-light. */
+body.ncu-admin-skin--white_future .postbox,
+body.ncu-admin-skin--white_future .stuffbox,
+body.ncu-admin-skin--white_future .card{border-color:#cfcfcf;border-radius:min(7px,var(--ncu-admin-radius));box-shadow:none!important}
+body.ncu-admin-skin--white_future .button,
+body.ncu-admin-skin--white_future input,
+body.ncu-admin-skin--white_future select,
+body.ncu-admin-skin--white_future textarea{border-radius:4px}
+body.ncu-admin-skin--white_future .ncu-workspace-context{box-shadow:none;border-color:#cfcfcf}
+body.ncu-admin-skin--white_future .wrap>h1,
+body.ncu-admin-skin--white_future h1.wp-heading-inline{font-family:var(--ncu-admin-mono);letter-spacing:-.035em}
+
+/* --- Responsive ------------------------------------------------------- */
+@media(max-width:960px){
+  body.ncu-admin-skin .ncu-workspace-context{margin-right:10px}
+  body.ncu-admin-skin .ncu-workspace-env{display:none}
+}
+@media(max-width:782px){
+  body.ncu-admin-skin #adminmenu li.menu-top{margin:0}
+  body.ncu-admin-skin #adminmenu li.menu-top>a.menu-top{border-radius:0}
+  body.ncu-admin-skin #adminmenu .wp-submenu{border-radius:0;border-left:0;border-right:0;box-shadow:none}
+  body.ncu-admin-skin .ncu-workspace-context{margin:0 10px 4px;padding:9px 10px;min-height:46px;border-top:1px solid var(--ncu-admin-border);border-radius:var(--ncu-admin-radius)}
+  body.ncu-admin-skin .ncu-workspace-context__identity small{display:none}
+  body.ncu-admin-skin .ncu-workspace-context__identity strong{max-width:42vw}
+  body.ncu-admin-skin .ncu-workspace-context__actions{gap:4px}
+  body.ncu-admin-skin .ncu-workspace-action:not(.ncu-workspace-command){display:none}
+  body.ncu-admin-skin #wpbody-content>.wrap{margin-left:10px;margin-right:10px}
+  .ncu-command-palette{padding:6vh 8px 8px}
+  .ncu-command-palette__dialog{width:100%;max-height:86vh;border-radius:10px}
+  .ncu-command-palette__foot{overflow:auto}
+}
+
+
+@media(min-width:783px){
+  .rtl body.ncu-admin-skin #adminmenuwrap{border-right:0;border-left:1px solid var(--ncu-admin-shell-border)}
+  .rtl body.ncu-admin-skin .ncu-workspace-context{margin-right:0;margin-left:20px}
+}
+@media(forced-colors:active){
+  body.ncu-admin-skin{--ncu-admin-shadow:none;--ncu-admin-canvas-pattern:none}
+  body.ncu-admin-skin .postbox,body.ncu-admin-skin .stuffbox,body.ncu-admin-skin .card,body.ncu-admin-skin .ncu-workspace-context{box-shadow:none!important;border:1px solid CanvasText!important}
+  body.ncu-admin-skin .button-primary{forced-color-adjust:auto}
+}
+
+@media(prefers-reduced-motion:reduce){
+  body.ncu-admin-skin *,
+  .ncu-command-palette *{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
+/* v3.3.0 — Admin menu hardening. The left navigation is a first-class 9 Code surface. */
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top{margin:3px 7px;width:calc(100% - 14px)}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top{box-sizing:border-box;display:flex;align-items:center;min-height:38px;border:1px solid transparent;border-radius:8px;padding-right:7px;transition:background-color .12s ease,border-color .12s ease,color .12s ease}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top:hover{border-color:var(--ncu-admin-shell-border);background:var(--ncu-admin-shell-hover)!important}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.wp-has-current-submenu{border-color:var(--ncu-admin-shell-active-bg)!important;background:var(--ncu-admin-shell-active-bg)!important;color:var(--ncu-admin-shell-active-text)!important;box-shadow:0 7px 20px rgba(0,0,0,.18)!important}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top .wp-menu-name,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.wp-has-current-submenu .wp-menu-name{color:var(--ncu-admin-shell-active-text)!important}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top div.wp-menu-image:before,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.wp-has-current-submenu div.wp-menu-image:before{color:var(--ncu-admin-shell-active-text)!important}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-name{font-weight:650;letter-spacing:-.005em}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu{box-sizing:border-box}
+body.ncu-admin-skin.ncu-admin-menu-skin.folded #adminmenu>li.menu-top{margin-left:4px;margin-right:4px;width:calc(100% - 8px)}
+@media(max-width:782px){body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top{margin:2px 6px;width:calc(100% - 12px)}body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top{min-height:42px}}
+
+/* v3.4.1 stabilization -------------------------------------------------- */
+/* Keep menu labels deliberately single-line. Long plugin labels truncate
+ * rather than changing row height and destroying the IDE rhythm. */
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-name{
+  flex:1 1 auto;
+  min-width:0;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  line-height:1.25!important;
+}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a{
+  display:block;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  line-height:1.35!important;
+  font-size:12px;
+}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+}
+
+/* v12.0.2 — Side-menu neutral lock. WP and third-party plugins often restore
+ * the stock blue submenu, current item or arrow after the skin stylesheet is
+ * loaded. Keep every navigation-only state on the active neutral palette. */
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenuwrap{
+  --wp-admin-theme-color:#4a4a4a!important;
+  --wp-admin-theme-color-darker-10:#2c2c2c!important;
+  --wp-admin-theme-color-darker-20:#151515!important;
+  border-left:0!important;
+  box-shadow:none!important;
+}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenuback{border-left:0!important;box-shadow:none!important}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu:before,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenuwrap:before{display:none!important}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu .wp-submenu-head{
+  background:var(--ncu-admin-shell-sub,#0d0d0d)!important;
+  color:var(--ncu-admin-shell-text,#fff)!important;
+  border-color:var(--ncu-admin-shell-border,#2b2b2b)!important;
+}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu li.current>a,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:hover,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:focus{
+  background:var(--ncu-admin-shell-hover,#1c1c1c)!important;
+  color:var(--ncu-admin-shell-text,#fff)!important;
+  box-shadow:inset 3px 0 0 var(--ncu-admin-shell-active-bg,#fff)!important;
+  outline:2px solid var(--ncu-admin-shell-active-bg,#fff)!important;
+  outline-offset:-2px!important;
+}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow div{background:var(--ncu-admin-shell,#070707)!important}
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow:after{border-right-color:var(--ncu-admin-shell,#070707)!important}
+
+/* Desktop geometry is intentionally explicit. Several admin plugins reset
+ * WordPress menu padding, which previously left icons and labels out of line. */
+@media (min-width:783px){
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top{
+    margin:3px 8px!important;
+    width:calc(100% - 16px)!important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top{
+    display:flex!important;
+    align-items:center!important;
+    min-height:40px!important;
+    padding:0 9px 0 0!important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-image{
+    display:grid!important;
+    place-items:center!important;
+    width:36px!important;
+    min-width:36px!important;
+    height:40px!important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-name{
+    padding:0!important;
+    line-height:40px!important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu{
+    box-sizing:border-box!important;
+    margin:3px 8px 7px!important;
+    padding:4px!important;
+    width:calc(100% - 16px)!important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a{
+    min-height:34px!important;
+    padding:8px 10px!important;
+    line-height:18px!important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #collapse-menu{
+    box-sizing:border-box!important;
+    margin:10px 8px!important;
+    width:calc(100% - 16px)!important;
+    padding:8px!important;
+  }
+}
+
+/* Monochrome lock: WordPress and Gutenberg expose their own blue accent
+ * variables. Redirect those tokens to the active 9 Code skin so stock blue
+ * cannot leak through a black/white workspace. Semantic error/warning/success
+ * colours remain distinguishable; generic information becomes neutral. */
+body.ncu-admin-skin.ncu-admin-monochrome,
+body.ncu-admin-skin.ncu-admin-monochrome #wpwrap{
+  --wp-admin-theme-color:var(--ncu-admin-text)!important;
+  --wp-admin-theme-color-darker-10:var(--ncu-admin-text)!important;
+  --wp-admin-theme-color-darker-20:var(--ncu-admin-text)!important;
+  --wp-components-color-accent:var(--ncu-admin-text)!important;
+  --wp-components-color-accent-darker-10:var(--ncu-admin-text)!important;
+  --wp-components-color-accent-darker-20:var(--ncu-admin-text)!important;
+  --ncu-admin-focus:var(--ncu-admin-text)!important;
+  --ncu-admin-info:var(--ncu-admin-muted)!important;
+}
+body.ncu-admin-skin.ncu-admin-monochrome a:not(.button):not(.components-button):not(.ab-item),
+body.ncu-admin-skin.ncu-admin-monochrome .button-link,
+body.ncu-admin-skin.ncu-admin-monochrome .page-title-action,
+body.ncu-admin-skin.ncu-admin-monochrome .subsubsub a,
+body.ncu-admin-skin.ncu-admin-monochrome .row-actions a{
+  color:var(--ncu-admin-text)!important;
+}
+body.ncu-admin-skin.ncu-admin-monochrome a:not(.button):not(.components-button):not(.ab-item):hover,
+body.ncu-admin-skin.ncu-admin-monochrome a:not(.button):not(.components-button):not(.ab-item):focus{
+  color:var(--ncu-admin-text)!important;
+  text-decoration-color:currentColor;
+}
+body.ncu-admin-skin.ncu-admin-monochrome .button-primary,
+body.ncu-admin-skin.ncu-admin-monochrome .wp-core-ui .button-primary,
+body.ncu-admin-skin.ncu-admin-monochrome .components-button.is-primary{
+  background:var(--ncu-admin-text)!important;
+  border-color:var(--ncu-admin-text)!important;
+  color:var(--ncu-admin-surface)!important;
+  box-shadow:none!important;
+}
+body.ncu-admin-skin.ncu-admin-monochrome .components-button.is-secondary,
+body.ncu-admin-skin.ncu-admin-monochrome .components-button.is-tertiary{
+  color:var(--ncu-admin-text)!important;
+  box-shadow:inset 0 0 0 1px var(--ncu-admin-border-strong)!important;
+}
+body.ncu-admin-skin.ncu-admin-monochrome .components-form-toggle.is-checked .components-form-toggle__track,
+body.ncu-admin-skin.ncu-admin-monochrome input[type=checkbox]:checked,
+body.ncu-admin-skin.ncu-admin-monochrome input[type=radio]:checked{
+  background:var(--ncu-admin-text)!important;
+  border-color:var(--ncu-admin-text)!important;
+}
+body.ncu-admin-skin.ncu-admin-monochrome .components-tab-panel__tabs-item.is-active,
+body.ncu-admin-skin.ncu-admin-monochrome .components-button.is-pressed,
+body.ncu-admin-skin.ncu-admin-monochrome .components-menu-item__button[aria-checked=true]{
+  color:var(--ncu-admin-text)!important;
+}
+body.ncu-admin-skin.ncu-admin-monochrome .notice-info,
+body.ncu-admin-skin.ncu-admin-monochrome .components-notice.is-info{
+  border-left-color:var(--ncu-admin-muted)!important;
+}
+/* Dark Future uses white as its control accent; keep primary buttons readable. */
+body.ncu-admin-skin.ncu-admin-skin--future.ncu-admin-monochrome .button-primary,
+body.ncu-admin-skin.ncu-admin-skin--future.ncu-admin-monochrome .wp-core-ui .button-primary,
+body.ncu-admin-skin.ncu-admin-skin--future.ncu-admin-monochrome .components-button.is-primary{
+  background:var(--ncu-admin-text)!important;
+  border-color:var(--ncu-admin-text)!important;
+  color:var(--ncu-admin-canvas)!important;
+}
+body.ncu-admin-skin.ncu-admin-monochrome #wpbody-content a:focus,
+body.ncu-admin-skin.ncu-admin-monochrome .components-button:focus:not(:disabled){
+  outline:2px solid transparent!important;
+  box-shadow:0 0 0 2px var(--ncu-admin-surface),0 0 0 4px var(--ncu-admin-text)!important;
+}
+
+/* 14.1.7: keep WordPress top chrome compact and image-free on smaller screens. */
+@media(max-width:960px){
+  body.ncu-admin-skin #wpadminbar #wp-admin-bar-ncu-command-palette{display:none!important}
+  body.ncu-admin-skin #wpadminbar .ncu-adminbar-brand span{max-width:120px!important}
+}
+@media(max-width:782px){
+  body.ncu-admin-skin #wpadminbar #wp-admin-bar-site-name>.ab-item{max-width:150px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+  body.ncu-admin-skin #wpadminbar .ncu-adminbar-brand span{max-width:100px!important}
+}

@@ -1,0 +1,356 @@
+{
+  "format": "99-go-style",
+  "version": 2,
+  "slug": "lecturer-profile-pro",
+  "label": "Lecturer Profile Pro",
+  "description": "Outcome-driven lecturer profile: identity, academic highlights, dynamic category feeds for publications/lectures/books/research/courses, tabbed resume, accordion contact/academic IDs and CV action.",
+  "goal_type": "lecturer_profile",
+  "recommended_post_type": "lecturer",
+  "include_unmapped": true,
+  "theme": {
+    "label": "Lecturer Navy Gold",
+    "vars": {
+      "primary": "#14213d",
+      "secondary": "#f4f6f9",
+      "accent": "#b28a24",
+      "surface": "#ffffff",
+      "text": "#20242c",
+      "muted": "#667085",
+      "radius": "16px",
+      "shadow": "0 10px 30px rgba(20,33,61,.09)",
+      "max_width": "1180px"
+    }
+  },
+  "boxes": [
+    {
+      "id": "lecturer_identity",
+      "title": "",
+      "type": "hero",
+      "style": "feature",
+      "containers": [
+        {
+          "id": "identity_main",
+          "title": "Profile",
+          "layout": "media-left",
+          "style": "none",
+          "fields": [
+            "lecturer_profile_photo",
+            "lecturer_full_name",
+            "lecturer_academic_title",
+            "lecturer_highest_qualification",
+            "lecturer_institution",
+            "lecturer_faculty",
+            "lecturer_department",
+            "lecturer_specialisation",
+            "lecturer_tagline",
+            "lecturer_short_bio"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_highlights",
+      "title": "Academic Highlights",
+      "type": "stats",
+      "style": "soft",
+      "containers": [
+        {
+          "id": "highlights_stats",
+          "title": "Highlights",
+          "layout": "inline",
+          "style": "none",
+          "fields": [
+            "lecturer_years_academia",
+            "lecturer_publication_count",
+            "lecturer_students_supervised",
+            "lecturer_research_projects_count"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_about",
+      "title": "About",
+      "type": "clear",
+      "style": "card",
+      "containers": [
+        {
+          "id": "about_bio",
+          "title": "Biography",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_biography"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_publications",
+      "title": "Publications",
+      "type": "carousel",
+      "style": "card",
+      "containers": [
+        {
+          "id": "publications_feed",
+          "title": "Publications",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            {
+              "name": "lecturer_publications_category",
+              "display": "category_posts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_lectures",
+      "title": "Lectures & Training",
+      "type": "grid",
+      "style": "soft",
+      "containers": [
+        {
+          "id": "lectures_feed",
+          "title": "Lectures & Training",
+          "layout": "grid-3",
+          "style": "none",
+          "fields": [
+            {
+              "name": "lecturer_lectures_category",
+              "display": "category_posts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_books",
+      "title": "Books",
+      "type": "gallery",
+      "style": "card",
+      "containers": [
+        {
+          "id": "books_feed",
+          "title": "Books",
+          "layout": "grid-3",
+          "style": "none",
+          "fields": [
+            {
+              "name": "lecturer_books_category",
+              "display": "category_posts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_research",
+      "title": "Research & Projects",
+      "type": "grid",
+      "style": "card",
+      "containers": [
+        {
+          "id": "research_feed",
+          "title": "Research & Projects",
+          "layout": "grid-2",
+          "style": "none",
+          "fields": [
+            {
+              "name": "lecturer_research_category",
+              "display": "category_posts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_courses",
+      "title": "Courses & Class Resources",
+      "type": "text_list",
+      "style": "soft",
+      "containers": [
+        {
+          "id": "courses_feed",
+          "title": "Courses",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            {
+              "name": "lecturer_courses_category",
+              "display": "category_posts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_resume",
+      "title": "Academic Résumé",
+      "type": "tabs",
+      "style": "card",
+      "containers": [
+        {
+          "id": "resume_overview",
+          "title": "Overview",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_overview"
+          ]
+        },
+        {
+          "id": "resume_qualifications",
+          "title": "Qualifications",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_qualifications"
+          ]
+        },
+        {
+          "id": "resume_positions",
+          "title": "Positions",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_positions"
+          ]
+        },
+        {
+          "id": "resume_teaching",
+          "title": "Teaching",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_teaching"
+          ]
+        },
+        {
+          "id": "resume_supervision",
+          "title": "Supervision",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_supervision"
+          ]
+        },
+        {
+          "id": "resume_grants",
+          "title": "Grants & Projects",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_grants"
+          ]
+        },
+        {
+          "id": "resume_awards",
+          "title": "Awards",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_awards"
+          ]
+        },
+        {
+          "id": "resume_memberships",
+          "title": "Memberships",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_memberships"
+          ]
+        },
+        {
+          "id": "resume_service",
+          "title": "Leadership & Service",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_service"
+          ]
+        },
+        {
+          "id": "resume_conferences",
+          "title": "Conferences",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_conferences"
+          ]
+        },
+        {
+          "id": "resume_skills",
+          "title": "Expertise",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_resume_skills"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_contact",
+      "title": "Contact & Academic Profiles",
+      "type": "accordion",
+      "style": "outline",
+      "containers": [
+        {
+          "id": "contact_details",
+          "title": "Contact",
+          "layout": "equal-2",
+          "style": "none",
+          "fields": [
+            "lecturer_university_email",
+            "lecturer_phone",
+            "lecturer_whatsapp",
+            "lecturer_website"
+          ]
+        },
+        {
+          "id": "academic_ids",
+          "title": "Academic Profiles & IDs",
+          "layout": "grid-2",
+          "style": "none",
+          "fields": [
+            "lecturer_orcid",
+            "lecturer_google_scholar",
+            "lecturer_scopus",
+            "lecturer_researchgate",
+            "lecturer_linkedin"
+          ]
+        },
+        {
+          "id": "cv_download",
+          "title": "Full CV / Résumé",
+          "layout": "vertical",
+          "style": "highlight",
+          "fields": [
+            "lecturer_cv_file"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lecturer_cta",
+      "title": "",
+      "type": "cta",
+      "style": "soft",
+      "containers": [
+        {
+          "id": "contact_action",
+          "title": "Contact / Collaborate",
+          "layout": "vertical",
+          "style": "none",
+          "fields": [
+            "lecturer_contact_cta_text",
+            "lecturer_contact_cta_url"
+          ]
+        }
+      ]
+    }
+  ]
+}

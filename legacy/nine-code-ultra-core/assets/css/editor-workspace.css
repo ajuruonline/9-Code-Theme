@@ -1,0 +1,59 @@
+/* 9Core 15.0.2 Editor Overlay Removal.
+ * The post editor never receives a 9CODE viewport shell, backdrop or scroll lock.
+ * 9CODE settings live in one compact, non-modal hamburger popover.
+ */
+body.ncu-editor-workspace{--ncu-editor-ink:#111;--ncu-editor-muted:#50575e;--ncu-editor-line:#a9afb5;--ncu-editor-soft:#f4f5f6;--ncu-editor-surface:#fff}
+
+/* Optional contrast affects controls only; never the content canvas. */
+body.ncu-editor-high-contrast .interface-interface-skeleton__header,
+body.ncu-editor-high-contrast .edit-post-header,
+body.ncu-editor-high-contrast .editor-header{border-bottom:1px solid #9fa6ad!important;color:#111!important}
+body.ncu-editor-high-contrast .components-panel__body-title{border-bottom:1px solid #c4c8cc!important;color:#111!important}
+body.ncu-editor-high-contrast .components-base-control__label,
+body.ncu-editor-high-contrast .components-input-control__label,
+body.ncu-editor-high-contrast .components-form-token-field__label{color:#181818!important;font-weight:700!important}
+body.ncu-editor-high-contrast .components-text-control__input,
+body.ncu-editor-high-contrast .components-textarea-control__input,
+body.ncu-editor-high-contrast .components-select-control__input,
+body.ncu-editor-high-contrast .components-input-control__container input{min-height:40px!important;border-color:#7b8188!important;color:#111!important;box-shadow:none!important}
+body.ncu-editor-high-contrast .postbox{border-color:#aeb4ba!important;box-shadow:none!important}
+
+/* HARD KILL: all retired 9CODE editor overlays from older cached releases. */
+body.ncu-editor-workspace .ncu-editor-tools-shell,
+body.ncu-editor-workspace .ncu-editor-tools-backdrop,
+body.ncu-editor-workspace .ncu-editor-tools-drawer,
+body.ncu-editor-workspace .ncu-command-palette,
+body.ncu-editor-workspace .ncu-editor-focus-backdrop,
+body.ncu-editor-workspace .ncu-edit-panels-menu,
+body.ncu-editor-workspace .ncu-edit-panels-fab,
+body.ncu-editor-workspace .ncu-editor-panel-save,
+body.ncu-editor-workspace .ncu-editor-panel-status{display:none!important;visibility:hidden!important;pointer-events:none!important}
+body.ncu-editor-workspace.ncu-editor-tools-open,
+body.ncu-editor-workspace.ncu-editor-panel-fullscreen-open{overflow:auto!important}
+body.ncu-editor-workspace .ncu-editor-panel-hidden{display:block!important;visibility:visible!important;opacity:1!important}
+body.ncu-editor-workspace .ncu-editor-panel-fullscreen{position:static!important;inset:auto!important;z-index:auto!important;width:auto!important;max-width:none!important;height:auto!important;max-height:none!important;overflow:visible!important;transform:none!important;box-shadow:none!important;visibility:visible!important;opacity:1!important}
+body.ncu-editor-workspace .ncu-editor-panel-fullscreen-ancestor{transform:none!important;filter:none!important;perspective:none!important;contain:none!important;overflow:visible!important;clip:auto!important;clip-path:none!important;isolation:auto!important}
+
+/* Compact non-modal tools popover. It never spans the viewport. */
+.ncu-editor-tools-popover[hidden]{display:none!important}
+.ncu-editor-tools-popover{position:fixed;top:52px;right:max(8px,env(safe-area-inset-right));z-index:100120;width:min(340px,calc(100vw - 16px));max-height:min(68dvh,620px);overflow:hidden;display:grid;grid-template-rows:auto minmax(0,1fr);background:#fff;color:#111;border:1px solid #9fa6ad;border-radius:12px;box-shadow:0 16px 42px rgba(0,0,0,.20)}
+.ncu-editor-tools-popover.is-floating{top:auto;bottom:calc(62px + env(safe-area-inset-bottom));right:max(8px,env(safe-area-inset-right))}
+.ncu-editor-tools-popover>header{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:6px 9px 6px 11px;border-bottom:1px solid #d0d4d8;background:#f4f5f6}
+.ncu-editor-tools-popover>header>div{display:grid;line-height:1.1}.ncu-editor-tools-popover>header small{font-size:9px;letter-spacing:.12em;color:#5b6168;font-weight:800}.ncu-editor-tools-popover>header strong{margin-top:3px;font-size:14px;color:#111}
+.ncu-editor-tools-close{display:grid;place-items:center;width:40px;height:40px;border:1px solid #888;border-radius:8px;background:#fff;color:#111;font-size:22px;line-height:1;cursor:pointer}
+.ncu-editor-tools-scroll{overflow:auto;overscroll-behavior:contain;padding:0 0 10px}.ncu-editor-tools-scroll section{padding:11px;border-bottom:1px solid #e1e3e5}.ncu-editor-tools-scroll h2{margin:0 0 8px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#4a5056}
+.ncu-editor-tools-list,.ncu-editor-tools-shortcuts{display:grid;gap:5px}.ncu-editor-tools-item{box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:9px;width:100%;min-height:44px;padding:8px 10px;border:1px solid #b7bcc1;border-radius:8px;background:#fff;color:#111!important;text-decoration:none!important;text-align:left;font:650 13px/1.25 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}.ncu-editor-tools-item:hover,.ncu-editor-tools-item:focus-visible{border-color:#111;background:#f4f5f6;outline:2px solid #111;outline-offset:1px}.ncu-editor-tools-item small{color:#626970;font:700 9px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase;letter-spacing:.06em}.ncu-editor-tools-empty{margin:4px 0 0;color:#646970;font-size:12px}.ncu-editor-tools-empty[hidden]{display:none!important}
+
+.ncu-editor-tools-toggle{display:none!important;min-width:42px!important;width:42px!important;height:42px!important;padding:0!important;border:1px solid #777!important;border-radius:8px!important;background:#fff!important;color:#111!important;box-shadow:none!important;place-items:center!important}.ncu-editor-tools-toggle span{font-size:18px;line-height:1}.ncu-editor-tools-toggle b{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body.ncu-editor-tools-enabled .ncu-editor-tools-toggle--floating{position:fixed!important;right:max(10px,env(safe-area-inset-right))!important;bottom:max(10px,env(safe-area-inset-bottom))!important;z-index:100121!important;display:grid!important;width:42px!important;height:42px!important;border-radius:50%!important;background:#111!important;color:#fff!important;border:1px solid #111!important;box-shadow:0 5px 18px rgba(0,0,0,.2)!important}
+body.ncu-editor-tools-enabled .ncu-editor-tools-toggle--floating:hover,body.ncu-editor-tools-enabled .ncu-editor-tools-toggle--floating:focus-visible{background:#fff!important;color:#111!important}
+
+@media (max-width:1180px){
+ body.ncu-editor-tools-enabled .ncu-editor-tools-toggle{display:grid!important;flex:0 0 42px!important}
+ body.ncu-editor-tools-enabled .ncu-editor-tools-captured{display:none!important}
+ body.ncu-editor-tools-enabled .editor-header,body.ncu-editor-tools-enabled .edit-post-header,body.ncu-editor-tools-enabled .interface-interface-skeleton__header{min-width:0!important;max-width:100vw!important}
+ body.ncu-editor-tools-enabled .editor-header__settings,body.ncu-editor-tools-enabled .edit-post-header__settings{display:flex!important;align-items:center!important;gap:4px!important;min-width:0!important;flex:0 0 auto!important}
+ body.ncu-editor-tools-enabled .editor-post-publish-button,body.ncu-editor-tools-enabled .editor-post-publish-panel__toggle,body.ncu-editor-tools-enabled .editor-post-save-draft{display:inline-flex!important;visibility:visible!important;opacity:1!important;flex:0 0 auto!important;min-height:40px!important;max-width:112px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+}
+@media(max-width:782px){.ncu-editor-tools-popover{top:48px;width:min(320px,calc(100vw - 12px));right:max(6px,env(safe-area-inset-right));max-height:62dvh}body.ncu-editor-tools-enabled .editor-post-publish-button,body.ncu-editor-tools-enabled .editor-post-publish-panel__toggle,body.ncu-editor-tools-enabled .editor-post-save-draft{min-height:42px!important;max-width:96px!important;padding-left:10px!important;padding-right:10px!important}}
+@media(prefers-reduced-motion:reduce){.ncu-editor-tools-popover{scroll-behavior:auto!important}}

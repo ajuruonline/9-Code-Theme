@@ -1,0 +1,1 @@
+<section class="ncu-empty"><span class="ncu-empty__mark" aria-hidden="true">9</span><h2><?php esc_html_e( 'Nothing to show yet.', 'nine-code-ultra' ); ?></h2><p><?php esc_html_e( 'Try another search, browse a category, or return to the homepage.', 'nine-code-ultra' ); ?></p></section>

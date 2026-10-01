@@ -1,0 +1,16 @@
+:root{--el-header-offset:0px;--el-bottom-offset:0px;--el-safe-height:100dvh;--el-z-side:79980;--el-z-header:80020;--el-z-modal:89980}
+/* EL compatibility: side navigation is intentionally non-modal and must not cover the Header. */
+html body .nlns-overlay{background:transparent!important;backdrop-filter:none!important;pointer-events:none!important;top:var(--el-header-offset)!important;bottom:var(--el-bottom-offset)!important;height:auto!important}
+html body .nlns-drawer{top:calc(var(--el-header-offset) + 6px)!important;bottom:calc(var(--el-bottom-offset) + 6px)!important;height:auto!important;max-height:none!important}
+html body #nine-stpc .nine-stpc__scrim{background:transparent!important;pointer-events:none!important;top:var(--el-header-offset)!important;bottom:var(--el-bottom-offset)!important;height:auto!important}
+html body #nine-stpc .nine-stpc__drawer{top:calc(var(--el-header-offset) + 6px)!important;bottom:calc(var(--el-bottom-offset) + 6px)!important;height:auto!important;max-height:none!important}
+html body #nine-stpc.nine-stpc--left:not(.is-open) .nine-stpc__drawer{transform:translateX(-18px)!important}
+html body #nine-stpc.nine-stpc--right:not(.is-open) .nine-stpc__drawer{transform:translateX(18px)!important}
+html body #nine-stpc.is-open .nine-stpc__drawer{transform:translateX(0)!important}
+html body .gm-drawer-backdrop,html body .gm-modal-backdrop{top:var(--el-header-offset)!important;bottom:var(--el-bottom-offset)!important;height:auto!important}
+html body .gm-drawer{top:var(--el-header-offset)!important;bottom:var(--el-bottom-offset)!important;height:auto!important;max-height:none!important}
+html body .nrl-classroom{top:var(--el-header-offset)!important;bottom:0!important;height:auto!important}
+html body .nrl-class-back{top:calc(var(--el-header-offset) + 8px + env(safe-area-inset-top,0px))!important}
+html body .nhn-wrap{max-height:var(--el-safe-height)!important}
+html body .nbmn-bar{z-index:79970!important}
+@media(max-width:782px){html body .nlns-drawer,html body #nine-stpc .nine-stpc__drawer{top:calc(var(--el-header-offset) + 3px)!important;bottom:calc(var(--el-bottom-offset) + 3px)!important}}

@@ -1,0 +1,10 @@
+/* Structural style-family bridge. Palette values still come from Theme design tokens at runtime. */
+.elhh-footer{--elhh-family-radius:12px;border-top:4px solid var(--n9f-accent)}
+.elhh-footer.elhh-style-academic,.elhh-footer.elhh-style-journal,.elhh-footer.elhh-style-library,.elhh-footer.elhh-style-heritage{border-top-style:double;border-top-width:6px}.elhh-footer.elhh-style-academic h4,.elhh-footer.elhh-style-journal h4,.elhh-footer.elhh-style-library h4,.elhh-footer.elhh-style-heritage h4{font-family:Georgia,"Times New Roman",serif}
+.elhh-footer.elhh-style-editorial,.elhh-footer.elhh-style-magazine,.elhh-footer.elhh-style-bold{border-top-width:8px}.elhh-footer.elhh-style-editorial h4,.elhh-footer.elhh-style-magazine h4,.elhh-footer.elhh-style-bold h4{text-transform:uppercase;letter-spacing:.06em}
+.elhh-footer.elhh-style-minimal,.elhh-footer.elhh-style-monochrome{border-top-width:1px}.elhh-footer.elhh-style-minimal h4,.elhh-footer.elhh-style-monochrome h4{font-weight:600}
+.elhh-footer.elhh-style-technical,.elhh-footer.elhh-style-research,.elhh-footer.elhh-style-neon{border-top-style:dashed}.elhh-footer.elhh-style-technical h4,.elhh-footer.elhh-style-research h4,.elhh-footer.elhh-style-neon h4{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.elhh-footer.elhh-style-classroom,.elhh-footer.elhh-style-study-guide,.elhh-footer.elhh-style-warm,.elhh-footer.elhh-style-community{box-shadow:inset 5px 0 0 var(--n9f-accent)}
+.elhh-footer.elhh-style-presentation,.elhh-footer.elhh-style-gallery,.elhh-footer.elhh-style-glass,.elhh-footer.elhh-style-glossy{border-top-left-radius:18px;border-top-right-radius:18px;overflow:hidden}
+.elhh-footer.elhh-style-modernist{border-top-width:2px}.elhh-footer.elhh-style-modernist .n9f-footer__grid{gap:0}.elhh-footer.elhh-style-modernist .n9f-footer__column{border-left:1px solid var(--n9f-accent);padding-left:16px}
+.elhh-footer.elhh-style-slate,.elhh-footer.elhh-style-executive,.elhh-footer.elhh-style-portal,.elhh-footer.elhh-style-campus{border-top-width:3px}

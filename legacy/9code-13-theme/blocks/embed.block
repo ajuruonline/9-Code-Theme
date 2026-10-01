@@ -1,0 +1,35 @@
+{
+  "format": "9block",
+  "format_version": 1,
+  "slug": "nine-embed",
+  "name": "Embed",
+  "version": "1.0.0",
+  "description": "A restrained external-link/embed handoff block for 9Page.",
+  "job": "Present one external resource or meeting destination.",
+  "category": "media",
+  "runtime": "declarative",
+  "fields": [
+    {
+      "key": "title",
+      "label": "Title",
+      "type": "text",
+      "default": "Resource"
+    },
+    {
+      "key": "url",
+      "label": "URL",
+      "type": "url",
+      "default": "#"
+    },
+    {
+      "key": "label",
+      "label": "Link label",
+      "type": "text",
+      "default": "Open resource"
+    }
+  ],
+  "template": "<section class=\"n9be-embed\"><h2>{{title}}</h2><a href=\"{{url}}\">{{label}}</a></section>",
+  "style": ".n9block-nine-embed .n9be-embed{padding:20px;border:1px solid #ddd;border-radius:14px;background:#fff}.n9block-nine-embed h2{margin:0 0 10px}.n9block-nine-embed a{font-weight:800}",
+  "semantic_role": "media",
+  "host_navigation": false
+}

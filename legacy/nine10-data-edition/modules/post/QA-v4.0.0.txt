@@ -1,0 +1,44 @@
+9 POST MANAGER v4.0.0 — RELEASE QA / BEST-EFFORT PRODUCTION HARDENING
+Date: 22 August 2026
+
+AUDIT GOAL
+Finish the ACF-independent architecture as far as practical without known major static/package errors, while preserving old ACF sites and the current Gutenberg-first Nine workflow.
+
+CHECKS PASSED
+- All PHP files: php -l clean under the available PHP CLI.
+- All front/admin/design JavaScript: node --check clean.
+- CSS brace/structure counts balanced for every shipped stylesheet.
+- JSON parsing passed for bundled `.9cf` and `.9pm` examples.
+- Plugin header and NPM9_VERSION both 4.0.0.
+- Core loader is WordPress-native; legacy Instant ACF renderer is required/instantiated only when ACF exists.
+- 9PM Design loads without ACF and accepts provider-neutral field_contract / stable 9CF IDs.
+- Elementor placeholder parser accepts `{{field:alias}}` and legacy `{{acf:alias}}`.
+- Site Fields use register_post_meta and are not a second content database.
+- Full-screen front-end workspace, bottom-centre sister control and fixed bottom Update command dock are present.
+- Action Menu bottom-centre collision detection/lift is present; 9C sister FAB receives the same lift when both plugins are active.
+- Category backup uses all UI-visible post types attached to the selected taxonomy and chunks at 100 posts per archive.
+- Safe restore is the default; slug replacement requires explicit selection.
+- Backup archive guards cover archive size, manifest size, post JSON size, per-media size and total media payload.
+- Media restore preserves old full/variant URL mappings and remaps Gutenberg media block IDs.
+- Regression fix verified statically: generic numeric meta is not treated as a media ID unless the meta/key is semantically media-like.
+- Cross-part restored-post link/parent repair is present for sequential category chunks.
+- 9CF v2 and existing provider-safe AI import architecture remain included.
+- ZIP path-safety and final archive-integrity checks are run after packaging.
+
+FAILURES ANTICIPATED AND ADDRESSED DURING FINAL PASS
+1. Temporary v4 lower-left launcher contradicted the accepted bottom-centre sister workflow -> restored bottom-centre 9P / 9C pair.
+2. Bottom-centre Action Menu could cover admin sister controls -> dynamic vertical lift added.
+3. Old restore UI implied generic matching -> Safe Restore is now the default; matching by slug is explicit.
+4. Category backup was scoped to the currently edited post type -> now backs up all editable post types using the selected taxonomy.
+5. Category-scale backup could become one large/fragile file -> automatic 100-post parts.
+6. Cross-part links/parents could remain pointed at source URLs -> provenance-based repair runs after each restored part.
+7. Generic numeric values could be incorrectly remapped as attachment IDs -> numeric remapping is now semantic, while real Gutenberg media blocks are remapped structurally.
+8. ZIP entries could expand to unexpectedly large JSON/media payloads -> explicit decompressed entry-size guards added before reads.
+9. `.9pm` design layer could disappear when ACF was removed -> design engine now loads independently and binds to 9CF/Site Fields.
+10. New Elementor-native field placeholders were documented but not parsed -> `field:` placeholder support added alongside legacy `acf:`.
+
+RUNTIME LIMITATION
+This environment is not the user's exact Bluehost/WordPress/theme/plugin stack. Static and focused source-level regression checks cannot certify every runtime interaction, cache/minifier behavior, proprietary plugin table or hosting upload limit. The recommended acceptance gate is one representative staging/live-safe site: edit/save a post in the full-screen 9P workspace; replace featured/content images; export/import one post with media; export/restore a small multi-post category; test one 9CF round-trip; then verify 9C/9P beside the site's current Action Menu.
+
+SHIP DECISION
+Best-effort production candidate. No known major static/package blocker remains. Use Safe Restore by default and retain ordinary hosting backups for whole-site disaster recovery; `.9post.zip` is intentionally the bite-sized post/category layer, not a replacement for full infrastructure backup.

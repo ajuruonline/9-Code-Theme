@@ -1,0 +1,55 @@
+{
+  "format": "9pm-design",
+  "version": 1,
+  "name": "Basic Profile — 9 Elements",
+  "description": "Example ACF-linked profile composed from 9 Elements and Gutenberg containers.",
+  "engine": "blocks",
+  "field_contract": [
+    {"alias":"photo","field":"profile_photo","key":"","type":"image","required":false},
+    {"alias":"name","field":"full_name","key":"","type":"text","required":true},
+    {"alias":"tagline","field":"tagline","key":"","type":"text","required":false},
+    {"alias":"bio","field":"biography","key":"","type":"wysiwyg","required":false},
+    {"alias":"highlights","field":"highlights","key":"","type":"textarea","required":false},
+    {"alias":"gallery","field":"gallery","key":"","type":"gallery","required":false}
+  ],
+  "settings": {
+    "placement": "replace",
+    "template": "default"
+  },
+  "sections": [
+    {
+      "layout": "hero",
+      "tone": "feature",
+      "elements": [
+        {"type":"image","source":"photo","preset":"inherit","hide_if_empty":true},
+        {"type":"heading","source":"name","level":1,"preset":"inherit"},
+        {"type":"paragraph","source":"tagline","preset":"inherit","hide_if_empty":true}
+      ]
+    },
+    {
+      "layout": "columns",
+      "columns": [
+        {
+          "elements": [
+            {"type":"heading","source":{"value":"About"},"level":2,"preset":"inherit"},
+            {"type":"paragraph","source":"bio","preset":"inherit","hide_if_empty":true}
+          ]
+        },
+        {
+          "elements": [
+            {"type":"heading","source":{"value":"Highlights"},"level":2,"preset":"inherit"},
+            {"type":"icon-list","source":"highlights","icon":"✓","preset":"inherit","hide_if_empty":true}
+          ]
+        }
+      ]
+    },
+    {
+      "layout": "card",
+      "tone": "soft",
+      "elements": [
+        {"type":"heading","source":{"value":"Gallery"},"level":2,"preset":"inherit"},
+        {"type":"gallery","source":"gallery","columns":3,"preset":"inherit","hide_if_empty":true}
+      ]
+    }
+  ]
+}

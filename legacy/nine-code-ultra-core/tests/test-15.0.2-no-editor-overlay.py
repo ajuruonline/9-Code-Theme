@@ -1,0 +1,15 @@
+from pathlib import Path
+root=Path(__file__).resolve().parents[1]
+main=(root/'nine-code-ultra-core.php').read_text(errors='ignore')
+js=(root/'assets/js/editor-workspace.js').read_text(errors='ignore')
+css=(root/'assets/css/editor-workspace.css').read_text(errors='ignore')
+def fail(msg): raise SystemExit('FAIL: '+msg)
+if 'Version: 15.0.2' not in main: fail('Core version must be 15.0.2')
+if "className='ncu-editor-tools-shell'" in js or "className=\"ncu-editor-tools-shell\"" in js: fail('editor tools must not create viewport shell')
+if '<button class=\"ncu-editor-tools-backdrop\"' in js or "<button class='ncu-editor-tools-backdrop'" in js: fail('editor tools must not create a backdrop')
+if "document.body.classList.add('ncu-editor-tools-open')" in js: fail('editor tools must not lock body')
+if 'position:fixed;inset:0' in css.replace(' ',''): fail('editor workspace must not contain viewport-sized fixed overlay')
+if '.ncu-editor-tools-shell' not in css or 'display:none!important' not in css: fail('legacy editor shell must be force-hidden')
+if 'clearBlockingEditorLayers' not in js: fail('hard cleanup function missing')
+if 'ncu-editor-tools-popover' not in js: fail('non-modal hamburger popover missing')
+print('PASS 15.0.2 no editor overlay contract')

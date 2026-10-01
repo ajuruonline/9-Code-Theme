@@ -1,0 +1,68 @@
+{
+  "format": "9cf-post",
+  "version": 2,
+  "mode": "blank",
+  "goal": "Create a concise lecturer profile",
+  "target": {
+    "post_id": 123,
+    "post_type": "page",
+    "title": "Lecturer Profile"
+  },
+  "source": {
+    "site": "https://example.com/",
+    "modified_gmt": "2026-08-18T12:00:00+00:00",
+    "wordpress_version": "7.0",
+    "latest_revision_id": 456,
+    "content_hash": "example-content-hash",
+    "gutenberg_primary": true,
+    "acf_available": false,
+    "nine_elements_available": true
+  },
+  "structure_fingerprint": "example-only",
+  "fields": [
+    {
+      "number": 1,
+      "code": "F001",
+      "display_label": "001 — Post title",
+      "id": "wp:title",
+      "section": "Post",
+      "provider": "wordpress",
+      "label": "Post title",
+      "type": "text",
+      "value": "",
+      "editable": true,
+      "ai_fill": true,
+      "source": {
+        "core_key": "title"
+      },
+      "baseline_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "validation": {}
+    },
+    {
+      "number": 2,
+      "code": "F002",
+      "display_label": "002 — Heading content",
+      "id": "block:0:attr:content",
+      "section": "Gutenberg / 9 Elements",
+      "provider": "block",
+      "label": "Heading content",
+      "type": "richtext",
+      "value": "",
+      "editable": true,
+      "ai_fill": true,
+      "source": {
+        "block_path": [
+          0
+        ],
+        "block_name": "nine/elements",
+        "element_type": "heading",
+        "operation": "attr",
+        "attr": "content",
+        "block_identity": "nine/elements#heading"
+      },
+      "baseline_hash": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "validation": {}
+    }
+  ],
+  "contract_id": "9cf-example-contract"
+}

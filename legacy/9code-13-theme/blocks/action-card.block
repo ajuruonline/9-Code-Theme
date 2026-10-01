@@ -1,0 +1,41 @@
+{
+  "format": "9block",
+  "format_version": 1,
+  "slug": "nine-action-card",
+  "name": "Action Card",
+  "version": "1.0.0",
+  "description": "A focused call-to-action card for a 9Page block position.",
+  "job": "Send the visitor to one destination.",
+  "category": "action",
+  "runtime": "declarative",
+  "fields": [
+    {
+      "key": "title",
+      "label": "Title",
+      "type": "text",
+      "default": "Take action"
+    },
+    {
+      "key": "description",
+      "label": "Description",
+      "type": "textarea",
+      "default": "Continue to the next step."
+    },
+    {
+      "key": "button",
+      "label": "Button label",
+      "type": "text",
+      "default": "Open"
+    },
+    {
+      "key": "url",
+      "label": "URL",
+      "type": "url",
+      "default": "#"
+    }
+  ],
+  "template": "<section class=\"n9be-action-card\"><h2>{{title}}</h2><p>{{description}}</p><a href=\"{{url}}\">{{button}}</a></section>",
+  "style": ".n9block-nine-action-card .n9be-action-card{padding:24px;border-radius:16px;background:#111;color:#fff}.n9block-nine-action-card h2{color:inherit;margin-top:0}.n9block-nine-action-card a{display:inline-block;padding:10px 14px;border-radius:9px;background:#fff;color:#111;text-decoration:none;font-weight:800}",
+  "semantic_role": "action",
+  "host_navigation": false
+}

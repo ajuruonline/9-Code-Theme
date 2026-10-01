@@ -1,0 +1,1 @@
+(function(){'use strict';document.addEventListener('click',function(e){var top=e.target.closest('.n9f-back-top');if(!top)return;e.preventDefault();var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});});})();
