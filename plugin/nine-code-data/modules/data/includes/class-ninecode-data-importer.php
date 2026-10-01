@@ -200,10 +200,10 @@ class NineCode_Data_Importer {
     }
 
     private function parse_csv_file( $path ) {
-        $handle = fopen( $path, 'r' );
+        $handle = fopen( $path, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- streams export/import data (php://output or a temp file); WP_Filesystem cannot stream.
         if ( ! $handle ) { return new WP_Error( 'csv_open', 'Could not open CSV file.' ); }
         $headers = fgetcsv( $handle, 0, ',', '"', '' );
-        if ( ! $headers ) { fclose( $handle ); return new WP_Error( 'csv_headers', 'CSV has no header row.' ); }
+        if ( ! $headers ) { fclose( $handle ); return new WP_Error( 'csv_headers', 'CSV has no header row.' ); } // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
         $headers = array_map( 'trim', $headers );
         $this->scope_lock_expected = in_array( '__ninecode_scope_guard', $headers, true );
         $records = array();
@@ -243,7 +243,7 @@ class NineCode_Data_Importer {
             }
             $records[] = $record;
         }
-        fclose( $handle );
+        fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
         return $records;
     }
 

@@ -17,6 +17,17 @@ t.ok(await page.locator('a.ncu-skip-link').count() === 1, 'skip link present');
 t.ok(!!(await page.getAttribute('html', 'lang')), 'html has lang attribute');
 t.ok(!!(await page.getAttribute('meta[name=viewport]', 'content')), 'viewport meta present');
 
+// Pages and the front page: one title only, aligned with the content column, no duplicates.
+for (const url of ['/sample-page/', '/']) {
+  await visit(page, url);
+  const h1s = await page.locator('h1').allInnerTexts();
+  t.ok(h1s.length === 1, `${url}: exactly one h1 (${JSON.stringify(h1s)})`);
+  const box = await page.locator('h1.ncu-entry-title').first().boundingBox();
+  t.ok(!box || box.x >= 8, `${url}: title is not flush against the viewport edge (x=${box && Math.round(box.x)})`);
+}
+await visit(page, '/sample-post-1/');
+t.ok(await page.locator('#respond, form.comment-form').count() > 0, 'single post shows the comment form when comments are open');
+
 // Mobile nav toggle works and is keyboard-closable.
 const toggle = page.locator('.ncu-nav-toggle');
 t.ok(await toggle.isVisible(), 'mobile menu toggle visible at 390px');

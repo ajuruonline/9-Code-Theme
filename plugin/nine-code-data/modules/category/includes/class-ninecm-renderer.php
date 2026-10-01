@@ -328,7 +328,8 @@ class NineCM_Renderer {
             }
             echo '</ol>';
         }
-        if ( $has_rendered_child ) { echo '<div class="ninecm-children">' . $child_html . '</div>'; }
+        if ( $has_rendered_child ) { echo '<div class="ninecm-children">' . $child_html . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $child_html is escaped by the recursive render call.
+        }
         echo '</div></section>';
         return true;
     }

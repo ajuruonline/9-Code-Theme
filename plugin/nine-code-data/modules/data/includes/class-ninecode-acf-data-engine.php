@@ -160,7 +160,7 @@ class NineCode_ACF_Data_Engine {
 
     private function require_cap() {
         if ( ! current_user_can( $this->capability ) ) {
-            wp_die( esc_html__( 'You do not have permission to manage 9Code data.', 'ninecode-acf-data-engine' ) );
+            wp_die( esc_html__( 'You do not have permission to manage 9Code data.', 'nine-code-data' ) );
         }
     }
 
@@ -1336,7 +1336,7 @@ class NineCode_ACF_Data_Engine {
                   AND pm.meta_value <> ''
                 GROUP BY pm.meta_key";
         $args = array_merge( array( $post_type ), $meta_keys );
-        $rows = $wpdb->get_results( $wpdb->prepare( $sql, $args ), ARRAY_A );
+        $rows = $wpdb->get_results( $wpdb->prepare( $sql, $args ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql contains only %s placeholders generated above.
         $out = array();
         foreach ( (array) $rows as $row ) { $out[ (string) $row['meta_key'] ] = intval( $row['used_count'] ); }
         return $out;
@@ -1747,7 +1747,7 @@ class NineCode_ACF_Data_Engine {
         if ( ! is_array( $files ) ) { return; }
         $cutoff = time() - HOUR_IN_SECONDS;
         foreach ( $files as $path ) {
-            if ( is_file( $path ) && @filemtime( $path ) < $cutoff ) { @unlink( $path ); }
+            if ( is_file( $path ) && @filemtime( $path ) < $cutoff ) { wp_delete_file( $path ); }
         }
     }
 
@@ -1761,12 +1761,12 @@ class NineCode_ACF_Data_Engine {
         $token = strtolower( wp_generate_password( 24, false, false ) );
         $path = tempnam( get_temp_dir(), 'ninecode-acf-stage-' );
         if ( ! $path || ! @copy( $file['tmp_name'], $path ) ) {
-            if ( $path && is_file( $path ) ) { @unlink( $path ); }
+            if ( $path && is_file( $path ) ) { wp_delete_file( $path ); }
             return new WP_Error( 'stage_copy_failed', '9Code could not secure the reviewed copy. Upload the file again and Preview.' );
         }
-        @chmod( $path, 0600 );
+        @chmod( $path, 0600 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod -- sets permissions on this plugin's own staged file.
         $hash = hash_file( 'sha256', $path );
-        if ( ! $hash ) { @unlink( $path ); return new WP_Error( 'stage_hash_failed', '9Code could not verify the reviewed copy.' ); }
+        if ( ! $hash ) { wp_delete_file( $path ); return new WP_Error( 'stage_hash_failed', '9Code could not verify the reviewed copy.' ); }
         $stage = array(
             'path' => $path,
             'hash' => $hash,
@@ -1834,7 +1834,7 @@ class NineCode_ACF_Data_Engine {
         $path = $stage['path'];
         if ( ! is_readable( $path ) || ! hash_equals( (string) $stage['hash'], (string) hash_file( 'sha256', $path ) ) ) {
             delete_transient( $transient_key );
-            if ( is_file( $path ) ) { @unlink( $path ); }
+            if ( is_file( $path ) ) { wp_delete_file( $path ); }
             wp_die( 'The reviewed copy changed or is unavailable. Nothing was changed. Preview the file again.' );
         }
         delete_transient( $transient_key ); // one-time Apply token; prevents accidental replay/double-submit.
@@ -1847,11 +1847,11 @@ class NineCode_ACF_Data_Engine {
         $requested_change_ids = isset( $_POST['approved_change_ids'] ) ? (array) wp_unslash( $_POST['approved_change_ids'] ) : array();
         $requested_change_ids = array_values( array_unique( array_filter( array_map( 'sanitize_key', $requested_change_ids ) ) ) );
         $approved_change_ids = array_values( array_intersect( $requested_change_ids, $allowed_change_ids ) );
-        if ( ! $approved_change_ids ) { @unlink( $path ); wp_die( 'No changes were selected. Nothing was changed. Preview the file again when you are ready.' ); }
+        if ( ! $approved_change_ids ) { wp_delete_file( $path ); wp_die( 'No changes were selected. Nothing was changed. Preview the file again when you are ready.' ); }
         $options['approved_change_ids'] = $approved_change_ids;
         $importer = new NineCode_Data_Importer();
         $report = $importer->import_staged_file( $path, $stage['name'] ?? 'ninecode-import.json', $options );
-        @unlink( $path );
+        wp_delete_file( $path );
         if ( is_wp_error( $report ) ) { wp_die( esc_html( $report->get_error_message() ) ); }
         $report['mode'] = 'apply';
         $report['messages'][] = 'Applied only the changes you selected from the exact reviewed file copy. The full preview fingerprint was rechecked immediately before the recovery snapshot and write.';
@@ -1908,8 +1908,8 @@ class NineCode_ACF_Data_Engine {
     private function send_file_download( $path, $filename, $mime = 'application/octet-stream', $delete_after = false ) {
         if ( ! file_exists( $path ) ) { wp_die( 'Download file not found.' ); }
         nocache_headers(); header( 'Content-Type: ' . $mime ); header( 'Content-Length: ' . filesize( $path ) ); header( 'Content-Disposition: attachment; filename="' . sanitize_file_name( $filename ) . '"' );
-        readfile( $path );
-        if ( $delete_after ) { @unlink( $path ); }
+        readfile( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- streams a generated download to the browser.
+        if ( $delete_after ) { wp_delete_file( $path ); }
         exit;
     }
 

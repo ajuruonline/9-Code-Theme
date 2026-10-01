@@ -77,7 +77,7 @@ class NineCM_Elementor_Widget extends \Elementor\Widget_Base {
 
     protected function render() {
         $s = $this->get_settings_for_display();
-        echo NineCM_Renderer::render( array(
+        $html = NineCM_Renderer::render( array(
             'taxonomy' => $s['taxonomy'] ?? 'category',
             'root' => absint( $s['root'] ?? 0 ),
             'depth' => absint( $s['depth'] ?? 0 ),
@@ -99,5 +99,6 @@ class NineCM_Elementor_Widget extends \Elementor\Widget_Base {
             'icon' => $s['icon'] ?? '›',
             'style' => $s['style_preset'] ?? 'clean',
         ) );
+        echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- NineCM_Renderer escapes every value it prints.
     }
 }

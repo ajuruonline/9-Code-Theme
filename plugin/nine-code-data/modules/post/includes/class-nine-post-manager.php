@@ -128,7 +128,7 @@ final class Nine_Post_Manager {
                 <?php endif; ?>
                 <?php if ( $protected ) : ?>
                     <details class="npm9-native-recovery-protected">
-                        <summary><?php echo esc_html( sprintf( __( 'Protected / technical metadata (%d)', 'nine-code-data' ), count( $protected ) ) ); ?></summary>
+                        <summary><?php echo esc_html( sprintf( /* translators: %d: number of protected meta keys */ __( 'Protected / technical metadata (%d)', 'nine-code-data' ), count( $protected ) ) ); ?></summary>
                         <p class="description"><?php esc_html_e( 'Visible for diagnosis. These private/system keys are not changed by this recovery panel.', 'nine-code-data' ); ?></p>
                         <?php foreach ( $protected as $row ) : ?>
                             <label class="npm9-native-recovery-meta-row is-readonly">
@@ -1300,10 +1300,10 @@ final class Nine_Post_Manager {
     }
 
     private function package_to_csv( $package ) {
-        $fh = fopen( 'php://temp', 'r+' );
+        $fh = fopen( 'php://temp', 'r+' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- streams export/import data (php://output or a temp file); WP_Filesystem cannot stream.
         if ( ! $fh ) return '';
         // UTF-8 BOM keeps Excel from misreading Unicode labels/content.
-        fwrite( $fh, "\xEF\xBB\xBF" );
+        fwrite( $fh, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- writes to a stream/temp file opened above.
         fputcsv( $fh, [ 'section', 'field_name', 'label', 'field_key', 'field_type', 'editable', 'value' ] );
         $stringify = static function( $value ) {
             if ( is_scalar( $value ) || null === $value ) return (string) $value;
@@ -1331,7 +1331,7 @@ final class Nine_Post_Manager {
         }
         rewind( $fh );
         $csv = stream_get_contents( $fh );
-        fclose( $fh );
+        fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
         return (string) $csv;
     }
 

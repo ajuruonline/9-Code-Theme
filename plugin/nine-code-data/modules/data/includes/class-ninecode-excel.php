@@ -49,7 +49,7 @@ class NineCode_Excel {
 
         $tmp = wp_tempnam( sanitize_file_name( $filename ) );
         if ( ! $tmp ) { return new WP_Error( 'temp_failed', 'Could not create a temporary Excel file.' ); }
-        $path = $tmp . '.xlsx'; @unlink( $tmp );
+        $path = $tmp . '.xlsx'; wp_delete_file( $tmp );
         $files = array(
             '[Content_Types].xml' => $this->content_types_xml(),
             '_rels/.rels' => $this->root_rels_xml(),
@@ -64,7 +64,7 @@ class NineCode_Excel {
             'xl/worksheets/sheet4.xml' => $this->sheet_xml( $original_rows, $columns, false ),
         );
         $written = $this->write_archive( $path, $files );
-        if ( is_wp_error( $written ) ) { @unlink( $path ); return $written; }
+        if ( is_wp_error( $written ) ) { wp_delete_file( $path ); return $written; }
         return $path;
     }
 
@@ -284,7 +284,7 @@ class NineCode_Excel {
         }
         if ( class_exists( 'PharData' ) ) {
             try {
-                @unlink( $path );
+                wp_delete_file( $path );
                 $phar = new PharData( $path, 0, null, Phar::ZIP );
                 foreach ( $files as $name => $content ) { $phar->addFromString( $name, $content ); }
                 unset( $phar );
@@ -407,7 +407,7 @@ class NineCode_Excel {
         return '';
     }
 
-    private function xml_decode( $value ) { return html_entity_decode( strip_tags( (string) $value ), ENT_QUOTES | ENT_XML1, 'UTF-8' ); }
+    private function xml_decode( $value ) { return html_entity_decode( wp_strip_all_tags( (string) $value ), ENT_QUOTES | ENT_XML1, 'UTF-8' ); }
 
     private function column_index_from_ref( $ref ) {
         preg_match( '/^([A-Z]+)/i', $ref, $m ); $letters = strtoupper( $m[1] ?? 'A' ); $n = 0;

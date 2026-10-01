@@ -93,7 +93,7 @@ class NineCM_Export {
     }
 
     private function categories_csv() {
-        $tax = $this->taxonomy( $_GET['taxonomy'] ?? 'category' );
+        $tax = $this->taxonomy( wp_unslash( $_GET['taxonomy'] ?? 'category' ) );
         $this->csv_headers( '9-category-manager-' . $tax->name . '-categories-' . gmdate( 'Y-m-d' ) . '.csv' );
         $out = fopen( 'php://output', 'w' );
         if ( ! $out ) { $this->fail( 'Could not open export stream.', 500 ); }
@@ -110,7 +110,7 @@ class NineCM_Export {
                 'number'     => $batch,
                 'offset'     => $offset,
             ) );
-            if ( is_wp_error( $terms ) ) { fclose( $out ); $this->fail( $terms->get_error_message(), 500 ); }
+            if ( is_wp_error( $terms ) ) { fclose( $out ); $this->fail( $terms->get_error_message(), 500 ); } // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
 
             foreach ( $terms as $term ) {
                 $parent_path = '';
@@ -140,12 +140,12 @@ class NineCM_Export {
             if ( function_exists( 'flush' ) ) { @flush(); }
         } while ( $count === $batch );
 
-        fclose( $out );
+        fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
     }
 
     private function planning_csv() {
-        $tax = $this->taxonomy( $_GET['taxonomy'] ?? 'category' );
-        $pto = $this->post_type( $_GET['post_type'] ?? 'page' );
+        $tax = $this->taxonomy( wp_unslash( $_GET['taxonomy'] ?? 'category' ) );
+        $pto = $this->post_type( wp_unslash( $_GET['post_type'] ?? 'page' ) );
 
         $this->csv_headers( '9-category-manager-' . $pto->name . '-infrastructure-planning-' . gmdate( 'Y-m-d' ) . '.csv' );
         $out = fopen( 'php://output', 'w' );
@@ -194,11 +194,11 @@ class NineCM_Export {
             }
             $more = $page < (int) $q->max_num_pages; $page++; wp_reset_postdata(); if ( function_exists( 'flush' ) ) { @flush(); }
         } while ( $more );
-        fclose( $out );
+        fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
     }
 
     private function structure_json() {
-        $tax = $this->taxonomy( $_GET['taxonomy'] ?? 'category' );
+        $tax = $this->taxonomy( wp_unslash( $_GET['taxonomy'] ?? 'category' ) );
         $this->json_headers( '9-category-manager-' . $tax->name . '-structure-' . gmdate( 'Y-m-d' ) . '.json' );
 
         $prefix = array(
@@ -258,8 +258,8 @@ class NineCM_Export {
     }
 
     private function blueprint_json() {
-        $selected_tax = $this->taxonomy( $_GET['taxonomy'] ?? 'category' );
-        $pto = $this->post_type( $_GET['post_type'] ?? 'page' );
+        $selected_tax = $this->taxonomy( wp_unslash( $_GET['taxonomy'] ?? 'category' ) );
+        $pto = $this->post_type( wp_unslash( $_GET['post_type'] ?? 'page' ) );
         $this->json_headers( '9-category-manager-' . $pto->name . '-site-infrastructure-blueprint-' . gmdate( 'Y-m-d' ) . '.json' );
 
         $descriptor = NineCM_Infrastructure::post_type_descriptor( $pto );

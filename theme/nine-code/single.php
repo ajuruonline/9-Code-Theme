@@ -10,6 +10,7 @@ get_header();
         <?php the_content(); wp_link_pages(); ?>
     </div>
 </article>
+<?php if ( ( comments_open() || get_comments_number() ) && ncu_safe_show( 'comments', true ) ) { comments_template(); } ?>
 <?php endwhile; ?>
 </main>
 <?php get_footer();

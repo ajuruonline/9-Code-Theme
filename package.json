@@ -10,7 +10,10 @@
     "test:crawl": "node tests/e2e/crawl.mjs",
     "test:editor": "node tests/e2e/editor.mjs",
     "test:upgrade": "bin/test-upgrade.sh",
-    "test": "npm run lint && node tests/e2e/public.mjs && node tests/e2e/crawl.mjs && node tests/e2e/editor.mjs"
+    "test": "npm run lint && node tests/e2e/public.mjs && node tests/e2e/crawl.mjs && node tests/e2e/editor.mjs && node tests/e2e/visual-editor.mjs && bin/plugin-check.sh",
+    "test:visual": "node tests/e2e/visual-editor.mjs",
+    "test:plugin-check": "bin/plugin-check.sh",
+    "audit": "bin/audit.sh"
   },
   "devDependencies": {
     "playwright": "1.56.1"

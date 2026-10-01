@@ -112,18 +112,19 @@ class NineCode_Data_Version_Manager {
     public static function list_versions( $limit = 50, $kind = '', $object_id = 0 ) {
         global $wpdb;
         $limit = max( 1, min( 200, absint( $limit ) ) );
-        $where = '1=1';
-        $args = array();
+        $where = '1=1'; // Fixed fragments only; every value below is bound through prepare().
+        $args = array( self::table_name() );
         if ( $kind ) { $where .= ' AND object_kind=%s'; $args[] = sanitize_key( $kind ); }
         if ( $object_id ) { $where .= ' AND object_id=%d'; $args[] = absint( $object_id ); }
-        $sql = "SELECT id,object_kind,object_id,object_type,object_label,version_label,source,user_id,created_at FROM " . self::table_name() . " WHERE {$where} ORDER BY id DESC LIMIT {$limit}";
-        if ( $args ) { $sql = $wpdb->prepare( $sql, $args ); }
-        return (array) $wpdb->get_results( $sql, ARRAY_A );
+        $args[] = $limit;
+        // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- $where holds fixed fragments; every value is bound by prepare(); plugin-owned table.
+        return (array) $wpdb->get_results( $wpdb->prepare( "SELECT id,object_kind,object_id,object_type,object_label,version_label,source,user_id,created_at FROM %i WHERE {$where} ORDER BY id DESC LIMIT %d", $args ), ARRAY_A );
+        // phpcs:enable
     }
 
     public static function get_version( $id ) {
         global $wpdb;
-        return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table_name() . ' WHERE id=%d', absint( $id ) ), ARRAY_A );
+        return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id=%d', self::table_name(), absint( $id ) ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table
     }
 
     public static function restore_version( $id ) {
@@ -153,18 +154,20 @@ class NineCode_Data_Version_Manager {
 
     public static function count_versions() {
         global $wpdb;
-        return (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . self::table_name() );
+        return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', self::table_name() ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table
     }
 
     private static function trim_object_versions( $kind, $id, $keep ) {
         global $wpdb;
         $ids = $wpdb->get_col( $wpdb->prepare(
-            'SELECT id FROM ' . self::table_name() . ' WHERE object_kind=%s AND object_id=%d ORDER BY id DESC LIMIT 18446744073709551615 OFFSET %d',
-            $kind, absint( $id ), absint( $keep )
-        ) );
+            'SELECT id FROM %i WHERE object_kind=%s AND object_id=%d ORDER BY id DESC LIMIT 18446744073709551615 OFFSET %d',
+            self::table_name(), $kind, absint( $id ), absint( $keep )
+        ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table
         if ( $ids ) {
             $ids = array_map( 'absint', $ids );
-            $wpdb->query( 'DELETE FROM ' . self::table_name() . ' WHERE id IN (' . implode( ',', $ids ) . ')' );
+            $in  = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- $in is a list of %d placeholders.
+            $wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id IN ($in)", array_merge( array( self::table_name() ), $ids ) ) );
         }
     }
 
@@ -173,6 +176,6 @@ class NineCode_Data_Version_Manager {
         $count = self::count_versions();
         if ( $count <= $keep ) { return; }
         $delete = $count - $keep;
-        $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . self::table_name() . ' ORDER BY id ASC LIMIT %d', $delete ) );
+        $wpdb->query( $wpdb->prepare( 'DELETE FROM %i ORDER BY id ASC LIMIT %d', self::table_name(), $delete ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- plugin-owned table
     }
 }

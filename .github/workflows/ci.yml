@@ -18,11 +18,14 @@ jobs:
         with:
           node-version: 22
       - run: npm ci || npm install
+      - run: composer install --no-interaction
       - run: npx playwright install --with-deps chromium
       - name: Lint
         run: bin/lint.sh
       - name: Build zips
         run: bin/build.sh
+      - name: Static audit (PHP compatibility, deprecated APIs)
+        run: bin/audit.sh
       - name: Start test site
         run: bin/setup-test-site.sh && bin/serve-test-site.sh
       - name: Public site
@@ -31,6 +34,10 @@ jobs:
         run: node tests/e2e/crawl.mjs
       - name: Post editor acceptance
         run: node tests/e2e/editor.mjs
+      - name: Visual editor
+        run: node tests/e2e/visual-editor.mjs
+      - name: WordPress Plugin Check
+        run: bin/plugin-check.sh
       - name: Upgrade from the old 3-package install
         run: bin/test-upgrade.sh
       - uses: actions/upload-artifact@v4

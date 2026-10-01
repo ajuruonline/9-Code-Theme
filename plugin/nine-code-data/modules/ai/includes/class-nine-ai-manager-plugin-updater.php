@@ -12,7 +12,17 @@ class Nine_AI_Manager_Plugin_Updater {
         $this->scanner = $scanner;
     }
 
+    /** Replacing plugin code is a file modification: honour capability, DISALLOW_FILE_MODS and managed hosts. */
+    private function file_mods_permitted() {
+        if ( ! current_user_can( 'update_plugins' ) || ! wp_is_file_mod_allowed( 'plugin_update' ) ) {
+            return new WP_Error( 'nine_ai_plugin_not_permitted', __( 'Plugin files cannot be changed on this site or by this user.', 'nine-code-data' ) );
+        }
+        return true;
+    }
+
     public function stage_upload($file, $target_plugin) {
+        $permitted = $this->file_mods_permitted();
+        if ( is_wp_error( $permitted ) ) { return $permitted; }
         if (empty($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
             return new WP_Error('nine_ai_plugin_no_file', __('No valid plugin ZIP was uploaded.', 'nine-code-data' ));
         }
@@ -34,7 +44,7 @@ class Nine_AI_Manager_Plugin_Updater {
         $settings = get_option('nine_ai_manager_settings', array());
         $max_mb = isset($settings['max_plugin_mb']) ? max(1, min(200, absint($settings['max_plugin_mb']))) : 40;
         if (!empty($file['size']) && $file['size'] > $max_mb * 1024 * 1024) {
-            return new WP_Error('nine_ai_plugin_large', sprintf(__('Plugin ZIP exceeds the %d MB limit.', 'nine-code-data' ), $max_mb));
+            return new WP_Error('nine_ai_plugin_large', sprintf(/* translators: %d: maximum plugin ZIP size in megabytes */ __( 'Plugin ZIP exceeds the %d MB limit.', 'nine-code-data' ), $max_mb));
         }
         if (!class_exists('ZipArchive')) {
             return new WP_Error('nine_ai_plugin_zip_support', __('ZIP support is not enabled on this server.', 'nine-code-data' ));
@@ -65,7 +75,7 @@ class Nine_AI_Manager_Plugin_Updater {
             $this->delete_directory($stage_dir);
             return new WP_Error(
                 'nine_ai_plugin_slug_mismatch',
-                sprintf(__('The ZIP uses plugin folder "%1$s" but the installed target uses "%2$s". Ask the AI to preserve the existing plugin slug/folder.', 'nine-code-data' ), $incoming_folder, $target_folder)
+                sprintf(/* translators: %1$s: plugin folder name in the ZIP, %2$s: folder name of the installed plugin */ __( 'The ZIP uses plugin folder "%1$s" but the installed target uses "%2$s". Ask the AI to preserve the existing plugin slug/folder.', 'nine-code-data' ), $incoming_folder, $target_folder)
             );
         }
         if ('.' === $target_folder && '.' !== $incoming_folder) {
@@ -87,6 +97,8 @@ class Nine_AI_Manager_Plugin_Updater {
     }
 
     public function apply($staged) {
+        $permitted = $this->file_mods_permitted();
+        if ( is_wp_error( $permitted ) ) { return $permitted; }
         if (empty($staged['zip_path']) || !is_file($staged['zip_path']) || empty($staged['target_plugin'])) {
             return new WP_Error('nine_ai_plugin_stage_missing', __('The staged plugin update is missing or expired.', 'nine-code-data' ));
         }
@@ -326,7 +338,7 @@ class Nine_AI_Manager_Plugin_Updater {
         if ('.' === $folder) {
             $target = WP_PLUGIN_DIR . '/' . $plugin_file;
             if (is_file($target)) {
-                @unlink($target);
+                wp_delete_file($target);
             }
         } else {
             self::delete_directory_static(WP_PLUGIN_DIR . '/' . $folder);
@@ -381,11 +393,11 @@ class Nine_AI_Manager_Plugin_Updater {
         );
         foreach ($it as $item) {
             if ($item->isDir()) {
-                @rmdir($item->getPathname());
+                @rmdir($item->getPathname()); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- removes this plugin's own staging directory.
             } else {
-                @unlink($item->getPathname());
+                wp_delete_file($item->getPathname());
             }
         }
-        @rmdir($dir);
+        @rmdir($dir); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- removes this plugin's own staging directory.
     }
 }

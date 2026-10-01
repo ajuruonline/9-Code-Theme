@@ -374,14 +374,14 @@ class NineCode_Data_Exporter {
         $out = fopen( 'php://output', 'w' );
         fputcsv( $out, $headers );
         foreach ( $rows as $row ) { fputcsv( $out, array_map( function( $h ) use ( $row ) { return $row[ $h ] ?? ''; }, $headers ) ); }
-        fclose( $out ); exit;
+        fclose( $out ); exit; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
     }
 
     public function create_backup_zip( $include_media = true, $include_builtin = false ) {
         if ( ! class_exists( 'ZipArchive' ) ) { return new WP_Error( 'zip_missing', 'PHP ZipArchive is required to create ZIP data packs.' ); }
         $tmp = wp_tempnam( 'ninecode-acf-data-pack.zip' );
         if ( ! $tmp ) { return new WP_Error( 'temp_failed', 'Could not create temporary backup file.' ); }
-        $zip_path = $tmp . '.zip'; @unlink( $tmp );
+        $zip_path = $tmp . '.zip'; wp_delete_file( $tmp );
         $zip = new ZipArchive();
         if ( true !== $zip->open( $zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE ) ) { return new WP_Error( 'zip_open_failed', 'Could not create backup ZIP.' ); }
 

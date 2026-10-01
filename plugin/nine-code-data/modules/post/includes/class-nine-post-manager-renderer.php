@@ -591,7 +591,7 @@ final class Nine_Post_Manager_Renderer {
             case 'wysiwyg':
                 echo wp_kses_post( wpautop( do_shortcode( (string) $value ) ) ); break;
             case 'textarea':
-                echo wpautop( esc_html( (string) $value ) ); break;
+                echo wp_kses_post( wpautop( esc_html( (string) $value ) ) ); break;
             case 'url':
                 echo '<a href="' . esc_url( $value ) . '" target="_blank" rel="noopener">' . esc_html( $value ) . '</a>'; break;
             case 'email':
@@ -605,7 +605,7 @@ final class Nine_Post_Manager_Renderer {
             case 'repeater': case 'group': case 'flexible_content':
                 $this->render_nested_value( $value ); break;
             case 'link':
-                if ( is_array( $value ) && ! empty( $value['url'] ) ) { $target = '_blank' === ( $value['target'] ?? '' ) ? ' target="_blank" rel="noopener"' : ''; echo '<a class="npm9r-action-link" href="' . esc_url( $value['url'] ) . '"' . $target . '>' . esc_html( $value['title'] ?? 'Open link' ) . '</a>'; }
+                if ( is_array( $value ) && ! empty( $value['url'] ) ) { $target = '_blank' === ( $value['target'] ?? '' ) ? ' target="_blank" rel="noopener"' : ''; echo '<a class="npm9r-action-link" href="' . esc_url( $value['url'] ) . '"' . $target . '>' . esc_html( $value['title'] ?? 'Open link' ) . '</a>'; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $target is one of two fixed literals.
                 break;
             default:
                 if ( is_array( $value ) ) { $scalars = array_filter( $value, 'is_scalar' ); echo esc_html( implode( ', ', array_map( 'strval', $scalars ) ) ); }

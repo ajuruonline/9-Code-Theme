@@ -99,7 +99,7 @@ final class Nine10_Data_Backup {
             if ( ! class_exists( 'NineCode_Excel' ) ) { wp_die( 'Excel engine unavailable.' ); }
             $excel = new NineCode_Excel(); $path = $excel->create_workbook( $records, 'post', $scope['post_type'] ?: 'post', $filename . '.xlsx', $scope_guard );
             if ( is_wp_error( $path ) ) { wp_die( esc_html( $path->get_error_message() ) ); }
-            nocache_headers(); header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ); header( 'Content-Disposition: attachment; filename="' . sanitize_file_name( $filename . '.xlsx' ) . '"' ); header( 'Content-Length: ' . filesize( $path ) ); readfile( $path ); @unlink( $path ); exit;
+            nocache_headers(); header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ); header( 'Content-Disposition: attachment; filename="' . sanitize_file_name( $filename . '.xlsx' ) . '"' ); header( 'Content-Length: ' . filesize( $path ) ); readfile( $path ); wp_delete_file( $path ); exit; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- streams a generated download to the browser.
         }
         $payload = $template_package;
         nocache_headers(); header( 'Content-Type: application/json; charset=utf-8' ); header( 'Content-Disposition: attachment; filename="' . sanitize_file_name( $filename . '.json' ) . '"' ); echo wp_json_encode( $payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); exit;

@@ -125,11 +125,11 @@ final class Nine10_Form {
                 if ( is_string( $raw ) ) { $raw = preg_split( '/[|,\r\n]+/', $raw ); }
                 foreach ( (array) $raw as $option ) {
                     $option = trim( (string) $option );
-                    if ( '' !== $option ) { $options[] = function_exists( 'sanitize_text_field' ) ? sanitize_text_field( $option ) : strip_tags( $option ); }
+                    if ( '' !== $option ) { $options[] = function_exists( 'sanitize_text_field' ) ? sanitize_text_field( $option ) : wp_strip_all_tags( $option ); }
                 }
                 $options = array_values( array_unique( $options ) );
             }
-            $out[] = array( 'key' => $key, 'label' => function_exists( 'sanitize_text_field' ) ? sanitize_text_field( $label ) : strip_tags( $label ), 'type' => $type, 'required' => ! empty( $row['required'] ), 'options' => $options );
+            $out[] = array( 'key' => $key, 'label' => function_exists( 'sanitize_text_field' ) ? sanitize_text_field( $label ) : wp_strip_all_tags( $label ), 'type' => $type, 'required' => ! empty( $row['required'] ), 'options' => $options );
         }
         return $out;
     }
@@ -285,7 +285,7 @@ final class Nine10_Form {
         nocache_headers(); header( 'Content-Type: text/csv; charset=utf-8' ); header( 'Content-Disposition: attachment; filename="nine10-form-' . intval( $form_id ) . '-responses-' . gmdate( 'Y-m-d' ) . '.csv"' );
         $out = fopen( 'php://output', 'w' ); fputcsv( $out, array_merge( array( 'Response ID', 'Submitted' ), $keys ), ',', '"', '' );
         foreach ( $rows as $row ) { $data = (array) get_post_meta( $row->ID, '_nine10_response_data', true ); $line = array( self::csv_safe_cell( $row->ID ), self::csv_safe_cell( $row->post_date ) ); foreach ( $keys as $key ) { $value = $data[ $key ] ?? ''; $line[] = self::csv_safe_cell( $value ); } fputcsv( $out, $line, ',', '"', '' ); }
-        fclose( $out ); exit;
+        fclose( $out ); exit; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
     }
 
     public function handle_download_category_responses() {
@@ -316,7 +316,7 @@ final class Nine10_Form {
             foreach ( $keys as $key ) { $line[] = self::csv_safe_cell( $data[ $key ] ?? '' ); }
             fputcsv( $out, $line, ',', '"', '' );
         }
-        fclose( $out ); exit;
+        fclose( $out ); exit; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- closes a stream opened above.
     }
 
     public function shortcode( $atts ) {
@@ -423,12 +423,12 @@ final class Nine10_Form {
         echo '<h3 class="nine10-managed-form-title">' . esc_html( $form->post_title ) . '</h3>';
         foreach ( $fields as $field ) {
             $key = sanitize_key( $field['key'] ?? '' ); if ( ! $key ) { continue; }
-            $required = ! empty( $field['required'] ) ? ' required' : ''; $label = esc_html( $field['label'] ?? $key ); $type = $field['type'] ?? 'text';
-            echo '<label><span>' . $label . ( ! empty( $field['required'] ) ? ' *' : '' ) . '</span>';
-            if ( 'textarea' === $type ) { echo '<textarea name="managed[' . esc_attr( $key ) . ']" rows="5"' . $required . '></textarea>'; }
-            elseif ( 'select' === $type ) { echo '<select name="managed[' . esc_attr( $key ) . ']"' . $required . '><option value="">Choose…</option>'; foreach ( (array) ( $field['options'] ?? array() ) as $option ) { echo '<option value="' . esc_attr( $option ) . '">' . esc_html( $option ) . '</option>'; } echo '</select>'; }
-            elseif ( 'checkbox' === $type ) { echo '<input type="hidden" name="managed[' . esc_attr( $key ) . ']" value="0"><input type="checkbox" name="managed[' . esc_attr( $key ) . ']" value="1"' . $required . '>'; }
-            else { $input = in_array( $type, array( 'email','number','url' ), true ) ? $type : 'text'; echo '<input type="' . esc_attr( $input ) . '" name="managed[' . esc_attr( $key ) . ']"' . $required . '>'; }
+            $is_required = ! empty( $field['required'] ); $label = $field['label'] ?? $key; $type = $field['type'] ?? 'text';
+            echo '<label><span>' . esc_html( $label ) . ( $is_required ? ' *' : '' ) . '</span>';
+            if ( 'textarea' === $type ) { echo '<textarea name="managed[' . esc_attr( $key ) . ']" rows="5"' . ( $is_required ? ' required' : '' ) . '></textarea>'; }
+            elseif ( 'select' === $type ) { echo '<select name="managed[' . esc_attr( $key ) . ']"' . ( $is_required ? ' required' : '' ) . '><option value="">Choose…</option>'; foreach ( (array) ( $field['options'] ?? array() ) as $option ) { echo '<option value="' . esc_attr( $option ) . '">' . esc_html( $option ) . '</option>'; } echo '</select>'; }
+            elseif ( 'checkbox' === $type ) { echo '<input type="hidden" name="managed[' . esc_attr( $key ) . ']" value="0"><input type="checkbox" name="managed[' . esc_attr( $key ) . ']" value="1"' . ( $is_required ? ' required' : '' ) . '>'; }
+            else { $input = in_array( $type, array( 'email','number','url' ), true ) ? $type : 'text'; echo '<input type="' . esc_attr( $input ) . '" name="managed[' . esc_attr( $key ) . ']"' . ( $is_required ? ' required' : '' ) . '>'; }
             echo '</label>';
         }
         echo '<label class="nine10-hp" aria-hidden="true"><span>Website</span><input tabindex="-1" autocomplete="off" type="text" name="website"></label>';

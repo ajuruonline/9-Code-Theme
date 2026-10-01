@@ -18,7 +18,7 @@ class Nine_AI_Manager_Importer {
         $settings = get_option('nine_ai_manager_settings', array());
         $max_mb = isset($settings['max_package_mb']) ? max(1, min(100, absint($settings['max_package_mb']))) : 15;
         if (!empty($file['size']) && $file['size'] > ($max_mb * 1024 * 1024)) {
-            return new WP_Error('nine_ai_too_large', sprintf(__('Package exceeds the %d MB limit.', 'nine-code-data' ), $max_mb));
+            return new WP_Error('nine_ai_too_large', sprintf(/* translators: %d: maximum package size in megabytes */ __( 'Package exceeds the %d MB limit.', 'nine-code-data' ), $max_mb));
         }
 
         $name = isset($file['name']) ? sanitize_file_name($file['name']) : 'package.json';
@@ -155,7 +155,7 @@ class Nine_AI_Manager_Importer {
         $allowed = array('post', 'page', 'cpt', 'landing_page', 'term', 'category', 'tag', 'media', 'menu', 'option', 'plugin_settings', 'user', 'integration');
         foreach ($package['items'] as $i => $item) {
             if (!is_array($item) || empty($item['entity']) || !in_array($item['entity'], $allowed, true)) {
-                return new WP_Error('nine_ai_entity', sprintf(__('Item %d has an unsupported entity type.', 'nine-code-data' ), $i + 1));
+                return new WP_Error('nine_ai_entity', sprintf(/* translators: %d: item number in the package */ __( 'Item %d has an unsupported entity type.', 'nine-code-data' ), $i + 1));
             }
         }
         return true;
@@ -312,7 +312,7 @@ class Nine_AI_Manager_Importer {
         $entity = $item['entity'];
         $post_type = !empty($item['post_type']) ? sanitize_key($item['post_type']) : (in_array($entity, array('page', 'landing_page'), true) ? 'page' : 'post');
         if (!post_type_exists($post_type)) {
-            return new WP_Error('nine_ai_post_type', sprintf(__('Post type "%s" does not exist.', 'nine-code-data' ), $post_type));
+            return new WP_Error('nine_ai_post_type', sprintf(/* translators: %s: post type slug */ __( 'Post type "%s" does not exist.', 'nine-code-data' ), $post_type));
         }
 
         $operation = !empty($item['operation']) ? sanitize_key($item['operation']) : 'create';
@@ -491,7 +491,7 @@ class Nine_AI_Manager_Importer {
         $entity = $item['entity'];
         $taxonomy = !empty($item['taxonomy']) ? sanitize_key($item['taxonomy']) : ('category' === $entity ? 'category' : ('tag' === $entity ? 'post_tag' : 'category'));
         if (!taxonomy_exists($taxonomy)) {
-            return new WP_Error('nine_ai_taxonomy', sprintf(__('Taxonomy "%s" does not exist.', 'nine-code-data' ), $taxonomy));
+            return new WP_Error('nine_ai_taxonomy', sprintf(/* translators: %s: taxonomy slug */ __( 'Taxonomy "%s" does not exist.', 'nine-code-data' ), $taxonomy));
         }
 
         $operation = !empty($item['operation']) ? sanitize_key($item['operation']) : 'create';
@@ -634,7 +634,7 @@ class Nine_AI_Manager_Importer {
         }
         $allowed = apply_filters('nine_ai_manager_allow_option_key', (0 === strpos($key, 'nine_') || 0 === strpos($key, '9_')), $key, $item);
         if (!$allowed) {
-            return new WP_Error('nine_ai_option_not_allowed', sprintf(__('Option "%s" is not allowed by the current safety rules.', 'nine-code-data' ), $key));
+            return new WP_Error('nine_ai_option_not_allowed', sprintf(/* translators: %s: option name */ __( 'Option "%s" is not allowed by the current safety rules.', 'nine-code-data' ), $key));
         }
         $exists = false !== get_option($key, false);
         $previous = get_option($key, null);
@@ -680,7 +680,7 @@ class Nine_AI_Manager_Importer {
         foreach ($values as $key => $value) {
             $key = sanitize_key($key);
             if (!$key || !in_array($key, $allowed, true)) {
-                return new WP_Error('nine_ai_plugin_setting_not_allowed', sprintf(__('Setting "%s" is not in the plugin contract and was rejected.', 'nine-code-data' ), $key));
+                return new WP_Error('nine_ai_plugin_setting_not_allowed', sprintf(/* translators: %s: setting key */ __( 'Setting "%s" is not in the plugin contract and was rejected.', 'nine-code-data' ), $key));
             }
             $exists = false !== get_option($key, false);
             $previous = get_option($key, null);
@@ -789,7 +789,7 @@ class Nine_AI_Manager_Importer {
         $key = !empty($item['integration']) ? sanitize_key($item['integration']) : '';
         $integrations = apply_filters('nine_ai_manager_integrations', array());
         if (!$key || empty($integrations[$key]) || empty($integrations[$key]['handler']) || !is_callable($integrations[$key]['handler'])) {
-            return new WP_Error('nine_ai_integration_missing', sprintf(__('Integration "%s" is not registered on this site.', 'nine-code-data' ), $key));
+            return new WP_Error('nine_ai_integration_missing', sprintf(/* translators: %s: integration key */ __( 'Integration "%s" is not registered on this site.', 'nine-code-data' ), $key));
         }
 
         $response = call_user_func($integrations[$key]['handler'], $item, $context);
@@ -852,7 +852,7 @@ class Nine_AI_Manager_Importer {
         $file_array = array('name' => sanitize_file_name(basename($path)), 'tmp_name' => $tmp);
         $id = media_handle_sideload($file_array, $post_id);
         if (is_wp_error($id) && file_exists($tmp)) {
-            @unlink($tmp);
+            wp_delete_file($tmp);
         }
         return $id;
     }
@@ -1031,8 +1031,8 @@ class Nine_AI_Manager_Importer {
             RecursiveIteratorIterator::CHILD_FIRST
         );
         foreach ($items as $item) {
-            $item->isDir() ? @rmdir($item->getPathname()) : @unlink($item->getPathname());
+            $item->isDir() ? @rmdir($item->getPathname()) : wp_delete_file($item->getPathname()); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- removes this plugin's own staging directory.
         }
-        @rmdir($dir);
+        @rmdir($dir); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- removes this plugin's own staging directory.
     }
 }

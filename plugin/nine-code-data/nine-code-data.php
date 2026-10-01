@@ -3,7 +3,7 @@
  * Plugin Name: Nine Code Data
  * Plugin URI: https://9igeria.online/
  * Description: Nine Code editorial and data workspace: Post Editor, Category Manager, Post Creator, Form Manager and scoped Data Backup. Keeps your data, forms and shortcodes working even if the theme changes.
- * Version: 10.0.0
+ * Version: 10.1.0
  * Requires at least: 6.6
  * Requires PHP: 7.4
  * Author: 9igeria Online Ltd
@@ -42,7 +42,7 @@ if ( $nine_code_data_legacy_active ) {
 }
 unset( $nine_code_data_legacy, $nine_code_data_legacy_active );
 
-define( 'NINE55_ULTRON_DATA_VERSION', '10.0.0' );
+define( 'NINE55_ULTRON_DATA_VERSION', '10.1.0' );
 define( 'NINE55_ULTRON_DATA_FILE', __FILE__ );
 define( 'NINE55_ULTRON_DATA_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NINE55_ULTRON_DATA_URL', plugin_dir_url( __FILE__ ) );

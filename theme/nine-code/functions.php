@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'NCU_THEME_VERSION', '16.0.0' );
+define( 'NCU_THEME_VERSION', '16.1.0' );
 define( 'NCU_THEME_RELEASE_SHOT', 'Nine Code baseline' );
 define( 'NCU_THEME_API_VERSION', 14 );
 define( 'NINECODE_SUITE_THEME_VERSION', NCU_THEME_VERSION );

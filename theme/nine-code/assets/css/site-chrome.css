@@ -6,8 +6,8 @@
 .ncu-site-title{font-weight:750;font-size:1.15rem;color:inherit;text-decoration:none}
 .ncu-site-branding .custom-logo{display:block;max-height:44px;width:auto}
 .ncu-menu{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px}
-.ncu-menu a{display:inline-block;padding:8px 2px;color:inherit;text-decoration:none}
-.ncu-menu a:hover,.ncu-menu .current-menu-item>a{text-decoration:underline;text-underline-offset:4px}
+.ncu-primary-nav .ncu-menu a,.ncu-footer-nav .ncu-menu a{display:inline-block;min-height:0;padding:8px 2px;border-bottom:0;color:inherit;font-weight:600;text-decoration:none}
+.ncu-primary-nav .ncu-menu a:hover,.ncu-primary-nav .ncu-menu .current-menu-item>a,.ncu-footer-nav .ncu-menu a:hover{text-decoration:underline;text-underline-offset:4px}
 .ncu-menu .sub-menu{list-style:none;margin:0;padding:0 0 0 16px}
 .ncu-nav-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--ncu-border,#e5e7eb);border-radius:10px;background:transparent;color:inherit;cursor:pointer}
 @media(max-width:720px){
@@ -15,11 +15,23 @@
 	.ncu-primary-nav{display:none;position:absolute;inset-inline:0;top:100%;padding:8px 16px 16px;background:var(--ncu-surface,#fff);border-bottom:1px solid var(--ncu-border,#e5e7eb)}
 	.ncu-primary-nav.is-open{display:block}
 	.ncu-primary-nav .ncu-menu{flex-direction:column;gap:0}
-	.ncu-primary-nav .ncu-menu a{display:block;padding:12px 0}
+	.ncu-primary-nav .ncu-menu a{display:block;padding:12px 0;border-bottom:1px solid var(--ncu-border,#e5e7eb)}
 }
-.ncu-entry-header{margin:0 0 1.25rem}
+.ncu-entry-header{max-width:var(--wp--style--global--content-size,760px);margin:0 auto 1.25rem;padding:1.5rem 0 0;box-sizing:border-box}
 .ncu-entry-title{margin:0 0 .4rem}
 .ncu-entry-meta{color:var(--ncu-muted,#5f6368);font-size:.9rem}
 .ncu-site-footer{margin-top:3rem;padding:28px 0;border-top:1px solid var(--ncu-border,#e5e7eb);color:var(--ncu-muted,#5f6368);font-size:.92rem}
 .ncu-footer-nav{margin-bottom:12px}
 .ncu-copyright{margin:0}
+
+.ncu-skip-link:not(:focus){position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;box-shadow:none}
+.ncu-main{padding-bottom:2rem}
+
+/* Keep text off the screen edge on phones; full-width templates opt out. */
+.ncu-main:not(.ncu-full-width){padding-inline:16px;box-sizing:border-box}
+/* Comments */
+.ncu-comments{max-width:var(--wp--style--global--content-size,760px);margin:2rem auto 0}
+.ncu-comments input[type=text],.ncu-comments input[type=email],.ncu-comments input[type=url],.ncu-comments textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;min-height:44px;padding:8px 10px;border:1px solid var(--ncu-border,#e5e7eb);border-radius:8px;font:inherit}
+.ncu-comments .comment-form p{margin:0 0 1rem}
+.ncu-comments .form-submit input[type=submit]{min-height:44px;padding:0 20px;border:0;border-radius:8px;background:var(--ncu-accent,#000);color:#fff;font-weight:700;cursor:pointer}
+.ncu-comments .comment-list{padding-left:0;list-style:none}

@@ -114,8 +114,8 @@ final class NPM9_Portable_Archive {
     private function remove_tree( $dir ) {
         if ( ! is_dir( $dir ) ) return;
         $it = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $dir, FilesystemIterator::SKIP_DOTS ), RecursiveIteratorIterator::CHILD_FIRST );
-        foreach ( $it as $file ) { $file->isDir() ? @rmdir( $file->getPathname() ) : @unlink( $file->getPathname() ); }
-        @rmdir( $dir );
+        foreach ( $it as $file ) { $file->isDir() ? @rmdir( $file->getPathname() ) : wp_delete_file( $file->getPathname() ); } // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- removes this plugin's own staging directory.
+        @rmdir( $dir ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- removes this plugin's own staging directory.
     }
 }
 
@@ -163,7 +163,7 @@ final class Nine_Post_Manager_Backup {
         $base = wp_tempnam( '9pm-' . sanitize_file_name( $label ) . '.zip' );
         if ( ! $base ) { return new WP_Error( 'temp_failed', 'WordPress could not create a temporary backup file.' ); }
         $zip = preg_replace( '/\.[^.]+$/', '', $base ) . '.zip';
-        @rename( $base, $zip );
+        @rename( $base, $zip ); // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- moves a staged file within this plugin's own directory.
         return $zip;
     }
 
@@ -193,8 +193,8 @@ final class Nine_Post_Manager_Backup {
         header( 'Content-Type: application/zip' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Content-Length: ' . filesize( $path ) );
-        readfile( $path );
-        @unlink( $path );
+        readfile( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile -- streams a generated download to the browser.
+        wp_delete_file( $path );
         exit;
     }
 
@@ -217,9 +217,9 @@ final class Nine_Post_Manager_Backup {
         $size = isset( $file['size'] ) ? absint( $file['size'] ) : 0;
         if ( $size > self::MAX_ARCHIVE_BYTES ) { return new WP_Error( 'too_large', 'Backup is larger than the 256 MB safety limit.' ); }
         $tmp = wp_tempnam( '9data-import.zip' );
-        if ( ! $tmp || ! move_uploaded_file( $file['tmp_name'], $tmp ) ) { return new WP_Error( 'stage', 'Could not stage the uploaded backup.' ); }
+        if ( ! $tmp || ! copy( $file['tmp_name'], $tmp ) ) { return new WP_Error( 'stage', 'Could not stage the uploaded backup.' ); }
         $inspect = $this->inspect_archive( $tmp );
-        if ( is_wp_error( $inspect ) ) { @unlink( $tmp ); return $inspect; }
+        if ( is_wp_error( $inspect ) ) { wp_delete_file( $tmp ); return $inspect; }
         $token = wp_generate_password( 32, false, false );
         $key = 'npm9_import_' . get_current_user_id() . '_' . hash( 'sha256', $token );
         set_transient( $key, array( 'path' => $tmp, 'manifest' => $inspect['manifest'] ), self::TOKEN_TTL );
@@ -242,7 +242,7 @@ final class Nine_Post_Manager_Backup {
         $key = 'npm9_import_' . get_current_user_id() . '_' . hash( 'sha256', $token );
         $item = get_transient( $key ); delete_transient( $key );
         if ( ! is_array( $item ) || empty( $item['path'] ) || ! is_readable( $item['path'] ) ) { return new WP_Error( 'expired', 'Import session expired. Preview the backup again.' ); }
-        $result = $this->restore_archive( $item['path'], $mode ); @unlink( $item['path'] ); return $result;
+        $result = $this->restore_archive( $item['path'], $mode ); wp_delete_file( $item['path'] ); return $result;
     }
 
     public function ajax_backup_post() {
@@ -317,7 +317,7 @@ final class Nine_Post_Manager_Backup {
         $path = $this->temp_archive_path( $label );
         if ( is_wp_error( $path ) ) { return $path; }
         $zip = NPM9_Portable_Archive::create( $path );
-        if ( is_wp_error( $zip ) ) { @unlink( $path ); return $zip; }
+        if ( is_wp_error( $zip ) ) { wp_delete_file( $path ); return $zip; }
 
         $manifest = [
             'format' => self::FORMAT,
@@ -374,10 +374,10 @@ final class Nine_Post_Manager_Backup {
             if ( $omitted ) { $manifest['warnings'][] = $omitted . ' media item(s) were omitted because of the per-file/total archive safety limits. The post data is still complete.'; }
         }
         $manifest_json = wp_json_encode( $manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
-        if ( ! $zip->addFromString( 'manifest.json', $manifest_json ) ) { $zip->close(); @unlink( $path ); return new WP_Error( 'manifest_write', 'WordPress could not write the backup manifest.' ); }
+        if ( ! $zip->addFromString( 'manifest.json', $manifest_json ) ) { $zip->close(); wp_delete_file( $path ); return new WP_Error( 'manifest_write', 'WordPress could not write the backup manifest.' ); }
         $closed = $zip->close();
-        if ( ! $closed ) { @unlink( $path ); return new WP_Error( 'zip_close', 'WordPress could not finish writing the backup archive.' ); }
-        if ( ! is_readable( $path ) || filesize( $path ) < 100 ) { @unlink( $path ); return new WP_Error( 'zip_empty', 'The generated backup archive is invalid.' ); }
+        if ( ! $closed ) { wp_delete_file( $path ); return new WP_Error( 'zip_close', 'WordPress could not finish writing the backup archive.' ); }
+        if ( ! is_readable( $path ) || filesize( $path ) < 100 ) { wp_delete_file( $path ); return new WP_Error( 'zip_empty', 'The generated backup archive is invalid.' ); }
         $is_data_backup = ! empty( $context['nine10_data_backup'] );
         $prefix = $is_data_backup ? '9data-' : '9pm-';
         $suffix = $is_data_backup ? '.9data.zip' : '.9post.zip';
@@ -690,7 +690,7 @@ final class Nine_Post_Manager_Backup {
                 foreach ( (array) ( $manifest['posts'] ?? [] ) as $pentry ) { if ( in_array( $source_media_id, array_map( 'absint', (array) ( $pentry['media_ids'] ?? [] ) ), true ) ) { $parent = $post_map[ absint( $pentry['source_id'] ?? 0 ) ] ?? 0; if ( $parent ) { break; } } }
                 $file_array = [ 'name' => sanitize_file_name( $media['original_name'] ?? wp_basename( $file ) ), 'tmp_name' => $tmp ];
                 $new_id = media_handle_sideload( $file_array, $parent, sanitize_text_field( $media['title'] ?? '' ), [ 'post_excerpt' => wp_kses_post( $media['caption'] ?? '' ), 'post_content' => wp_kses_post( $media['description'] ?? '' ) ] );
-                if ( is_wp_error( $new_id ) ) { @unlink( $tmp ); $warnings[] = $new_id->get_error_message(); continue; }
+                if ( is_wp_error( $new_id ) ) { wp_delete_file( $tmp ); $warnings[] = $new_id->get_error_message(); continue; }
                 update_post_meta( $new_id, '_npm9_backup_checksum', $checksum );
                 if ( isset( $media['alt'] ) ) { update_post_meta( $new_id, '_wp_attachment_image_alt', sanitize_text_field( $media['alt'] ) ); }
                 $media_map[ $source_media_id ] = (int) $new_id;
