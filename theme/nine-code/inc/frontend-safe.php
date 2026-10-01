@@ -75,6 +75,12 @@ function ncu_safe_public_enqueue() {
     if ( ncu_safe_should_enqueue_presentation_css() ) {
         wp_enqueue_style( 'ncu-theme-main', NCU_THEME_URI . '/assets/css/main.css', array( 'ncu-theme-style' ), NCU_THEME_VERSION );
     }
+    if ( ! ncu_safe_engine_surface_active( 'header' ) || ! ncu_safe_engine_surface_active( 'footer' ) ) {
+        wp_enqueue_style( 'ncu-site-chrome', NCU_THEME_URI . '/assets/css/site-chrome.css', array( 'ncu-theme-style' ), NCU_THEME_VERSION );
+    }
+    if ( ! ncu_safe_engine_surface_active( 'header' ) && has_nav_menu( 'primary' ) ) {
+        wp_enqueue_script( 'ncu-nav', NCU_THEME_URI . '/assets/js/nav.js', array(), NCU_THEME_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+    }
     if ( function_exists( 'wp_add_inline_style' ) && function_exists( 'ninecode_theme_get_design_tokens' ) ) {
         $t = ninecode_theme_get_design_tokens();
         $css = ':root{--ncu-accent:' . $t['primary'] . ';--ncu-surface:' . $t['surface'] . ';--ncu-text:' . $t['text'] . ';--ncu-muted:' . $t['muted'] . ';--ncu-border:' . $t['border'] . ';--ncu-radius:' . absint( $t['radius'] ) . 'px;}';
@@ -224,3 +230,31 @@ function ncu_safe_front_launcher_markup() {
     }
 }
 add_action( 'wp_footer', 'ncu_safe_front_launcher_markup', 1001 );
+
+
+/*
+ * Native site chrome. The theme renders a simple header and footer unless the
+ * Header & Footer engine has been switched on for that surface.
+ */
+function ncu_safe_engine_surface_active( $surface ) {
+    $class = 'footer' === $surface ? 'ELHF_F_Settings' : 'ELHF_H_Settings';
+    return class_exists( $class, false ) && $class::is_enabled();
+}
+
+function ncu_safe_render_site_header() {
+    if ( ncu_safe_engine_surface_active( 'header' ) ) { return; }
+    if ( ! apply_filters( 'ncu_render_native_header', true ) ) { return; }
+    get_template_part( 'template-parts/site-header' );
+}
+
+function ncu_safe_render_site_footer() {
+    if ( ncu_safe_engine_surface_active( 'footer' ) ) { return; }
+    if ( ! apply_filters( 'ncu_render_native_footer', true ) ) { return; }
+    get_template_part( 'template-parts/site-footer' );
+}
+
+/** Whether a presentation feature (title, meta, comments...) should print for this entry. */
+function ncu_safe_show( $feature, $default = true ) {
+    $id = get_the_ID();
+    return function_exists( 'ncu_should_show_post_feature' ) ? ncu_should_show_post_feature( $id, $feature, $default ) : (bool) $default;
+}

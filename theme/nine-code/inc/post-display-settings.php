@@ -19,12 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
  * defaults are presentation-only and never alter stored WordPress content.
  */
 function ncu_theme_display_defaults() {
+    /* Fresh installs show the post title (a theme with no title looks broken).
+     * Sites upgraded from 9Code keep their previous OFF default: see migrate-legacy.php. */
     $defaults = array(
-        'show_title' => 0,
+        'show_title' => 1,
         'show_meta'  => 0,
     );
-    $saved = get_option( 'ncu_theme_display_defaults', array() );
-    if ( ! is_array( $saved ) ) { $saved = array(); }
+    $saved = get_option( 'ncu_theme_display_defaults', null );
+    if ( ! is_array( $saved ) ) { return $defaults; }
     return array(
         'show_title' => ! empty( $saved['show_title'] ) ? 1 : 0,
         'show_meta'  => ! empty( $saved['show_meta'] ) ? 1 : 0,
@@ -61,7 +63,7 @@ function ncu_render_theme_display_defaults_page() {
             <input type="hidden" name="action" value="ncu_save_theme_display_defaults">
             <?php wp_nonce_field( 'ncu_save_theme_display_defaults' ); ?>
             <table class="form-table" role="presentation"><tbody>
-                <tr><th scope="row"><?php esc_html_e( 'Post/Page title', 'nine-code' ); ?></th><td><label><input type="checkbox" name="ncu_theme_display[show_title]" value="1" <?php checked( ! empty( $defaults['show_title'] ) ); ?>> <?php esc_html_e( 'Show the Theme title by default', 'nine-code' ); ?></label><p class="description"><?php esc_html_e( 'Default is OFF because 9Code plugins normally provide their own styled title.', 'nine-code' ); ?></p></td></tr>
+                <tr><th scope="row"><?php esc_html_e( 'Post/Page title', 'nine-code' ); ?></th><td><label><input type="checkbox" name="ncu_theme_display[show_title]" value="1" <?php checked( ! empty( $defaults['show_title'] ) ); ?>> <?php esc_html_e( 'Show the Theme title by default', 'nine-code' ); ?></label><p class="description"><?php esc_html_e( 'Turn this off when a plugin supplies its own styled title.', 'nine-code' ); ?></p></td></tr>
                 <tr><th scope="row"><?php esc_html_e( 'Post meta', 'nine-code' ); ?></th><td><label><input type="checkbox" name="ncu_theme_display[show_meta]" value="1" <?php checked( ! empty( $defaults['show_meta'] ) ); ?>> <?php esc_html_e( 'Show Theme date / author meta by default', 'nine-code' ); ?></label><p class="description"><?php esc_html_e( 'Default is OFF so plugin-owned author/date/meta treatments are not duplicated.', 'nine-code' ); ?></p></td></tr>
             </tbody></table>
             <p class="submit"><button class="button button-primary"><?php esc_html_e( 'Save display defaults', 'nine-code' ); ?></button></p>

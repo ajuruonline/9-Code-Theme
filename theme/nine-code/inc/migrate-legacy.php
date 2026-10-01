@@ -39,6 +39,10 @@ function ncu_migrate_theme_mods() {
     if ( get_option( 'ncu_theme_mods_migrated' ) ) { return; }
     $old = get_option( 'theme_mods_9code-13-theme' );
     $new = get_theme_mods();
+    if ( is_array( $old ) && $old && false === get_option( 'ncu_theme_display_defaults', false ) ) {
+        /* Upgraded site: keep the old behaviour (plugins supplied the title). */
+        add_option( 'ncu_theme_display_defaults', array( 'show_title' => 0, 'show_meta' => 0 ), '', false );
+    }
     if ( is_array( $old ) && $old && empty( $new ) ) {
         foreach ( $old as $key => $value ) { if ( 'autosave_draft_ids' !== $key ) { set_theme_mod( $key, $value ); } }
     }

@@ -24,6 +24,24 @@ function ncu_theme_is_admin_runtime() {
     return function_exists( 'is_admin' ) && is_admin();
 }
 
+/**
+ * The Header & Footer engine is only needed on the public site when an
+ * administrator has switched a surface on. Load it then, isolated so a fault in
+ * it can never take the site down.
+ */
+function ncu_theme_maybe_load_header_footer_engine() {
+    $header = get_option( 'n9lh8_settings', array() );
+    $footer = get_option( 'n9f_settings', array() );
+    $on = ( is_array( $header ) && 'yes' === ( $header['enabled'] ?? '' ) ) || ( is_array( $footer ) && 'yes' === ( $footer['enabled'] ?? '' ) );
+    if ( ! $on ) { return; }
+    try {
+        require_once NCU_THEME_DIR . '/inc/surface-contract.php';
+        require_once NCU_THEME_DIR . '/inc/header-footer/bootstrap.php';
+    } catch ( \Throwable $e ) {
+        error_log( '[Nine Code ' . NCU_THEME_VERSION . '] header/footer engine disabled for this request: ' . $e->getMessage() );
+    }
+}
+
 /* Safe on every request: defaults, native WordPress theme support and helpers. */
 require_once NCU_THEME_DIR . '/inc/defaults.php';
 require_once NCU_THEME_DIR . '/inc/setup.php';
@@ -57,4 +75,7 @@ if ( ncu_theme_is_admin_runtime() ) {
 } else {
     /* Minimal public runtime: WordPress owns rendering; Theme supplies CSS only. */
     require_once NCU_THEME_DIR . '/inc/frontend-safe.php';
+    /* Per-post display overrides (title/meta/comments) are honoured on the public site too. */
+    require_once NCU_THEME_DIR . '/inc/post-display-settings.php';
+    ncu_theme_maybe_load_header_footer_engine();
 }

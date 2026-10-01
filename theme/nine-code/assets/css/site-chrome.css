@@ -1,0 +1,25 @@
+/* Native header, footer and entry header. Small on purpose; loaded after main.css. */
+.ncu-site-header{position:relative;border-bottom:1px solid var(--ncu-border,#e5e7eb);background:var(--ncu-surface,#fff)}
+.ncu-sticky-header .ncu-site-header{position:sticky;top:0;z-index:50}
+.admin-bar.ncu-sticky-header .ncu-site-header{top:var(--wp-admin--admin-bar--height,32px)}
+.ncu-site-header__inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:60px;padding-block:10px}
+.ncu-site-title{font-weight:750;font-size:1.15rem;color:inherit;text-decoration:none}
+.ncu-site-branding .custom-logo{display:block;max-height:44px;width:auto}
+.ncu-menu{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 18px}
+.ncu-menu a{display:inline-block;padding:8px 2px;color:inherit;text-decoration:none}
+.ncu-menu a:hover,.ncu-menu .current-menu-item>a{text-decoration:underline;text-underline-offset:4px}
+.ncu-menu .sub-menu{list-style:none;margin:0;padding:0 0 0 16px}
+.ncu-nav-toggle{display:none;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--ncu-border,#e5e7eb);border-radius:10px;background:transparent;color:inherit;cursor:pointer}
+@media(max-width:720px){
+	.ncu-nav-toggle{display:inline-flex}
+	.ncu-primary-nav{display:none;position:absolute;inset-inline:0;top:100%;padding:8px 16px 16px;background:var(--ncu-surface,#fff);border-bottom:1px solid var(--ncu-border,#e5e7eb)}
+	.ncu-primary-nav.is-open{display:block}
+	.ncu-primary-nav .ncu-menu{flex-direction:column;gap:0}
+	.ncu-primary-nav .ncu-menu a{display:block;padding:12px 0}
+}
+.ncu-entry-header{margin:0 0 1.25rem}
+.ncu-entry-title{margin:0 0 .4rem}
+.ncu-entry-meta{color:var(--ncu-muted,#5f6368);font-size:.9rem}
+.ncu-site-footer{margin-top:3rem;padding:28px 0;border-top:1px solid var(--ncu-border,#e5e7eb);color:var(--ncu-muted,#5f6368);font-size:.92rem}
+.ncu-footer-nav{margin-bottom:12px}
+.ncu-copyright{margin:0}
