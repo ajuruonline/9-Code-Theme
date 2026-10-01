@@ -1,0 +1,39 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the upgrade test reads the old 3-package source from git history
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: sqlite3, pdo_sqlite, zip, mbstring, gd
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci || npm install
+      - run: npx playwright install --with-deps chromium
+      - name: Lint
+        run: bin/lint.sh
+      - name: Build zips
+        run: bin/build.sh
+      - name: Start test site
+        run: bin/setup-test-site.sh && bin/serve-test-site.sh
+      - name: Public site
+        run: node tests/e2e/public.mjs
+      - name: Admin crawl
+        run: node tests/e2e/crawl.mjs
+      - name: Post editor acceptance
+        run: node tests/e2e/editor.mjs
+      - name: Upgrade from the old 3-package install
+        run: bin/test-upgrade.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installable-zips
+          path: dist/*

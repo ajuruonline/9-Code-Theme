@@ -1,0 +1,5 @@
+/.wp-test*/
+/dist/
+/node_modules/
+*.log
+.DS_Store
