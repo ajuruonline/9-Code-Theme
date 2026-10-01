@@ -161,3 +161,4 @@ body.post-php .ncu-edit-panels-menu,body.post-new-php .ncu-edit-panels-menu,
 body.post-php .ncu-edit-panels-fab,body.post-new-php .ncu-edit-panels-fab{display:none!important;visibility:hidden!important;pointer-events:none!important}
 body.post-php.ncu-editor-tools-open,body.post-new-php.ncu-editor-tools-open,
 body.post-php.ncu-editor-panel-fullscreen-open,body.post-new-php.ncu-editor-panel-fullscreen-open{overflow:auto!important}
+.npm9-unsaved[hidden]{display:none!important}

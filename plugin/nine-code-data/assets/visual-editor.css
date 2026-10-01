@@ -1,0 +1,36 @@
+/* Nine Code Data - visual content editor (scoped to .nc-ve so wp-admin and Post Editor styles do not leak in). */
+.npm9-ve-host:not(.is-ready){display:none}
+.nc-ve__bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:8px;border:1px solid #c3c4c7;border-bottom:0;border-radius:12px 12px 0 0;background:#f6f7f7;position:sticky;top:var(--wp-admin--admin-bar--height,0px);z-index:5}
+.nc-ve__modes{display:flex;gap:4px;margin-left:auto}
+.nc-ve__add.components-button{min-height:40px}
+.nc-ve__body{border:1px solid #c3c4c7;border-radius:0 0 12px 12px;background:#fff}
+.is-code-mode .nc-ve__bar{border-bottom:1px solid #c3c4c7;border-radius:12px}
+.nc-ve__canvas.editor-styles-wrapper{min-height:min(60vh,520px);padding:20px 16px;background:#fff;font-size:16px;line-height:1.65;color:#1e1e1e;box-sizing:border-box;overflow-x:hidden}
+.nc-ve__canvas .block-editor-block-list__layout{max-width:760px;margin:0 auto}
+.nc-ve__canvas img{max-width:100%;height:auto}
+/* Undo the Post Editor's generic form-field sizing inside the editor. */
+.nc-ve input:not([type=checkbox]):not([type=radio]),.nc-ve select,.nc-ve textarea{min-height:0}
+.nc-ve__settings{border-top:1px solid #dcdcde;padding:8px 12px}
+.nc-ve__settings summary{cursor:pointer;font-weight:600;min-height:32px;display:flex;align-items:center}
+.nc-form-block{border:1px dashed #8c8f94;border-radius:8px;padding:12px;background:#f6f7f7}
+.nc-form-block__hint{margin:6px 0 0;color:#50575e;font-size:13px}
+@media(max-width:782px){.nc-ve__canvas.editor-styles-wrapper{padding:14px 10px}.nc-ve__add.components-button{flex:1}}
+
+/* The Nine Code admin skin repaints buttons; keep the editor's own buttons legible. */
+.nc-ve .components-button.is-primary,.nc-ve .components-button.is-primary:hover,.nc-ve .components-button.is-primary:focus{background:#1d2327;color:#fff}
+.nc-ve .components-button.is-secondary{background:#fff;color:#1d2327;box-shadow:inset 0 0 0 1px #1d2327}
+.nc-ve .components-button.is-primary svg,.nc-ve .components-button.is-primary .dashicon{fill:#fff}
+.nc-ve__canvas.editor-styles-wrapper{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.nc-ve__canvas.editor-styles-wrapper p,.nc-ve__canvas.editor-styles-wrapper li{font-family:inherit}
+
+.nc-ve .components-button[aria-pressed="true"],.nc-ve .components-button[aria-pressed="true"]:hover{background:#1d2327!important;color:#fff!important}
+.nc-ve .components-button[aria-pressed="false"]{background:#fff!important;color:#1d2327!important;box-shadow:inset 0 0 0 1px #1d2327}
+/* Inserter and block popovers must sit above the Post Editor's sticky action bar. */
+.components-popover{z-index:100001}
+/* Highest-specificity pass: admin skins repaint .components-button (incl. :focus/.is-pressed); keep our toolbar readable. */
+body.wp-admin .nc-ve .nc-ve__bar .components-button.is-primary,
+body.wp-admin .nc-ve .nc-ve__bar .components-button.is-primary:hover,
+body.wp-admin .nc-ve .nc-ve__bar .components-button.is-primary:focus,
+body.wp-admin .nc-ve .nc-ve__bar .components-button.is-primary.is-pressed{background:#1d2327!important;border-color:#1d2327!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+body.wp-admin .nc-ve .nc-ve__bar .components-button.is-secondary,
+body.wp-admin .nc-ve .nc-ve__bar .components-button.is-secondary:hover{background:#fff!important;color:#1d2327!important;-webkit-text-fill-color:#1d2327!important}

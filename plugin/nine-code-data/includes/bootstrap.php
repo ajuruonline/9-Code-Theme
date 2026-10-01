@@ -106,9 +106,11 @@ foreach ( $nine55_modules as $module ) {
 }
 unset( $nine55_modules, $module );
 
+require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine-code-visual-editor.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-form.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-data-backup.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine55-ultron-data.php';
+Nine_Code_Visual_Editor::instance();
 Nine10_Form::instance();
 Nine10_Data_Backup::instance();
 Nine55_Ultron_Data::instance();

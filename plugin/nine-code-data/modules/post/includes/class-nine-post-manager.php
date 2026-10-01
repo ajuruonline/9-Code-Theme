@@ -185,7 +185,13 @@ final class Nine_Post_Manager {
     private function enqueue_workspace_assets() {
         wp_enqueue_media();
         wp_enqueue_style( 'npm9-admin', NPM9_URL . 'assets/admin.css', [], NPM9_VERSION );
-        wp_enqueue_script( 'npm9-app', NPM9_URL . 'assets/app.js', [ 'jquery' ], NPM9_VERSION, true );
+        $app_deps = [ 'jquery' ];
+        if ( class_exists( 'Nine_Code_Visual_Editor', false ) ) {
+            // Visual (WYSIWYG) editor for the Post Content tab; the code textarea remains the fallback.
+            Nine_Code_Visual_Editor::instance()->enqueue();
+            $app_deps[] = Nine_Code_Visual_Editor::HANDLE;
+        }
+        wp_enqueue_script( 'npm9-app', NPM9_URL . 'assets/app.js', $app_deps, NPM9_VERSION, true );
         wp_localize_script( 'npm9-app', 'NPM9', $this->js_config() );
     }
 
