@@ -291,6 +291,7 @@ function ncu_replace_welcome_panel_branding() {
 function ncu_client_welcome_panel() {
     if ( ! current_user_can( 'read' ) ) { return; }
     $name = ncu_client_brand_name();
+    $icon = ncu_admin_brand_icon_url();
     ?>
     <div class="welcome-panel-content ncu-client-welcome">
         <div class="ncu-client-welcome__brand"><img src="<?php echo esc_url( $icon ); ?>" alt="" width="42" height="42"><div><small>9 CODE APPLICATION</small><h2><?php echo esc_html( $name ); ?></h2><p>Workspace ready.</p></div></div>

@@ -81,6 +81,25 @@ final class Nine55_Ultron_Data {
         remove_menu_page( 'nine-post-manager' );
         remove_menu_page( 'nine-category-manager' );
         remove_menu_page( 'nine-ai-manager' );
+
+        /*
+         * The removed menu entries are still valid routed pages. WordPress finds
+         * a page title by walking the menu, so without one the global $title is
+         * null and wp-admin/admin-header.php passes null to strip_tags()
+         * (deprecated since PHP 8.1). Supply the title for these routed pages.
+         */
+        $titles = array(
+            'nine-post-manager'        => 'Post Editor',
+            'nine-category-manager'    => 'Category Manager',
+            'ninecode-acf-data-engine' => 'Data Engine',
+            'nine-ai-manager'          => 'AI Manager',
+        );
+        foreach ( $titles as $page_slug => $page_title ) {
+            add_action( 'load-toplevel_page_' . $page_slug, static function () use ( $page_title ) {
+                global $title;
+                if ( null === $title || '' === $title ) { $title = $page_title; }
+            } );
+        }
     }
 
     public function admin_assets() {

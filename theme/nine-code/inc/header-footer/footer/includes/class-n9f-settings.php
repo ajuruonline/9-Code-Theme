@@ -131,6 +131,21 @@ class ELHF_F_Settings {
         return $out;
     }
 
+    /**
+     * Save migrated settings without re-entering sanitize(): update_option() runs
+     * the registered sanitize callback, which calls all(), which would migrate
+     * again (the stored version is not yet updated) and recurse until the
+     * request runs out of memory.
+     */
+    private static function persist( $settings ) {
+        $instance = self::instance();
+        $had = has_filter( 'sanitize_option_n9f_settings', [ $instance, 'sanitize' ] );
+        if ( false !== $had ) { remove_filter( 'sanitize_option_n9f_settings', [ $instance, 'sanitize' ], $had ); }
+        update_option( 'n9f_settings', $settings );
+        if ( false !== $had ) { add_filter( 'sanitize_option_n9f_settings', [ $instance, 'sanitize' ], $had, 2 ); }
+        self::$settings_cache = null;
+    }
+
     public static function all( $refresh = false ) {
         if ( ! $refresh && null !== self::$settings_cache ) return self::$settings_cache;
         $stored = get_option( 'n9f_settings', [] );
@@ -141,11 +156,11 @@ class ELHF_F_Settings {
                 $stored['footer_manager_image_override_url'] = esc_url_raw( $stored['footer_manager_logo_url'] );
             }
             $stored['settings_version'] = '1.1.0';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         if ( version_compare( $stored['settings_version'] ?? '1.1.0', '1.2.0', '<' ) ) {
             $stored['settings_version'] = '1.2.0';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         if ( version_compare( $stored['settings_version'] ?? '1.2.0', '1.3.1', '<' ) ) {
             // Old v1.2 defaults forced a navy/white palette. If the site still
@@ -163,7 +178,7 @@ class ELHF_F_Settings {
                 if ( empty( $stored["footer_slot_{$i}_color_behavior"] ) ) $stored["footer_slot_{$i}_color_behavior"] = 'inherit';
             }
             $stored['settings_version'] = '1.3.1';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         if ( version_compare( $stored['settings_version'] ?? '1.3.1', '1.3.2', '<' ) ) {
             // v1.3.2 changes Automatic mode from transparent/inherited to a
@@ -171,13 +186,13 @@ class ELHF_F_Settings {
             if ( ! isset( $stored['footer_auto_contrast'] ) ) $stored['footer_auto_contrast'] = 'yes';
             if ( ! isset( $stored['footer_manager_auto_contrast'] ) ) $stored['footer_manager_auto_contrast'] = 'yes';
             $stored['settings_version'] = '1.3.2';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         if ( version_compare( $stored['settings_version'] ?? '1.3.2', '1.4.0', '<' ) ) {
             // Historical version step retained only for deterministic upgrades.
             // The discontinued companion layer is no longer created or restored.
             $stored['settings_version'] = '1.4.0';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         if ( version_compare( $stored['settings_version'] ?? '1.4.0', '1.5.0', '<' ) ) {
             // v1.5 makes footer navigation explicitly administrator-selected.
@@ -187,7 +202,7 @@ class ELHF_F_Settings {
                 $stored['footer_nav_builder'] = self::default_footer_nav_builder();
             }
             $stored['settings_version'] = '1.5.0';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         if ( version_compare( $stored['settings_version'] ?? '1.5.0', '1.6.0', '<' ) ) {
             // v1.6 removes the discontinued companion layer and introduces
@@ -197,14 +212,14 @@ class ELHF_F_Settings {
             }
             $stored['enabled'] = '';
             $stored['settings_version'] = '1.6.0';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         if ( version_compare( $stored['settings_version'] ?? '1.6.0', '1.7.0', '<' ) ) {
             // v1.7 repairs the master switch contract. One upgrade reset to OFF
             // prevents legacy or imported state from silently keeping Theme chrome alive.
             $stored['enabled'] = '';
             $stored['settings_version'] = '1.7.0';
-            update_option( 'n9f_settings', $stored );
+            self::persist( $stored );
         }
         self::$settings_cache = wp_parse_args( $stored, self::defaults() );
         return self::$settings_cache;
@@ -224,9 +239,9 @@ class ELHF_F_Settings {
                 }
                 $import['enabled'] = '';
                 $import['settings_version'] = '1.7.0';
-                update_option( 'n9f_settings', $import );
+                self::persist( $import );
             } else {
-                update_option( 'n9f_settings', self::defaults() );
+                self::persist( self::defaults() );
             }
         }
     }
