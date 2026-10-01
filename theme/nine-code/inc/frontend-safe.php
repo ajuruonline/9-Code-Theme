@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
- * Minimal public runtime for 9Code Theme.
+ * Minimal public runtime for Nine Code.
  *
  * No Header/Footer engine, style takeover, host-mode resolver, custom content
  * renderer, starter migration, or editor runtime is loaded here. WordPress and
@@ -208,7 +208,7 @@ function ncu_safe_front_launcher_markup() {
     echo '<button type="button" class="n9be-rail-button" data-n9be-quick-toggle aria-expanded="false" aria-controls="n9be-quick-drawer" title="Quick Actions"><span class="dashicons dashicons-grid-view"></span><span class="screen-reader-text">Quick Actions</span></button>';
     echo '</div>';
     echo '<aside id="n9be-quick-drawer" class="n9be-quick-drawer" hidden aria-label="9Code Quick Actions"><button type="button" class="n9be-quick-drawer__backdrop" data-n9be-quick-close tabindex="-1"></button><section class="n9be-quick-drawer__panel"><header><div><span>9CODE · SAFE RUNTIME</span><strong>Quick Actions</strong></div><button type="button" data-n9be-quick-close aria-label="Close quick actions"><span class="dashicons dashicons-no-alt"></span></button></header><div class="n9be-quick-grid">';
-    if ( current_user_can( 'edit_theme_options' ) ) { ncu_safe_front_launcher_item( '9Code Theme', 'admin-appearance', admin_url( 'themes.php?page=ninecode-theme-display' ) ); }
+    if ( current_user_can( 'edit_theme_options' ) ) { ncu_safe_front_launcher_item( 'Nine Code', 'admin-appearance', admin_url( 'themes.php?page=ninecode-theme-display' ) ); }
     if ( defined( 'NINE55_ULTRON_DATA_VERSION' ) || class_exists( 'Nine55_Ultron_Data', false ) ) {
         if ( current_user_can( 'edit_posts' ) ) { ncu_safe_front_launcher_item( 'Post Editor', 'edit-page', admin_url( 'admin.php?page=nine-post-manager' ) ); }
         if ( current_user_can( 'manage_categories' ) ) { ncu_safe_front_launcher_item( 'Category Manager', 'category', admin_url( 'admin.php?page=nine-category-manager' ) ); }

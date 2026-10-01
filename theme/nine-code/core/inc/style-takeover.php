@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
- * 9Core 15 v3 design authority.
+ * Nine Code v3 design authority.
  *
  * Plugin-local settings remain stored. Aggressive Takeover changes the final
  * presentation cascade only, so disabling the feature restores plugin styling.
@@ -315,7 +315,7 @@ function ncu_style_takeover_settings_page() {
 
             <section class="ncu-panel ncu-panel--padded">
                 <h2>Portable Style Pack</h2>
-                <p>Move only the active design authority settings to another 9Core 15 site without copying client content, branding identity, builders or plugin configuration.</p>
+                <p>Move only the active design authority settings to another Nine Code site without copying client content, branding identity, builders or plugin configuration.</p>
                 <div class="ncu-tools">
                     <a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_style_pack' ), 'ncu_export_style_pack' ) ); ?>">Export current .9style package</a>
                     <form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">

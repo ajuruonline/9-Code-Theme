@@ -110,7 +110,7 @@ class NineCM_Admin {
     }
 
     public function page() {
-        if ( ! NineCM_Core::can_access_planner() ) { wp_die( esc_html__( 'You do not have permission to use 9 Category Manager.', 'nine-category-manager' ) ); }
+        if ( ! NineCM_Core::can_access_planner() ) { wp_die( esc_html__( 'You do not have permission to use 9 Category Manager.', 'nine-code-data' ) ); }
         $settings = wp_parse_args( (array) get_option( 'ninecm_settings', array() ), NineCM_Core::default_settings() );
         $taxonomies = get_taxonomies( array( 'show_ui' => true ), 'objects' );
         $post_types = get_post_types( array( 'show_ui' => true ), 'objects' );

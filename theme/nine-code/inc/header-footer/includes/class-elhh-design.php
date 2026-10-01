@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Read-only design bridge.
  *
  * Authority order:
- * 1. 9Code Theme public design-token API.
+ * 1. Nine Code public design-token API.
  * 2. Header/Footer saved local fallback.
  *
  * No upstream option is copied or written. Derived values exist for the request only.
@@ -161,7 +161,7 @@ final class ELHF_Design {
 
     public static function authority_label() {
         $source = self::source();
-        if ( 'theme' === $source ) return '9 Code Ultra Theme Skin';
+        if ( 'theme' === $source ) return 'Nine Code Skin';
         return 'Header & Footer saved fallback';
     }
 }

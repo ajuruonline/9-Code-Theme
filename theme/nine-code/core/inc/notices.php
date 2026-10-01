@@ -34,11 +34,11 @@ function ncu_notice_render_queue() {
 
 add_action( 'admin_post_ncu_clear_notices', 'ncu_clear_notices_handler' );
 function ncu_clear_notices_handler() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_clear_notices' );
     delete_user_meta( get_current_user_id(), '_ncu_notice_queue' );
     delete_user_meta( get_current_user_id(), '_ncu_dismissed_notices' );
-    ncu_notice_push( '9Core 15 notices cleared.', 'success', 'notices-cleared' );
+    ncu_notice_push( 'Nine Code notices cleared.', 'success', 'notices-cleared' );
     wp_safe_redirect( admin_url( 'admin.php?page=nine-code-ultra' ) );
     exit;
 }
@@ -48,10 +48,10 @@ add_action( 'admin_init', 'ncu_cleanup_legacy_notice_query_args', 99 );
 function ncu_cleanup_legacy_notice_query_args() {
     if ( ! is_admin() || wp_doing_ajax() || ! current_user_can( 'manage_options' ) ) { return; }
     $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
-    if ( 0 !== strpos( $page, 'nine-code-ultra' ) ) { return; }
+    if ( 0 !== strpos( $page, 'nine-code' ) ) { return; }
     if ( empty( $_GET['updated'] ) && empty( $_GET['reset'] ) && empty( $_GET['imported'] ) ) { return; }
     $type = ! empty( $_GET['reset'] ) ? 'info' : 'success';
-    $message = ! empty( $_GET['reset'] ) ? '9Core 15 settings reset.' : ( ! empty( $_GET['imported'] ) ? '9Core 15 settings imported.' : '9Core 15 settings saved.' );
+    $message = ! empty( $_GET['reset'] ) ? 'Nine Code settings reset.' : ( ! empty( $_GET['imported'] ) ? 'Nine Code settings imported.' : 'Nine Code settings saved.' );
     ncu_notice_push( $message, $type, 'legacy-result' );
     $url = remove_query_arg( array( 'updated', 'reset', 'imported' ) );
     wp_safe_redirect( $url );

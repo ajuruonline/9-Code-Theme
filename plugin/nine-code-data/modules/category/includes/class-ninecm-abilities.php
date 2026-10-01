@@ -14,16 +14,16 @@ class NineCM_Abilities {
     public function register_category() {
         if ( ! function_exists( 'wp_register_ability_category' ) ) { return; }
         wp_register_ability_category( 'nine-category-planning', array(
-            'label'       => __( '9 Site Infrastructure', 'nine-category-manager' ),
-            'description' => __( 'Read-only discovery of content types, taxonomies/tags and planning-layer relationships managed by 9 Category Manager.', 'nine-category-manager' ),
+            'label'       => __( '9 Site Infrastructure', 'nine-code-data' ),
+            'description' => __( 'Read-only discovery of content types, taxonomies/tags and planning-layer relationships managed by 9 Category Manager.', 'nine-code-data' ),
         ) );
     }
 
     public function register_abilities() {
         if ( ! function_exists( 'wp_register_ability' ) ) { return; }
         wp_register_ability( 'nine-category-manager/list-infrastructure', array(
-            'label' => __( 'List site infrastructure', 'nine-category-manager' ),
-            'description' => __( 'Lists editable content types and compatible taxonomy/tag systems with their structural capabilities.', 'nine-category-manager' ),
+            'label' => __( 'List site infrastructure', 'nine-code-data' ),
+            'description' => __( 'Lists editable content types and compatible taxonomy/tag systems with their structural capabilities.', 'nine-code-data' ),
             'category' => 'nine-category-planning',
             'input_schema' => array( 'type' => 'object', 'properties' => array(), 'additionalProperties' => false ),
             'output_schema' => array( 'type' => 'object' ),
@@ -32,8 +32,8 @@ class NineCM_Abilities {
             'meta' => array( 'annotations' => array( 'readonly' => true, 'destructive' => false, 'idempotent' => true ), 'show_in_rest' => true ),
         ) );
         wp_register_ability( 'nine-category-manager/list-taxonomy-terms', array(
-            'label' => __( 'List taxonomy terms', 'nine-category-manager' ),
-            'description' => __( 'Returns terms from a visible hierarchical or tag-like taxonomy. Hierarchical systems include full paths.', 'nine-category-manager' ),
+            'label' => __( 'List taxonomy terms', 'nine-code-data' ),
+            'description' => __( 'Returns terms from a visible hierarchical or tag-like taxonomy. Hierarchical systems include full paths.', 'nine-code-data' ),
             'category' => 'nine-category-planning',
             'input_schema' => array(
                 'type' => 'object', 'properties' => array(
@@ -49,8 +49,8 @@ class NineCM_Abilities {
         ) );
         // Backward-compatible v3 ability name. It now delegates to the generic term reader.
         wp_register_ability( 'nine-category-manager/list-category-paths', array(
-            'label' => __( 'List category paths', 'nine-category-manager' ),
-            'description' => __( 'Backward-compatible read-only category path discovery.', 'nine-category-manager' ),
+            'label' => __( 'List category paths', 'nine-code-data' ),
+            'description' => __( 'Backward-compatible read-only category path discovery.', 'nine-code-data' ),
             'category' => 'nine-category-planning',
             'input_schema' => array( 'type' => 'object', 'properties' => array( 'taxonomy' => array( 'type' => 'string', 'default' => 'category' ), 'search' => array( 'type' => 'string', 'default' => '' ), 'limit' => array( 'type' => 'integer', 'default' => 200, 'minimum' => 1, 'maximum' => 500 ) ), 'additionalProperties' => false ),
             'output_schema' => array( 'type' => 'array', 'items' => array( 'type' => 'object' ) ),
@@ -59,8 +59,8 @@ class NineCM_Abilities {
             'meta' => array( 'annotations' => array( 'readonly' => true, 'destructive' => false, 'idempotent' => true ), 'show_in_rest' => true ),
         ) );
         wp_register_ability( 'nine-category-manager/get-planning-item', array(
-            'label' => __( 'Get planning item', 'nine-category-manager' ),
-            'description' => __( 'Returns the planning-layer structure for one editable item: title, excerpt, featured image, author, parent/order, all attached taxonomy/tag allocations and registered relationship providers. Body content and private detailed fields are excluded.', 'nine-category-manager' ),
+            'label' => __( 'Get planning item', 'nine-code-data' ),
+            'description' => __( 'Returns the planning-layer structure for one editable item: title, excerpt, featured image, author, parent/order, all attached taxonomy/tag allocations and registered relationship providers. Body content and private detailed fields are excluded.', 'nine-code-data' ),
             'category' => 'nine-category-planning',
             'input_schema' => array( 'type' => 'object', 'properties' => array( 'post_id' => array( 'type' => 'integer', 'minimum' => 1 ) ), 'required' => array( 'post_id' ), 'additionalProperties' => false ),
             'output_schema' => array( 'type' => 'object' ),

@@ -26,8 +26,8 @@ final class N9BE_Quick_Actions {
         if ( ! current_user_can( 'edit_posts' ) ) { return; }
         add_submenu_page(
             'nine-code-ultra',
-            __( 'Quick Actions', 'nine-code-ultra' ),
-            __( 'Quick Actions', 'nine-code-ultra' ),
+            __( 'Quick Actions', 'nine-code' ),
+            __( 'Quick Actions', 'nine-code' ),
             'edit_posts',
             'ninecode-quick-actions',
             array( __CLASS__, 'render_settings_page' )
@@ -82,7 +82,7 @@ final class N9BE_Quick_Actions {
             'menu' => array( 'label'=>'WordPress Menu', 'icon'=>'menu', 'handler'=>'menu', 'cap'=>'edit_posts' ),
             'theme_menu' => array( 'label'=>'Theme Menu', 'icon'=>'menu', 'handler'=>'theme_menu', 'cap'=>'read' ),
             'view_site' => array( 'label'=>'View Site', 'icon'=>'admin-home', 'handler'=>'view_site', 'cap'=>'edit_posts' ),
-            'ninecode_theme' => array( 'label'=>'9Code Theme', 'icon'=>'admin-appearance', 'url'=>admin_url( 'themes.php?page=ninecode-theme-display' ), 'cap'=>'edit_theme_options' ),
+            'ninecode_theme' => array( 'label'=>'Nine Code', 'icon'=>'admin-appearance', 'url'=>admin_url( 'themes.php?page=ninecode-theme-display' ), 'cap'=>'edit_theme_options' ),
                         'new_post' => array( 'label'=>'Add Post', 'icon'=>'edit-page', 'url'=>admin_url( 'post-new.php' ), 'cap'=>'edit_posts' ),
             'new_page' => array( 'label'=>'Add Page', 'icon'=>'admin-page', 'url'=>admin_url( 'post-new.php?post_type=page' ), 'cap'=>'edit_pages' ),
             'media_upload' => array( 'label'=>'Upload Media', 'icon'=>'upload', 'url'=>admin_url( 'media-new.php' ), 'cap'=>'upload_files' ),
@@ -207,7 +207,7 @@ final class N9BE_Quick_Actions {
     }
 
     private static function record_frontend_error( $stage, $error ) {
-        $message = '[9Code Theme Quick Actions] Front-end ' . sanitize_key( (string) $stage ) . ' disabled for this request: ' . $error->getMessage();
+        $message = '[Nine Code Quick Actions] Front-end ' . sanitize_key( (string) $stage ) . ' disabled for this request: ' . $error->getMessage();
         if ( function_exists( 'error_log' ) ) { error_log( $message ); }
         do_action( 'ninecode_theme_quick_actions_frontend_error', $stage, $error );
     }
@@ -255,7 +255,7 @@ final class N9BE_Quick_Actions {
     }
 
     public static function handle_settings_save() {
-        if ( ! current_user_can( 'edit_posts' ) ) { wp_die( esc_html__( 'You are not allowed to change quick actions.', 'nine-code-ultra' ) ); }
+        if ( ! current_user_can( 'edit_posts' ) ) { wp_die( esc_html__( 'You are not allowed to change quick actions.', 'nine-code' ) ); }
         check_admin_referer( 'n9be_quick_actions_save' );
         $catalog = self::catalog();
         $ids = isset( $_POST['action_ids'] ) && is_array( $_POST['action_ids'] ) ? array_map( 'sanitize_key', wp_unslash( $_POST['action_ids'] ) ) : array();
@@ -308,7 +308,7 @@ final class N9BE_Quick_Actions {
     public static function ajax_plugin_install() {
         check_ajax_referer( 'n9be_quick_plugin_install', 'nonce' );
         if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'upload_plugins' ) || ! current_user_can( 'activate_plugins' ) ) {
-            wp_send_json_error( array( 'message'=>__( 'You are not allowed to install and activate plugins.', 'nine-code-ultra' ) ), 403 );
+            wp_send_json_error( array( 'message'=>__( 'You are not allowed to install and activate plugins.', 'nine-code' ) ), 403 );
         }
         if ( empty( $_FILES['pluginzip'] ) || ! is_array( $_FILES['pluginzip'] ) ) { wp_send_json_error( array( 'message'=>'Choose a plugin ZIP.' ), 400 ); }
         $upload = $_FILES['pluginzip']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized

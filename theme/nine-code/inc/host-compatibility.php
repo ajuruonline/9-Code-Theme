@@ -131,7 +131,7 @@ function ncu_theme_default_surface_context() {
 add_filter( 'body_class', 'ncu_theme_host_compatibility_body_class_safe', 12 );
 function ncu_theme_host_compatibility_body_class_safe( $classes ) {
     try { return ncu_theme_host_compatibility_body_class( $classes ); }
-    catch ( \Throwable $e ) { error_log( '[9Code Theme ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] host body-class fallback: ' . $e->getMessage() ); return is_array( $classes ) ? $classes : array(); }
+    catch ( \Throwable $e ) { error_log( '[Nine Code ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] host body-class fallback: ' . $e->getMessage() ); return is_array( $classes ) ? $classes : array(); }
 }
 function ncu_theme_host_compatibility_body_class( $classes ) {
     $mode = ncu_theme_host_mode();

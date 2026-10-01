@@ -7,7 +7,7 @@ class NineCM_Export {
     }
 
     private function fail( $message, $status = 403 ) {
-        wp_die( esc_html( $message ), esc_html__( '9 Category Manager Export', 'nine-category-manager' ), array( 'response' => (int) $status ) );
+        wp_die( esc_html( $message ), esc_html__( '9 Category Manager Export', 'nine-code-data' ), array( 'response' => (int) $status ) );
     }
 
     private function taxonomy( $name ) {

@@ -3,10 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'NCU_THEME_VERSION', '15.0.2' );
-define( 'NCU_THEME_RELEASE_SHOT', 'Version 15 Editor Overlay Removal' );
+define( 'NCU_THEME_VERSION', '16.0.0' );
+define( 'NCU_THEME_RELEASE_SHOT', 'Nine Code baseline' );
 define( 'NCU_THEME_API_VERSION', 14 );
-define( 'NINECODE_SUITE_THEME_VERSION', '15.0.2' );
+define( 'NINECODE_SUITE_THEME_VERSION', NCU_THEME_VERSION );
 if ( ! defined( 'NINECODE_SUITE_CONTRACT_MAJOR' ) ) { define( 'NINECODE_SUITE_CONTRACT_MAJOR', 14 ); }
 define( 'NCU_THEME_DIR', get_template_directory() );
 define( 'NCU_THEME_URI', get_template_directory_uri() );
@@ -27,6 +27,18 @@ function ncu_theme_is_admin_runtime() {
 /* Safe on every request: defaults, native WordPress theme support and helpers. */
 require_once NCU_THEME_DIR . '/inc/defaults.php';
 require_once NCU_THEME_DIR . '/inc/setup.php';
+require_once NCU_THEME_DIR . '/inc/migrate-legacy.php';
+
+/*
+ * Core module (settings, Style Authority, admin workspace, editor tools...).
+ * It used to ship as the separate "Nine Code" plugin. If that plugin is still
+ * active in this request it has already declared the same functions, so skip
+ * the bundled copy; inc/migrate-legacy.php deactivates the plugin on the next
+ * admin request and the bundled module takes over.
+ */
+if ( ! function_exists( 'ncu_core_defaults' ) ) {
+    require_once NCU_THEME_DIR . '/core/bootstrap.php';
+}
 
 if ( ncu_theme_is_admin_runtime() ) {
     require_once NCU_THEME_DIR . '/inc/helpers.php';
@@ -42,7 +54,6 @@ if ( ncu_theme_is_admin_runtime() ) {
     require_once NCU_THEME_DIR . '/inc/enqueue.php';
     require_once NCU_THEME_DIR . '/inc/integrations.php';
     require_once NCU_THEME_DIR . '/inc/starter-content.php';
-    require_once NCU_THEME_DIR . '/inc/admin.php';
 } else {
     /* Minimal public runtime: WordPress owns rendering; Theme supplies CSS only. */
     require_once NCU_THEME_DIR . '/inc/frontend-safe.php';

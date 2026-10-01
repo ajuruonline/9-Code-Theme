@@ -57,10 +57,10 @@ function ncu_theme_header_footer_retired_notice() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     if ( get_transient( 'ncu_header_footer_retired_notice' ) ) {
         delete_transient( 'ncu_header_footer_retired_notice' );
-        echo '<div class="notice notice-success is-dismissible"><p><strong>9 Code Ultra Theme:</strong> standalone e-learning.click Header &amp; Footer was deactivated. Existing Header/Footer settings were preserved and the Theme now owns both surfaces.</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p><strong>Nine Code:</strong> standalone e-learning.click Header &amp; Footer was deactivated. Existing Header/Footer settings were preserved and the Theme now owns both surfaces.</p></div>';
     }
     if ( 'network-active-needs-network-admin' === get_option( 'ncu_header_footer_retirement_status' ) ) {
-        echo '<div class="notice notice-warning"><p><strong>9 Code Ultra Theme:</strong> the standalone Header &amp; Footer plugin is network-active. A network administrator must deactivate it to complete the one-owner migration.</p></div>';
+        echo '<div class="notice notice-warning"><p><strong>Nine Code:</strong> the standalone Header &amp; Footer plugin is network-active. A network administrator must deactivate it to complete the one-owner migration.</p></div>';
     }
 }
 add_action( 'admin_notices', 'ncu_theme_header_footer_retired_notice' );
@@ -147,9 +147,9 @@ function ncu_theme_header_footer_admin_page() {
     wp_enqueue_script( 'elhh-admin', ELHF_URL . 'assets/admin-unified.js', [], ELHF_VERSION, true );
     ?>
     <div class="wrap elhh-admin" data-elhh-admin data-active-surface="<?php echo esc_attr($surface); ?>">
-        <header class="elhh-admin__hero"><div><span class="elhh-admin__kicker">9 CODE ULTRA THEME · SITE SHELL</span><h1>Header &amp; Footer</h1><p>Header and Footer are optional Theme surfaces and start OFF. Turn on only the edge you explicitly want the Theme to render.</p></div><div class="elhh-authority"><small>Default style authority</small><strong>9 Code Ultra Theme Skin</strong><span><?php echo esc_html(ucwords(str_replace('-',' ',ELHF_Design::style_slug()))); ?> · <?php echo esc_html(ELHF_Design::authority_label()); ?></span></div></header>
+        <header class="elhh-admin__hero"><div><span class="elhh-admin__kicker">NINE CODE · SITE SHELL</span><h1>Header &amp; Footer</h1><p>Header and Footer are optional Theme surfaces and start OFF. Turn on only the edge you explicitly want the Theme to render.</p></div><div class="elhh-authority"><small>Default style authority</small><strong>Nine Code Skin</strong><span><?php echo esc_html(ucwords(str_replace('-',' ',ELHF_Design::style_slug()))); ?> · <?php echo esc_html(ELHF_Design::authority_label()); ?></span></div></header>
         <div class="elhh-toolbar" role="region" aria-label="Header and footer settings navigation"><div class="elhh-tabs" role="tablist"><button type="button" class="elhh-tab" data-elhh-tab="header" role="tab">Header</button><button type="button" class="elhh-tab" data-elhh-tab="footer" role="tab">Footer</button></div><label class="elhh-search"><span class="dashicons dashicons-search" aria-hidden="true"></span><span class="screen-reader-text">Search Header and Footer settings</span><input type="search" data-elhh-search placeholder="Find any setting…" autocomplete="off"><button type="button" data-elhh-clear aria-label="Clear search">×</button></label></div>
-        <div class="notice notice-info inline elhh-runtime-note"><p><strong>Theme Skin is authoritative by default.</strong> Local Header/Footer colours are compatibility fallbacks. Change Popular Site or Skin under <strong>9Core 15 → Style Authority</strong> to restyle both edges together.</p></div>
+        <div class="notice notice-info inline elhh-runtime-note"><p><strong>Theme Skin is authoritative by default.</strong> Local Header/Footer colours are compatibility fallbacks. Change Popular Site or Skin under <strong>Nine Code → Style Authority</strong> to restyle both edges together.</p></div>
         <section class="elhh-surface" data-elhh-surface="header"><?php ELHF_H_Settings::instance()->page(); ?></section>
         <section class="elhh-surface" data-elhh-surface="footer"><?php ELHF_F_Settings::instance()->page(); ?></section>
     </div><?php

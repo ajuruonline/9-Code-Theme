@@ -17,18 +17,18 @@ function ncu_theme_setup() {
     add_theme_support( 'customize-selective-refresh-widgets' );
 
     register_nav_menus( array(
-        'primary' => __( 'Primary Menu', 'nine-code-ultra' ),
-        'quick'   => __( 'Quick Links', 'nine-code-ultra' ),
-        'footer'  => __( 'Footer Menu', 'nine-code-ultra' ),
+        'primary' => __( 'Primary Menu', 'nine-code' ),
+        'quick'   => __( 'Quick Links', 'nine-code' ),
+        'footer'  => __( 'Footer Menu', 'nine-code' ),
     ) );
 }
 
 add_action( 'widgets_init', 'ncu_widgets_init' );
 function ncu_widgets_init() {
     register_sidebar( array(
-        'name'          => __( 'Sidebar', 'nine-code-ultra' ),
+        'name'          => __( 'Sidebar', 'nine-code' ),
         'id'            => 'sidebar-1',
-        'description'   => __( 'Optional sidebar for native site templates.', 'nine-code-ultra' ),
+        'description'   => __( 'Optional sidebar for native site templates.', 'nine-code' ),
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
         'after_widget'  => '</section>',
         'before_title'  => '<h2 class="widget-title">',
@@ -39,12 +39,12 @@ function ncu_widgets_init() {
 add_action( 'init', 'ncu_register_block_designs' );
 function ncu_register_block_designs() {
     if ( function_exists( 'register_block_pattern_category' ) ) {
-        register_block_pattern_category( 'nine-code-ultra', array( 'label' => __( '9Code 15 Theme', 'nine-code-ultra' ) ) );
+        register_block_pattern_category( 'nine-code-ultra', array( 'label' => __( 'Nine Code', 'nine-code' ) ) );
     }
     if ( function_exists( 'register_block_style' ) ) {
-        register_block_style( 'core/group', array( 'name' => 'ncu-card', 'label' => __( '9code Card', 'nine-code-ultra' ), 'inline_style' => '.wp-block-group.is-style-ncu-card{border:1px solid var(--ncu-border);border-radius:var(--ncu-radius);padding:clamp(16px,3vw,28px);background:var(--ncu-surface)}' ) );
-        register_block_style( 'core/details', array( 'name' => 'ncu-accordion', 'label' => __( '9code Accordion', 'nine-code-ultra' ), 'inline_style' => '.wp-block-details.is-style-ncu-accordion{border:1px solid var(--ncu-border);border-radius:12px;padding:14px 16px}.wp-block-details.is-style-ncu-accordion summary{font-weight:750}' ) );
-        register_block_style( 'core/list', array( 'name' => 'ncu-clean-list', 'label' => __( '9code Clean List', 'nine-code-ultra' ), 'inline_style' => '.wp-block-list.is-style-ncu-clean-list{padding-left:1.25em}.wp-block-list.is-style-ncu-clean-list li{margin:.4em 0}' ) );
+        register_block_style( 'core/group', array( 'name' => 'ncu-card', 'label' => __( '9code Card', 'nine-code' ), 'inline_style' => '.wp-block-group.is-style-ncu-card{border:1px solid var(--ncu-border);border-radius:var(--ncu-radius);padding:clamp(16px,3vw,28px);background:var(--ncu-surface)}' ) );
+        register_block_style( 'core/details', array( 'name' => 'ncu-accordion', 'label' => __( '9code Accordion', 'nine-code' ), 'inline_style' => '.wp-block-details.is-style-ncu-accordion{border:1px solid var(--ncu-border);border-radius:12px;padding:14px 16px}.wp-block-details.is-style-ncu-accordion summary{font-weight:750}' ) );
+        register_block_style( 'core/list', array( 'name' => 'ncu-clean-list', 'label' => __( '9code Clean List', 'nine-code' ), 'inline_style' => '.wp-block-list.is-style-ncu-clean-list{padding-left:1.25em}.wp-block-list.is-style-ncu-clean-list li{margin:.4em 0}' ) );
     }
 }
 

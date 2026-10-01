@@ -82,7 +82,7 @@ final class NineCM_Core {
     }
 
     public function plugin_action_links( $links ) {
-        array_unshift( $links, '<a href="' . esc_url( admin_url( 'admin.php?page=nine-category-manager' ) ) . '">' . esc_html__( 'Open Manager', 'nine-category-manager' ) . '</a>' );
+        array_unshift( $links, '<a href="' . esc_url( admin_url( 'admin.php?page=nine-category-manager' ) ) . '">' . esc_html__( 'Open Manager', 'nine-code-data' ) . '</a>' );
         return $links;
     }
 

@@ -28,7 +28,7 @@ function DisplayPanel(){
   var controls=[];
   controls.push(el(Select,{key:'owner',label:__('Presentation owner','nine-code-ultra'),value:state.meta._ncu_presentation_owner||'auto',options:[
     {label:__('Automatic','nine-code-ultra'),value:'auto'},
-    {label:__('9Code Theme','nine-code-ultra'),value:'theme'},
+    {label:__('Nine Code','nine-code-ultra'),value:'theme'},
     {label:__('Plugin / custom presentation','nine-code-ultra'),value:'plugin'}
   ],help:__('Plugin / custom suppresses Theme title, meta, category line, featured image, breadcrumbs, tags and navigation unless an item below is explicitly set to Show.','nine-code-ultra'),onChange:function(v){setMeta({_ncu_presentation_owner:v});}}));
   controls.push(setting(__('Title','nine-code-ultra'),'_ncu_display_title',state.meta,setMeta));

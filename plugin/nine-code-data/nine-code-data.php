@@ -1,151 +1,50 @@
 <?php
 /**
- * Plugin Name: 9 Data Manager
- * Description: 9Code editorial and data workspace combining Post Editor, Category Manager, Post Creator, Form Manager and scoped Data Backup.
- * Version: 9.10.14
- * Author: 9Code
- * Text Domain: nine55-ultron-data
+ * Plugin Name: Nine Code Data
+ * Plugin URI: https://9igeria.online/
+ * Description: Nine Code editorial and data workspace: Post Editor, Category Manager, Post Creator, Form Manager and scoped Data Backup. Keeps your data, forms and shortcodes working even if the theme changes.
+ * Version: 10.0.0
+ * Requires at least: 6.6
+ * Requires PHP: 7.4
+ * Author: 9igeria Online Ltd
+ * Author URI: https://9igeria.online/
+ * License: GPL-2.0-or-later
+ * Text Domain: nine-code-data
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'NINE55_ULTRON_DATA_VERSION', '9.10.14' );
+/*
+ * Upgrade safety: the previous "9 Data Manager" plugin (folder nine10-data-edition)
+ * declares the same classes/functions, and WordPress loads plugins in
+ * alphabetical order, so this plugin would load first. If the old plugin is
+ * active (checked from the active-plugins list, which works in either load
+ * order), do not load; retire the old plugin on the next admin request and take
+ * over after that. No data is touched either way.
+ */
+$nine_code_data_legacy = 'nine10-data-edition/nine55-ultron-data.php';
+$nine_code_data_legacy_active = defined( 'NINE55_ULTRON_DATA_VERSION' )
+    || in_array( $nine_code_data_legacy, (array) get_option( 'active_plugins', array() ), true )
+    || ( is_multisite() && isset( get_site_option( 'active_sitewide_plugins', array() )[ $nine_code_data_legacy ] ) );
+if ( $nine_code_data_legacy_active ) {
+    add_action( 'admin_init', function () use ( $nine_code_data_legacy ) {
+        if ( ! current_user_can( 'activate_plugins' ) ) { return; }
+        if ( ! function_exists( 'deactivate_plugins' ) ) { require_once ABSPATH . 'wp-admin/includes/plugin.php'; }
+        if ( is_plugin_active( $nine_code_data_legacy ) ) {
+            deactivate_plugins( $nine_code_data_legacy, true );
+            set_transient( 'ncu_migrated_data_notice', 1, DAY_IN_SECONDS );
+            wp_safe_redirect( remove_query_arg( 'nc_retire' ) );
+            exit;
+        }
+    }, 1 );
+    unset( $nine_code_data_legacy, $nine_code_data_legacy_active );
+    return;
+}
+unset( $nine_code_data_legacy, $nine_code_data_legacy_active );
+
+define( 'NINE55_ULTRON_DATA_VERSION', '10.0.0' );
 define( 'NINE55_ULTRON_DATA_FILE', __FILE__ );
 define( 'NINE55_ULTRON_DATA_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NINE55_ULTRON_DATA_URL', plugin_dir_url( __FILE__ ) );
 
-/**
- * During migration, an older standalone engine may still be active. In that
- * case use that live engine for this request instead of loading the bundled
- * copy and causing duplicate classes. Once the standalone is deactivated the
- * bundled engine takes over automatically on the next request.
- */
-function nine55_ultron_external_plugin_active( $main_file ) {
-    $wanted_basename = basename( $main_file );
-    $active = (array) get_option( 'active_plugins', array() );
-    foreach ( $active as $plugin_file ) {
-        if ( $plugin_file === $main_file || basename( $plugin_file ) === $wanted_basename ) { return true; }
-    }
-    if ( is_multisite() ) {
-        $network = (array) get_site_option( 'active_sitewide_plugins', array() );
-        foreach ( array_keys( $network ) as $plugin_file ) {
-            if ( $plugin_file === $main_file || basename( $plugin_file ) === $wanted_basename ) { return true; }
-        }
-    }
-    return false;
-}
-
-
-/**
- * The Theme owns the visible logged-in front-end control rail when available.
- * Data Manager keeps its workspaces loaded but suppresses its legacy floating
- * Post Editor / Category Manager buttons so users see one launcher only.
- */
-function nine10_data_theme_launcher_available() {
-    $available = class_exists( 'N9BE_Quick_Actions', false );
-    return (bool) apply_filters( 'nine10_data_theme_launcher_available', $available );
-}
-
-
-/** Additive suite contract: Data Manager edits only WordPress/provider-authorized data. */
-function nine10_data_component_contract( $contracts ) {
-    $contracts = is_array( $contracts ) ? $contracts : array();
-    $contracts['9-data-manager'] = array(
-        'id' => '9-data-manager',
-        'version' => NINE55_ULTRON_DATA_VERSION,
-        'role' => 'editorial-data-workspace',
-        'foreign_cpt_policy' => 'discover-dont-own',
-        'private_meta_policy' => 'readonly-unless-provider-allows',
-        'acf_policy' => 'provider-api',
-        'elementor_policy' => 'presentation-owner',
-        'taxonomy_policy' => 'registered-object-taxonomies-only',
-    );
-    return $contracts;
-}
-add_filter( 'ninecodepress_component_contracts', 'nine10_data_component_contract', 30 );
-
-/**
- * Default editing boundary: native posts/pages plus public provider-owned CPTs.
- * Internal builder/configuration post types stay with Elementor, ACF, Frontend
- * Admin and other owning plugins unless they explicitly opt in through the
- * filter.
- */
-function nine10_data_filter_internal_post_types( $post_types, $context = '' ) {
-    if ( ! is_array( $post_types ) ) { return array(); }
-    foreach ( $post_types as $key => $object ) {
-        $name = is_object( $object ) && isset( $object->name ) ? (string) $object->name : (string) $key;
-        if ( in_array( $name, array( 'post', 'page' ), true ) ) { continue; }
-        $public = is_object( $object ) && ( ! empty( $object->public ) || ! empty( $object->publicly_queryable ) );
-        $include = (bool) apply_filters( 'nine10_data_include_internal_post_type', $public, $name, $object, $context );
-        if ( ! $include ) { unset( $post_types[ $key ] ); }
-    }
-    return $post_types;
-}
-add_filter( 'nine10_data_editable_post_types', 'nine10_data_filter_internal_post_types', 5, 2 );
-
-$nine55_modules = array(
-    'data' => array(
-        'external' => 'ninecode-acf-data-engine/ninecode-acf-data-engine.php',
-        'class'    => 'NineCode_ACF_Data_Engine',
-        'file'     => NINE55_ULTRON_DATA_DIR . 'modules/data/ninecode-acf-data-engine.php',
-    ),
-    'post' => array(
-        'external' => '9-post-manager/9-post-manager.php',
-        'class'    => 'Nine_Post_Manager',
-        'file'     => NINE55_ULTRON_DATA_DIR . 'modules/post/9-post-manager.php',
-    ),
-    'category' => array(
-        'external' => 'nine-category-manager/nine-category-manager.php',
-        'class'    => 'NineCM_Core',
-        'file'     => NINE55_ULTRON_DATA_DIR . 'modules/category/nine-category-manager.php',
-    ),
-    'ai' => array(
-        'external' => 'nine-ai-manager/nine-ai-manager.php',
-        'class'    => 'Nine_AI_Manager',
-        'file'     => NINE55_ULTRON_DATA_DIR . 'modules/ai/nine-ai-manager.php',
-    ),
-);
-
-foreach ( $nine55_modules as $module ) {
-    if ( ! class_exists( $module['class'], false ) && ! nine55_ultron_external_plugin_active( $module['external'] ) && is_file( $module['file'] ) ) {
-        require_once $module['file'];
-    }
-}
-unset( $nine55_modules, $module );
-
-require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-form.php';
-require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-data-backup.php';
-require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine55-ultron-data.php';
-Nine10_Form::instance();
-Nine10_Data_Backup::instance();
-Nine55_Ultron_Data::instance();
-
-function nine55_ultron_data_activate() {
-    if ( class_exists( 'NineCode_ACF_Data_Engine' ) && method_exists( 'NineCode_ACF_Data_Engine', 'activate' ) ) {
-        NineCode_ACF_Data_Engine::activate();
-    }
-    if ( class_exists( 'NineCM_Core' ) && method_exists( 'NineCM_Core', 'activate' ) ) {
-        NineCM_Core::activate();
-    }
-    if ( class_exists( 'Nine_AI_Manager' ) && method_exists( 'Nine_AI_Manager', 'activate' ) ) {
-        Nine_AI_Manager::activate();
-    }
-    update_option( 'nine55_ultron_data_version', NINE55_ULTRON_DATA_VERSION, false );
-    update_option( 'nine55_ultron_data_sources', array(
-        'data' => defined( 'NINECODE_ACF_DATA_ENGINE_VERSION' ) ? NINECODE_ACF_DATA_ENGINE_VERSION : 'external',
-        'post' => defined( 'NPM9_VERSION' ) ? NPM9_VERSION : 'external',
-        'category' => defined( 'NINECM_VERSION' ) ? NINECM_VERSION : 'external',
-        'ai' => defined( 'NINE_AI_MANAGER_VERSION' ) ? NINE_AI_MANAGER_VERSION : 'external',
-    ), false );
-}
-register_activation_hook( __FILE__, 'nine55_ultron_data_activate' );
-
-function nine55_ultron_data_deactivate() {
-    if ( class_exists( 'NineCode_ACF_Data_Engine' ) && method_exists( 'NineCode_ACF_Data_Engine', 'deactivate' ) ) {
-        NineCode_ACF_Data_Engine::deactivate();
-    }
-    if ( class_exists( 'Nine_AI_Manager' ) && method_exists( 'Nine_AI_Manager', 'deactivate' ) ) {
-        Nine_AI_Manager::deactivate();
-    }
-}
-register_deactivation_hook( __FILE__, 'nine55_ultron_data_deactivate' );
+require_once NINE55_ULTRON_DATA_DIR . 'includes/bootstrap.php';

@@ -46,8 +46,8 @@ final class Nine_Post_Manager {
 
     public function admin_menu() {
         add_menu_page(
-            __( '9 Post Editor', 'nine-post-manager' ),
-            __( '9 Post Editor', 'nine-post-manager' ),
+            __( '9 Post Editor', 'nine-code-data' ),
+            __( '9 Post Editor', 'nine-code-data' ),
             'edit_posts',
             $this->menu_slug,
             [ $this, 'render_admin_page' ],
@@ -94,7 +94,7 @@ final class Nine_Post_Manager {
             if ( ! is_object( $post_type ) || 'attachment' === $post_type->name ) { continue; }
             add_meta_box(
                 'npm9-native-content-meta-recovery',
-                __( '9 Data - Post Content & Metadata', 'nine-post-manager' ),
+                __( '9 Data - Post Content & Metadata', 'nine-code-data' ),
                 [ $this, 'render_native_recovery_metabox' ],
                 $post_type->name,
                 'normal',
@@ -110,12 +110,12 @@ final class Nine_Post_Manager {
         $protected = array_values( array_filter( $meta, static function( $row ) { return ! empty( $row['system'] ); } ) );
         ?>
         <div class="npm9-native-recovery" data-post-id="<?php echo esc_attr( $post->ID ); ?>">
-            <p><strong><?php esc_html_e( 'Emergency-safe editing path.', 'nine-post-manager' ); ?></strong> <?php esc_html_e( 'This panel exposes the real WordPress post_content and stored post metadata even if another editor layer is covering the normal canvas.', 'nine-post-manager' ); ?></p>
-            <p><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . $this->menu_slug . '&post_id=' . $post->ID ) ); ?>"><?php esc_html_e( 'Open full 9 Data Post Editor', 'nine-post-manager' ); ?></a></p>
-            <label class="npm9-field-label" for="npm9-native-recovery-content"><?php esc_html_e( 'Post Content', 'nine-post-manager' ); ?></label>
+            <p><strong><?php esc_html_e( 'Emergency-safe editing path.', 'nine-code-data' ); ?></strong> <?php esc_html_e( 'This panel exposes the real WordPress post_content and stored post metadata even if another editor layer is covering the normal canvas.', 'nine-code-data' ); ?></p>
+            <p><a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . $this->menu_slug . '&post_id=' . $post->ID ) ); ?>"><?php esc_html_e( 'Open full 9 Data Post Editor', 'nine-code-data' ); ?></a></p>
+            <label class="npm9-field-label" for="npm9-native-recovery-content"><?php esc_html_e( 'Post Content', 'nine-code-data' ); ?></label>
             <textarea id="npm9-native-recovery-content" class="npm9-native-recovery-content"><?php echo esc_textarea( $post->post_content ); ?></textarea>
             <div class="npm9-native-recovery-meta">
-                <h3><?php esc_html_e( 'Post Metadata', 'nine-post-manager' ); ?></h3>
+                <h3><?php esc_html_e( 'Post Metadata', 'nine-code-data' ); ?></h3>
                 <?php if ( $ordinary ) : ?>
                     <?php foreach ( $ordinary as $row ) : ?>
                         <label class="npm9-native-recovery-meta-row" data-meta-key="<?php echo esc_attr( $row['key'] ); ?>">
@@ -124,12 +124,12 @@ final class Nine_Post_Manager {
                         </label>
                     <?php endforeach; ?>
                 <?php else : ?>
-                    <p class="description"><?php esc_html_e( 'No ordinary custom metadata is currently stored on this post.', 'nine-post-manager' ); ?></p>
+                    <p class="description"><?php esc_html_e( 'No ordinary custom metadata is currently stored on this post.', 'nine-code-data' ); ?></p>
                 <?php endif; ?>
                 <?php if ( $protected ) : ?>
                     <details class="npm9-native-recovery-protected">
-                        <summary><?php echo esc_html( sprintf( __( 'Protected / technical metadata (%d)', 'nine-post-manager' ), count( $protected ) ) ); ?></summary>
-                        <p class="description"><?php esc_html_e( 'Visible for diagnosis. These private/system keys are not changed by this recovery panel.', 'nine-post-manager' ); ?></p>
+                        <summary><?php echo esc_html( sprintf( __( 'Protected / technical metadata (%d)', 'nine-code-data' ), count( $protected ) ) ); ?></summary>
+                        <p class="description"><?php esc_html_e( 'Visible for diagnosis. These private/system keys are not changed by this recovery panel.', 'nine-code-data' ); ?></p>
                         <?php foreach ( $protected as $row ) : ?>
                             <label class="npm9-native-recovery-meta-row is-readonly">
                                 <span><code><?php echo esc_html( $row['key'] ); ?></code></span>
@@ -140,8 +140,8 @@ final class Nine_Post_Manager {
                 <?php endif; ?>
             </div>
             <div class="npm9-native-recovery-actions">
-                <button type="button" class="button button-primary" id="npm9-native-recovery-save"><?php esc_html_e( 'Save Post Content & Metadata', 'nine-post-manager' ); ?></button>
-                <button type="button" class="button" id="npm9-native-recovery-restore"><?php esc_html_e( 'Restore Native Editor Visibility', 'nine-post-manager' ); ?></button>
+                <button type="button" class="button button-primary" id="npm9-native-recovery-save"><?php esc_html_e( 'Save Post Content & Metadata', 'nine-code-data' ); ?></button>
+                <button type="button" class="button" id="npm9-native-recovery-restore"><?php esc_html_e( 'Restore Native Editor Visibility', 'nine-code-data' ); ?></button>
                 <span id="npm9-native-recovery-status" role="status" aria-live="polite"></span>
             </div>
         </div>
@@ -192,7 +192,7 @@ final class Nine_Post_Manager {
     public function render_standalone_workspace() {
         $post_id = isset( $_GET['post_id'] ) ? absint( $_GET['post_id'] ) : 0;
         if ( ! is_user_logged_in() || ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
-            wp_die( esc_html__( 'You do not have permission to edit this post.', 'nine-post-manager' ) );
+            wp_die( esc_html__( 'You do not have permission to edit this post.', 'nine-code-data' ) );
         }
         check_admin_referer( 'npm9_workspace_' . $post_id );
         $this->enqueue_workspace_assets();
@@ -237,9 +237,9 @@ final class Nine_Post_Manager {
             'categoryManagerUrl' => $category_manager_active ? admin_url( 'admin.php?page=nine-category-manager' ) : '',
             'renderStyles' => class_exists( 'Nine_Post_Manager_Renderer' ) ? Nine_Post_Manager_Renderer::instance()->all_styles() : [],
             'strings' => [
-                'loading' => __( 'Loading…', 'nine-post-manager' ),
-                'saved'   => __( 'Post updated.', 'nine-post-manager' ),
-                'error'   => __( 'Something went wrong.', 'nine-post-manager' ),
+                'loading' => __( 'Loading…', 'nine-code-data' ),
+                'saved'   => __( 'Post updated.', 'nine-code-data' ),
+                'error'   => __( 'Something went wrong.', 'nine-code-data' ),
             ],
         ];
     }
@@ -249,7 +249,7 @@ final class Nine_Post_Manager {
         // A custom-role user may legitimately edit a CPT item without holding the generic
         // edit_posts capability. The full-screen front-end workspace follows object capability.
         if ( ! current_user_can( 'edit_posts' ) && ( ! $initial_id || ! current_user_can( 'edit_post', $initial_id ) ) ) {
-            wp_die( esc_html__( 'You do not have permission to use this screen.', 'nine-post-manager' ) );
+            wp_die( esc_html__( 'You do not have permission to use this screen.', 'nine-code-data' ) );
         }
         $post_types = get_post_types( [ 'show_ui' => true ], 'objects' );
         $post_types = apply_filters( 'nine10_data_editable_post_types', $post_types, 'post-editor' );
@@ -259,7 +259,7 @@ final class Nine_Post_Manager {
             <header class="npm9-header">
                 <div>
                     <h1>9 Post Editor</h1>
-                    <p><?php esc_html_e( 'WordPress-native mobile post workspace. Edit core post data, Gutenberg/9 Elements, media, taxonomies and post-specific plugin controls without requiring ACF. Includes 9CF AI and portable post/category backups.', 'nine-post-manager' ); ?></p>
+                    <p><?php esc_html_e( 'WordPress-native mobile post workspace. Edit core post data, Gutenberg/9 Elements, media, taxonomies and post-specific plugin controls without requiring ACF. Includes 9CF AI and portable post/category backups.', 'nine-code-data' ); ?></p>
                 </div>
                 <span class="npm9-version">v<?php echo esc_html( NPM9_VERSION ); ?></span>
             </header>
@@ -276,7 +276,7 @@ final class Nine_Post_Manager {
             <section class="npm9-card npm9-finder">
                 <div class="npm9-grid npm9-grid-filter">
                     <label>
-                        <span><?php esc_html_e( 'Post type', 'nine-post-manager' ); ?></span>
+                        <span><?php esc_html_e( 'Post type', 'nine-code-data' ); ?></span>
                         <select id="npm9-post-type">
                             <?php foreach ( $post_types as $pt ) : if ( 'attachment' === $pt->name ) continue; ?>
                                 <option value="<?php echo esc_attr( $pt->name ); ?>"><?php echo esc_html( $pt->labels->singular_name . ' (' . $pt->name . ')' ); ?></option>
@@ -284,18 +284,18 @@ final class Nine_Post_Manager {
                         </select>
                     </label>
                     <label>
-                        <span><?php esc_html_e( 'Category / term', 'nine-post-manager' ); ?></span>
-                        <select id="npm9-term"><option value=""><?php esc_html_e( 'All', 'nine-post-manager' ); ?></option></select>
+                        <span><?php esc_html_e( 'Category / term', 'nine-code-data' ); ?></span>
+                        <select id="npm9-term"><option value=""><?php esc_html_e( 'All', 'nine-code-data' ); ?></option></select>
                     </label>
                     <label class="npm9-grow">
-                        <span><?php esc_html_e( 'Search', 'nine-post-manager' ); ?></span>
+                        <span><?php esc_html_e( 'Search', 'nine-code-data' ); ?></span>
                         <input type="search" id="npm9-search" placeholder="Title, ID or keyword">
                     </label>
-                    <button type="button" class="button button-primary" id="npm9-find"><?php esc_html_e( 'Find posts', 'nine-post-manager' ); ?></button>
+                    <button type="button" class="button button-primary" id="npm9-find"><?php esc_html_e( 'Find posts', 'nine-code-data' ); ?></button>
                 </div>
                 <div class="npm9-create-line">
-                    <button type="button" class="button" id="npm9-create-import-btn"><?php esc_html_e( 'Create New Post from JSON / Markdown', 'nine-post-manager' ); ?></button>
-                    <small><?php esc_html_e( 'Use an AI template or backup as the starting point for a completely new post.', 'nine-post-manager' ); ?></small>
+                    <button type="button" class="button" id="npm9-create-import-btn"><?php esc_html_e( 'Create New Post from JSON / Markdown', 'nine-code-data' ); ?></button>
+                    <small><?php esc_html_e( 'Use an AI template or backup as the starting point for a completely new post.', 'nine-code-data' ); ?></small>
                     <input type="file" id="npm9-create-import-file" accept=".json,.md,.markdown,application/json,text/markdown,text/plain" hidden>
                 </div>
                 <div id="npm9-create-preview" class="npm9-create-preview" hidden></div>
@@ -304,19 +304,19 @@ final class Nine_Post_Manager {
 
             <?php if ( function_exists( 'acf_get_field_groups' ) ) : ?>
             <details class="npm9-card npm9-deploy-card npm9-major-details" id="npm9-deploy-card">
-                <summary class="npm9-major-summary"><span><strong><?php esc_html_e( 'Quick Deploy · ACF Bridge / Legacy', 'nine-post-manager' ); ?></strong><small><?php esc_html_e( 'Optional ACF schema import for existing ACF workflows', 'nine-post-manager' ); ?></small></span><span class="npm9-badge npm9-badge-new">NEW · Instant Render</span></summary>
-                <div class="npm9-major-body"><p class="description"><?php esc_html_e( 'Keep this for sites that already use ACF. 9CF is now the primary portable field contract; ACF remains an optional bridge for existing field groups and specialist Elementor workflows.', 'nine-post-manager' ); ?></p>
+                <summary class="npm9-major-summary"><span><strong><?php esc_html_e( 'Quick Deploy · ACF Bridge / Legacy', 'nine-code-data' ); ?></strong><small><?php esc_html_e( 'Optional ACF schema import for existing ACF workflows', 'nine-code-data' ); ?></small></span><span class="npm9-badge npm9-badge-new">NEW · Instant Render</span></summary>
+                <div class="npm9-major-body"><p class="description"><?php esc_html_e( 'Keep this for sites that already use ACF. 9CF is now the primary portable field contract; ACF remains an optional bridge for existing field groups and specialist Elementor workflows.', 'nine-code-data' ); ?></p>
                 <div class="npm9-deploy-grid">
-                    <label><span><?php esc_html_e( 'New page/post title', 'nine-post-manager' ); ?></span><input type="text" id="npm9-deploy-title" placeholder="e.g. Lecturer Profile"></label>
-                    <label><span><?php esc_html_e( 'Target post type', 'nine-post-manager' ); ?></span><select id="npm9-deploy-post-type">
+                    <label><span><?php esc_html_e( 'New page/post title', 'nine-code-data' ); ?></span><input type="text" id="npm9-deploy-title" placeholder="e.g. Lecturer Profile"></label>
+                    <label><span><?php esc_html_e( 'Target post type', 'nine-code-data' ); ?></span><select id="npm9-deploy-post-type">
                         <?php foreach ( $post_types as $pt ) : if ( 'attachment' === $pt->name ) continue; ?>
                             <option value="<?php echo esc_attr( $pt->name ); ?>" <?php selected( 'page', $pt->name ); ?>><?php echo esc_html( $pt->labels->singular_name . ' (' . $pt->name . ')' ); ?></option>
                         <?php endforeach; ?>
                     </select></label>
-                    <label><span><?php esc_html_e( 'Basic display style', 'nine-post-manager' ); ?></span><select id="npm9-deploy-style"></select></label>
-                    <label><span><?php esc_html_e( 'Initial status', 'nine-post-manager' ); ?></span><select id="npm9-deploy-status"><option value="draft">Draft</option><option value="publish">Publish</option><option value="pending">Pending review</option><option value="private">Private</option></select></label>
+                    <label><span><?php esc_html_e( 'Basic display style', 'nine-code-data' ); ?></span><select id="npm9-deploy-style"></select></label>
+                    <label><span><?php esc_html_e( 'Initial status', 'nine-code-data' ); ?></span><select id="npm9-deploy-status"><option value="draft">Draft</option><option value="publish">Publish</option><option value="pending">Pending review</option><option value="private">Private</option></select></label>
                 </div>
-                <details class="npm9-render-colors npm9-deploy-colors"><summary><strong><?php esc_html_e( 'Optional colours', 'nine-post-manager' ); ?></strong> — <?php esc_html_e( 'leave blank to use the selected style defaults', 'nine-post-manager' ); ?></summary>
+                <details class="npm9-render-colors npm9-deploy-colors"><summary><strong><?php esc_html_e( 'Optional colours', 'nine-code-data' ); ?></strong> — <?php esc_html_e( 'leave blank to use the selected style defaults', 'nine-code-data' ); ?></summary>
                     <div class="npm9-color-grid">
                         <label><span>Primary</span><input type="text" id="npm9-deploy-color-primary" placeholder="#17345c"></label>
                         <label><span>Accent</span><input type="text" id="npm9-deploy-color-accent" placeholder="#9a2233"></label>
@@ -327,10 +327,10 @@ final class Nine_Post_Manager {
                     </div>
                 </details>
                 <div class="npm9-deploy-actions">
-                    <button type="button" class="button button-primary" id="npm9-deploy-acf-btn"><?php esc_html_e( 'Choose ACF JSON & Create', 'nine-post-manager' ); ?></button>
-                    <button type="button" class="button" id="npm9-deploy-template-btn"><?php esc_html_e( 'Download AI Deploy Template', 'nine-post-manager' ); ?></button>
+                    <button type="button" class="button button-primary" id="npm9-deploy-acf-btn"><?php esc_html_e( 'Choose ACF JSON & Create', 'nine-code-data' ); ?></button>
+                    <button type="button" class="button" id="npm9-deploy-template-btn"><?php esc_html_e( 'Download AI Deploy Template', 'nine-code-data' ); ?></button>
                     <input type="file" id="npm9-deploy-acf-file" accept=".json,application/json" hidden>
-                    <small><?php esc_html_e( 'Administrator-only because this imports an ACF schema. The imported group is allocated to the selected post type.', 'nine-post-manager' ); ?></small>
+                    <small><?php esc_html_e( 'Administrator-only because this imports an ACF schema. The imported group is allocated to the selected post type.', 'nine-code-data' ); ?></small>
                 </div>
                 <div id="npm9-deploy-result" class="npm9-deploy-result" hidden></div>
                 </div>
@@ -348,12 +348,12 @@ final class Nine_Post_Manager {
                         <button type="button" class="button button-small" id="npm9-back-results">Back to Results</button>
                     </div>
                     <div class="npm9-action-row">
-                        <button type="button" class="button button-primary button-hero" id="npm9-save"><?php esc_html_e( 'Update Post', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button npm9-publish-now" id="npm9-publish-now" hidden><?php esc_html_e( 'Publish Now', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button" id="npm9-backup-menu-btn"><?php esc_html_e( 'Backup / Restore', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button" id="npm9-export-menu-btn"><?php esc_html_e( 'AI / 9CF', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button" id="npm9-import-btn"><?php esc_html_e( 'Legacy Import', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button npm9-undo" id="npm9-undo" hidden><?php esc_html_e( 'Undo Last 9PM Change', 'nine-post-manager' ); ?></button>
+                        <button type="button" class="button button-primary button-hero" id="npm9-save"><?php esc_html_e( 'Update Post', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button npm9-publish-now" id="npm9-publish-now" hidden><?php esc_html_e( 'Publish Now', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button" id="npm9-backup-menu-btn"><?php esc_html_e( 'Backup / Restore', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button" id="npm9-export-menu-btn"><?php esc_html_e( 'AI / 9CF', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button" id="npm9-import-btn"><?php esc_html_e( 'Legacy Import', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button npm9-undo" id="npm9-undo" hidden><?php esc_html_e( 'Undo Last 9PM Change', 'nine-code-data' ); ?></button>
                     </div>
                 </div>
 
@@ -361,8 +361,8 @@ final class Nine_Post_Manager {
 
 
                 <section class="npm9-card npm9-backup-panel" id="npm9-backup-panel" hidden>
-                    <div class="npm9-section-head"><h2><?php esc_html_e( 'Post & Category Backup', 'nine-post-manager' ); ?></h2><span class="npm9-badge npm9-badge-new">Native · ACF not required</span></div>
-                    <p class="description"><?php esc_html_e( 'Create small portable backups containing only the selected post(s), their taxonomies/plugin post-meta and optional WordPress media. No theme, plugin or global site settings are included.', 'nine-post-manager' ); ?></p>
+                    <div class="npm9-section-head"><h2><?php esc_html_e( 'Post & Category Backup', 'nine-code-data' ); ?></h2><span class="npm9-badge npm9-badge-new">Native · ACF not required</span></div>
+                    <p class="description"><?php esc_html_e( 'Create small portable backups containing only the selected post(s), their taxonomies/plugin post-meta and optional WordPress media. No theme, plugin or global site settings are included.', 'nine-code-data' ); ?></p>
                     <div class="npm9-backup-actions">
                         <button type="button" class="button button-primary npm9-native-backup-post" data-media="1">Back Up This Post + Images</button>
                         <button type="button" class="button npm9-native-backup-post" data-media="0">Back Up This Post · Data Only</button>
@@ -385,28 +385,28 @@ final class Nine_Post_Manager {
                 </section>
 
                 <section class="npm9-card npm9-ninecf-panel" id="npm9-ninecf-panel" hidden>
-                    <div class="npm9-section-head"><h2><?php esc_html_e( '9CF · AI Fill Workflow', 'nine-post-manager' ); ?></h2><span class="npm9-badge npm9-badge-new">Gutenberg-first</span></div>
-                    <p class="description"><?php esc_html_e( '9CF inventories fillable data already owned by WordPress, Gutenberg/9 Elements, taxonomies and post-specific plugin/meta fields. ACF is not required. Every field is numbered for human/AI tracking, but imports use stable field IDs so numbering can never corrupt the mapping.', 'nine-post-manager' ); ?></p>
+                    <div class="npm9-section-head"><h2><?php esc_html_e( '9CF · AI Fill Workflow', 'nine-code-data' ); ?></h2><span class="npm9-badge npm9-badge-new">Gutenberg-first</span></div>
+                    <p class="description"><?php esc_html_e( '9CF inventories fillable data already owned by WordPress, Gutenberg/9 Elements, taxonomies and post-specific plugin/meta fields. ACF is not required. Every field is numbered for human/AI tracking, but imports use stable field IDs so numbering can never corrupt the mapping.', 'nine-code-data' ); ?></p>
                     <div class="npm9-ninecf-actions">
-                        <button type="button" class="button button-primary npm9-ninecf-export" data-mode="blank" data-format="9cf"><?php esc_html_e( 'Download Numbered 9CF AI Form', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button npm9-ninecf-export" data-mode="current" data-format="9cf"><?php esc_html_e( 'Download Current 9CF', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button npm9-ninecf-export" data-mode="blank" data-format="markdown"><?php esc_html_e( 'AI Form · Markdown', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button" id="npm9-ninecf-import"><?php esc_html_e( 'Import Filled 9CF', 'nine-post-manager' ); ?></button>
+                        <button type="button" class="button button-primary npm9-ninecf-export" data-mode="blank" data-format="9cf"><?php esc_html_e( 'Download Numbered 9CF AI Form', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button npm9-ninecf-export" data-mode="current" data-format="9cf"><?php esc_html_e( 'Download Current 9CF', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button npm9-ninecf-export" data-mode="blank" data-format="markdown"><?php esc_html_e( 'AI Form · Markdown', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button" id="npm9-ninecf-import"><?php esc_html_e( 'Import Filled 9CF', 'nine-code-data' ); ?></button>
                         <input type="file" id="npm9-ninecf-file" accept=".9cf,.json,.md,.markdown,application/json,text/plain" hidden>
                     </div>
                     <div class="npm9-ninecf-bridge">
-                        <label class="npm9-switch-line"><input type="checkbox" id="npm9-ninecf-mirror"> <span><?php esc_html_e( '9CF Bridge Mirror for Elementor/custom-field consumers', 'nine-post-manager' ); ?></span></label>
-                        <button type="button" class="button" id="npm9-ninecf-sync"><?php esc_html_e( 'Sync Mirror Now', 'nine-post-manager' ); ?></button>
-                        <?php if ( function_exists( 'acf_get_field_groups' ) ) : ?><button type="button" class="button" id="npm9-ninecf-acf-bridge"><?php esc_html_e( 'Legacy ACF Bridge JSON', 'nine-post-manager' ); ?></button><?php endif; ?>
-                        <button type="button" class="button" id="npm9-legacy-export-toggle"><?php esc_html_e( 'Legacy Backup Exports', 'nine-post-manager' ); ?></button>
-                        <small><?php esc_html_e( 'The mirror copies values to stable 9CF meta keys. The optional ACF JSON maps those same keys for Elementor ACF Dynamic Tags. 9CF itself does not require ACF.', 'nine-post-manager' ); ?></small>
+                        <label class="npm9-switch-line"><input type="checkbox" id="npm9-ninecf-mirror"> <span><?php esc_html_e( '9CF Bridge Mirror for Elementor/custom-field consumers', 'nine-code-data' ); ?></span></label>
+                        <button type="button" class="button" id="npm9-ninecf-sync"><?php esc_html_e( 'Sync Mirror Now', 'nine-code-data' ); ?></button>
+                        <?php if ( function_exists( 'acf_get_field_groups' ) ) : ?><button type="button" class="button" id="npm9-ninecf-acf-bridge"><?php esc_html_e( 'Legacy ACF Bridge JSON', 'nine-code-data' ); ?></button><?php endif; ?>
+                        <button type="button" class="button" id="npm9-legacy-export-toggle"><?php esc_html_e( 'Legacy Backup Exports', 'nine-code-data' ); ?></button>
+                        <small><?php esc_html_e( 'The mirror copies values to stable 9CF meta keys. The optional ACF JSON maps those same keys for Elementor ACF Dynamic Tags. 9CF itself does not require ACF.', 'nine-code-data' ); ?></small>
                     </div>
                     <div id="npm9-ninecf-summary" class="npm9-ninecf-summary"></div>
-                    <details class="npm9-ninecf-history-wrap" id="npm9-ninecf-history-wrap"><summary><?php esc_html_e( 'AI Import History', 'nine-post-manager' ); ?></summary><div id="npm9-ninecf-history" class="npm9-ninecf-history"></div></details>
+                    <details class="npm9-ninecf-history-wrap" id="npm9-ninecf-history-wrap"><summary><?php esc_html_e( 'AI Import History', 'nine-code-data' ); ?></summary><div id="npm9-ninecf-history" class="npm9-ninecf-history"></div></details>
                 </section>
 
                 <section class="npm9-card npm9-export-panel" id="npm9-export-panel" hidden>
-                    <div class="npm9-section-head"><h2><?php esc_html_e( 'Export and AI workflow', 'nine-post-manager' ); ?></h2><span class="npm9-badge">Portable backup</span></div>
+                    <div class="npm9-section-head"><h2><?php esc_html_e( 'Export and AI workflow', 'nine-code-data' ); ?></h2><span class="npm9-badge">Portable backup</span></div>
                     <div class="npm9-export-grid">
                         <button class="button npm9-export" data-format="json" data-mode="template">Empty AI Template — JSON</button>
                         <button class="button npm9-export" data-format="markdown" data-mode="template">Empty AI Template — Markdown</button>
@@ -419,15 +419,15 @@ final class Nine_Post_Manager {
 
                 <?php if ( function_exists( 'acf_get_field_groups' ) ) : ?>
                 <details class="npm9-card npm9-render-panel npm9-major-details" id="npm9-render-panel">
-                    <summary class="npm9-major-summary"><span><strong><?php esc_html_e( 'ACF → Page Render', 'nine-post-manager' ); ?></strong><small><?php esc_html_e( 'Instant presentation, reusable styles and colour controls', 'nine-post-manager' ); ?></small></span><span class="npm9-render-status-badge" id="npm9-render-status">Off</span></summary>
-                    <div class="npm9-major-body"><p class="description"><?php esc_html_e( 'Optional legacy presentation layer for sites that still use ACF. New v4 sites should normally use Gutenberg/9 Elements, Site Fields and .9pm designs instead.', 'nine-post-manager' ); ?></p>
+                    <summary class="npm9-major-summary"><span><strong><?php esc_html_e( 'ACF → Page Render', 'nine-code-data' ); ?></strong><small><?php esc_html_e( 'Instant presentation, reusable styles and colour controls', 'nine-code-data' ); ?></small></span><span class="npm9-render-status-badge" id="npm9-render-status">Off</span></summary>
+                    <div class="npm9-major-body"><p class="description"><?php esc_html_e( 'Optional legacy presentation layer for sites that still use ACF. New v4 sites should normally use Gutenberg/9 Elements, Site Fields and .9pm designs instead.', 'nine-code-data' ); ?></p>
                     <div id="npm9-render-specialist" class="npm9-render-specialist" hidden></div>
                     <div class="npm9-render-grid">
-                        <label class="npm9-switch-field"><span><?php esc_html_e( 'Instant ACF Render', 'nine-post-manager' ); ?></span><label class="npm9-switch-line"><input type="checkbox" id="npm9-render-enabled"> <span><?php esc_html_e( 'Enable on this post', 'nine-post-manager' ); ?></span></label></label>
-                        <label><span><?php esc_html_e( 'Display style', 'nine-post-manager' ); ?></span><select id="npm9-render-style"></select></label>
-                        <label><span><?php esc_html_e( 'Where to render', 'nine-post-manager' ); ?></span><select id="npm9-render-mode"><option value="after">After normal post content (safe default)</option><option value="before">Before normal post content</option><option value="replace">Replace normal content with ACF display</option></select></label>
+                        <label class="npm9-switch-field"><span><?php esc_html_e( 'Instant ACF Render', 'nine-code-data' ); ?></span><label class="npm9-switch-line"><input type="checkbox" id="npm9-render-enabled"> <span><?php esc_html_e( 'Enable on this post', 'nine-code-data' ); ?></span></label></label>
+                        <label><span><?php esc_html_e( 'Display style', 'nine-code-data' ); ?></span><select id="npm9-render-style"></select></label>
+                        <label><span><?php esc_html_e( 'Where to render', 'nine-code-data' ); ?></span><select id="npm9-render-mode"><option value="after">After normal post content (safe default)</option><option value="before">Before normal post content</option><option value="replace">Replace normal content with ACF display</option></select></label>
                     </div>
-                    <details class="npm9-render-colors"><summary><strong><?php esc_html_e( 'Edit Style Colours', 'nine-post-manager' ); ?></strong> — <?php esc_html_e( 'optional per-post overrides', 'nine-post-manager' ); ?></summary>
+                    <details class="npm9-render-colors"><summary><strong><?php esc_html_e( 'Edit Style Colours', 'nine-code-data' ); ?></strong> — <?php esc_html_e( 'optional per-post overrides', 'nine-code-data' ); ?></summary>
                         <div class="npm9-color-grid">
                             <label><span>Primary</span><input type="text" id="npm9-color-primary" placeholder="#17345c"></label>
                             <label><span>Accent</span><input type="text" id="npm9-color-accent" placeholder="#9a2233"></label>
@@ -438,15 +438,15 @@ final class Nine_Post_Manager {
                         </div>
                     </details>
                     <div class="npm9-render-actions">
-                        <button type="button" class="button button-primary" id="npm9-render-save"><?php esc_html_e( 'Save Render Settings', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button" id="npm9-render-import-style"><?php esc_html_e( 'Import Style', 'nine-post-manager' ); ?></button>
+                        <button type="button" class="button button-primary" id="npm9-render-save"><?php esc_html_e( 'Save Render Settings', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button" id="npm9-render-import-style"><?php esc_html_e( 'Import Style', 'nine-code-data' ); ?></button>
                         <input type="file" id="npm9-render-style-file" accept=".99gostyle,.99goalstyle,.json,application/json" hidden>
-                        <button type="button" class="button" id="npm9-render-export-style"><?php esc_html_e( 'Export Style', 'nine-post-manager' ); ?></button>
-                        <button type="button" class="button" id="npm9-render-import-acf"><?php esc_html_e( 'Import ACF JSON to this Post Type', 'nine-post-manager' ); ?></button>
+                        <button type="button" class="button" id="npm9-render-export-style"><?php esc_html_e( 'Export Style', 'nine-code-data' ); ?></button>
+                        <button type="button" class="button" id="npm9-render-import-acf"><?php esc_html_e( 'Import ACF JSON to this Post Type', 'nine-code-data' ); ?></button>
                         <input type="file" id="npm9-render-acf-file" accept=".json,application/json" hidden>
-                        <a class="button" id="npm9-render-view" target="_blank" rel="noopener"><?php esc_html_e( 'View Front End', 'nine-post-manager' ); ?></a>
+                        <a class="button" id="npm9-render-view" target="_blank" rel="noopener"><?php esc_html_e( 'View Front End', 'nine-code-data' ); ?></a>
                     </div>
-                    <p class="npm9-render-note"><?php esc_html_e( 'Imported .99gostyle packages use the same field-name contract as 99 ACF Go Builder. This panel does not rename ACF fields or keys.', 'nine-post-manager' ); ?></p>
+                    <p class="npm9-render-note"><?php esc_html_e( 'Imported .99gostyle packages use the same field-name contract as 99 ACF Go Builder. This panel does not rename ACF fields or keys.', 'nine-code-data' ); ?></p>
                     </div>
                 </details>
                 <?php endif; ?>
@@ -1629,18 +1629,18 @@ final class Nine_Post_Manager {
         if ( ! is_user_logged_in() || ! is_singular() ) return;
         $post_id = get_queried_object_id();
         if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) return;
-        $title = get_the_title( $post_id ) ?: __( 'Current post', 'nine-post-manager' );
+        $title = get_the_title( $post_id ) ?: __( 'Current post', 'nine-code-data' );
         ?>
-        <button class="npm9-front-toggle<?php echo ( defined( 'NINECM_VERSION' ) || class_exists( 'NineCM_Core' ) ) ? ' npm9-has-sister' : ''; ?>" type="button" aria-expanded="false" aria-controls="npm9-front-overlay" title="<?php esc_attr_e( 'Open 9 Post Editor', 'nine-post-manager' ); ?>">9P</button>
-        <div class="npm9-front-overlay" id="npm9-front-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( '9 Post Editor', 'nine-post-manager' ); ?>">
+        <button class="npm9-front-toggle<?php echo ( defined( 'NINECM_VERSION' ) || class_exists( 'NineCM_Core' ) ) ? ' npm9-has-sister' : ''; ?>" type="button" aria-expanded="false" aria-controls="npm9-front-overlay" title="<?php esc_attr_e( 'Open 9 Post Editor', 'nine-code-data' ); ?>">9P</button>
+        <div class="npm9-front-overlay" id="npm9-front-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( '9 Post Editor', 'nine-code-data' ); ?>">
             <div class="npm9-front-overlay-head">
-                <strong><?php esc_html_e( '9 Post Editor', 'nine-post-manager' ); ?></strong>
+                <strong><?php esc_html_e( '9 Post Editor', 'nine-code-data' ); ?></strong>
                 <span><?php echo esc_html( $title ); ?></span>
             </div>
-            <iframe class="npm9-front-frame" title="<?php esc_attr_e( 'Edit current post in 9 Post Editor', 'nine-post-manager' ); ?>" data-src="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=npm9_workspace&post_id=' . $post_id ), 'npm9_workspace_' . $post_id ) ); ?>"></iframe>
+            <iframe class="npm9-front-frame" title="<?php esc_attr_e( 'Edit current post in 9 Post Editor', 'nine-code-data' ); ?>" data-src="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=npm9_workspace&post_id=' . $post_id ), 'npm9_workspace_' . $post_id ) ); ?>"></iframe>
             <div class="npm9-front-overlay-bottom">
-                <span class="npm9-front-saved-state" aria-live="polite"><?php esc_html_e( 'Changes are saved only when you press Update.', 'nine-post-manager' ); ?></span>
-                <button type="button" class="npm9-front-close"><?php esc_html_e( 'Close 9 Post Editor', 'nine-post-manager' ); ?></button>
+                <span class="npm9-front-saved-state" aria-live="polite"><?php esc_html_e( 'Changes are saved only when you press Update.', 'nine-code-data' ); ?></span>
+                <button type="button" class="npm9-front-close"><?php esc_html_e( 'Close 9 Post Editor', 'nine-code-data' ); ?></button>
             </div>
         </div>
         <?php

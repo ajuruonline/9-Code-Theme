@@ -26,7 +26,7 @@ function ncu_dark_palette_is_valid( $key ) {
 add_action( 'admin_post_ncu_save_dark_mode', 'ncu_save_dark_mode_settings' );
 function ncu_save_dark_mode_settings() {
     if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( esc_html__( 'You do not have permission to change dark mode.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'You do not have permission to change dark mode.', 'nine-code' ) );
     }
     check_admin_referer( 'ncu_save_dark_mode' );
     $raw = isset( $_POST['ncu'] ) && is_array( $_POST['ncu'] ) ? wp_unslash( $_POST['ncu'] ) : array();
@@ -36,7 +36,7 @@ function ncu_save_dark_mode_settings() {
     );
     $booleans = array( 'dark_mode_enabled', 'dark_toggle_enabled', 'dark_floating_toggle', 'dark_use_site_accent' );
     $result = ncu_save_settings_subset( $raw, $keys, $booleans );
-    ncu_redirect_after_settings_save( 'nine-code-ultra-dark-mode', $result, '9Core 15 dark mode saved and verified.' );
+    ncu_redirect_after_settings_save( 'nine-code-ultra-dark-mode', $result, 'Nine Code dark mode saved and verified.' );
 }
 
 function ncu_dark_mode_settings_page() {
@@ -58,7 +58,7 @@ function ncu_dark_mode_settings_page() {
             <section class="ncu-panel ncu-panel--padded">
                 <h2>Behaviour</h2>
                 <div class="ncu-checks">
-                    <?php ncu_checkbox( 'dark_mode_enabled', 'Enable 9Core 15 admin dark mode', $s ); ?>
+                    <?php ncu_checkbox( 'dark_mode_enabled', 'Enable Nine Code admin dark mode', $s ); ?>
                     <?php ncu_checkbox( 'dark_toggle_enabled', 'Show the dark-mode button in the WordPress top bar', $s ); ?>
                     <?php ncu_checkbox( 'dark_use_site_accent', 'Inherit the site/plugin accent automatically', $s ); ?>
                 </div>

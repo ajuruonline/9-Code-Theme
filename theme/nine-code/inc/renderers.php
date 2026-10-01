@@ -49,7 +49,7 @@ function ncu_builder_full_width( $post_id ) {
         }
         return (bool) apply_filters( 'ncu_builder_full_width', $full, $post_id, $mode );
     } catch ( \Throwable $e ) {
-        error_log( '[9Code Theme ' . NCU_THEME_VERSION . '] 9Code Theme render filter fallback (ncu_builder_full_width): ' . $e->getMessage() );
+        error_log( '[Nine Code ' . NCU_THEME_VERSION . '] Nine Code render filter fallback (ncu_builder_full_width): ' . $e->getMessage() );
         return (bool) $full;
     }
 }
@@ -60,7 +60,7 @@ function ncu_native_content_html( $post_id, $ai = false ) {
 
     /*
      * AI-capable engines may supply their own non-destructive base presentation.
-     * Returning null leaves 9Core 15 to use the native WordPress post content.
+     * Returning null leaves Nine Code to use the native WordPress post content.
      */
     if ( $ai ) {
         $external = apply_filters( 'ncu_ai_builder_base_html', null, $post_id, ncu_theme_ai_config( $post_id ) );
@@ -110,7 +110,7 @@ function ncu_output_post_content( $post_id = 0 ) {
         if ( is_string( $auto_html ) ) { echo $auto_html; return; }
         the_content();
     } catch ( \Throwable $e ) {
-        error_log( '[9Code Theme ' . NCU_THEME_VERSION . '] content renderer fallback for post ' . intval( $post_id ) . ': ' . $e->getMessage() );
+        error_log( '[Nine Code ' . NCU_THEME_VERSION . '] content renderer fallback for post ' . intval( $post_id ) . ': ' . $e->getMessage() );
         $raw = (string) get_post_field( 'post_content', $post_id );
         echo wp_kses_post( $raw );
     }
@@ -118,7 +118,7 @@ function ncu_output_post_content( $post_id = 0 ) {
 
 function ncu_builder_article_class( $post_id ) {
     try { $mode = ncu_theme_get_render_mode( $post_id ); }
-    catch ( \Throwable $e ) { error_log( '[9Code Theme ' . NCU_THEME_VERSION . '] render-mode class fallback: ' . $e->getMessage() ); $mode = 'auto'; }
+    catch ( \Throwable $e ) { error_log( '[Nine Code ' . NCU_THEME_VERSION . '] render-mode class fallback: ' . $e->getMessage() ); $mode = 'auto'; }
     $classes = array( 'ncu-render-shell', 'ncu-render-' . sanitize_html_class( $mode ) );
     if ( 'ai' === $mode ) { $classes[] = 'ncu-ai-shell'; }
     return implode( ' ', $classes );

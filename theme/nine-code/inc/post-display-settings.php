@@ -42,8 +42,8 @@ function ncu_theme_site_feature_default( $feature, $fallback = true ) {
 add_action( 'admin_menu', 'ncu_register_theme_display_defaults_page', 95 );
 function ncu_register_theme_display_defaults_page() {
     add_theme_page(
-        __( '9Code Theme Display', 'nine-code-ultra' ),
-        __( '9Code Display', 'nine-code-ultra' ),
+        __( 'Nine Code Display', 'nine-code' ),
+        __( '9Code Display', 'nine-code' ),
         'edit_theme_options',
         'ninecode-theme-display',
         'ncu_render_theme_display_defaults_page'
@@ -55,19 +55,19 @@ function ncu_render_theme_display_defaults_page() {
     $defaults = ncu_theme_display_defaults();
     ?>
     <div class="wrap">
-        <h1><?php esc_html_e( '9Code Theme Display', 'nine-code-ultra' ); ?></h1>
-        <p><?php esc_html_e( 'Site-wide defaults for Theme-owned post and page presentation. Specialist plugins can supply their own title and meta without duplication.', 'nine-code-ultra' ); ?></p>
+        <h1><?php esc_html_e( 'Nine Code Display', 'nine-code' ); ?></h1>
+        <p><?php esc_html_e( 'Site-wide defaults for Theme-owned post and page presentation. Specialist plugins can supply their own title and meta without duplication.', 'nine-code' ); ?></p>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
             <input type="hidden" name="action" value="ncu_save_theme_display_defaults">
             <?php wp_nonce_field( 'ncu_save_theme_display_defaults' ); ?>
             <table class="form-table" role="presentation"><tbody>
-                <tr><th scope="row"><?php esc_html_e( 'Post/Page title', 'nine-code-ultra' ); ?></th><td><label><input type="checkbox" name="ncu_theme_display[show_title]" value="1" <?php checked( ! empty( $defaults['show_title'] ) ); ?>> <?php esc_html_e( 'Show the Theme title by default', 'nine-code-ultra' ); ?></label><p class="description"><?php esc_html_e( 'Default is OFF because 9Code plugins normally provide their own styled title.', 'nine-code-ultra' ); ?></p></td></tr>
-                <tr><th scope="row"><?php esc_html_e( 'Post meta', 'nine-code-ultra' ); ?></th><td><label><input type="checkbox" name="ncu_theme_display[show_meta]" value="1" <?php checked( ! empty( $defaults['show_meta'] ) ); ?>> <?php esc_html_e( 'Show Theme date / author meta by default', 'nine-code-ultra' ); ?></label><p class="description"><?php esc_html_e( 'Default is OFF so plugin-owned author/date/meta treatments are not duplicated.', 'nine-code-ultra' ); ?></p></td></tr>
+                <tr><th scope="row"><?php esc_html_e( 'Post/Page title', 'nine-code' ); ?></th><td><label><input type="checkbox" name="ncu_theme_display[show_title]" value="1" <?php checked( ! empty( $defaults['show_title'] ) ); ?>> <?php esc_html_e( 'Show the Theme title by default', 'nine-code' ); ?></label><p class="description"><?php esc_html_e( 'Default is OFF because 9Code plugins normally provide their own styled title.', 'nine-code' ); ?></p></td></tr>
+                <tr><th scope="row"><?php esc_html_e( 'Post meta', 'nine-code' ); ?></th><td><label><input type="checkbox" name="ncu_theme_display[show_meta]" value="1" <?php checked( ! empty( $defaults['show_meta'] ) ); ?>> <?php esc_html_e( 'Show Theme date / author meta by default', 'nine-code' ); ?></label><p class="description"><?php esc_html_e( 'Default is OFF so plugin-owned author/date/meta treatments are not duplicated.', 'nine-code' ); ?></p></td></tr>
             </tbody></table>
-            <p class="submit"><button class="button button-primary"><?php esc_html_e( 'Save display defaults', 'nine-code-ultra' ); ?></button></p>
+            <p class="submit"><button class="button button-primary"><?php esc_html_e( 'Save display defaults', 'nine-code' ); ?></button></p>
         </form>
         <hr>
-        <p><strong><?php esc_html_e( 'Per-post/page override:', 'nine-code-ultra' ); ?></strong> <?php esc_html_e( 'Use 9Code Display in the editor and choose Show or Hide for an individual item.', 'nine-code-ultra' ); ?></p>
+        <p><strong><?php esc_html_e( 'Per-post/page override:', 'nine-code' ); ?></strong> <?php esc_html_e( 'Use 9Code Display in the editor and choose Show or Hide for an individual item.', 'nine-code' ); ?></p>
         <?php do_action( 'ncu_theme_display_editor_controls' ); ?>
     </div>
     <?php
@@ -75,7 +75,7 @@ function ncu_render_theme_display_defaults_page() {
 
 add_action( 'admin_post_ncu_save_theme_display_defaults', 'ncu_save_theme_display_defaults' );
 function ncu_save_theme_display_defaults() {
-    if ( ! current_user_can( 'edit_theme_options' ) ) { wp_die( esc_html__( 'You are not allowed to change Theme display defaults.', 'nine-code-ultra' ) ); }
+    if ( ! current_user_can( 'edit_theme_options' ) ) { wp_die( esc_html__( 'You are not allowed to change Theme display defaults.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_save_theme_display_defaults' );
     $raw = isset( $_POST['ncu_theme_display'] ) && is_array( $_POST['ncu_theme_display'] ) ? wp_unslash( $_POST['ncu_theme_display'] ) : array();
     update_option( 'ncu_theme_display_defaults', array(
@@ -200,7 +200,7 @@ function ncu_should_show_post_feature( $post_id, $feature, $default = true ) {
     try {
         return (bool) apply_filters( 'ncu_should_show_post_feature', $default, $post_id, $feature, $setting );
     } catch ( \Throwable $e ) {
-        error_log( '[9Code Theme ' . NCU_THEME_VERSION . '] 9Code Theme feature filter fallback (' . $feature . '): ' . $e->getMessage() );
+        error_log( '[Nine Code ' . NCU_THEME_VERSION . '] Nine Code feature filter fallback (' . $feature . '): ' . $e->getMessage() );
         return (bool) $default;
     }
 }
@@ -235,7 +235,7 @@ function ncu_add_display_settings_metabox() {
         // Gutenberg gets the native document-settings sidebar panel above. Keep
         // this meta box only as a Classic Editor / non-block-editor fallback.
         if ( function_exists( 'use_block_editor_for_post_type' ) && use_block_editor_for_post_type( $type ) ) { continue; }
-        add_meta_box( 'ncu-display-settings', __( '9Code Display', 'nine-code-ultra' ), 'ncu_render_display_settings_metabox', $type, 'side', 'default' );
+        add_meta_box( 'ncu-display-settings', __( '9Code Display', 'nine-code' ), 'ncu_render_display_settings_metabox', $type, 'side', 'default' );
     }
 }
 
@@ -254,7 +254,7 @@ function ncu_render_display_settings_metabox( $post ) {
     $owner = ncu_post_presentation_owner( $post->ID );
     $width = ncu_post_content_width( $post->ID );
     echo '<p><label><strong>Presentation owner</strong><select name="ncu_display[_ncu_presentation_owner]" style="width:100%;margin-top:5px">';
-    foreach ( array( 'auto'=>'Automatic', 'theme'=>'9Code Theme', 'plugin'=>'Plugin / custom presentation' ) as $v => $name ) {
+    foreach ( array( 'auto'=>'Automatic', 'theme'=>'Nine Code', 'plugin'=>'Plugin / custom presentation' ) as $v => $name ) {
         echo '<option value="' . esc_attr( $v ) . '"' . selected( $owner, $v, false ) . '>' . esc_html( $name ) . '</option>';
     }
     echo '</select></label></p><p class="description">Plugin / custom suppresses Theme title, meta, category line, featured image, breadcrumbs, tags and navigation unless explicitly overridden below.</p>';

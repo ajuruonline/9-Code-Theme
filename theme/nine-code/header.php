@@ -9,4 +9,4 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-<a class="ncu-skip-link" href="#primary"><?php esc_html_e( 'Skip to content', 'nine-code-ultra' ); ?></a>
+<a class="ncu-skip-link" href="#primary"><?php esc_html_e( 'Skip to content', 'nine-code' ); ?></a>

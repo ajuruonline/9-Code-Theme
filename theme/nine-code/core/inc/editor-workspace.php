@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
- * 9Core 15 Mobile Editor Workspace.
+ * Nine Code Mobile Editor Workspace.
  *
  * Presentation-only editor layer. WordPress and provider plugins continue to
  * own every field, meta box, save callback and data record. 9Core keeps its
@@ -80,7 +80,7 @@ function ncu_editor_workspace_assets() {
 
     $shortcuts = array();
     if ( current_user_can( 'edit_theme_options' ) ) {
-        $shortcuts[] = array( 'label' => '9Code Theme', 'url' => admin_url( 'themes.php?page=ninecode-theme-display' ) );
+        $shortcuts[] = array( 'label' => 'Nine Code', 'url' => admin_url( 'themes.php?page=ninecode-theme-display' ) );
         $shortcuts[] = array( 'label' => 'Appearance', 'url' => admin_url( 'themes.php' ) );
     }
     if ( current_user_can( 'manage_options' ) ) {
@@ -106,7 +106,7 @@ function ncu_editor_workspace_assets() {
         'focusPanels'      => false,
         'hidePluginPanels' => false,
         'breakpoint'       => (int) apply_filters( 'ncu_editor_workspace_breakpoint', 1180 ),
-        'title'            => __( 'Editor Tools', 'nine-code-ultra-core' ),
+        'title'            => __( 'Editor Tools', 'nine-code' ),
         'shortcuts'        => apply_filters( 'ncu_editor_workspace_shortcuts', $shortcuts ),
     ) );
 }
@@ -128,7 +128,7 @@ function ncu_ajax_save_editor_panel_visibility() {
 /** Reset the current user's per-panel overrides without affecting plugin data. */
 add_action( 'admin_post_ncu_reset_editor_panel_visibility', 'ncu_reset_editor_panel_visibility' );
 function ncu_reset_editor_panel_visibility() {
-    if ( ! current_user_can( 'edit_posts' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'edit_posts' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_reset_editor_panel_visibility' );
     delete_user_meta( get_current_user_id(), '_ncu_editor_panel_visibility' );
     $return = wp_get_referer();
@@ -147,16 +147,16 @@ function ncu_editor_workspace_theme_controls() {
     ?>
     <hr>
     <section id="ncu-mobile-editor-controls" style="max-width:860px">
-        <h2><?php esc_html_e( 'Mobile Editor Workspace', 'nine-code-ultra-core' ); ?></h2>
-        <p><strong><?php esc_html_e( 'Native editor space is protected.', 'nine-code-ultra-core' ); ?></strong> <?php esc_html_e( 'Post Content and all available metadata/meta boxes remain in the normal WordPress editor flow. 9CODE settings, shortcuts and nonessential editor/plugin toolbar actions use the hamburger popover instead of covering the editor.', 'nine-code-ultra-core' ); ?></p>
-        <p class="description"><?php esc_html_e( 'The former full-screen Edit Panels overlay and automatic plugin-meta-box hiding are retired in 15.0.2. The hamburger is non-modal: it has no full-screen shell, backdrop or body scroll lock.', 'nine-code-ultra-core' ); ?></p>
+        <h2><?php esc_html_e( 'Mobile Editor Workspace', 'nine-code' ); ?></h2>
+        <p><strong><?php esc_html_e( 'Native editor space is protected.', 'nine-code' ); ?></strong> <?php esc_html_e( 'Post Content and all available metadata/meta boxes remain in the normal WordPress editor flow. 9CODE settings, shortcuts and nonessential editor/plugin toolbar actions use the hamburger popover instead of covering the editor.', 'nine-code' ); ?></p>
+        <p class="description"><?php esc_html_e( 'The former full-screen Edit Panels overlay and automatic plugin-meta-box hiding are retired in 15.0.2. The hamburger is non-modal: it has no full-screen shell, backdrop or body scroll lock.', 'nine-code' ); ?></p>
     </section>
     <?php
 }
 
 add_action( 'admin_post_ncu_save_mobile_editor_theme_controls', 'ncu_save_mobile_editor_theme_controls' );
 function ncu_save_mobile_editor_theme_controls() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_save_mobile_editor_theme_controls' );
     $raw = isset( $_POST['ncu_mobile_editor'] ) && is_array( $_POST['ncu_mobile_editor'] ) ? wp_unslash( $_POST['ncu_mobile_editor'] ) : array();
     $raw['admin_editor_focus_panels'] = 0;

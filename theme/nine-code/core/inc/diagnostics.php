@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'admin_post_ncu_export_diagnostics', 'ncu_export_diagnostics' );
 function ncu_export_diagnostics() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_export_diagnostics' );
     $theme = wp_get_theme();
     $parent = $theme->parent();
@@ -49,7 +49,7 @@ function ncu_export_diagnostics() {
 
 add_filter( 'site_status_tests', 'ncu_register_site_health_tests' );
 function ncu_register_site_health_tests( $tests ) {
-    $tests['direct']['ncu_stack'] = array( 'label' => __( '9Core 15 stack', 'nine-code-ultra-core' ), 'test' => 'ncu_site_health_stack' );
+    $tests['direct']['ncu_stack'] = array( 'label' => __( 'Nine Code stack', 'nine-code' ), 'test' => 'ncu_site_health_stack' );
     return $tests;
 }
 
@@ -60,12 +60,12 @@ function ncu_site_health_stack() {
     $theme_api = defined( 'NCU_THEME_API_VERSION' ) ? (int) NCU_THEME_API_VERSION : 0;
     $api_ok = $is_ncu && ncu_core_theme_api_compatible( $theme_api );
     $status = $api_ok ? 'good' : 'recommended';
-    $label = $api_ok ? __( '9Core 15 theme and Core API are aligned', 'nine-code-ultra-core' ) : __( 'Review the 9Core 15 theme/Core pairing', 'nine-code-ultra-core' );
+    $label = $api_ok ? __( 'Nine Code theme and Core API are aligned', 'nine-code' ) : __( 'Review the Nine Code theme/Core pairing', 'nine-code' );
     return array(
         'label'       => $label,
         'status'      => $status,
-        'badge'       => array( 'label' => '9Core 15', 'color' => 'gray' ),
-        'description' => '<p>' . esc_html__( 'Conference Update stack: 9Code Theme + 9Core (Core API 14) + 9 Data Manager. WordPress owns routing; each Conference/Open Scholar/flyer/9stagram/Special/Elementor/front-end-admin surface keeps its own template, data and business logic; the suite supplies additive tools and design tokens only.', 'nine-code-ultra-core' ) . '</p>',
+        'badge'       => array( 'label' => 'Nine Code', 'color' => 'gray' ),
+        'description' => '<p>' . esc_html__( 'Conference Update stack: Nine Code + 9Core (Core API 14) + 9 Data Manager. WordPress owns routing; each Conference/Open Scholar/flyer/9stagram/Special/Elementor/front-end-admin surface keeps its own template, data and business logic; the suite supplies additive tools and design tokens only.', 'nine-code' ) . '</p>',
         'actions'     => '',
         'test'        => 'ncu_stack',
     );
@@ -78,6 +78,6 @@ function ncu_core_api_mismatch_notice() {
     if ( ncu_core_theme_api_compatible( NCU_THEME_API_VERSION ) ) { return; }
     $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
     $id = $screen && isset( $screen->id ) ? (string) $screen->id : '';
-    if ( false === strpos( $id, 'nine-code-ultra' ) && ! in_array( $id, array( 'themes', 'plugins' ), true ) ) { return; }
-    echo '<div class="notice notice-error is-dismissible"><p><strong>9Core 15:</strong> ' . esc_html__( 'Theme/Core API mismatch detected. Public rendering remains isolated by the parent theme fallback, but builder and Doctor settings should not be changed until matching versions are installed.', 'nine-code-ultra-core' ) . '</p></div>';
+    if ( false === strpos( $id, 'nine-code' ) && ! in_array( $id, array( 'themes', 'plugins' ), true ) ) { return; }
+    echo '<div class="notice notice-error is-dismissible"><p><strong>Nine Code:</strong> ' . esc_html__( 'Theme/Core API mismatch detected. Public rendering remains isolated by the parent theme fallback, but builder and Doctor settings should not be changed until matching versions are installed.', 'nine-code' ) . '</p></div>';
 }

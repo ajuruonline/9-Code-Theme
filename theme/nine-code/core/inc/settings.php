@@ -6,41 +6,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'admin_menu', 'ncu_core_admin_menu' );
 function ncu_core_admin_menu() {
     $icon = 'dashicons-admin-generic';
+    $cap  = current_user_can( 'manage_ninecode_data' ) ? 'manage_ninecode_data' : 'manage_options';
     add_menu_page(
-        __( '9Core 15', 'nine-code-ultra-core' ),
-        __( '9Core 15', 'nine-code-ultra-core' ),
-        'manage_ninecode_data',
+        __( 'Nine Code', 'nine-code' ),
+        __( 'Nine Code', 'nine-code' ),
+        $cap,
         'nine-code-ultra',
         'ncu_core_dashboard_page',
         $icon,
         3
     );
-    if ( ncu_core_uses_legacy_data_fallback() ) {
-        add_submenu_page( 'nine-code-ultra', __( 'Legacy Data Fallback', 'nine-code-ultra-core' ), __( 'Legacy Data Fallback', 'nine-code-ultra-core' ), 'manage_ninecode_data', 'nine-code-ultra', 'ncu_core_dashboard_page' );
-    }
-    add_submenu_page( 'nine-code-ultra', __( 'Responses', 'nine-code-ultra-core' ), __( 'Responses', 'nine-code-ultra-core' ), 'edit_posts', 'nine-code-ultra-responses', 'ncu_core_responses_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Responses', 'nine-code' ), __( 'Responses', 'nine-code' ), 'edit_posts', 'nine-code-ultra-responses', 'ncu_core_responses_page' );
 
     /* Data Manager and Responses are the daily workspace, but all established
-     * 9Core settings remain visible and directly accessible under 9Core 15. */
-    add_submenu_page( 'nine-code-ultra', __( 'Menu & UI', 'nine-code-ultra-core' ), __( 'Menu & UI', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-menu-ui', 'ncu13_ui_render_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Design System', 'nine-code-ultra-core' ), __( 'Design System', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-design', 'ncu_core_design_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Style Authority', 'nine-code-ultra-core' ), __( 'Style Authority', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-style-takeover', 'ncu_style_takeover_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Header & Footer', 'nine-code-ultra-core' ), __( 'Header & Footer', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-header-footer', 'ncu_core_header_footer_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Admin Workspace', 'nine-code-ultra-core' ), __( 'Admin Workspace', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-admin-workspace', 'ncu_admin_workspace_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Admin Dark Mode', 'nine-code-ultra-core' ), __( 'Admin Dark Mode', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-dark-mode', 'ncu_dark_mode_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Branding & Ownership', 'nine-code-ultra-core' ), __( 'Branding & Ownership', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-branding', 'ncu_branding_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Builders', 'nine-code-ultra-core' ), __( 'Builders', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-builders', 'ncu_core_builders_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Backup & Recovery', 'nine-code-ultra-core' ), __( 'Backup & Recovery', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-backup', 'ncu_core_backup_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Doctor', 'nine-code-ultra-core' ), __( 'Doctor', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-doctor', 'ncu_core_doctor_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'System Health', 'nine-code-ultra-core' ), __( 'System Health', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-health', 'ncu_core_health_page' );
+     * 9Core settings remain visible and directly accessible under Nine Code. */
+    add_submenu_page( 'nine-code-ultra', __( 'Menu & UI', 'nine-code' ), __( 'Menu & UI', 'nine-code' ), 'manage_options', 'nine-code-ultra-menu-ui', 'ncu13_ui_render_settings_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Design System', 'nine-code' ), __( 'Design System', 'nine-code' ), 'manage_options', 'nine-code-ultra-design', 'ncu_core_design_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Style Authority', 'nine-code' ), __( 'Style Authority', 'nine-code' ), 'manage_options', 'nine-code-ultra-style-takeover', 'ncu_style_takeover_settings_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Header & Footer', 'nine-code' ), __( 'Header & Footer', 'nine-code' ), 'manage_options', 'nine-code-ultra-header-footer', 'ncu_core_header_footer_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Admin Workspace', 'nine-code' ), __( 'Admin Workspace', 'nine-code' ), 'manage_options', 'nine-code-ultra-admin-workspace', 'ncu_admin_workspace_settings_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Admin Dark Mode', 'nine-code' ), __( 'Admin Dark Mode', 'nine-code' ), 'manage_options', 'nine-code-ultra-dark-mode', 'ncu_dark_mode_settings_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Branding & Ownership', 'nine-code' ), __( 'Branding & Ownership', 'nine-code' ), 'manage_options', 'nine-code-ultra-branding', 'ncu_branding_settings_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Builders', 'nine-code' ), __( 'Builders', 'nine-code' ), 'manage_options', 'nine-code-ultra-builders', 'ncu_core_builders_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Backup & Recovery', 'nine-code' ), __( 'Backup & Recovery', 'nine-code' ), 'manage_options', 'nine-code-ultra-backup', 'ncu_core_backup_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'Doctor', 'nine-code' ), __( 'Doctor', 'nine-code' ), 'manage_options', 'nine-code-ultra-doctor', 'ncu_core_doctor_page' );
+    add_submenu_page( 'nine-code-ultra', __( 'System Health', 'nine-code' ), __( 'System Health', 'nine-code' ), 'manage_options', 'nine-code-ultra-health', 'ncu_core_health_page' );
 
     /* Retired Front-End Edit remains routable for legacy bookmarks but stays
      * out of the visible menu because the feature itself is disabled. */
-    add_submenu_page( null, __( 'Front-End Edit (disabled)', 'nine-code-ultra-core' ), __( 'Front-End Edit', 'nine-code-ultra-core' ), 'manage_options', 'nine-code-ultra-frontend-edit', 'ncu_frontend_edit_settings_page' );
+    add_submenu_page( null, __( 'Front-End Edit (disabled)', 'nine-code' ), __( 'Front-End Edit', 'nine-code' ), 'manage_options', 'nine-code-ultra-frontend-edit', 'ncu_frontend_edit_settings_page' );
 
     add_theme_page(
-        __( '9Core 15', 'nine-code-ultra-core' ),
-        __( '9Core 15', 'nine-code-ultra-core' ),
+        __( 'Nine Code', 'nine-code' ),
+        __( 'Nine Code', 'nine-code' ),
         'manage_options',
         'nine-code-ultra-appearance',
         'ncu_core_appearance_bridge_page'
@@ -81,7 +79,7 @@ function ncu_core_admin_assets( $hook ) {
     $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
     $is_ncu = false;
     if ( $screen && isset( $screen->id ) ) {
-        $is_ncu = false !== strpos( (string) $screen->id, 'nine-code-ultra' );
+        $is_ncu = false !== strpos( (string) $screen->id, 'nine-code' );
     }
     if ( ! $is_ncu && 'appearance_page_nine-code-ultra-appearance' !== $hook ) {
         return;
@@ -315,7 +313,7 @@ function ncu_save_settings_subset( $raw, $keys, $boolean_keys = array() ) {
 function ncu_redirect_after_settings_save( $return_page, $result, $success_message ) {
     if ( ! empty( $result['mismatch'] ) ) {
         if ( function_exists( 'ncu_notice_push' ) ) {
-            ncu_notice_push( '9Core 15 could not verify one or more saved settings. Use System Health/Doctor before retrying.', 'error', 'settings-save-verify-failed' );
+            ncu_notice_push( 'Nine Code could not verify one or more saved settings. Use System Health/Doctor before retrying.', 'error', 'settings-save-verify-failed' );
         }
     } elseif ( function_exists( 'ncu_notice_push' ) ) {
         ncu_notice_push( $success_message, 'success', 'settings-saved' );
@@ -327,7 +325,7 @@ function ncu_redirect_after_settings_save( $return_page, $result, $success_messa
 add_action( 'admin_post_ncu_save_settings', 'ncu_core_save_settings' );
 function ncu_core_save_settings() {
     if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( esc_html__( 'You do not have permission to change these settings.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'You do not have permission to change these settings.', 'nine-code' ) );
     }
     check_admin_referer( 'ncu_save_settings' );
     $raw = isset( $_POST['ncu'] ) && is_array( $_POST['ncu'] ) ? wp_unslash( $_POST['ncu'] ) : array();
@@ -335,7 +333,7 @@ function ncu_core_save_settings() {
     $merged = array_replace_recursive( $current, $raw );
     update_option( 'ncu_settings', ncu_sanitize_settings( $merged ), false );
     $return_page = isset( $_POST['ncu_return_page'] ) ? sanitize_key( wp_unslash( $_POST['ncu_return_page'] ) ) : 'nine-code-ultra';
-    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( '9Core 15 settings saved.', 'success', 'settings-saved' ); }
+    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( 'Nine Code settings saved.', 'success', 'settings-saved' ); }
     wp_safe_redirect( add_query_arg( array( 'page' => $return_page ), admin_url( 'admin.php' ) ) );
     exit;
 }
@@ -343,12 +341,12 @@ function ncu_core_save_settings() {
 add_action( 'admin_post_ncu_reset_settings', 'ncu_core_reset_settings' );
 function ncu_core_reset_settings() {
     if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( esc_html__( 'You do not have permission to reset these settings.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'You do not have permission to reset these settings.', 'nine-code' ) );
     }
     check_admin_referer( 'ncu_reset_settings' );
     update_option( 'ncu_settings', ncu_core_defaults(), false );
     update_option( 'ncu_builder_settings', ncu_builder_defaults(), false );
-    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( '9Core 15 settings reset to safe defaults.', 'info', 'settings-reset' ); }
+    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( 'Nine Code settings reset to safe defaults.', 'info', 'settings-reset' ); }
     wp_safe_redirect( add_query_arg( array( 'page' => 'nine-code-ultra-backup' ), admin_url( 'admin.php' ) ) );
     exit;
 }
@@ -365,10 +363,10 @@ function ncu_admin_header( $title, $description = '' ) {
 }
 
 function ncu_core_dashboard_page() {
-    if ( ! current_user_can( 'manage_ninecode_data' ) ) { return; }
+    if ( ! current_user_can( 'manage_ninecode_data' ) && ! current_user_can( 'manage_options' ) ) { return; }
     if ( ncu_core_external_data_edition_active() ) {
         echo '<div class="wrap ncu-admin">';
-        ncu_admin_header( '9Core 15', 'Shared 9CodePress infrastructure. Edition 9.10 Data owns data, AI, post and taxonomy management.' );
+        ncu_admin_header( 'Nine Code', 'Shared 9CodePress infrastructure. Edition 9.10 Data owns data, AI, post and taxonomy management.' );
         echo '<section class="ncu-panel ncu-panel--padded"><h2>Edition 9.10 ownership</h2><p>9 Data is active and is the authoritative data-management surface. Core has automatically disabled its legacy embedded data engine to prevent duplicate menus, imports, versions and AI workflows.</p><p><a class="button button-primary button-hero" href="' . esc_url( admin_url( 'admin.php?page=nine10-data-edition' ) ) . '">Open 9 Data Manager</a></p></section></div>';
         return;
     }
@@ -408,7 +406,7 @@ function ncu_core_header_footer_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     if ( function_exists( 'ncu_theme_header_footer_admin_page' ) ) { ncu_theme_header_footer_admin_page(); return; }
     echo '<div class="wrap ncu-admin">';
-    ncu_admin_header( 'Header & Footer', 'Theme-owned Header & Footer controls require the matching 9 Code Ultra Theme 14.1.0+.' );
+    ncu_admin_header( 'Header & Footer', 'Theme-owned Header & Footer controls require the matching Nine Code 14.1.0+.' );
     echo '<section class="ncu-panel ncu-panel--padded"><h2>Theme integration required</h2><p>The former Core built-in Header/Footer renderer is retired. Activate the matching Theme; Core remains the settings/control plane and the Theme remains the single public renderer.</p></section></div>';
 }
 
@@ -416,9 +414,9 @@ function ncu_core_backup_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     ?>
     <div class="wrap ncu-admin"><?php ncu_admin_header( 'Backup & Recovery', 'Keep the theme recoverable without depending on another workflow plugin.' ); ?>
-    <section class="ncu-panel ncu-panel--padded"><h2>Export</h2><p>Download a compact JSON backup of 9Core 15 settings.</p><p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_settings' ), 'ncu_export_settings' ) ); ?>">Export settings</a></p></section>
+    <section class="ncu-panel ncu-panel--padded"><h2>Export</h2><p>Download a compact JSON backup of Nine Code settings.</p><p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_settings' ), 'ncu_export_settings' ) ); ?>">Export settings</a></p></section>
     <section class="ncu-panel ncu-panel--padded"><h2>Import</h2><form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"><input type="hidden" name="action" value="ncu_import_settings"><?php wp_nonce_field( 'ncu_import_settings' ); ?><input type="file" name="ncu_backup" accept="application/json,.json" required> <button class="button button-secondary">Validate & import</button></form></section>
-    <section class="ncu-panel ncu-panel--padded"><h2>Reset</h2><p>Returns theme and builder configuration to the v3.2 safe defaults. Aggressive Style Takeover remains off until you enable it.</p><form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Reset every 9Core 15 setting to its safe default?');"><input type="hidden" name="action" value="ncu_reset_settings"><?php wp_nonce_field( 'ncu_reset_settings' ); ?><button class="button">Reset defaults</button></form></section></div>
+    <section class="ncu-panel ncu-panel--padded"><h2>Reset</h2><p>Returns theme and builder configuration to the v3.2 safe defaults. Aggressive Style Takeover remains off until you enable it.</p><form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Reset every Nine Code setting to its safe default?');"><input type="hidden" name="action" value="ncu_reset_settings"><?php wp_nonce_field( 'ncu_reset_settings' ); ?><button class="button">Reset defaults</button></form></section></div>
     <?php
 }
 
@@ -447,15 +445,15 @@ function ncu_core_health_page() {
         array( 'Debug Display', ! $debug_display, $debug_display ? 'Visible debug output is enabled' : 'Errors are not exposed to public visitors' ),
     );
     ?>
-    <div class="wrap ncu-admin"><?php ncu_admin_header( 'System Health', 'Pre-deployment checks for the minimal 9Core 15 stack.' ); ?><div class="ncu-health-list">
+    <div class="wrap ncu-admin"><?php ncu_admin_header( 'System Health', 'Pre-deployment checks for the minimal Nine Code stack.' ); ?><div class="ncu-health-list">
     <?php foreach ( $checks as $check ) : ?><div class="ncu-health-row"><span class="ncu-health-dot <?php echo $check[1] ? 'is-good' : 'is-warn'; ?>"></span><strong><?php echo esc_html( $check[0] ); ?></strong><span><?php echo esc_html( $check[2] ); ?></span></div><?php endforeach; ?>
-    </div><section class="ncu-panel ncu-panel--padded"><h2>Diagnostics</h2><p><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_diagnostics' ), 'ncu_export_diagnostics' ) ); ?>">Download system diagnostics</a></p><p class="description">For a specific page, use <strong>9Core 15 → Doctor</strong> or the Doctor icon in the editor/front end.</p></section></div>
+    </div><section class="ncu-panel ncu-panel--padded"><h2>Diagnostics</h2><p><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_diagnostics' ), 'ncu_export_diagnostics' ) ); ?>">Download system diagnostics</a></p><p class="description">For a specific page, use <strong>Nine Code → Doctor</strong> or the Doctor icon in the editor/front end.</p></section></div>
     <?php
 }
 
 function ncu_core_appearance_bridge_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
-    ?><div class="wrap ncu-admin"><?php ncu_admin_header( '9Core 15', 'Theme functions have moved to a dedicated top-level dashboard so they are always easy to find.' ); ?><p><a class="button button-primary button-hero" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra' ) ); ?>">Open 9Core 15 Dashboard</a></p></div><?php
+    ?><div class="wrap ncu-admin"><?php ncu_admin_header( 'Nine Code', 'Theme functions have moved to a dedicated top-level dashboard so they are always easy to find.' ); ?><p><a class="button button-primary button-hero" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra' ) ); ?>">Open Nine Code Dashboard</a></p></div><?php
 }
 
 function ncu_settings_notice() { /* v2.1 uses the one-shot notice queue in inc/notices.php. */ }

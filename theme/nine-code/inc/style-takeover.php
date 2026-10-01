@@ -76,7 +76,7 @@ function ncu_theme_style_dark_companion_tokens() {
 add_filter( 'body_class', 'ncu_theme_style_takeover_body_classes_safe', 50 );
 function ncu_theme_style_takeover_body_classes_safe( $classes ) {
     try { return ncu_theme_style_takeover_body_classes( $classes ); }
-    catch ( \Throwable $e ) { error_log( '[9Code Theme ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] style body-class fallback: ' . $e->getMessage() ); return is_array( $classes ) ? $classes : array(); }
+    catch ( \Throwable $e ) { error_log( '[Nine Code ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] style body-class fallback: ' . $e->getMessage() ); return is_array( $classes ) ? $classes : array(); }
 }
 function ncu_theme_style_takeover_body_classes( $classes ) {
     if ( function_exists( 'ncu_theme_allows_style_takeover' ) && ! ncu_theme_allows_style_takeover() ) { return $classes; }
@@ -92,7 +92,7 @@ function ncu_theme_style_takeover_body_classes( $classes ) {
 add_action( 'wp_enqueue_scripts', 'ncu_theme_style_takeover_css_safe', 9999 );
 function ncu_theme_style_takeover_css_safe() {
     try { ncu_theme_style_takeover_css(); }
-    catch ( \Throwable $e ) { error_log( '[9Code Theme ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] style takeover fallback: ' . $e->getMessage() ); }
+    catch ( \Throwable $e ) { error_log( '[Nine Code ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] style takeover fallback: ' . $e->getMessage() ); }
 }
 function ncu_theme_style_hex_rgb_triplet( $hex ) {
     $hex = ltrim( (string) $hex, '#' );

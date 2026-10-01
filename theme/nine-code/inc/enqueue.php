@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 add_action( 'wp_enqueue_scripts', 'ncu_enqueue_assets_safe' );
 function ncu_enqueue_assets_safe() {
     try { ncu_enqueue_assets(); }
-    catch ( \Throwable $e ) { error_log( '[9Code Theme ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] enqueue fallback: ' . $e->getMessage() ); }
+    catch ( \Throwable $e ) { error_log( '[Nine Code ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] enqueue fallback: ' . $e->getMessage() ); }
 }
 function ncu_enqueue_assets() {
     if ( function_exists( 'ncu_theme_should_enqueue_presentation_assets' ) && ! ncu_theme_should_enqueue_presentation_assets() ) { return; }
@@ -18,7 +18,7 @@ function ncu_enqueue_assets() {
         wp_localize_script( 'nine-code-ultra', 'NCUThemeRuntime', array(
             'restRoot' => esc_url_raw( rest_url( 'nine-code-ultra/v1/' ) ),
             'contextId' => is_singular() ? absint( get_queried_object_id() ) : 0,
-            'strings' => array( 'loading' => __( 'Loading…', 'nine-code-ultra' ), 'error' => __( 'Unable to load this content. Please try again.', 'nine-code-ultra' ) ),
+            'strings' => array( 'loading' => __( 'Loading…', 'nine-code' ), 'error' => __( 'Unable to load this content. Please try again.', 'nine-code' ) ),
         ) );
     }
 
@@ -78,7 +78,7 @@ function ncu_safe_color( $value, $fallback ) {
 add_filter( 'body_class', 'ncu_body_classes_safe' );
 function ncu_body_classes_safe( $classes ) {
     try { return ncu_body_classes( $classes ); }
-    catch ( \Throwable $e ) { error_log( '[9Code Theme ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] body-class fallback: ' . $e->getMessage() ); return is_array( $classes ) ? $classes : array(); }
+    catch ( \Throwable $e ) { error_log( '[Nine Code ' . ( defined( 'NCU_THEME_VERSION' ) ? NCU_THEME_VERSION : '' ) . '] body-class fallback: ' . $e->getMessage() ); return is_array( $classes ) ? $classes : array(); }
 }
 function ncu_body_classes( $classes ) {
     $s = ncu_theme_settings();

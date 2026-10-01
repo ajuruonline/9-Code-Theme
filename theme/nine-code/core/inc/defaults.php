@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Admin Workspace skin catalog.
  *
- * Names are visual-reference labels only. 9Core 15 does not load or copy
+ * Names are visual-reference labels only. Nine Code does not load or copy
  * third-party brand assets; every skin is implemented locally with 9 Code UI.
  */
 function ncu_admin_skin_mode_choices() {

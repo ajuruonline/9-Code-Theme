@@ -81,7 +81,7 @@ function ncu_get_author_contact() {
     if ( $email ) { $items[] = array( 'label' => 'Email', 'url' => 'mailto:' . sanitize_email( $email ), 'icon' => 'mail' ); }
     if ( $phone ) { $items[] = array( 'label' => 'Phone', 'url' => 'tel:' . preg_replace( '/[^0-9+]/', '', $phone ), 'icon' => 'phone' ); }
     if ( empty( $items ) ) { return array(); }
-    return array( 'label' => __( 'Contact author', 'nine-code-ultra' ), 'name' => get_the_author_meta( 'display_name', $author_id ), 'items' => $items );
+    return array( 'label' => __( 'Contact author', 'nine-code' ), 'name' => get_the_author_meta( 'display_name', $author_id ), 'items' => $items );
 }
 
 function ncu_should_show_native_title() {
@@ -97,4 +97,4 @@ function ncu_should_show_native_title() {
 }
 
 function ncu_posted_on() { echo '<span class="posted-on">' . esc_html( get_the_date() ) . '</span>'; }
-function ncu_posted_by() { echo '<span class="byline">' . esc_html__( 'By', 'nine-code-ultra' ) . ' <a href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'; }
+function ncu_posted_by() { echo '<span class="byline">' . esc_html__( 'By', 'nine-code' ) . ' <a href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'; }

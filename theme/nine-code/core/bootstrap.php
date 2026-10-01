@@ -1,32 +1,25 @@
 <?php
 /**
- * Plugin Name: 9Core 15
- * Plugin URI: https://9igeria.online/
- * Description: Shared infrastructure/control plane for 9CodePress Edition 9.10. 9 Data owns data/AI/post/category/tag workflows when installed; Core keeps a legacy fallback data engine only for upgrade continuity.
- * Version: 15.0.2
- * Requires at least: 6.6
- * Requires PHP: 7.4
- * Author: 9igeria Online Ltd
- * Author URI: https://9igeria.online/
- * Text Domain: nine-code-ultra-core
+ * Nine Code Core module.
+ *
+ * Shared infrastructure for the Nine Code theme: settings, Style Authority,
+ * admin workspace/branding, editor tools, builders, Doctor and diagnostics.
+ * Loaded from functions.php. The Data Manager is a separate plugin
+ * (nine-code-data) so data, CPTs and shortcodes survive theme changes.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'NCU_CORE_VERSION', '15.0.2' );
+define( 'NCU_CORE_VERSION', NCU_THEME_VERSION );
 define( 'NCU_CORE_RELEASE_SHOT', 'Native Editor Space Recovery' );
-define( 'NCU_CORE_RELEASE_SHOT_SUMMARY', 'Restore native Post Content and metadata editing, retire the blocking full-screen focus layer, and keep 9CODE settings inside one hamburger drawer.' );
 define( 'NCU_CORE_API_VERSION', 14 );
-define( 'NINECODE_SUITE_CORE_VERSION', '15.0.2' );
+define( 'NINECODE_SUITE_CORE_VERSION', NCU_THEME_VERSION );
 if ( ! defined( 'NINECODE_SUITE_CONTRACT_MAJOR' ) ) { define( 'NINECODE_SUITE_CONTRACT_MAJOR', 14 ); }
 define( 'NCU_CORE_FILE', __FILE__ );
-define( 'NCU_CORE_DIR', plugin_dir_path( __FILE__ ) );
-define( 'NCU_CORE_URL', plugin_dir_url( __FILE__ ) );
-define( 'NCU_DATA_ENGINE_VERSION', '0.17.0' );
-define( 'NCU_DATA_ENGINE_DIR', NCU_CORE_DIR . 'inc/data-engine/' );
-define( 'NCU_DATA_ENGINE_URL', NCU_CORE_URL . 'assets/data-engine/' );
+define( 'NCU_CORE_DIR', trailingslashit( NCU_THEME_DIR ) . 'core/' );
+define( 'NCU_CORE_URL', trailingslashit( NCU_THEME_URI ) . 'core/' );
 
 /** API 14 is the current suite contract. The compatibility function remains
  * tolerant of older API-2+ Themes during an upgrade window, while diagnostics
@@ -37,34 +30,11 @@ function ncu_core_theme_api_compatible( $theme_api ) {
 }
 
 /**
- * Edition 9.10 ownership guard.
- *
- * 9 Data Manager is the authoritative owner of Post Editor, Category Manager,
- * Post Creator, Form Manager and Data Backup. Core keeps its older embedded data engine only as
- * a compatibility fallback when 9 Data is not active. Detection happens from
- * WordPress' active-plugin registry so it is safe regardless of plugin load
- * order and also covers network activation.
+ * The Data Manager is the separate nine-code-data plugin. Plugins load before
+ * the theme, so its version constant is reliable here.
  */
 function ncu_core_external_data_edition_active() {
-    $targets = array(
-        'nine10-data-edition/nine55-ultron-data.php',
-        'nine55-ultron-data/nine55-ultron-data.php',
-    );
-    $active = (array) get_option( 'active_plugins', array() );
-    foreach ( $targets as $target ) {
-        if ( in_array( $target, $active, true ) ) { return true; }
-    }
-    if ( is_multisite() ) {
-        $network = (array) get_site_option( 'active_sitewide_plugins', array() );
-        foreach ( $targets as $target ) {
-            if ( isset( $network[ $target ] ) ) { return true; }
-        }
-    }
-    return defined( 'NINE55_ULTRON_DATA_VERSION' ) && version_compare( NINE55_ULTRON_DATA_VERSION, '9.10.0', '>=' );
-}
-
-function ncu_core_uses_legacy_data_fallback() {
-    return ! ncu_core_external_data_edition_active();
+    return defined( 'NINE55_ULTRON_DATA_VERSION' );
 }
 
 require_once NCU_CORE_DIR . 'inc/defaults.php';
@@ -85,95 +55,19 @@ require_once NCU_CORE_DIR . 'inc/diagnostics.php';
 require_once NCU_CORE_DIR . 'inc/builders.php';
 require_once NCU_CORE_DIR . 'inc/doctor.php';
 require_once NCU_CORE_DIR . 'inc/shortcodes.php';
-/* Edition 9.10: 9 Data owns the active data stack. These classes remain only
- * as a reversible legacy fallback for sites upgrading Core before installing
- * 9 Data. */
-if ( ncu_core_uses_legacy_data_fallback() ) {
-    require_once NCU_DATA_ENGINE_DIR . 'class-ninecode-scope-lock.php';
-    require_once NCU_DATA_ENGINE_DIR . 'class-ninecode-data-exporter.php';
-    require_once NCU_DATA_ENGINE_DIR . 'class-ninecode-data-importer.php';
-    require_once NCU_DATA_ENGINE_DIR . 'class-ninecode-excel.php';
-    require_once NCU_DATA_ENGINE_DIR . 'class-ninecode-data-version-manager.php';
-    require_once NCU_DATA_ENGINE_DIR . 'class-ninecode-acf-data-engine.php';
-    require_once NCU_DATA_ENGINE_DIR . 'ai-data-workspace.php';
-}
-
-register_activation_hook( __FILE__, 'ncu_core_activate' );
+/** Seed defaults once per install/upgrade (theme activation or version bump). */
 function ncu_core_activate() {
-    global $wp_version;
-
-    if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
-        deactivate_plugins( plugin_basename( __FILE__ ) );
-        wp_die( esc_html__( '9Core 15 requires PHP 7.4 or newer.', 'nine-code-ultra-core' ) );
-    }
-
-    if ( isset( $wp_version ) && version_compare( $wp_version, '6.6', '<' ) ) {
-        deactivate_plugins( plugin_basename( __FILE__ ) );
-        wp_die( esc_html__( '9Core 15 requires WordPress 6.6 or newer.', 'nine-code-ultra-core' ) );
-    }
-
     if ( false === get_option( 'ncu_settings', false ) ) {
         add_option( 'ncu_settings', ncu_core_defaults(), '', false );
     }
     if ( false === get_option( 'ncu_builder_settings', false ) ) {
         add_option( 'ncu_builder_settings', ncu_builder_defaults(), '', false );
     }
-    if ( ncu_core_uses_legacy_data_fallback() && class_exists( 'NCU_Data_ACF_Data_Engine' ) ) { NCU_Data_ACF_Data_Engine::activate(); }
+    if ( function_exists( 'ncu13_ui_activation' ) ) { ncu13_ui_activation(); }
     update_option( 'ncu_core_version', NCU_CORE_VERSION, false );
 }
-
-add_action( 'plugins_loaded', 'ncu_core_boot' );
+add_action( 'after_switch_theme', 'ncu_core_activate' );
 add_action( 'admin_init', 'ncu_core_maybe_upgrade', 5 );
-function ncu_core_boot() {
-    load_plugin_textdomain( 'nine-code-ultra-core', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
-    if ( ncu_core_uses_legacy_data_fallback() ) { ncu_core_data_engine_boot(); }
-}
-
-/**
- * 13.3: Core is the single authoritative data engine.
- *
- * Older standalone Data Engine builds may remain installed during migration,
- * but their callbacks are detached before WordPress reaches init/admin-post so
- * they cannot create a second import history, menu or rollback pipeline.
- */
-function ncu_core_data_engine_boot() {
-    if ( ! ncu_core_uses_legacy_data_fallback() || ! class_exists( 'NCU_Data_ACF_Data_Engine' ) ) { return; }
-    ncu_core_quarantine_legacy_data_engine();
-    NCU_Data_ACF_Data_Engine::activate();
-    $engine = NCU_Data_ACF_Data_Engine::instance();
-    $engine->maybe_upgrade();
-}
-
-function ncu_core_quarantine_legacy_data_engine() {
-    if ( ! class_exists( 'NineCode_ACF_Data_Engine' ) ) { return; }
-    global $wp_filter;
-    $tags = array(
-        'plugins_loaded', 'init', 'admin_menu', 'admin_enqueue_scripts', 'admin_notices',
-        'acf/load_field_group', 'acf/save_post', 'elementor/dynamic_tags/register',
-        'admin_post_ninecode_save_term_data', 'admin_post_ninecode_save_data_view',
-        'admin_post_ninecode_delete_data_view', 'admin_post_ninecode_save_terms',
-        'admin_post_ninecode_save_plugin_meta', 'admin_post_ninecode_bulk_category_update',
-        'admin_post_ninecode_save_allocations', 'admin_post_ninecode_save_registry',
-        'admin_post_ninecode_delete_registry', 'admin_post_ninecode_acf_export_record',
-        'admin_post_ninecode_acf_export_collection', 'admin_post_ninecode_acf_export_schema',
-        'admin_post_ninecode_acf_export_backup', 'admin_post_ninecode_acf_import',
-        'admin_post_ninecode_acf_apply_stage', 'admin_post_ninecode_acf_restore_backup',
-        'admin_post_ninecode_acf_undo_import', 'admin_post_ninecode_acf_restore_version',
-    );
-    foreach ( $tags as $tag ) {
-        if ( empty( $wp_filter[ $tag ] ) || ! is_object( $wp_filter[ $tag ] ) || empty( $wp_filter[ $tag ]->callbacks ) ) { continue; }
-        foreach ( $wp_filter[ $tag ]->callbacks as $priority => $callbacks ) {
-            foreach ( $callbacks as $callback ) {
-                $function = $callback['function'] ?? null;
-                if ( ! is_array( $function ) || empty( $function[0] ) ) { continue; }
-                $owner = is_object( $function[0] ) ? get_class( $function[0] ) : (string) $function[0];
-                if ( 'NineCode_ACF_Data_Engine' === $owner ) {
-                    remove_filter( $tag, $function, $priority );
-                }
-            }
-        }
-    }
-}
 
 function ncu_core_data_manager_url() {
     return admin_url( ncu_core_external_data_edition_active() ? 'admin.php?page=nine-post-manager' : 'admin.php?page=nine-code-ultra' );
@@ -333,6 +227,5 @@ function ncu_core_maybe_upgrade() {
     $builders = get_option( 'ncu_builder_settings', array() );
     $builders = is_array( $builders ) ? $builders : array();
     update_option( 'ncu_builder_settings', ncu_sanitize_builder_settings( array_replace_recursive( ncu_builder_defaults(), $builders ) ), false );
-    if ( ncu_core_uses_legacy_data_fallback() && class_exists( 'NCU_Data_ACF_Data_Engine' ) ) { NCU_Data_ACF_Data_Engine::activate(); }
     update_option( 'ncu_core_version', NCU_CORE_VERSION, false );
 }

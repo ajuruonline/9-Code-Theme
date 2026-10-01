@@ -135,7 +135,7 @@ final class Nine10_Form {
     }
 
     public function render_admin_page() {
-        if ( ! current_user_can( 'edit_posts' ) ) { wp_die( esc_html__( 'You do not have permission to use Form Manager.', 'nine55-ultron-data' ) ); }
+        if ( ! current_user_can( 'edit_posts' ) ) { wp_die( esc_html__( 'You do not have permission to use Form Manager.', 'nine-code-data' ) ); }
         $view = isset( $_GET['form_view'] ) ? sanitize_key( wp_unslash( $_GET['form_view'] ) ) : 'create';
         if ( ! in_array( $view, array( 'create', 'manage', 'responses', 'category_responses' ), true ) ) { $view = 'create'; }
         $edit_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : 0;

@@ -210,14 +210,14 @@ class NineCM_Drift {
     }
 
     public function save_baseline() {
-        if ( ! NineCM_Core::can_access_planner() || ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to save the infrastructure baseline.', 'nine-category-manager' ), 403 ); }
+        if ( ! NineCM_Core::can_access_planner() || ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to save the infrastructure baseline.', 'nine-code-data' ), 403 ); }
         check_admin_referer( 'ninecm_save_infrastructure_baseline' );
         update_option( self::OPTION, self::capture_payload(), false );
         $this->redirect( 'baseline_saved' );
     }
 
     public function clear_baseline() {
-        if ( ! NineCM_Core::can_access_planner() || ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to clear the infrastructure baseline.', 'nine-category-manager' ), 403 ); }
+        if ( ! NineCM_Core::can_access_planner() || ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to clear the infrastructure baseline.', 'nine-code-data' ), 403 ); }
         check_admin_referer( 'ninecm_clear_infrastructure_baseline' );
         delete_option( self::OPTION );
         $this->redirect( 'baseline_cleared' );

@@ -12,13 +12,13 @@ class Nine_AI_Manager_Importer {
 
     public function stage_upload($file) {
         if (empty($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
-            return new WP_Error('nine_ai_no_file', __('No valid package file was uploaded.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_no_file', __('No valid package file was uploaded.', 'nine-code-data' ));
         }
 
         $settings = get_option('nine_ai_manager_settings', array());
         $max_mb = isset($settings['max_package_mb']) ? max(1, min(100, absint($settings['max_package_mb']))) : 15;
         if (!empty($file['size']) && $file['size'] > ($max_mb * 1024 * 1024)) {
-            return new WP_Error('nine_ai_too_large', sprintf(__('Package exceeds the %d MB limit.', 'nine-ai-manager'), $max_mb));
+            return new WP_Error('nine_ai_too_large', sprintf(__('Package exceeds the %d MB limit.', 'nine-code-data' ), $max_mb));
         }
 
         $name = isset($file['name']) ? sanitize_file_name($file['name']) : 'package.json';
@@ -29,7 +29,7 @@ class Nine_AI_Manager_Importer {
         }
 
         if (!in_array($ext, array('json', '9ai'), true) && substr($name, -9) !== '.9ai.json') {
-            return new WP_Error('nine_ai_bad_type', __('Upload a .json, .9ai.json or .zip package.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_bad_type', __('Upload a .json, .9ai.json or .zip package.', 'nine-code-data' ));
         }
 
         $raw = file_get_contents($file['tmp_name']);
@@ -38,7 +38,7 @@ class Nine_AI_Manager_Importer {
 
     private function stage_zip($tmp_file, $name) {
         if (!class_exists('ZipArchive')) {
-            return new WP_Error('nine_ai_no_zip', __('This server does not have ZIP support enabled.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_no_zip', __('This server does not have ZIP support enabled.', 'nine-code-data' ));
         }
 
         $uploads = wp_upload_dir();
@@ -48,13 +48,13 @@ class Nine_AI_Manager_Importer {
 
         $base = trailingslashit($uploads['basedir']) . 'nine-ai-manager/packages/' . wp_generate_uuid4();
         if (!wp_mkdir_p($base)) {
-            return new WP_Error('nine_ai_mkdir', __('Could not create a temporary package directory.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_mkdir', __('Could not create a temporary package directory.', 'nine-code-data' ));
         }
 
         $zip = new ZipArchive();
         $opened = $zip->open($tmp_file);
         if (true !== $opened) {
-            return new WP_Error('nine_ai_zip_open', __('Could not open the ZIP package.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_zip_open', __('Could not open the ZIP package.', 'nine-code-data' ));
         }
 
         for ($i = 0; $i < $zip->numFiles; $i++) {
@@ -62,14 +62,14 @@ class Nine_AI_Manager_Importer {
             if ($this->unsafe_zip_path($entry)) {
                 $zip->close();
                 $this->delete_directory($base);
-                return new WP_Error('nine_ai_zip_path', __('The ZIP contains an unsafe path and was rejected.', 'nine-ai-manager'));
+                return new WP_Error('nine_ai_zip_path', __('The ZIP contains an unsafe path and was rejected.', 'nine-code-data' ));
             }
         }
 
         if (!$zip->extractTo($base)) {
             $zip->close();
             $this->delete_directory($base);
-            return new WP_Error('nine_ai_zip_extract', __('Could not extract the ZIP package.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_zip_extract', __('Could not extract the ZIP package.', 'nine-code-data' ));
         }
         $zip->close();
 
@@ -96,7 +96,7 @@ class Nine_AI_Manager_Importer {
 
         if (!$manifest_file || !is_readable($manifest_file)) {
             $this->delete_directory($base);
-            return new WP_Error('nine_ai_zip_manifest', __('No package.json or .9ai.json manifest was found inside the ZIP.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_zip_manifest', __('No package.json or .9ai.json manifest was found inside the ZIP.', 'nine-code-data' ));
         }
 
         $raw = file_get_contents($manifest_file);
@@ -115,7 +115,7 @@ class Nine_AI_Manager_Importer {
     private function stage_json($raw, $name, $asset_dir) {
         $data = json_decode($raw, true);
         if (!is_array($data)) {
-            return new WP_Error('nine_ai_json', __('The package is not valid JSON.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_json', __('The package is not valid JSON.', 'nine-code-data' ));
         }
 
         $validation = $this->validate_package($data);
@@ -134,7 +134,7 @@ class Nine_AI_Manager_Importer {
     public function validate_package($package) {
         $format = isset($package['format']) ? (string) $package['format'] : '';
         if (!in_array($format, array('nine-ai-package/v1', 'nine-ai-package/v2'), true)) {
-            return new WP_Error('nine_ai_format', __('Package format must be nine-ai-package/v2 (v1 remains accepted for older work).', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_format', __('Package format must be nine-ai-package/v2 (v1 remains accepted for older work).', 'nine-code-data' ));
         }
         if ('nine-ai-package/v2' === $format) {
             $target = isset($package['target']) && is_array($package['target']) ? $package['target'] : array();
@@ -142,20 +142,20 @@ class Nine_AI_Manager_Importer {
             $scan = get_option(Nine_AI_Manager_Scanner::OPTION, array());
             $actual = is_array($scan) && !empty($scan['site_fingerprint']) ? (string) $scan['site_fingerprint'] : '';
             if ($expected && $actual && !hash_equals($actual, $expected)) {
-                return new WP_Error('nine_ai_stale_site_file', __('This AI package was prepared from a different or older Site AI File. Download a fresh AI instruction file and ask the AI to rebuild the package.', 'nine-ai-manager'));
+                return new WP_Error('nine_ai_stale_site_file', __('This AI package was prepared from a different or older Site AI File. Download a fresh AI instruction file and ask the AI to rebuild the package.', 'nine-code-data' ));
             }
         }
         if (empty($package['items']) || !is_array($package['items'])) {
-            return new WP_Error('nine_ai_items', __('The package must contain an items array.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_items', __('The package must contain an items array.', 'nine-code-data' ));
         }
         if (count($package['items']) > 250) {
-            return new WP_Error('nine_ai_too_many', __('A single package may contain at most 250 items.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_too_many', __('A single package may contain at most 250 items.', 'nine-code-data' ));
         }
 
         $allowed = array('post', 'page', 'cpt', 'landing_page', 'term', 'category', 'tag', 'media', 'menu', 'option', 'plugin_settings', 'user', 'integration');
         foreach ($package['items'] as $i => $item) {
             if (!is_array($item) || empty($item['entity']) || !in_array($item['entity'], $allowed, true)) {
-                return new WP_Error('nine_ai_entity', sprintf(__('Item %d has an unsupported entity type.', 'nine-ai-manager'), $i + 1));
+                return new WP_Error('nine_ai_entity', sprintf(__('Item %d has an unsupported entity type.', 'nine-code-data' ), $i + 1));
             }
         }
         return true;
@@ -198,7 +198,7 @@ class Nine_AI_Manager_Importer {
 
     public function apply_package($staged, $route_filter = '') {
         if (empty($staged['package']) || !is_array($staged['package'])) {
-            return new WP_Error('nine_ai_stage_missing', __('The staged package is missing.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_stage_missing', __('The staged package is missing.', 'nine-code-data' ));
         }
 
         $package = $staged['package'];
@@ -305,14 +305,14 @@ class Nine_AI_Manager_Importer {
         if ('integration' === $entity) {
             return $this->apply_integration($item, $context);
         }
-        return new WP_Error('nine_ai_unknown_entity', __('Unsupported entity.', 'nine-ai-manager'));
+        return new WP_Error('nine_ai_unknown_entity', __('Unsupported entity.', 'nine-code-data' ));
     }
 
     private function apply_content($item, $context) {
         $entity = $item['entity'];
         $post_type = !empty($item['post_type']) ? sanitize_key($item['post_type']) : (in_array($entity, array('page', 'landing_page'), true) ? 'page' : 'post');
         if (!post_type_exists($post_type)) {
-            return new WP_Error('nine_ai_post_type', sprintf(__('Post type "%s" does not exist.', 'nine-ai-manager'), $post_type));
+            return new WP_Error('nine_ai_post_type', sprintf(__('Post type "%s" does not exist.', 'nine-code-data' ), $post_type));
         }
 
         $operation = !empty($item['operation']) ? sanitize_key($item['operation']) : 'create';
@@ -354,7 +354,7 @@ class Nine_AI_Manager_Importer {
         }
 
         if (!$existing_id && empty($postarr['post_title'])) {
-            return new WP_Error('nine_ai_title_required', __('A title is required when creating content.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_title_required', __('A title is required when creating content.', 'nine-code-data' ));
         }
 
         $post_id = wp_insert_post(wp_slash($postarr), true);
@@ -491,7 +491,7 @@ class Nine_AI_Manager_Importer {
         $entity = $item['entity'];
         $taxonomy = !empty($item['taxonomy']) ? sanitize_key($item['taxonomy']) : ('category' === $entity ? 'category' : ('tag' === $entity ? 'post_tag' : 'category'));
         if (!taxonomy_exists($taxonomy)) {
-            return new WP_Error('nine_ai_taxonomy', sprintf(__('Taxonomy "%s" does not exist.', 'nine-ai-manager'), $taxonomy));
+            return new WP_Error('nine_ai_taxonomy', sprintf(__('Taxonomy "%s" does not exist.', 'nine-code-data' ), $taxonomy));
         }
 
         $operation = !empty($item['operation']) ? sanitize_key($item['operation']) : 'create';
@@ -541,7 +541,7 @@ class Nine_AI_Manager_Importer {
             $op = 'update';
         } else {
             if (!$name) {
-                return new WP_Error('nine_ai_term_name', __('A term name is required.', 'nine-ai-manager'));
+                return new WP_Error('nine_ai_term_name', __('A term name is required.', 'nine-code-data' ));
             }
             $created = wp_insert_term($name, $taxonomy, $args);
             if (is_wp_error($created)) {
@@ -561,11 +561,11 @@ class Nine_AI_Manager_Importer {
     private function apply_menu($item) {
         $settings = get_option('nine_ai_manager_settings', array());
         if (empty($settings['allow_menu_changes'])) {
-            return new WP_Error('nine_ai_menu_disabled', __('Menu changes are disabled in 9 AI Manager settings.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_menu_disabled', __('Menu changes are disabled in 9 AI Manager settings.', 'nine-code-data' ));
         }
         $name = !empty($item['name']) ? sanitize_text_field($item['name']) : '';
         if (!$name) {
-            return new WP_Error('nine_ai_menu_name', __('A menu name is required.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_menu_name', __('A menu name is required.', 'nine-code-data' ));
         }
 
         $existing = wp_get_nav_menu_object($name);
@@ -626,15 +626,15 @@ class Nine_AI_Manager_Importer {
     private function apply_option($item) {
         $settings = get_option('nine_ai_manager_settings', array());
         if (empty($settings['allow_options'])) {
-            return new WP_Error('nine_ai_options_disabled', __('Option changes are disabled. Enable them explicitly in 9 AI Manager settings.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_options_disabled', __('Option changes are disabled. Enable them explicitly in 9 AI Manager settings.', 'nine-code-data' ));
         }
         $key = !empty($item['key']) ? sanitize_key($item['key']) : '';
         if (!$key) {
-            return new WP_Error('nine_ai_option_key', __('An option key is required.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_option_key', __('An option key is required.', 'nine-code-data' ));
         }
         $allowed = apply_filters('nine_ai_manager_allow_option_key', (0 === strpos($key, 'nine_') || 0 === strpos($key, '9_')), $key, $item);
         if (!$allowed) {
-            return new WP_Error('nine_ai_option_not_allowed', sprintf(__('Option "%s" is not allowed by the current safety rules.', 'nine-ai-manager'), $key));
+            return new WP_Error('nine_ai_option_not_allowed', sprintf(__('Option "%s" is not allowed by the current safety rules.', 'nine-code-data' ), $key));
         }
         $exists = false !== get_option($key, false);
         $previous = get_option($key, null);
@@ -650,12 +650,12 @@ class Nine_AI_Manager_Importer {
     private function apply_plugin_settings($item) {
         $settings = get_option('nine_ai_manager_settings', array());
         if (empty($settings['allow_options'])) {
-            return new WP_Error('nine_ai_plugin_settings_disabled', __('Plugin-setting changes are disabled. Enable approved option changes in 9 AI Manager settings.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_settings_disabled', __('Plugin-setting changes are disabled. Enable approved option changes in 9 AI Manager settings.', 'nine-code-data' ));
         }
         $plugin_file = !empty($item['plugin_file']) ? plugin_basename($item['plugin_file']) : '';
         $values = isset($item['settings']) && is_array($item['settings']) ? $item['settings'] : array();
         if (!$plugin_file || !$values) {
-            return new WP_Error('nine_ai_plugin_settings_payload', __('plugin_settings requires plugin_file and a settings object.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_settings_payload', __('plugin_settings requires plugin_file and a settings object.', 'nine-code-data' ));
         }
         $scan = get_option(Nine_AI_Manager_Scanner::OPTION, array());
         $contract = null;
@@ -666,21 +666,21 @@ class Nine_AI_Manager_Importer {
             }
         }
         if (!$contract) {
-            return new WP_Error('nine_ai_plugin_settings_unknown', __('The target plugin is not present in the latest AI readiness scan.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_settings_unknown', __('The target plugin is not present in the latest AI readiness scan.', 'nine-code-data' ));
         }
         $allowed = array_values(array_unique(array_merge(
             (array) (isset($contract['detected']['option_keys']) ? $contract['detected']['option_keys'] : array()),
             (array) (isset($contract['detected']['settings']) ? $contract['detected']['settings'] : array())
         )));
         if (!$allowed) {
-            return new WP_Error('nine_ai_plugin_settings_none', __('No safe literal option keys were detected for this plugin. Use a native integration instead.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_settings_none', __('No safe literal option keys were detected for this plugin. Use a native integration instead.', 'nine-code-data' ));
         }
         $rollback = array();
         $changed = array();
         foreach ($values as $key => $value) {
             $key = sanitize_key($key);
             if (!$key || !in_array($key, $allowed, true)) {
-                return new WP_Error('nine_ai_plugin_setting_not_allowed', sprintf(__('Setting "%s" is not in the plugin contract and was rejected.', 'nine-ai-manager'), $key));
+                return new WP_Error('nine_ai_plugin_setting_not_allowed', sprintf(__('Setting "%s" is not in the plugin contract and was rejected.', 'nine-code-data' ), $key));
             }
             $exists = false !== get_option($key, false);
             $previous = get_option($key, null);
@@ -697,7 +697,7 @@ class Nine_AI_Manager_Importer {
     private function apply_user($item) {
         $settings = get_option('nine_ai_manager_settings', array());
         if (empty($settings['allow_users'])) {
-            return new WP_Error('nine_ai_users_disabled', __('AI user changes are disabled in 9 AI Manager settings.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_users_disabled', __('AI user changes are disabled in 9 AI Manager settings.', 'nine-code-data' ));
         }
         require_once ABSPATH . 'wp-admin/includes/user.php';
         $operation = !empty($item['operation']) ? sanitize_key($item['operation']) : 'create';
@@ -716,7 +716,7 @@ class Nine_AI_Manager_Importer {
             $login = !empty($item['user_login']) ? sanitize_user($item['user_login'], true) : '';
             $email = !empty($item['email']) ? sanitize_email($item['email']) : '';
             if (!$login || !$email || !is_email($email)) {
-                return new WP_Error('nine_ai_user_required', __('Creating a user requires a valid user_login and email.', 'nine-ai-manager'));
+                return new WP_Error('nine_ai_user_required', __('Creating a user requires a valid user_login and email.', 'nine-code-data' ));
             }
             $data['user_login'] = $login;
             $data['user_email'] = $email;
@@ -774,7 +774,7 @@ class Nine_AI_Manager_Importer {
             return $id;
         }
         if (!$id) {
-            return new WP_Error('nine_ai_media_empty', __('Media item requires attachment_id, a bundled asset, or a URL.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_media_empty', __('Media item requires attachment_id, a bundled asset, or a URL.', 'nine-code-data' ));
         }
         if (!empty($item['title'])) {
             wp_update_post(array('ID' => $id, 'post_title' => sanitize_text_field($item['title'])));
@@ -789,7 +789,7 @@ class Nine_AI_Manager_Importer {
         $key = !empty($item['integration']) ? sanitize_key($item['integration']) : '';
         $integrations = apply_filters('nine_ai_manager_integrations', array());
         if (!$key || empty($integrations[$key]) || empty($integrations[$key]['handler']) || !is_callable($integrations[$key]['handler'])) {
-            return new WP_Error('nine_ai_integration_missing', sprintf(__('Integration "%s" is not registered on this site.', 'nine-ai-manager'), $key));
+            return new WP_Error('nine_ai_integration_missing', sprintf(__('Integration "%s" is not registered on this site.', 'nine-code-data' ), $key));
         }
 
         $response = call_user_func($integrations[$key]['handler'], $item, $context);
@@ -797,7 +797,7 @@ class Nine_AI_Manager_Importer {
             return $response;
         }
         if (!is_array($response)) {
-            $response = array('message' => __('Integration completed.', 'nine-ai-manager'));
+            $response = array('message' => __('Integration completed.', 'nine-code-data' ));
         }
         return array(
             'result' => array_merge(array('entity' => 'integration', 'integration' => $key, 'operation' => 'apply'), $response),
@@ -808,18 +808,18 @@ class Nine_AI_Manager_Importer {
     private function resolve_media($media, $post_id, $context) {
         if (!empty($media['attachment_id'])) {
             $id = absint($media['attachment_id']);
-            return 'attachment' === get_post_type($id) ? $id : new WP_Error('nine_ai_media_id', __('Featured-media attachment ID does not exist.', 'nine-ai-manager'));
+            return 'attachment' === get_post_type($id) ? $id : new WP_Error('nine_ai_media_id', __('Featured-media attachment ID does not exist.', 'nine-code-data' ));
         }
 
         if (!empty($media['asset']) && !empty($context['asset_dir'])) {
             $relative = ltrim(str_replace('\\', '/', $media['asset']), '/');
             if (false !== strpos($relative, '..')) {
-                return new WP_Error('nine_ai_asset_path', __('Unsafe asset path.', 'nine-ai-manager'));
+                return new WP_Error('nine_ai_asset_path', __('Unsafe asset path.', 'nine-code-data' ));
             }
             $base = realpath($context['asset_dir']);
             $path = realpath(trailingslashit($context['asset_dir']) . $relative);
             if (!$base || !$path || 0 !== strpos($path, $base) || !is_file($path)) {
-                return new WP_Error('nine_ai_asset_missing', __('Bundled media asset was not found.', 'nine-ai-manager'));
+                return new WP_Error('nine_ai_asset_missing', __('Bundled media asset was not found.', 'nine-code-data' ));
             }
             $id = $this->sideload_local_file($path, $post_id);
             if (!is_wp_error($id) && !empty($media['alt'])) {
@@ -847,7 +847,7 @@ class Nine_AI_Manager_Importer {
         require_once ABSPATH . 'wp-admin/includes/image.php';
         $tmp = wp_tempnam(basename($path));
         if (!$tmp || !copy($path, $tmp)) {
-            return new WP_Error('nine_ai_asset_copy', __('Could not prepare the bundled media file.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_asset_copy', __('Could not prepare the bundled media file.', 'nine-code-data' ));
         }
         $file_array = array('name' => sanitize_file_name(basename($path)), 'tmp_name' => $tmp);
         $id = media_handle_sideload($file_array, $post_id);
@@ -860,10 +860,10 @@ class Nine_AI_Manager_Importer {
     public function rollback($history_id) {
         $entry = $this->history->get($history_id);
         if (!$entry) {
-            return new WP_Error('nine_ai_history_missing', __('History entry not found.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_history_missing', __('History entry not found.', 'nine-code-data' ));
         }
         if ('rolled_back' === $entry['status']) {
-            return new WP_Error('nine_ai_already_rolled_back', __('This package has already been rolled back.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_already_rolled_back', __('This package has already been rolled back.', 'nine-code-data' ));
         }
 
         $actions = !empty($entry['rollback']) && is_array($entry['rollback']) ? array_reverse($entry['rollback']) : array();

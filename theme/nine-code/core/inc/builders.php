@@ -73,7 +73,7 @@ function ncu_builder_float_string( $value, $min, $max, $fallback ) {
 add_action( 'admin_post_ncu_save_builders', 'ncu_save_builder_settings' );
 function ncu_save_builder_settings() {
     if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'Permission denied.', 'nine-code' ) );
     }
     check_admin_referer( 'ncu_save_builders' );
     $raw = isset( $_POST['ncu_builders'] ) && is_array( $_POST['ncu_builders'] ) ? wp_unslash( $_POST['ncu_builders'] ) : array();
@@ -303,7 +303,7 @@ function ncu_add_classic_builder_box() {
     $types = ncu_builder_allowed_post_types();
     foreach ( $types as $type ) {
         if ( 'attachment' === $type ) { continue; }
-        add_meta_box( 'ncu-builders', '9Core 15 Builders', 'ncu_classic_builder_box', $type, 'side', 'high' );
+        add_meta_box( 'ncu-builders', 'Nine Code Builders', 'ncu_classic_builder_box', $type, 'side', 'high' );
     }
 }
 
@@ -393,7 +393,7 @@ function ncu_build_ai_export_package( $post_id ) {
         'instructions' => array(
             'purpose' => 'Presentation correction only. Do not duplicate or rewrite source content unless the site owner separately requests content editing.',
             'editable' => array( 'renderer', 'ai_builder.preset', 'ai_builder.content_width', 'ai_builder.radius', 'ai_builder.spacing_scale', 'ai_builder.font_scale', 'ai_builder.background', 'ai_builder.text_color', 'ai_builder.accent_color', 'ai_builder.hidden_sections', 'ai_builder.section_order', 'ai_builder.page_css' ),
-            'repair_boundary' => 'No executable PHP or JavaScript is accepted by 9Core 15 import.',
+            'repair_boundary' => 'No executable PHP or JavaScript is accepted by Nine Code import.',
         ),
     );
 }
@@ -427,7 +427,7 @@ function ncu_rest_ai_import( $request ) {
     $post_id = absint( $request['id'] );
     $payload = $request->get_json_params();
     if ( ! is_array( $payload ) || '9-code-ultra-ai-page' !== ( isset( $payload['format'] ) ? $payload['format'] : '' ) ) {
-        return new WP_Error( 'ncu_invalid_ai_package', 'Invalid 9Core 15 AI package.', array( 'status' => 400 ) );
+        return new WP_Error( 'ncu_invalid_ai_package', 'Invalid Nine Code AI package.', array( 'status' => 400 ) );
     }
     if ( strlen( (string) wp_json_encode( $payload ) ) > 1048576 ) {
         return new WP_Error( 'ncu_ai_package_too_large', 'AI presentation packages must be 1 MB or smaller.', array( 'status' => 413 ) );

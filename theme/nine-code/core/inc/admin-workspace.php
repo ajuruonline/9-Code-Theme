@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
- * 9Core 15 Admin Workspace.
+ * Nine Code Admin Workspace.
  *
  * This is a presentation layer over wp-admin. It does not modify WordPress
  * core files, permissions, routes, editor data or plugin layouts.
@@ -322,15 +322,15 @@ function ncu_admin_workspace_context_bar() {
     if ( ! $title && $screen && ! empty( $screen->title ) ) { $title = $screen->title; }
     $environment = function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production';
     ?>
-    <div class="ncu-workspace-context" role="region" aria-label="<?php esc_attr_e( '9 Code workspace context', 'nine-code-ultra-core' ); ?>">
+    <div class="ncu-workspace-context" role="region" aria-label="<?php esc_attr_e( '9 Code workspace context', 'nine-code' ); ?>">
         <div class="ncu-workspace-context__identity">
             <span><small>WORKSPACE</small><strong><?php echo esc_html( $title ? $title : ncu_client_brand_name() ); ?></strong></span>
         </div>
         <div class="ncu-workspace-context__actions">
-            <span class="ncu-workspace-env" title="<?php esc_attr_e( 'Application environment', 'nine-code-ultra-core' ); ?>"><?php echo esc_html( strtoupper( $environment ) ); ?></span>
-            <a class="ncu-workspace-action" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View site', 'nine-code-ultra-core' ); ?></a>
+            <span class="ncu-workspace-env" title="<?php esc_attr_e( 'Application environment', 'nine-code' ); ?>"><?php echo esc_html( strtoupper( $environment ) ); ?></span>
+            <a class="ncu-workspace-action" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'View site', 'nine-code' ); ?></a>
             <?php if ( current_user_can( 'manage_options' ) ) : ?>
-                <a class="ncu-workspace-action" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-doctor' ) ); ?>"><?php esc_html_e( 'Doctor', 'nine-code-ultra-core' ); ?></a>
+                <a class="ncu-workspace-action" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-doctor' ) ); ?>"><?php esc_html_e( 'Doctor', 'nine-code' ); ?></a>
             <?php endif; ?>
             <?php if ( ! empty( $s['admin_skin_command_palette'] ) ) : ?>
                 <button class="ncu-workspace-action ncu-workspace-command" type="button" data-ncu-command-open aria-haspopup="dialog">⌘K</button>
@@ -347,7 +347,7 @@ function ncu_admin_workspace_command_node( $bar ) {
     if ( empty( $s['admin_skin_command_palette'] ) ) { return; }
     $bar->add_node( array(
         'id'    => 'ncu-command-palette',
-        'title' => '<span class="ncu-command-adminbar" data-ncu-command-open aria-label="' . esc_attr__( 'Open command palette', 'nine-code-ultra-core' ) . '">⌘K</span>',
+        'title' => '<span class="ncu-command-adminbar" data-ncu-command-open aria-label="' . esc_attr__( 'Open command palette', 'nine-code' ) . '">⌘K</span>',
         'href'  => '#ncu-command-palette',
         'meta'  => array( 'class' => 'ncu-command-adminbar-node' ),
     ) );
@@ -359,35 +359,35 @@ function ncu_admin_workspace_commands() {
         $commands[] = array( 'label' => $label, 'hint' => $hint, 'url' => $url, 'group' => $group );
     };
 
-    $add( __( 'Dashboard', 'nine-code-ultra-core' ), 'dashboard', admin_url(), 'Workspace' );
-    $add( __( 'View site', 'nine-code-ultra-core' ), 'site preview', home_url( '/' ), 'Workspace' );
+    $add( __( 'Dashboard', 'nine-code' ), 'dashboard', admin_url(), 'Workspace' );
+    $add( __( 'View site', 'nine-code' ), 'site preview', home_url( '/' ), 'Workspace' );
 
     if ( current_user_can( 'edit_posts' ) ) {
-        $add( __( 'Posts', 'nine-code-ultra-core' ), 'content posts', admin_url( 'edit.php' ), 'Content' );
-        $add( __( 'New post', 'nine-code-ultra-core' ), 'create content', admin_url( 'post-new.php' ), 'Content' );
+        $add( __( 'Posts', 'nine-code' ), 'content posts', admin_url( 'edit.php' ), 'Content' );
+        $add( __( 'New post', 'nine-code' ), 'create content', admin_url( 'post-new.php' ), 'Content' );
     }
     if ( current_user_can( 'edit_pages' ) ) {
-        $add( __( 'Pages', 'nine-code-ultra-core' ), 'content pages', admin_url( 'edit.php?post_type=page' ), 'Content' );
-        $add( __( 'New page', 'nine-code-ultra-core' ), 'create page', admin_url( 'post-new.php?post_type=page' ), 'Content' );
+        $add( __( 'Pages', 'nine-code' ), 'content pages', admin_url( 'edit.php?post_type=page' ), 'Content' );
+        $add( __( 'New page', 'nine-code' ), 'create page', admin_url( 'post-new.php?post_type=page' ), 'Content' );
     }
-    if ( current_user_can( 'upload_files' ) ) { $add( __( 'Media', 'nine-code-ultra-core' ), 'files library', admin_url( 'upload.php' ), 'Content' ); }
-    if ( current_user_can( 'moderate_comments' ) ) { $add( __( 'Comments', 'nine-code-ultra-core' ), 'discussion', admin_url( 'edit-comments.php' ), 'Content' ); }
+    if ( current_user_can( 'upload_files' ) ) { $add( __( 'Media', 'nine-code' ), 'files library', admin_url( 'upload.php' ), 'Content' ); }
+    if ( current_user_can( 'moderate_comments' ) ) { $add( __( 'Comments', 'nine-code' ), 'discussion', admin_url( 'edit-comments.php' ), 'Content' ); }
 
     if ( current_user_can( 'manage_options' ) ) {
-        $add( __( '9Core 15', 'nine-code-ultra-core' ), 'theme control center', admin_url( 'admin.php?page=nine-code-ultra' ), '9 Code' );
-        $add( __( 'Admin Workspace', 'nine-code-ultra-core' ), 'admin skin interface', admin_url( 'admin.php?page=nine-code-ultra-admin-workspace' ), '9 Code' );
-        $add( __( 'Design', 'nine-code-ultra-core' ), 'site design', admin_url( 'admin.php?page=nine-code-ultra-design' ), '9 Code' );
-        $add( __( 'Style Takeover', 'nine-code-ultra-core' ), 'design authority', admin_url( 'admin.php?page=nine-code-ultra-style-takeover' ), '9 Code' );
-        $add( __( 'Dark Mode', 'nine-code-ultra-core' ), 'dark appearance', admin_url( 'admin.php?page=nine-code-ultra-dark-mode' ), '9 Code' );
-        $add( __( 'Branding & Ownership', 'nine-code-ultra-core' ), 'client branding', admin_url( 'admin.php?page=nine-code-ultra-branding' ), '9 Code' );
-        $add( __( 'Builders', 'nine-code-ultra-core' ), 'rendering builders', admin_url( 'admin.php?page=nine-code-ultra-builders' ), '9 Code' );
-        $add( __( 'Doctor', 'nine-code-ultra-core' ), 'diagnostics repair', admin_url( 'admin.php?page=nine-code-ultra-doctor' ), '9 Code' );
-        $add( __( 'System Health', 'nine-code-ultra-core' ), 'health diagnostics', admin_url( 'admin.php?page=nine-code-ultra-health' ), '9 Code' );
+        $add( __( 'Nine Code', 'nine-code' ), 'theme control center', admin_url( 'admin.php?page=nine-code-ultra' ), '9 Code' );
+        $add( __( 'Admin Workspace', 'nine-code' ), 'admin skin interface', admin_url( 'admin.php?page=nine-code-ultra-admin-workspace' ), '9 Code' );
+        $add( __( 'Design', 'nine-code' ), 'site design', admin_url( 'admin.php?page=nine-code-ultra-design' ), '9 Code' );
+        $add( __( 'Style Takeover', 'nine-code' ), 'design authority', admin_url( 'admin.php?page=nine-code-ultra-style-takeover' ), '9 Code' );
+        $add( __( 'Dark Mode', 'nine-code' ), 'dark appearance', admin_url( 'admin.php?page=nine-code-ultra-dark-mode' ), '9 Code' );
+        $add( __( 'Branding & Ownership', 'nine-code' ), 'client branding', admin_url( 'admin.php?page=nine-code-ultra-branding' ), '9 Code' );
+        $add( __( 'Builders', 'nine-code' ), 'rendering builders', admin_url( 'admin.php?page=nine-code-ultra-builders' ), '9 Code' );
+        $add( __( 'Doctor', 'nine-code' ), 'diagnostics repair', admin_url( 'admin.php?page=nine-code-ultra-doctor' ), '9 Code' );
+        $add( __( 'System Health', 'nine-code' ), 'health diagnostics', admin_url( 'admin.php?page=nine-code-ultra-health' ), '9 Code' );
     }
-    if ( current_user_can( 'edit_theme_options' ) ) { $add( __( 'Appearance', 'nine-code-ultra-core' ), 'menus themes', admin_url( 'themes.php' ), 'System' ); }
-    if ( current_user_can( 'activate_plugins' ) ) { $add( __( 'Plugins', 'nine-code-ultra-core' ), 'extensions', admin_url( 'plugins.php' ), 'System' ); }
-    if ( current_user_can( 'list_users' ) ) { $add( __( 'Users', 'nine-code-ultra-core' ), 'accounts', admin_url( 'users.php' ), 'System' ); }
-    if ( current_user_can( 'manage_options' ) ) { $add( __( 'Settings', 'nine-code-ultra-core' ), 'application settings', admin_url( 'options-general.php' ), 'System' ); }
+    if ( current_user_can( 'edit_theme_options' ) ) { $add( __( 'Appearance', 'nine-code' ), 'menus themes', admin_url( 'themes.php' ), 'System' ); }
+    if ( current_user_can( 'activate_plugins' ) ) { $add( __( 'Plugins', 'nine-code' ), 'extensions', admin_url( 'plugins.php' ), 'System' ); }
+    if ( current_user_can( 'list_users' ) ) { $add( __( 'Users', 'nine-code' ), 'accounts', admin_url( 'users.php' ), 'System' ); }
+    if ( current_user_can( 'manage_options' ) ) { $add( __( 'Settings', 'nine-code' ), 'application settings', admin_url( 'options-general.php' ), 'System' ); }
 
     return apply_filters( 'ncu_admin_workspace_commands', $commands );
 }
@@ -400,19 +400,19 @@ function ncu_admin_workspace_command_palette() {
     $commands = ncu_admin_workspace_commands();
     ?>
     <div id="ncu-command-palette" class="ncu-command-palette" hidden aria-hidden="true">
-        <button class="ncu-command-palette__backdrop" type="button" data-ncu-command-close aria-label="<?php esc_attr_e( 'Close command palette', 'nine-code-ultra-core' ); ?>"></button>
+        <button class="ncu-command-palette__backdrop" type="button" data-ncu-command-close aria-label="<?php esc_attr_e( 'Close command palette', 'nine-code' ); ?>"></button>
         <div class="ncu-command-palette__dialog" role="dialog" aria-modal="true" aria-labelledby="ncu-command-title">
             <div class="ncu-command-palette__head">
                 <span class="ncu-command-palette__mark">9C</span>
-                <div><strong id="ncu-command-title"><?php esc_html_e( 'Command palette', 'nine-code-ultra-core' ); ?></strong><small><?php esc_html_e( 'Navigate the 9 Code workspace', 'nine-code-ultra-core' ); ?></small></div>
+                <div><strong id="ncu-command-title"><?php esc_html_e( 'Command palette', 'nine-code' ); ?></strong><small><?php esc_html_e( 'Navigate the 9 Code workspace', 'nine-code' ); ?></small></div>
                 <kbd>ESC</kbd>
             </div>
-            <label class="ncu-command-palette__search"><span class="screen-reader-text"><?php esc_html_e( 'Search commands', 'nine-code-ultra-core' ); ?></span><input type="search" data-ncu-command-search autocomplete="off" placeholder="Search commands…"></label>
+            <label class="ncu-command-palette__search"><span class="screen-reader-text"><?php esc_html_e( 'Search commands', 'nine-code' ); ?></span><input type="search" data-ncu-command-search autocomplete="off" placeholder="Search commands…"></label>
             <div class="ncu-command-palette__results" data-ncu-command-results>
                 <?php $last_group = ''; foreach ( $commands as $command ) : $group = sanitize_text_field( $command['group'] ); if ( $group !== $last_group ) : $last_group = $group; ?><div class="ncu-command-group" data-ncu-command-group><?php echo esc_html( strtoupper( $group ) ); ?></div><?php endif; ?>
                     <a class="ncu-command-item" href="<?php echo esc_url( $command['url'] ); ?>" data-ncu-command-item data-search="<?php echo esc_attr( strtolower( $command['label'] . ' ' . $command['hint'] . ' ' . $command['group'] ) ); ?>"><span><strong><?php echo esc_html( $command['label'] ); ?></strong><small><?php echo esc_html( $command['hint'] ); ?></small></span><kbd>↵</kbd></a>
                 <?php endforeach; ?>
-                <div class="ncu-command-empty" data-ncu-command-empty hidden><?php esc_html_e( 'No matching command', 'nine-code-ultra-core' ); ?></div>
+                <div class="ncu-command-empty" data-ncu-command-empty hidden><?php esc_html_e( 'No matching command', 'nine-code' ); ?></div>
             </div>
             <div class="ncu-command-palette__foot"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> open</span><span><kbd>ESC</kbd> close</span></div>
         </div>
@@ -432,7 +432,7 @@ function ncu_admin_workspace_optional_css() {
 add_action( 'admin_post_ncu_save_admin_workspace', 'ncu_save_admin_workspace' );
 function ncu_save_admin_workspace() {
     if ( ! current_user_can( 'manage_options' ) ) {
-        wp_die( esc_html__( 'You do not have permission to change the Admin Workspace.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'You do not have permission to change the Admin Workspace.', 'nine-code' ) );
     }
     check_admin_referer( 'ncu_save_admin_workspace' );
     $raw = isset( $_POST['ncu'] ) && is_array( $_POST['ncu'] ) ? wp_unslash( $_POST['ncu'] ) : array();
@@ -455,7 +455,7 @@ function ncu_save_admin_workspace() {
 
 add_action( 'admin_post_ncu_force_admin_skin', 'ncu_force_admin_skin' );
 function ncu_force_admin_skin() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_force_admin_skin' );
     $s = ncu_get_settings();
     $s['admin_skin_enabled'] = 1;

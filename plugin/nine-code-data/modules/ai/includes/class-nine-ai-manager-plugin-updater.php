@@ -14,30 +14,30 @@ class Nine_AI_Manager_Plugin_Updater {
 
     public function stage_upload($file, $target_plugin) {
         if (empty($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
-            return new WP_Error('nine_ai_plugin_no_file', __('No valid plugin ZIP was uploaded.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_no_file', __('No valid plugin ZIP was uploaded.', 'nine-code-data' ));
         }
         $target_plugin = plugin_basename((string) $target_plugin);
         if (!$target_plugin) {
-            return new WP_Error('nine_ai_plugin_target', __('Choose the installed plugin this AI update is meant to replace.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_target', __('Choose the installed plugin this AI update is meant to replace.', 'nine-code-data' ));
         }
         if (!function_exists('get_plugins')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
         $installed = get_plugins();
         if (!isset($installed[$target_plugin])) {
-            return new WP_Error('nine_ai_plugin_missing', __('The selected target plugin is not installed.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_missing', __('The selected target plugin is not installed.', 'nine-code-data' ));
         }
         $name = isset($file['name']) ? sanitize_file_name($file['name']) : 'plugin.zip';
         if ('zip' !== strtolower(pathinfo($name, PATHINFO_EXTENSION))) {
-            return new WP_Error('nine_ai_plugin_type', __('AI plugin updates must be installable ZIP files.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_type', __('AI plugin updates must be installable ZIP files.', 'nine-code-data' ));
         }
         $settings = get_option('nine_ai_manager_settings', array());
         $max_mb = isset($settings['max_plugin_mb']) ? max(1, min(200, absint($settings['max_plugin_mb']))) : 40;
         if (!empty($file['size']) && $file['size'] > $max_mb * 1024 * 1024) {
-            return new WP_Error('nine_ai_plugin_large', sprintf(__('Plugin ZIP exceeds the %d MB limit.', 'nine-ai-manager'), $max_mb));
+            return new WP_Error('nine_ai_plugin_large', sprintf(__('Plugin ZIP exceeds the %d MB limit.', 'nine-code-data' ), $max_mb));
         }
         if (!class_exists('ZipArchive')) {
-            return new WP_Error('nine_ai_plugin_zip_support', __('ZIP support is not enabled on this server.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_zip_support', __('ZIP support is not enabled on this server.', 'nine-code-data' ));
         }
 
         $uploads = wp_upload_dir();
@@ -46,12 +46,12 @@ class Nine_AI_Manager_Plugin_Updater {
         }
         $stage_dir = trailingslashit($uploads['basedir']) . 'nine-ai-manager/plugin-stages/' . wp_generate_uuid4();
         if (!wp_mkdir_p($stage_dir)) {
-            return new WP_Error('nine_ai_plugin_stage_dir', __('Could not create the plugin staging directory.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_stage_dir', __('Could not create the plugin staging directory.', 'nine-code-data' ));
         }
         $zip_path = trailingslashit($stage_dir) . 'update.zip';
         if (!copy($file['tmp_name'], $zip_path)) {
             $this->delete_directory($stage_dir);
-            return new WP_Error('nine_ai_plugin_copy', __('Could not preserve the uploaded plugin ZIP for preview.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_copy', __('Could not preserve the uploaded plugin ZIP for preview.', 'nine-code-data' ));
         }
 
         $inspection = $this->inspect_zip($zip_path);
@@ -65,12 +65,12 @@ class Nine_AI_Manager_Plugin_Updater {
             $this->delete_directory($stage_dir);
             return new WP_Error(
                 'nine_ai_plugin_slug_mismatch',
-                sprintf(__('The ZIP uses plugin folder "%1$s" but the installed target uses "%2$s". Ask the AI to preserve the existing plugin slug/folder.', 'nine-ai-manager'), $incoming_folder, $target_folder)
+                sprintf(__('The ZIP uses plugin folder "%1$s" but the installed target uses "%2$s". Ask the AI to preserve the existing plugin slug/folder.', 'nine-code-data' ), $incoming_folder, $target_folder)
             );
         }
         if ('.' === $target_folder && '.' !== $incoming_folder) {
             $this->delete_directory($stage_dir);
-            return new WP_Error('nine_ai_plugin_slug_mismatch', __('The AI update changed a single-file plugin into a folder plugin. Preserve the existing plugin path.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_slug_mismatch', __('The AI update changed a single-file plugin into a folder plugin. Preserve the existing plugin path.', 'nine-code-data' ));
         }
 
         return array(
@@ -88,7 +88,7 @@ class Nine_AI_Manager_Plugin_Updater {
 
     public function apply($staged) {
         if (empty($staged['zip_path']) || !is_file($staged['zip_path']) || empty($staged['target_plugin'])) {
-            return new WP_Error('nine_ai_plugin_stage_missing', __('The staged plugin update is missing or expired.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_stage_missing', __('The staged plugin update is missing or expired.', 'nine-code-data' ));
         }
         if (!function_exists('get_plugins')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -99,7 +99,7 @@ class Nine_AI_Manager_Plugin_Updater {
         $target = plugin_basename($staged['target_plugin']);
         $installed = get_plugins();
         if (!isset($installed[$target])) {
-            return new WP_Error('nine_ai_plugin_target_gone', __('The target plugin is no longer installed.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_target_gone', __('The target plugin is no longer installed.', 'nine-code-data' ));
         }
         $was_active = is_plugin_active($target);
         $backup = $this->backup_plugin($target, $installed[$target]);
@@ -114,20 +114,20 @@ class Nine_AI_Manager_Plugin_Updater {
             return $result;
         }
         if (!$result) {
-            return new WP_Error('nine_ai_plugin_install', __('WordPress did not complete the plugin replacement.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_install', __('WordPress did not complete the plugin replacement.', 'nine-code-data' ));
         }
 
         wp_clean_plugins_cache(true);
         $after = get_plugins();
         if (!isset($after[$target])) {
             self::restore_backup($backup['zip'], $target, $was_active);
-            return new WP_Error('nine_ai_plugin_verify_missing', __('The updated plugin could not be found at its original path, so the backup was restored.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_verify_missing', __('The updated plugin could not be found at its original path, so the backup was restored.', 'nine-code-data' ));
         }
         if ($was_active && !is_plugin_active($target)) {
             $activation = activate_plugin($target, '', is_multisite() && is_plugin_active_for_network($target), true);
             if (is_wp_error($activation)) {
                 self::restore_backup($backup['zip'], $target, true);
-                return new WP_Error('nine_ai_plugin_activation', __('The update installed but could not be reactivated, so the previous version was restored: ', 'nine-ai-manager') . $activation->get_error_message());
+                return new WP_Error('nine_ai_plugin_activation', __('The update installed but could not be reactivated, so the previous version was restored: ', 'nine-code-data' ) . $activation->get_error_message());
             }
         }
 
@@ -169,10 +169,10 @@ class Nine_AI_Manager_Plugin_Updater {
         }
         $plugins = get_plugins();
         if (!$plugin_file || !isset($plugins[$plugin_file])) {
-            return new WP_Error('nine_ai_pack_plugin', __('The selected plugin is not installed.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_pack_plugin', __('The selected plugin is not installed.', 'nine-code-data' ));
         }
         if (!class_exists('ZipArchive')) {
-            return new WP_Error('nine_ai_pack_zip', __('ZIP support is required to build an AI plugin work pack.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_pack_zip', __('ZIP support is required to build an AI plugin work pack.', 'nine-code-data' ));
         }
         $uploads = wp_upload_dir();
         if (!empty($uploads['error'])) {
@@ -180,7 +180,7 @@ class Nine_AI_Manager_Plugin_Updater {
         }
         $work = trailingslashit($uploads['basedir']) . 'nine-ai-manager/work-packs/' . wp_generate_uuid4();
         if (!wp_mkdir_p($work)) {
-            return new WP_Error('nine_ai_pack_dir', __('Could not create the work-pack directory.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_pack_dir', __('Could not create the work-pack directory.', 'nine-code-data' ));
         }
         $zip_path = trailingslashit($work) . sanitize_file_name(dirname($plugin_file) . '-AI-WORK-PACK.zip');
         if ('.' === dirname($plugin_file)) {
@@ -206,7 +206,7 @@ class Nine_AI_Manager_Plugin_Updater {
         $zip = new ZipArchive();
         if (true !== $zip->open($zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
             $this->delete_directory($work);
-            return new WP_Error('nine_ai_pack_open', __('Could not create the AI work-pack ZIP.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_pack_open', __('Could not create the AI work-pack ZIP.', 'nine-code-data' ));
         }
         $zip->addFile(trailingslashit($work) . 'AI-INSTRUCTIONS.md', 'AI-INSTRUCTIONS.md');
         $zip->addFile(trailingslashit($work) . 'site-ai.json', 'site-ai.json');
@@ -239,22 +239,22 @@ class Nine_AI_Manager_Plugin_Updater {
         wp_mkdir_p($tmp);
         $zip = new ZipArchive();
         if (true !== $zip->open($zip_path)) {
-            return new WP_Error('nine_ai_plugin_open', __('Could not open the plugin ZIP.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_open', __('Could not open the plugin ZIP.', 'nine-code-data' ));
         }
         if ($zip->numFiles > 2500) {
             $zip->close();
-            return new WP_Error('nine_ai_plugin_files', __('The plugin ZIP contains too many files.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_files', __('The plugin ZIP contains too many files.', 'nine-code-data' ));
         }
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $entry = $zip->getNameIndex($i);
             if ($this->unsafe_path($entry)) {
                 $zip->close();
-                return new WP_Error('nine_ai_plugin_path', __('The plugin ZIP contains an unsafe path.', 'nine-ai-manager'));
+                return new WP_Error('nine_ai_plugin_path', __('The plugin ZIP contains an unsafe path.', 'nine-code-data' ));
             }
         }
         if (!$zip->extractTo($tmp)) {
             $zip->close();
-            return new WP_Error('nine_ai_plugin_extract', __('Could not inspect the plugin ZIP.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_extract', __('Could not inspect the plugin ZIP.', 'nine-code-data' ));
         }
         $zip->close();
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -272,7 +272,7 @@ class Nine_AI_Manager_Plugin_Updater {
         }
         $this->delete_directory($tmp);
         if (!$candidates) {
-            return new WP_Error('nine_ai_plugin_header', __('No WordPress plugin header was found inside the ZIP.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_plugin_header', __('No WordPress plugin header was found inside the ZIP.', 'nine-code-data' ));
         }
         usort($candidates, function($a, $b) {
             return substr_count($a['relative'], '/') <=> substr_count($b['relative'], '/');
@@ -288,7 +288,7 @@ class Nine_AI_Manager_Plugin_Updater {
 
     private function backup_plugin($plugin_file, $headers) {
         if (!class_exists('ZipArchive')) {
-            return new WP_Error('nine_ai_backup_zip', __('ZIP support is required to back up the existing plugin before replacement.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_backup_zip', __('ZIP support is required to back up the existing plugin before replacement.', 'nine-code-data' ));
         }
         $uploads = wp_upload_dir();
         if (!empty($uploads['error'])) {
@@ -296,14 +296,14 @@ class Nine_AI_Manager_Plugin_Updater {
         }
         $dir = trailingslashit($uploads['basedir']) . 'nine-ai-manager/plugin-backups';
         if (!wp_mkdir_p($dir)) {
-            return new WP_Error('nine_ai_backup_mkdir', __('Could not create the plugin backup directory.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_backup_mkdir', __('Could not create the plugin backup directory.', 'nine-code-data' ));
         }
         $slug = '.' === dirname($plugin_file) ? basename($plugin_file, '.php') : dirname($plugin_file);
         $version = isset($headers['Version']) ? $headers['Version'] : 'unknown';
         $zip_path = trailingslashit($dir) . sanitize_file_name($slug . '-backup-v' . $version . '-' . gmdate('Ymd-His') . '.zip');
         $zip = new ZipArchive();
         if (true !== $zip->open($zip_path, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
-            return new WP_Error('nine_ai_backup_open', __('Could not create the plugin rollback ZIP.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_backup_open', __('Could not create the plugin rollback ZIP.', 'nine-code-data' ));
         }
         $source = WP_PLUGIN_DIR . '/' . $plugin_file;
         if ('.' === dirname($plugin_file)) {
@@ -318,7 +318,7 @@ class Nine_AI_Manager_Plugin_Updater {
 
     public static function restore_backup($backup_zip, $plugin_file, $was_active = true) {
         if (!class_exists('ZipArchive') || !$backup_zip || !is_file($backup_zip)) {
-            return new WP_Error('nine_ai_restore_backup', __('Plugin rollback ZIP is unavailable.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_restore_backup', __('Plugin rollback ZIP is unavailable.', 'nine-code-data' ));
         }
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
         $plugin_file = plugin_basename($plugin_file);
@@ -333,11 +333,11 @@ class Nine_AI_Manager_Plugin_Updater {
         }
         $zip = new ZipArchive();
         if (true !== $zip->open($backup_zip)) {
-            return new WP_Error('nine_ai_restore_open', __('Could not open the plugin rollback ZIP.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_restore_open', __('Could not open the plugin rollback ZIP.', 'nine-code-data' ));
         }
         if (!$zip->extractTo(WP_PLUGIN_DIR)) {
             $zip->close();
-            return new WP_Error('nine_ai_restore_extract', __('Could not restore the previous plugin files.', 'nine-ai-manager'));
+            return new WP_Error('nine_ai_restore_extract', __('Could not restore the previous plugin files.', 'nine-code-data' ));
         }
         $zip->close();
         wp_clean_plugins_cache(true);

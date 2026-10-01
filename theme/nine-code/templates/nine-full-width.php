@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: 9 Code Ultra Full Width
+ * Template Name: Nine Code Full Width
  * Template Post Type: page
  * WordPress-safe template: no 9Code builder/render helper dependency.
  */

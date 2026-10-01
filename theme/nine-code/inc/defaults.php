@@ -127,10 +127,9 @@ function ncu_theme_defaults() {
     );
 }
 
+/** Core is bundled with the theme, so the API always matches. Kept for the public contract. */
 function ncu_theme_core_compatible() {
-    if ( ! function_exists( 'ncu_get_settings' ) || ! defined( 'NCU_CORE_API_VERSION' ) || ! defined( 'NCU_THEME_API_VERSION' ) ) { return false; }
-    if ( function_exists( 'ncu_core_theme_api_compatible' ) ) { return ncu_core_theme_api_compatible( NCU_THEME_API_VERSION ); }
-    return (int) NCU_CORE_API_VERSION === (int) NCU_THEME_API_VERSION;
+    return function_exists( 'ncu_get_settings' ) && defined( 'NCU_CORE_API_VERSION' );
 }
 
 function ncu_theme_settings() {

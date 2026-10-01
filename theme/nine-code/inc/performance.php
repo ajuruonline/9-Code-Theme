@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
- * 9Core 15.1 public performance layer.
+ * Nine Code.1 public performance layer.
  * Heavy drawer content is rendered only after a visitor asks for it.
  */
 add_action( 'rest_api_init', 'ncu_register_public_ui_routes' );
@@ -34,7 +34,7 @@ function ncu_rest_drawer_categories( WP_REST_Request $request ) {
         );
         $html = wp_list_categories( apply_filters( 'ncu_drawer_category_args', $args, $s ) );
         if ( ! $html ) {
-            $html = '<li class="ncu-category-empty">' . esc_html__( 'No categories available.', 'nine-code-ultra' ) . '</li>';
+            $html = '<li class="ncu-category-empty">' . esc_html__( 'No categories available.', 'nine-code' ) . '</li>';
         }
         set_transient( $cache_key, $html, 6 * HOUR_IN_SECONDS );
     }

@@ -2,7 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /**
- * 9Core 15 Front-End Edit Layer.
+ * Nine Code Front-End Edit Layer.
  *
  * Canonical-data rule: this layer edits the same WordPress post/theme options
  * already used by wp-admin. It never creates a parallel page record.
@@ -99,10 +99,10 @@ function ncu_frontend_edit_enqueue() {
         'editUrl'       => $post_id ? get_edit_post_link( $post_id, 'raw' ) : '',
         'elementorUrl'  => $post_id && ( defined( 'ELEMENTOR_VERSION' ) || did_action( 'elementor/loaded' ) ) ? admin_url( 'post.php?post=' . $post_id . '&action=elementor' ) : '',
         'messages'      => array(
-            'saving'   => __( 'Saving…', 'nine-code-ultra-core' ),
-            'saved'    => __( 'Saved. Reloading the page…', 'nine-code-ultra-core' ),
-            'stale'    => __( 'This content changed after you opened the page. Reload before overwriting the newer version.', 'nine-code-ultra-core' ),
-            'error'    => __( 'The change could not be saved.', 'nine-code-ultra-core' ),
+            'saving'   => __( 'Saving…', 'nine-code' ),
+            'saved'    => __( 'Saved. Reloading the page…', 'nine-code' ),
+            'stale'    => __( 'This content changed after you opened the page. Reload before overwriting the newer version.', 'nine-code' ),
+            'error'    => __( 'The change could not be saved.', 'nine-code' ),
         ),
     ) );
 }
@@ -119,37 +119,37 @@ function ncu_frontend_edit_render_ui() {
     $featured_url = $featured_id ? wp_get_attachment_image_url( $featured_id, 'thumbnail' ) : '';
     ?>
     <div class="ncu-fe-dock" data-ncu-fe-dock>
-        <?php if ( $can_post ) : ?><button type="button" class="ncu-fe-dock__button" data-ncu-fe-open="content"><span aria-hidden="true">✎</span><b><?php esc_html_e( 'Edit', 'nine-code-ultra-core' ); ?></b></button><?php endif; ?>
-        <?php if ( $can_theme && ! empty( $s['frontend_edit_theme_regions'] ) ) : ?><button type="button" class="ncu-fe-dock__button ncu-fe-dock__button--secondary" data-ncu-fe-open="theme"><span aria-hidden="true">⌘</span><b><?php esc_html_e( 'Theme', 'nine-code-ultra-core' ); ?></b></button><?php endif; ?>
+        <?php if ( $can_post ) : ?><button type="button" class="ncu-fe-dock__button" data-ncu-fe-open="content"><span aria-hidden="true">✎</span><b><?php esc_html_e( 'Edit', 'nine-code' ); ?></b></button><?php endif; ?>
+        <?php if ( $can_theme && ! empty( $s['frontend_edit_theme_regions'] ) ) : ?><button type="button" class="ncu-fe-dock__button ncu-fe-dock__button--secondary" data-ncu-fe-open="theme"><span aria-hidden="true">⌘</span><b><?php esc_html_e( 'Theme', 'nine-code' ); ?></b></button><?php endif; ?>
     </div>
 
     <div class="ncu-fe-shell" data-ncu-fe-shell hidden>
-        <button class="ncu-fe-backdrop" type="button" data-ncu-fe-close aria-label="<?php esc_attr_e( 'Close front-end editor', 'nine-code-ultra-core' ); ?>"></button>
+        <button class="ncu-fe-backdrop" type="button" data-ncu-fe-close aria-label="<?php esc_attr_e( 'Close front-end editor', 'nine-code' ); ?>"></button>
         <section class="ncu-fe-panel" role="dialog" aria-modal="true" aria-labelledby="ncu-fe-title" tabindex="-1">
             <header class="ncu-fe-panel__head">
-                <div><small>9 CODE · LIVE EDIT</small><h2 id="ncu-fe-title"><?php esc_html_e( 'Front-End Editor', 'nine-code-ultra-core' ); ?></h2></div>
-                <button type="button" class="ncu-fe-close" data-ncu-fe-close aria-label="<?php esc_attr_e( 'Close', 'nine-code-ultra-core' ); ?>">×</button>
+                <div><small>9 CODE · LIVE EDIT</small><h2 id="ncu-fe-title"><?php esc_html_e( 'Front-End Editor', 'nine-code' ); ?></h2></div>
+                <button type="button" class="ncu-fe-close" data-ncu-fe-close aria-label="<?php esc_attr_e( 'Close', 'nine-code' ); ?>">×</button>
             </header>
-            <nav class="ncu-fe-tabs" aria-label="<?php esc_attr_e( 'Editing sections', 'nine-code-ultra-core' ); ?>">
-                <?php if ( $can_post ) : ?><button type="button" data-ncu-fe-tab="content"><?php esc_html_e( 'Content', 'nine-code-ultra-core' ); ?></button><?php endif; ?>
-                <?php if ( $can_post && ! empty( $s['frontend_edit_builder'] ) ) : ?><button type="button" data-ncu-fe-tab="presentation"><?php esc_html_e( 'Presentation', 'nine-code-ultra-core' ); ?></button><?php endif; ?>
-                <?php if ( $can_theme && ! empty( $s['frontend_edit_theme_regions'] ) ) : ?><button type="button" data-ncu-fe-tab="header"><?php esc_html_e( 'Header', 'nine-code-ultra-core' ); ?></button><button type="button" data-ncu-fe-tab="footer"><?php esc_html_e( 'Footer', 'nine-code-ultra-core' ); ?></button><button type="button" data-ncu-fe-tab="theme"><?php esc_html_e( 'Theme', 'nine-code-ultra-core' ); ?></button><?php endif; ?>
+            <nav class="ncu-fe-tabs" aria-label="<?php esc_attr_e( 'Editing sections', 'nine-code' ); ?>">
+                <?php if ( $can_post ) : ?><button type="button" data-ncu-fe-tab="content"><?php esc_html_e( 'Content', 'nine-code' ); ?></button><?php endif; ?>
+                <?php if ( $can_post && ! empty( $s['frontend_edit_builder'] ) ) : ?><button type="button" data-ncu-fe-tab="presentation"><?php esc_html_e( 'Presentation', 'nine-code' ); ?></button><?php endif; ?>
+                <?php if ( $can_theme && ! empty( $s['frontend_edit_theme_regions'] ) ) : ?><button type="button" data-ncu-fe-tab="header"><?php esc_html_e( 'Header', 'nine-code' ); ?></button><button type="button" data-ncu-fe-tab="footer"><?php esc_html_e( 'Footer', 'nine-code' ); ?></button><button type="button" data-ncu-fe-tab="theme"><?php esc_html_e( 'Theme', 'nine-code' ); ?></button><?php endif; ?>
             </nav>
             <div class="ncu-fe-panel__body">
                 <?php if ( $can_post && ! empty( $s['frontend_edit_content'] ) ) : ?>
                 <form class="ncu-fe-pane" data-ncu-fe-pane="content" data-ncu-fe-form="post">
                     <input type="hidden" name="post_id" value="<?php echo esc_attr( $post_id ); ?>">
                     <input type="hidden" name="modified_gmt" value="<?php echo esc_attr( $post->post_modified_gmt ); ?>" data-ncu-modified>
-                    <label><span><?php esc_html_e( 'Title', 'nine-code-ultra-core' ); ?></span><input type="text" name="post_title" value="<?php echo esc_attr( $post->post_title ); ?>"></label>
-                    <?php if ( post_type_supports( $post->post_type, 'excerpt' ) ) : ?><label><span><?php esc_html_e( 'Excerpt', 'nine-code-ultra-core' ); ?></span><textarea name="post_excerpt" rows="4"><?php echo esc_textarea( $post->post_excerpt ); ?></textarea></label><?php endif; ?>
-                    <label class="ncu-fe-field--content"><span><?php esc_html_e( 'Content', 'nine-code-ultra-core' ); ?></span><textarea name="post_content" rows="16" spellcheck="true"><?php echo esc_textarea( $post->post_content ); ?></textarea><small><?php esc_html_e( 'Edits the canonical WordPress content. Block markup and shortcodes are preserved.', 'nine-code-ultra-core' ); ?></small></label>
+                    <label><span><?php esc_html_e( 'Title', 'nine-code' ); ?></span><input type="text" name="post_title" value="<?php echo esc_attr( $post->post_title ); ?>"></label>
+                    <?php if ( post_type_supports( $post->post_type, 'excerpt' ) ) : ?><label><span><?php esc_html_e( 'Excerpt', 'nine-code' ); ?></span><textarea name="post_excerpt" rows="4"><?php echo esc_textarea( $post->post_excerpt ); ?></textarea></label><?php endif; ?>
+                    <label class="ncu-fe-field--content"><span><?php esc_html_e( 'Content', 'nine-code' ); ?></span><textarea name="post_content" rows="16" spellcheck="true"><?php echo esc_textarea( $post->post_content ); ?></textarea><small><?php esc_html_e( 'Edits the canonical WordPress content. Block markup and shortcodes are preserved.', 'nine-code' ); ?></small></label>
                     <?php if ( ! empty( $s['frontend_edit_featured'] ) && post_type_supports( $post->post_type, 'thumbnail' ) ) : ?>
                     <div class="ncu-fe-featured">
-                        <span><?php esc_html_e( 'Featured image', 'nine-code-ultra-core' ); ?></span>
-                        <div class="ncu-fe-featured__row"><div class="ncu-fe-featured__preview" data-ncu-featured-preview><?php if ( $featured_url ) : ?><img src="<?php echo esc_url( $featured_url ); ?>" alt=""><?php endif; ?></div><input type="hidden" name="featured_image_id" value="<?php echo esc_attr( $featured_id ); ?>" data-ncu-featured-id><button type="button" class="ncu-fe-small" data-ncu-featured-choose><?php esc_html_e( 'Choose image', 'nine-code-ultra-core' ); ?></button><button type="button" class="ncu-fe-link" data-ncu-featured-clear><?php esc_html_e( 'Clear', 'nine-code-ultra-core' ); ?></button></div>
+                        <span><?php esc_html_e( 'Featured image', 'nine-code' ); ?></span>
+                        <div class="ncu-fe-featured__row"><div class="ncu-fe-featured__preview" data-ncu-featured-preview><?php if ( $featured_url ) : ?><img src="<?php echo esc_url( $featured_url ); ?>" alt=""><?php endif; ?></div><input type="hidden" name="featured_image_id" value="<?php echo esc_attr( $featured_id ); ?>" data-ncu-featured-id><button type="button" class="ncu-fe-small" data-ncu-featured-choose><?php esc_html_e( 'Choose image', 'nine-code' ); ?></button><button type="button" class="ncu-fe-link" data-ncu-featured-clear><?php esc_html_e( 'Clear', 'nine-code' ); ?></button></div>
                     </div>
                     <?php endif; ?>
-                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save content', 'nine-code-ultra-core' ); ?></button><?php if ( get_edit_post_link( $post_id, 'raw' ) ) : ?><a href="<?php echo esc_url( get_edit_post_link( $post_id, 'raw' ) ); ?>" class="ncu-fe-secondary"><?php esc_html_e( 'Full editor', 'nine-code-ultra-core' ); ?></a><?php endif; ?></div>
+                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save content', 'nine-code' ); ?></button><?php if ( get_edit_post_link( $post_id, 'raw' ) ) : ?><a href="<?php echo esc_url( get_edit_post_link( $post_id, 'raw' ) ); ?>" class="ncu-fe-secondary"><?php esc_html_e( 'Full editor', 'nine-code' ); ?></a><?php endif; ?></div>
                 </form>
                 <?php endif; ?>
 
@@ -157,36 +157,36 @@ function ncu_frontend_edit_render_ui() {
                 <form class="ncu-fe-pane" data-ncu-fe-pane="presentation" data-ncu-fe-form="presentation" hidden>
                     <input type="hidden" name="post_id" value="<?php echo esc_attr( $post_id ); ?>">
                     <input type="hidden" name="modified_gmt" value="<?php echo esc_attr( $post->post_modified_gmt ); ?>" data-ncu-modified>
-                    <label><span><?php esc_html_e( 'Output builder', 'nine-code-ultra-core' ); ?></span><select name="render_mode"><option value="auto" <?php selected( $mode, 'auto' ); ?>>Auto Builder</option><option value="ai" <?php selected( $mode, 'ai' ); ?>>AI Builder</option><option value="gutenberg" <?php selected( $mode, 'gutenberg' ); ?>>Gutenberg</option><option value="elementor" <?php selected( $mode, 'elementor' ); ?>>Elementor</option></select></label>
-                    <p class="ncu-fe-help"><?php esc_html_e( 'This switches presentation only. The post remains the same canonical record.', 'nine-code-ultra-core' ); ?></p>
-                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save presentation', 'nine-code-ultra-core' ); ?></button><?php if ( defined( 'ELEMENTOR_VERSION' ) || did_action( 'elementor/loaded' ) ) : ?><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'post.php?post=' . $post_id . '&action=elementor' ) ); ?>"><?php esc_html_e( 'Open Elementor', 'nine-code-ultra-core' ); ?></a><?php endif; ?></div>
+                    <label><span><?php esc_html_e( 'Output builder', 'nine-code' ); ?></span><select name="render_mode"><option value="auto" <?php selected( $mode, 'auto' ); ?>>Auto Builder</option><option value="ai" <?php selected( $mode, 'ai' ); ?>>AI Builder</option><option value="gutenberg" <?php selected( $mode, 'gutenberg' ); ?>>Gutenberg</option><option value="elementor" <?php selected( $mode, 'elementor' ); ?>>Elementor</option></select></label>
+                    <p class="ncu-fe-help"><?php esc_html_e( 'This switches presentation only. The post remains the same canonical record.', 'nine-code' ); ?></p>
+                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save presentation', 'nine-code' ); ?></button><?php if ( defined( 'ELEMENTOR_VERSION' ) || did_action( 'elementor/loaded' ) ) : ?><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'post.php?post=' . $post_id . '&action=elementor' ) ); ?>"><?php esc_html_e( 'Open Elementor', 'nine-code' ); ?></a><?php endif; ?></div>
                 </form>
                 <?php endif; ?>
 
                 <?php if ( $can_theme && ! empty( $s['frontend_edit_theme_regions'] ) ) : ?>
                 <form class="ncu-fe-pane" data-ncu-fe-pane="header" data-ncu-fe-form="theme" hidden>
                     <input type="hidden" name="theme_section" value="header">
-                    <label><span><?php esc_html_e( 'Site name', 'nine-code-ultra-core' ); ?></span><input type="text" name="site_name" value="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"></label>
-                    <label><span><?php esc_html_e( 'Tagline', 'nine-code-ultra-core' ); ?></span><input type="text" name="site_tagline" value="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"></label>
-                    <div class="ncu-fe-grid"><label><span><?php esc_html_e( 'Header background', 'nine-code-ultra-core' ); ?></span><input type="color" name="header_background_color" value="<?php echo esc_attr( $s['header_background_color'] ); ?>"></label><label><span><?php esc_html_e( 'Header icons', 'nine-code-ultra-core' ); ?></span><input type="color" name="header_icon_color" value="<?php echo esc_attr( $s['header_icon_color'] ); ?>"></label></div>
-                    <label class="ncu-fe-check"><input type="checkbox" name="sticky_header" value="1" <?php checked( ! empty( $s['sticky_header'] ) ); ?>> <span><?php esc_html_e( 'Sticky header', 'nine-code-ultra-core' ); ?></span></label>
-                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save header', 'nine-code-ultra-core' ); ?></button><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-header-footer' ) ); ?>"><?php esc_html_e( 'Full header settings', 'nine-code-ultra-core' ); ?></a></div>
+                    <label><span><?php esc_html_e( 'Site name', 'nine-code' ); ?></span><input type="text" name="site_name" value="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>"></label>
+                    <label><span><?php esc_html_e( 'Tagline', 'nine-code' ); ?></span><input type="text" name="site_tagline" value="<?php echo esc_attr( get_bloginfo( 'description' ) ); ?>"></label>
+                    <div class="ncu-fe-grid"><label><span><?php esc_html_e( 'Header background', 'nine-code' ); ?></span><input type="color" name="header_background_color" value="<?php echo esc_attr( $s['header_background_color'] ); ?>"></label><label><span><?php esc_html_e( 'Header icons', 'nine-code' ); ?></span><input type="color" name="header_icon_color" value="<?php echo esc_attr( $s['header_icon_color'] ); ?>"></label></div>
+                    <label class="ncu-fe-check"><input type="checkbox" name="sticky_header" value="1" <?php checked( ! empty( $s['sticky_header'] ) ); ?>> <span><?php esc_html_e( 'Sticky header', 'nine-code' ); ?></span></label>
+                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save header', 'nine-code' ); ?></button><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-header-footer' ) ); ?>"><?php esc_html_e( 'Full header settings', 'nine-code' ); ?></a></div>
                 </form>
 
                 <form class="ncu-fe-pane" data-ncu-fe-pane="footer" data-ncu-fe-form="theme" hidden>
                     <input type="hidden" name="theme_section" value="footer">
-                    <label class="ncu-fe-check"><input type="checkbox" name="footer_enabled" value="1" <?php checked( ! empty( $s['footer_enabled'] ) ); ?>> <span><?php esc_html_e( 'Enable built-in 9 Code footer', 'nine-code-ultra-core' ); ?></span></label>
-                    <label><span><?php esc_html_e( 'Footer text', 'nine-code-ultra-core' ); ?></span><input type="text" name="footer_text" value="<?php echo esc_attr( $s['footer_text'] ); ?>"></label>
-                    <label><span><?php esc_html_e( 'Footer link', 'nine-code-ultra-core' ); ?></span><input type="url" name="footer_url" value="<?php echo esc_attr( $s['footer_url'] ); ?>"></label>
-                    <div class="ncu-fe-grid"><label><span><?php esc_html_e( 'Footer background', 'nine-code-ultra-core' ); ?></span><input type="color" name="footer_background_color" value="<?php echo esc_attr( $s['footer_background_color'] ); ?>"></label><label><span><?php esc_html_e( 'Footer text colour', 'nine-code-ultra-core' ); ?></span><input type="color" name="footer_text_color" value="<?php echo esc_attr( $s['footer_text_color'] ); ?>"></label></div>
-                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save footer', 'nine-code-ultra-core' ); ?></button><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-header-footer' ) ); ?>"><?php esc_html_e( 'Full footer settings', 'nine-code-ultra-core' ); ?></a></div>
+                    <label class="ncu-fe-check"><input type="checkbox" name="footer_enabled" value="1" <?php checked( ! empty( $s['footer_enabled'] ) ); ?>> <span><?php esc_html_e( 'Enable built-in 9 Code footer', 'nine-code' ); ?></span></label>
+                    <label><span><?php esc_html_e( 'Footer text', 'nine-code' ); ?></span><input type="text" name="footer_text" value="<?php echo esc_attr( $s['footer_text'] ); ?>"></label>
+                    <label><span><?php esc_html_e( 'Footer link', 'nine-code' ); ?></span><input type="url" name="footer_url" value="<?php echo esc_attr( $s['footer_url'] ); ?>"></label>
+                    <div class="ncu-fe-grid"><label><span><?php esc_html_e( 'Footer background', 'nine-code' ); ?></span><input type="color" name="footer_background_color" value="<?php echo esc_attr( $s['footer_background_color'] ); ?>"></label><label><span><?php esc_html_e( 'Footer text colour', 'nine-code' ); ?></span><input type="color" name="footer_text_color" value="<?php echo esc_attr( $s['footer_text_color'] ); ?>"></label></div>
+                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save footer', 'nine-code' ); ?></button><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-header-footer' ) ); ?>"><?php esc_html_e( 'Full footer settings', 'nine-code' ); ?></a></div>
                 </form>
 
                 <form class="ncu-fe-pane" data-ncu-fe-pane="theme" data-ncu-fe-form="theme" hidden>
                     <input type="hidden" name="theme_section" value="theme">
-                    <div class="ncu-fe-grid"><label><span><?php esc_html_e( 'Site accent', 'nine-code-ultra-core' ); ?></span><input type="color" name="accent_color" value="<?php echo esc_attr( $s['accent_color'] ); ?>"></label><label><span><?php esc_html_e( 'Text', 'nine-code-ultra-core' ); ?></span><input type="color" name="text_color" value="<?php echo esc_attr( $s['text_color'] ); ?>"></label></div>
-                    <label><span><?php esc_html_e( 'Content maximum width', 'nine-code-ultra-core' ); ?></span><input type="number" min="720" max="1800" name="max_width" value="<?php echo esc_attr( $s['max_width'] ); ?>"></label>
-                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save theme', 'nine-code-ultra-core' ); ?></button><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-design' ) ); ?>"><?php esc_html_e( 'Full design settings', 'nine-code-ultra-core' ); ?></a></div>
+                    <div class="ncu-fe-grid"><label><span><?php esc_html_e( 'Site accent', 'nine-code' ); ?></span><input type="color" name="accent_color" value="<?php echo esc_attr( $s['accent_color'] ); ?>"></label><label><span><?php esc_html_e( 'Text', 'nine-code' ); ?></span><input type="color" name="text_color" value="<?php echo esc_attr( $s['text_color'] ); ?>"></label></div>
+                    <label><span><?php esc_html_e( 'Content maximum width', 'nine-code' ); ?></span><input type="number" min="720" max="1800" name="max_width" value="<?php echo esc_attr( $s['max_width'] ); ?>"></label>
+                    <div class="ncu-fe-actions"><button type="submit" class="ncu-fe-primary"><?php esc_html_e( 'Save theme', 'nine-code' ); ?></button><a class="ncu-fe-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-design' ) ); ?>"><?php esc_html_e( 'Full design settings', 'nine-code' ); ?></a></div>
                 </form>
                 <?php endif; ?>
 
@@ -203,14 +203,14 @@ function ncu_frontend_edit_ajax_save_post() {
     check_ajax_referer( 'ncu_frontend_edit', 'nonce' );
     $post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
     if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
-        wp_send_json_error( array( 'message' => __( 'You do not have permission to edit this content.', 'nine-code-ultra-core' ) ), 403 );
+        wp_send_json_error( array( 'message' => __( 'You do not have permission to edit this content.', 'nine-code' ) ), 403 );
     }
     $post = get_post( $post_id );
-    if ( ! $post ) { wp_send_json_error( array( 'message' => __( 'Content not found.', 'nine-code-ultra-core' ) ), 404 ); }
+    if ( ! $post ) { wp_send_json_error( array( 'message' => __( 'Content not found.', 'nine-code' ) ), 404 ); }
 
     $client_modified = isset( $_POST['modified_gmt'] ) ? sanitize_text_field( wp_unslash( $_POST['modified_gmt'] ) ) : '';
     if ( $client_modified && $post->post_modified_gmt && $client_modified !== $post->post_modified_gmt ) {
-        wp_send_json_error( array( 'message' => __( 'This content was changed elsewhere after the page loaded. Reload before saving.', 'nine-code-ultra-core' ), 'code' => 'stale_edit', 'modified_gmt' => $post->post_modified_gmt ), 409 );
+        wp_send_json_error( array( 'message' => __( 'This content was changed elsewhere after the page loaded. Reload before saving.', 'nine-code' ), 'code' => 'stale_edit', 'modified_gmt' => $post->post_modified_gmt ), 409 );
     }
 
     $update = array( 'ID' => $post_id );
@@ -236,7 +236,7 @@ function ncu_frontend_edit_ajax_save_post() {
     $fresh = get_post( $post_id );
     do_action( 'ncu_frontend_edit_saved_post', $post_id, $fresh );
     wp_send_json_success( array(
-        'message'      => __( 'Saved.', 'nine-code-ultra-core' ),
+        'message'      => __( 'Saved.', 'nine-code' ),
         'modified_gmt' => $fresh ? $fresh->post_modified_gmt : '',
     ) );
 }
@@ -245,7 +245,7 @@ add_action( 'wp_ajax_ncu_frontend_edit_save_theme', 'ncu_frontend_edit_ajax_save
 function ncu_frontend_edit_ajax_save_theme() {
     check_ajax_referer( 'ncu_frontend_edit', 'nonce' );
     if ( ! current_user_can( 'manage_options' ) ) {
-        wp_send_json_error( array( 'message' => __( 'You do not have permission to change theme settings.', 'nine-code-ultra-core' ) ), 403 );
+        wp_send_json_error( array( 'message' => __( 'You do not have permission to change theme settings.', 'nine-code' ) ), 403 );
     }
     $section = isset( $_POST['theme_section'] ) ? sanitize_key( wp_unslash( $_POST['theme_section'] ) ) : 'theme';
     $s = ncu_get_settings();
@@ -274,7 +274,7 @@ function ncu_frontend_edit_ajax_save_theme() {
 
     update_option( 'ncu_settings', ncu_sanitize_settings( $raw ), false );
     do_action( 'ncu_frontend_edit_saved_theme', $section, ncu_get_settings() );
-    wp_send_json_success( array( 'message' => __( 'Theme settings saved.', 'nine-code-ultra-core' ) ) );
+    wp_send_json_success( array( 'message' => __( 'Theme settings saved.', 'nine-code' ) ) );
 }
 
 function ncu_frontend_edit_settings_page() {

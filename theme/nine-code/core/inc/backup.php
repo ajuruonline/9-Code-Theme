@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'admin_post_ncu_export_settings', 'ncu_export_settings' );
 function ncu_export_settings() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_export_settings' );
     $payload = array(
         'format'           => '9-code-ultra-settings',
@@ -20,21 +20,21 @@ function ncu_export_settings() {
 
 add_action( 'admin_post_ncu_import_settings', 'ncu_import_settings' );
 function ncu_import_settings() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_import_settings' );
-    if ( empty( $_FILES['ncu_backup']['tmp_name'] ) || ! is_uploaded_file( $_FILES['ncu_backup']['tmp_name'] ) ) { wp_die( esc_html__( 'No valid backup file was uploaded.', 'nine-code-ultra-core' ) ); }
-    if ( ! empty( $_FILES['ncu_backup']['size'] ) && (int) $_FILES['ncu_backup']['size'] > 1048576 ) { wp_die( esc_html__( 'Backup file is too large.', 'nine-code-ultra-core' ) ); }
+    if ( empty( $_FILES['ncu_backup']['tmp_name'] ) || ! is_uploaded_file( $_FILES['ncu_backup']['tmp_name'] ) ) { wp_die( esc_html__( 'No valid backup file was uploaded.', 'nine-code' ) ); }
+    if ( ! empty( $_FILES['ncu_backup']['size'] ) && (int) $_FILES['ncu_backup']['size'] > 1048576 ) { wp_die( esc_html__( 'Backup file is too large.', 'nine-code' ) ); }
     $json = file_get_contents( $_FILES['ncu_backup']['tmp_name'] );
     $data = json_decode( $json, true );
     $schema = isset( $data['schema'] ) ? (int) $data['schema'] : 0;
     if ( ! is_array( $data ) || '9-code-ultra-settings' !== ( isset( $data['format'] ) ? $data['format'] : '' ) || ! in_array( $schema, array( 1, 2, 3 ), true ) || ! isset( $data['settings'] ) || ! is_array( $data['settings'] ) ) {
-        wp_die( esc_html__( 'This is not a valid 9Core 15 settings backup.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'This is not a valid Nine Code settings backup.', 'nine-code' ) );
     }
     update_option( 'ncu_settings', ncu_sanitize_settings( array_replace_recursive( ncu_core_defaults(), $data['settings'] ) ), false );
     if ( $schema >= 2 && ! empty( $data['builder_settings'] ) && is_array( $data['builder_settings'] ) && function_exists( 'ncu_sanitize_builder_settings' ) ) {
         update_option( 'ncu_builder_settings', ncu_sanitize_builder_settings( $data['builder_settings'] ), false );
     }
-    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( '9Core 15 settings imported and validated.', 'success', 'settings-imported' ); }
+    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( 'Nine Code settings imported and validated.', 'success', 'settings-imported' ); }
     wp_safe_redirect( add_query_arg( array( 'page' => 'nine-code-ultra-backup' ), admin_url( 'admin.php' ) ) );
     exit;
 }
@@ -58,7 +58,7 @@ function ncu_style_pack_keys() {
 
 add_action( 'admin_post_ncu_export_style_pack', 'ncu_export_style_pack' );
 function ncu_export_style_pack() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_export_style_pack' );
     $settings = ncu_get_settings(); $style = array();
     foreach ( ncu_style_pack_keys() as $key ) { if ( array_key_exists( $key, $settings ) ) { $style[ $key ] = $settings[ $key ]; } }
@@ -68,7 +68,7 @@ function ncu_export_style_pack() {
         'schema'       => 1,
         'core_version' => NCU_CORE_VERSION,
         'exported_at'  => gmdate( 'c' ),
-        'label'        => isset( $tokens['family_label'], $tokens['label'] ) ? $tokens['family_label'] . ' — ' . $tokens['label'] : '9Core 15 Style',
+        'label'        => isset( $tokens['family_label'], $tokens['label'] ) ? $tokens['family_label'] . ' — ' . $tokens['label'] : 'Nine Code Style',
         'style'        => $style,
     );
     ncu_send_json_download( '9-code-ultra-style-' . sanitize_title( $payload['label'] ) . '-' . gmdate( 'Ymd-His' ) . '.9style.json', $payload );
@@ -76,13 +76,13 @@ function ncu_export_style_pack() {
 
 add_action( 'admin_post_ncu_import_style_pack', 'ncu_import_style_pack' );
 function ncu_import_style_pack() {
-    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_import_style_pack' );
-    if ( empty( $_FILES['ncu_style_pack']['tmp_name'] ) || ! is_uploaded_file( $_FILES['ncu_style_pack']['tmp_name'] ) ) { wp_die( esc_html__( 'No valid style package was uploaded.', 'nine-code-ultra-core' ) ); }
-    if ( ! empty( $_FILES['ncu_style_pack']['size'] ) && (int) $_FILES['ncu_style_pack']['size'] > 262144 ) { wp_die( esc_html__( 'Style package is too large.', 'nine-code-ultra-core' ) ); }
+    if ( empty( $_FILES['ncu_style_pack']['tmp_name'] ) || ! is_uploaded_file( $_FILES['ncu_style_pack']['tmp_name'] ) ) { wp_die( esc_html__( 'No valid style package was uploaded.', 'nine-code' ) ); }
+    if ( ! empty( $_FILES['ncu_style_pack']['size'] ) && (int) $_FILES['ncu_style_pack']['size'] > 262144 ) { wp_die( esc_html__( 'Style package is too large.', 'nine-code' ) ); }
     $data = json_decode( (string) file_get_contents( $_FILES['ncu_style_pack']['tmp_name'] ), true );
     if ( ! is_array( $data ) || '9-code-ultra-style-pack' !== ( isset( $data['format'] ) ? $data['format'] : '' ) || 1 !== (int) ( isset( $data['schema'] ) ? $data['schema'] : 0 ) || empty( $data['style'] ) || ! is_array( $data['style'] ) ) {
-        wp_die( esc_html__( 'This is not a valid 9Core 15 style package.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'This is not a valid Nine Code style package.', 'nine-code' ) );
     }
     $allowed = array_flip( ncu_style_pack_keys() );
     $incoming = array_intersect_key( $data['style'], $allowed );

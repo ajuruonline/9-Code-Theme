@@ -27,7 +27,7 @@ function ncu_rest_doctor_repair( $request ) {
     $post_id = absint( $request['id'] );
     $payload = $request->get_json_params();
     if ( ! is_array( $payload ) || '9-code-ultra-repair' !== ( isset( $payload['format'] ) ? $payload['format'] : '' ) ) {
-        return new WP_Error( 'ncu_invalid_repair', 'Invalid 9Core 15 repair package.', array( 'status' => 400 ) );
+        return new WP_Error( 'ncu_invalid_repair', 'Invalid Nine Code repair package.', array( 'status' => 400 ) );
     }
     if ( strlen( (string) wp_json_encode( $payload ) ) > 1048576 ) {
         return new WP_Error( 'ncu_repair_too_large', 'Repair packages must be 1 MB or smaller.', array( 'status' => 413 ) );
@@ -338,18 +338,18 @@ function ncu_admin_export_page_diagnosis() {
 add_action( 'admin_post_ncu_import_page_repair', 'ncu_admin_import_page_repair' );
 function ncu_admin_import_page_repair() {
     $post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
-    if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code-ultra-core' ) ); }
+    if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) { wp_die( esc_html__( 'Permission denied.', 'nine-code' ) ); }
     check_admin_referer( 'ncu_import_page_repair_' . $post_id );
     if ( empty( $_FILES['ncu_repair']['tmp_name'] ) || ! isset( $_FILES['ncu_repair']['error'] ) || UPLOAD_ERR_OK !== (int) $_FILES['ncu_repair']['error'] ) {
-        wp_die( esc_html__( 'The repair file could not be uploaded.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'The repair file could not be uploaded.', 'nine-code' ) );
     }
     if ( ! empty( $_FILES['ncu_repair']['size'] ) && (int) $_FILES['ncu_repair']['size'] > 1048576 ) {
-        wp_die( esc_html__( 'Repair packages must be 1 MB or smaller.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'Repair packages must be 1 MB or smaller.', 'nine-code' ) );
     }
     $raw = file_get_contents( $_FILES['ncu_repair']['tmp_name'] );
     $payload = json_decode( (string) $raw, true );
     if ( ! is_array( $payload ) || '9-code-ultra-repair' !== ( isset( $payload['format'] ) ? $payload['format'] : '' ) ) {
-        wp_die( esc_html__( 'This is not a valid 9Core 15 repair package.', 'nine-code-ultra-core' ) );
+        wp_die( esc_html__( 'This is not a valid Nine Code repair package.', 'nine-code' ) );
     }
     $result = ncu_doctor_apply_repair( $post_id, $payload );
     if ( is_wp_error( $result ) ) { wp_die( esc_html( $result->get_error_message() ) ); }
@@ -362,14 +362,14 @@ function ncu_core_doctor_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     $post_id = isset( $_GET['post_id'] ) ? absint( $_GET['post_id'] ) : 0;
     ?>
-    <div class="wrap ncu-admin"><?php ncu_admin_header( 'Doctor', 'Diagnose one page, one section or the whole 9Core 15 stack without installing another diagnostics plugin.' ); ?>
+    <div class="wrap ncu-admin"><?php ncu_admin_header( 'Doctor', 'Diagnose one page, one section or the whole Nine Code stack without installing another diagnostics plugin.' ); ?>
     <div class="ncu-doctor-grid">
         <section class="ncu-panel ncu-panel--padded"><h2>Page Doctor</h2><p>Enter a page/post ID. The diagnosis maps the page renderer, block callbacks, shortcodes, <code>the_content</code> callbacks, active plugins and probable runtime owners.</p>
         <form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>"><input type="hidden" name="page" value="nine-code-ultra-doctor"><label><strong>Post/Page ID</strong><input type="number" name="post_id" min="1" value="<?php echo esc_attr( $post_id ); ?>" required></label> <button class="button button-primary">Inspect</button></form>
         <?php if ( $post_id && current_user_can( 'edit_post', $post_id ) ) : $pkg = ncu_doctor_build_package( $post_id ); ?>
             <div class="ncu-doctor-summary"><p><strong><?php echo esc_html( get_the_title( $post_id ) ); ?></strong></p><p>Renderer: <code><?php echo esc_html( $pkg['page']['renderer'] ); ?></code> · Type: <code><?php echo esc_html( $pkg['page']['type'] ); ?></code></p><p>Runtime owners detected: <?php echo esc_html( $pkg['owners_seen'] ? implode( ', ', $pkg['owners_seen'] ) : 'No non-core owner resolved from content callbacks.' ); ?></p></div>
             <p><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_page_diagnosis&post_id=' . $post_id ), 'ncu_export_page_diagnosis_' . $post_id ) ); ?>">Download page diagnosis</a> <a class="button" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" target="_blank" rel="noopener">Open front-end Doctor</a></p>
-            <form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Apply this safe 9Core 15 repair package to this page?');">
+            <form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Apply this safe Nine Code repair package to this page?');">
                 <input type="hidden" name="action" value="ncu_import_page_repair"><input type="hidden" name="post_id" value="<?php echo esc_attr( $post_id ); ?>"><?php wp_nonce_field( 'ncu_import_page_repair_' . $post_id ); ?>
                 <label><strong>Upload AI repair JSON</strong><br><input type="file" name="ncu_repair" accept="application/json,.json" required></label> <button class="button button-secondary">Validate & apply safe repair</button>
             </form>

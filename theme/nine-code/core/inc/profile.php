@@ -7,7 +7,7 @@ add_action( 'show_user_profile', 'ncu_profile_contact_fields' );
 add_action( 'edit_user_profile', 'ncu_profile_contact_fields' );
 function ncu_profile_contact_fields( $user ) {
     ?>
-    <h2><?php esc_html_e( '9Core 15 public contact', 'nine-code-ultra-core' ); ?></h2>
+    <h2><?php esc_html_e( 'Nine Code public contact', 'nine-code' ); ?></h2>
     <table class="form-table" role="presentation">
         <tr><th><label for="ncu_public_email">Public email</label></th><td><input class="regular-text" type="email" id="ncu_public_email" name="ncu_public_email" value="<?php echo esc_attr( get_user_meta( $user->ID, 'ncu_public_email', true ) ); ?>"><p class="description">Shown only when the theme's author contact action is enabled.</p></td></tr>
         <tr><th><label for="ncu_whatsapp">WhatsApp</label></th><td><input class="regular-text" type="text" id="ncu_whatsapp" name="ncu_whatsapp" value="<?php echo esc_attr( get_user_meta( $user->ID, 'ncu_whatsapp', true ) ); ?>" placeholder="2348012345678"></td></tr>

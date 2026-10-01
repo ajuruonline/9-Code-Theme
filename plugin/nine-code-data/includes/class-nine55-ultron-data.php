@@ -141,7 +141,7 @@ final class Nine55_Ultron_Data {
     }
 
     public function render_dashboard() {
-        if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to manage this workspace.', 'nine55-ultron-data' ) ); }
+        if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'You do not have permission to manage this workspace.', 'nine-code-data' ) ); }
         $post_type = isset( $_GET['ultron_post_type'] ) ? sanitize_key( wp_unslash( $_GET['ultron_post_type'] ) ) : 'post';
         $search = isset( $_GET['ultron_search'] ) ? sanitize_text_field( wp_unslash( $_GET['ultron_search'] ) ) : '';
         $record_id = isset( $_GET['ultron_record'] ) ? absint( $_GET['ultron_record'] ) : 0;
