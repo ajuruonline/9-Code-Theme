@@ -119,6 +119,7 @@ require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine-code-visual-editor.ph
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-form.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-data-backup.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine55-ultron-data.php';
+require_once NINE55_ULTRON_DATA_DIR . 'includes/data-api/bootstrap.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-ninecode-universal-data-manager.php';
 Nine_Code_Visual_Editor::instance();
 Nine10_Form::instance();
@@ -135,6 +136,9 @@ function nine55_ultron_data_activate() {
     if ( class_exists( 'Nine_AI_Manager' ) && method_exists( 'Nine_AI_Manager', 'activate' ) ) {
         Nine_AI_Manager::activate();
     }
+    if ( class_exists( 'NCD_History' ) ) { NCD_History::install(); }
+    $admin_role = get_role( 'administrator' );
+    if ( $admin_role && ! $admin_role->has_cap( 'manage_ninecode_data' ) ) { $admin_role->add_cap( 'manage_ninecode_data' ); }
     update_option( 'nine55_ultron_data_version', NINE55_ULTRON_DATA_VERSION, false );
     update_option( 'nine55_ultron_data_sources', array(
         'data' => defined( 'NINECODE_ACF_DATA_ENGINE_VERSION' ) ? NINECODE_ACF_DATA_ENGINE_VERSION : 'external',
