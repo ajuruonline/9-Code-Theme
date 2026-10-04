@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Posts and Pages now keep only Save/Save Draft and Publish/Update visible in the editor top bar; every other editor/plugin action, including Edit with Elementor, is routed through the existing hamburger menu on desktop and mobile.
+
 ## Theme 16.0.0 / Plugin 10.0.0 — Nine Code baseline
 - One product named **Nine Code**: theme (public site + former 9Core) and plugin (former 9 Data Manager).
 - Removed 9Core's duplicate legacy data engine (the plugin owns data).
