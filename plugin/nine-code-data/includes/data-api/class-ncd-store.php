@@ -45,7 +45,7 @@ final class NCD_Store {
 					'update_post_term_cache' => false,
 				);
 				if ( '' !== $search ) { $q['s'] = $search; }
-				if ( $ids ) { $q['post__in'] = $ids; $q['posts_per_page'] = min( 500, count( $ids ) ); $q['paged'] = 1; }
+				if ( $ids ) { $q['post__in'] = $ids; }
 				$meta_query = array();
 				foreach ( (array) ( $args['filters'] ?? array() ) as $fkey => $fval ) {
 					$f = $entity['fields'][ $fkey ] ?? null;
@@ -62,7 +62,7 @@ final class NCD_Store {
 			case 'term':
 				$q = array( 'taxonomy' => $entity['object_type'], 'hide_empty' => false, 'number' => $per_page, 'offset' => ( $page - 1 ) * $per_page, 'orderby' => in_array( $args['orderby'] ?? '', array( 'name', 'slug', 'count', 'term_id' ), true ) ? $args['orderby'] : 'name', 'order' => $order, 'fields' => 'ids' );
 				if ( '' !== $search ) { $q['search'] = $search; }
-				if ( $ids ) { $q['include'] = $ids; $q['number'] = 0; $q['offset'] = 0; }
+				if ( $ids ) { $q['include'] = $ids; }
 				$found = get_terms( $q );
 				$count_q = $q; unset( $count_q['number'], $count_q['offset'] ); $count_q['fields'] = 'count';
 				return array( 'ids' => is_wp_error( $found ) ? array() : array_map( 'intval', $found ), 'total' => (int) ( is_wp_error( $found ) ? 0 : get_terms( $count_q ) ) );
@@ -70,7 +70,7 @@ final class NCD_Store {
 			case 'user':
 				$q = array( 'number' => $per_page, 'paged' => $page, 'fields' => 'ID', 'orderby' => in_array( $args['orderby'] ?? '', array( 'display_name', 'registered', 'login', 'email', 'ID' ), true ) ? $args['orderby'] : 'display_name', 'order' => $order, 'count_total' => true );
 				if ( '' !== $search ) { $q['search'] = '*' . $search . '*'; $q['search_columns'] = array( 'user_login', 'user_email', 'display_name', 'user_nicename' ); }
-				if ( $ids ) { $q['include'] = $ids; $q['number'] = count( $ids ); $q['paged'] = 1; }
+				if ( $ids ) { $q['include'] = $ids; }
 				if ( ! empty( $entity['capabilities']['role__in'] ) ) { $q['role__in'] = (array) $entity['capabilities']['role__in']; }
 				$q = apply_filters( 'ninecode_data_user_query_args', $q, $entity, $args );
 				$uq = new WP_User_Query( $q );

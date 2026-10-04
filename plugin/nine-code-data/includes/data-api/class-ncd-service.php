@@ -144,7 +144,7 @@ final class NCD_Service {
 			$field = $entity['fields'][ $key ];
 			list( $ok, $why ) = $id ? self::field_access( $entity, $field, $id ) : array( empty( $field['protected'] ) && ! empty( $field['writable'] ), $field['reason'] ?: 'Read-only' );
 			if ( ! $ok ) {
-				if ( $id && NCD_Types::same( $raw, $current[ $key ] ?? null ) ) { $unchanged[] = $key; continue; } // re-sent unchanged read-only value: harmless
+				if ( $id && NCD_Types::same( $raw, $current[ $key ] ?? null, $field ) ) { $unchanged[] = $key; continue; } // re-sent unchanged read-only value: harmless
 				$errors[ $key ] = $why;
 				continue;
 			}
@@ -156,7 +156,7 @@ final class NCD_Service {
 				if ( is_wp_error( $msg ) ) { $errors[ $key ] = $msg->get_error_message(); continue; }
 			}
 			if ( $field['required'] && ( '' === $value || array() === $value || null === $value || 0 === $value ) ) { $errors[ $key ] = $field['label'] . ' is required'; continue; }
-			if ( $id && array_key_exists( $key, $current ) && NCD_Types::same( $value, $current[ $key ] ) ) { $unchanged[] = $key; continue; }
+			if ( $id && array_key_exists( $key, $current ) && NCD_Types::same( $value, $current[ $key ], $field ) ) { $unchanged[] = $key; continue; }
 			$clean[ $key ] = $value;
 		}
 
@@ -206,6 +206,45 @@ final class NCD_Service {
 	public static function apply_values( array $entity, $id, array $clean, array $before, array $context ) {
 		$result = array( 'ok' => true, 'changed' => array(), 'errors' => array(), 'warnings' => array() );
 		if ( ! $clean ) { return $result; }
+		// A provider publish callback owns publication (e.g. notifications, workflow), never a raw field write.
+		$pub_field = self::publish_config( $entity )['field'];
+		$pub_value = null;
+		if ( $pub_field && array_key_exists( $pub_field, $clean ) && isset( $entity['callbacks']['publish'] ) ) {
+			$pub_value = $clean[ $pub_field ];
+			unset( $clean[ $pub_field ] );
+		}
+		$work = static function () use ( $entity, $id, $clean, $context, $pub_field, $pub_value, &$result ) {
+			$ok = self::write_values( $entity, $id, $clean, $context, $result );
+			if ( $ok && null !== $pub_value ) {
+				$r = call_user_func( $entity['callbacks']['publish'], (int) $id, $pub_value, $context );
+				if ( is_wp_error( $r ) || false === $r ) { $result['ok'] = false; $result['errors'][ $pub_field ] = is_wp_error( $r ) ? $r->get_error_message() : 'The owning plugin refused this status change'; return false; }
+				$result['changed'][] = $pub_field;
+			}
+			return $ok;
+		};
+		if ( isset( $entity['callbacks']['transaction'] ) ) {
+			// The provider runs $work inside its own transaction and rolls back when it returns false.
+			call_user_func( $entity['callbacks']['transaction'], $work );
+			if ( ! $result['ok'] && $result['changed'] ) {
+				$result['warnings'][] = 'The change was rolled back because ' . implode( '; ', $result['errors'] );
+				$result['changed']    = array();
+			}
+		} else {
+			$work();
+			if ( ! $result['ok'] && $result['changed'] && empty( $entity['callbacks']['write'] ) ) {
+				// Compensating rollback of the fields already written in this record.
+				foreach ( $result['changed'] as $k ) { NCD_Store::write_field( $entity, $entity['fields'][ $k ], $id, $before[ $k ] ?? '', array( 'source' => 'rollback' ) ); }
+				$result['warnings'][] = 'The change was rolled back because ' . implode( '; ', $result['errors'] );
+				$result['changed'] = array();
+			}
+		}
+		if ( 'post' === $entity['kind'] && $result['changed'] ) { clean_post_cache( (int) $id ); }
+		return $result;
+	}
+
+	/** Writes values through the provider write callback, or field by field. */
+	private static function write_values( array $entity, $id, array $clean, array $context, array &$result ) {
+		if ( ! $clean ) { return true; }
 		$work = static function () use ( $entity, $id, $clean, $context, &$result ) {
 			if ( isset( $entity['callbacks']['write'] ) ) {
 				$r = call_user_func( $entity['callbacks']['write'], (int) $id, $clean, $context );
@@ -225,19 +264,7 @@ final class NCD_Service {
 			}
 			return true;
 		};
-		if ( isset( $entity['callbacks']['transaction'] ) ) {
-			call_user_func( $entity['callbacks']['transaction'], $work );
-		} else {
-			$work();
-			if ( ! $result['ok'] && $result['changed'] && empty( $entity['callbacks']['write'] ) ) {
-				// Compensating rollback of the fields already written in this record.
-				foreach ( $result['changed'] as $k ) { NCD_Store::write_field( $entity, $entity['fields'][ $k ], $id, $before[ $k ] ?? '', array( 'source' => 'rollback' ) ); }
-				$result['warnings'][] = 'The change was rolled back because ' . implode( '; ', $result['errors'] );
-				$result['changed'] = array();
-			}
-		}
-		if ( 'post' === $entity['kind'] && $result['changed'] ) { clean_post_cache( (int) $id ); }
-		return $result;
+		return $work();
 	}
 
 	/**
@@ -283,6 +310,7 @@ final class NCD_Service {
 		$id = NCD_Store::create( $entity, $v['clean'] );
 		if ( is_wp_error( $id ) ) { return $id; }
 		$id   = (int) $id;
+		if ( $id <= 0 ) { return new WP_Error( 'ncd_create', 'The owning plugin did not create the record.', array( 'status' => 500 ) ); }
 		$rest = $v['clean'];
 		$r    = self::apply_values( $entity, $id, $rest, array(), $context );
 		$hid  = empty( $context['no_history'] ) ? NCD_History::add( $entity['provider'], $entity['id'], 'create', $context['source'] ?? 'editor', 'Created ' . NCD_Store::summary( $entity, $id )['label'],
@@ -358,7 +386,7 @@ final class NCD_Service {
 			$restore = array();
 			foreach ( (array) $rec['before'] as $k => $old ) {
 				if ( ! isset( $entity['fields'][ $k ] ) ) { continue; }
-				if ( ! $force && array_key_exists( $k, (array) $rec['after'] ) && ! NCD_Types::same( $current[ $k ] ?? null, $rec['after'][ $k ] ) ) { $report['conflicts'][] = array( 'id' => $id, 'field' => $k ); continue; }
+				if ( ! $force && array_key_exists( $k, (array) $rec['after'] ) && ! NCD_Types::same( $current[ $k ] ?? null, $rec['after'][ $k ], $entity['fields'][ $k ] ) ) { $report['conflicts'][] = array( 'id' => $id, 'field' => $k ); continue; }
 				$restore[ $k ] = $old;
 			}
 			if ( ! $restore ) { continue; }

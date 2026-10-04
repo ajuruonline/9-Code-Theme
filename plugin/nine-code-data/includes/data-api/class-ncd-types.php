@@ -187,20 +187,45 @@ final class NCD_Types {
 		return array( $out, '' );
 	}
 
-	/** Comparable representation for change detection. */
-	public static function normalize_for_compare( $v ) {
+	/**
+	 * Comparable representation for change detection. Empty forms ('' / null / [] / a group whose
+	 * values are all empty / 0 for a reference field) compare equal, so spreadsheet round trips of
+	 * empty ACF fields are not reported as changes.
+	 *
+	 * @param mixed      $v     Value.
+	 * @param array|null $field Field definition, when known (enables type-aware empties).
+	 */
+	public static function normalize_for_compare( $v, $field = null ) {
+		$type = is_array( $field ) ? ( $field['type'] ?? '' ) : '';
+		if ( in_array( $type, array( 'media', 'post', 'user', 'term' ), true ) && ( null === $v || '' === $v || 0 === $v || '0' === $v || false === $v ) ) { return ''; }
+		// ACF returns false for empty repeaters/relationships; only boolean fields treat false as a value.
+		if ( false === $v && '' !== $type && ! in_array( $type, array( 'boolean', 'checkbox' ), true ) ) { return ''; }
 		if ( is_array( $v ) ) {
 			$o = array();
-			foreach ( $v as $k => $x ) { $o[ $k ] = self::normalize_for_compare( $x ); }
-			return $o;
+			foreach ( $v as $k => $x ) {
+				$sub = null;
+				if ( 'group' === $type ) { $sub = $field['sub_fields'][ $k ] ?? null; }
+				elseif ( 'repeater' === $type ) { $sub = array( 'type' => 'group', 'sub_fields' => $field['sub_fields'] ); }
+				elseif ( 'flexible' === $type && is_array( $x ) ) { $sub = array( 'type' => 'group', 'sub_fields' => $field['layouts'][ $x['acf_fc_layout'] ?? '' ]['sub_fields'] ?? array() ); }
+				$o[ $k ] = self::normalize_for_compare( $x, $sub );
+			}
+			return self::all_empty( $o ) ? '' : $o;
 		}
 		if ( is_bool( $v ) ) { return $v ? '1' : '0'; }
 		if ( null === $v ) { return ''; }
 		return trim( (string) $v );
 	}
 
-	public static function same( $a, $b ) {
-		return wp_json_encode( self::normalize_for_compare( $a ) ) === wp_json_encode( self::normalize_for_compare( $b ) );
+	private static function all_empty( $v ) {
+		if ( is_array( $v ) ) {
+			foreach ( $v as $k => $x ) { if ( 'acf_fc_layout' !== $k && ! self::all_empty( $x ) ) { return false; } }
+			return true;
+		}
+		return '' === $v;
+	}
+
+	public static function same( $a, $b, $field = null ) {
+		return wp_json_encode( self::normalize_for_compare( $a, $field ) ) === wp_json_encode( self::normalize_for_compare( $b, $field ) );
 	}
 
 	public static function hash( $v ) { return substr( md5( (string) wp_json_encode( self::normalize_for_compare( $v ) ) ), 0, 12 ); }

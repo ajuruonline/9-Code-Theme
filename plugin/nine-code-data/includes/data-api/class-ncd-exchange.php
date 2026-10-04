@@ -37,7 +37,7 @@ final class NCD_Exchange {
 				$records[] = self::export_record( $entity, $id );
 			}
 			$page++;
-		} while ( $res['ids'] && ! empty( $res['total'] ) && ( $page - 1 ) * 100 < $res['total'] && empty( $args['ids'] ) );
+		} while ( $res['ids'] && ! empty( $res['total'] ) && ( $page - 1 ) * 100 < $res['total'] );
 		return $records;
 	}
 
@@ -221,6 +221,12 @@ final class NCD_Exchange {
 		return array( 'format' => self::FORMAT, 'records' => $records );
 	}
 
+	const STAGE_GUARD = "<?php exit; ?>\n";
+
+	private static function stage_path( $token ) {
+		return self::staging_dir() . '/' . preg_replace( '/[^A-Za-z0-9]/', '', (string) $token ) . '.php';
+	}
+
 	private static function staging_dir() {
 		$up  = wp_upload_dir();
 		$dir = trailingslashit( $up['basedir'] ) . 'ncd-staging';
@@ -235,9 +241,10 @@ final class NCD_Exchange {
 	/** Store a parsed package server-side so it can be previewed/applied in batches. */
 	public static function stage( array $package ) {
 		$dir = self::staging_dir();
-		foreach ( (array) glob( $dir . '/*.json' ) as $old ) { if ( filemtime( $old ) < time() - DAY_IN_SECONDS ) { wp_delete_file( $old ); } }
+		foreach ( (array) glob( $dir . '/*.{json,php}', GLOB_BRACE ) as $old ) { if ( 'index.php' !== basename( $old ) && filemtime( $old ) < time() - DAY_IN_SECONDS ) { wp_delete_file( $old ); } }
 		$token = wp_generate_password( 32, false, false );
-		file_put_contents( $dir . '/' . $token . '.json', wp_json_encode( $package ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- private staging file.
+		// .php with an exit guard: never served as data even where .htaccess is ignored (nginx).
+		file_put_contents( self::stage_path( $token ), self::STAGE_GUARD . wp_json_encode( $package ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- private staging file.
 		set_transient( 'ncd_stage_' . $token, array( 'user' => get_current_user_id(), 'provider' => $package['provider'], 'entity' => $package['entity'], 'count' => count( $package['records'] ) ), DAY_IN_SECONDS );
 		return array( 'token' => $token, 'count' => count( $package['records'] ), 'warnings' => $package['warnings'] ?? array() );
 	}
@@ -247,15 +254,16 @@ final class NCD_Exchange {
 		$meta  = get_transient( 'ncd_stage_' . $token );
 		if ( ! $token || ! is_array( $meta ) ) { return new WP_Error( 'ncd_stage', 'This import has expired. Upload the file again.', array( 'status' => 410 ) ); }
 		if ( (int) $meta['user'] !== get_current_user_id() ) { return new WP_Error( 'ncd_forbidden', 'This import belongs to another user.', array( 'status' => 403 ) ); }
-		$path = self::staging_dir() . '/' . $token . '.json';
-		$pkg  = is_readable( $path ) ? json_decode( (string) file_get_contents( $path ), true ) : null; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- private staging file.
+		$path = self::stage_path( $token );
+		$raw  = is_readable( $path ) ? (string) file_get_contents( $path ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- private staging file.
+		$pkg  = json_decode( (string) substr( $raw, strlen( self::STAGE_GUARD ) ), true );
 		return is_array( $pkg ) ? $pkg : new WP_Error( 'ncd_stage', 'The staged import could not be read.', array( 'status' => 410 ) );
 	}
 
 	public static function discard_stage( $token ) {
 		$token = preg_replace( '/[^A-Za-z0-9]/', '', (string) $token );
 		delete_transient( 'ncd_stage_' . $token );
-		wp_delete_file( self::staging_dir() . '/' . $token . '.json' );
+		if ( $token ) { wp_delete_file( self::stage_path( $token ) ); }
 	}
 
 	/* ================================================================ preview */
@@ -305,7 +313,9 @@ final class NCD_Exchange {
 		$row['label'] = NCD_Store::summary( $entity, $rec['id'] )['label'];
 		$v        = NCD_Service::validate( $entity, $rec['id'], $fields, $ctx );
 		$current  = $v['current'];
-		$record_changed = $rec['revision'] && ! $rec['base'] && $rec['revision'] !== NCD_Service::fingerprint( $current );
+		// Base hashes/revisions were computed on exported (transformed) values; compare like with like.
+		$exported = isset( $entity['callbacks']['export'] ) ? (array) call_user_func( $entity['callbacks']['export'], $current, (int) $rec['id'], $entity ) : $current;
+		$record_changed = $rec['revision'] && ! $rec['base'] && $rec['revision'] !== NCD_Service::fingerprint( $exported );
 		$publish  = NCD_Service::publish_config( $entity );
 		foreach ( $fields as $k => $after ) {
 			$f = $entity['fields'][ $k ] ?? null;
@@ -317,7 +327,7 @@ final class NCD_Exchange {
 				'status' === $item['status'] ? $row['changes']++ : $row['errors']++;
 			} elseif ( array_key_exists( $k, $v['clean'] ) ) {
 				$item['status'] = 'change';
-				$conflict = ( isset( $rec['base'][ $k ] ) && $rec['base'][ $k ] !== NCD_Types::hash( $current[ $k ] ?? null ) ) || $record_changed;
+				$conflict = ( isset( $rec['base'][ $k ] ) && $rec['base'][ $k ] !== NCD_Types::hash( $exported[ $k ] ?? null ) ) || $record_changed;
 				if ( $conflict ) { $item['status'] = 'conflict'; $item['message'] = 'Changed on the site since this file was exported. Tick it to overwrite.'; $row['conflicts']++; }
 				else { $row['changes']++; }
 			} else { continue; }

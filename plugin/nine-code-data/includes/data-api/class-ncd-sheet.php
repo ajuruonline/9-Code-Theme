@@ -34,12 +34,16 @@ final class NCD_Sheet {
 		rewind( $fh );
 		$matrix = array();
 		while ( false !== ( $row = fgetcsv( $fh, 0, $delim, '"', '\\' ) ) ) {
-			if ( count( $matrix ) > self::MAX_ROWS ) { break; }
+			if ( count( $matrix ) > self::MAX_ROWS ) { fclose( $fh ); return self::too_many(); } // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- reading an uploaded temp file.
 			$matrix[] = $row;
 		}
 		fclose( $fh ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- reading an uploaded temp file.
 		if ( isset( $matrix[0][0] ) ) { $matrix[0][0] = preg_replace( '/^\xEF\xBB\xBF/', '', (string) $matrix[0][0] ); }
 		return self::matrix_to_rows( $matrix );
+	}
+
+	private static function too_many() {
+		return new WP_Error( 'ncd_too_many_rows', sprintf( 'The sheet has more than %d rows. Split it into smaller files.', self::MAX_ROWS ) );
 	}
 
 	/** A leading = + - @ would be executed as a formula by spreadsheet apps (CSV injection). */
@@ -147,7 +151,7 @@ final class NCD_Sheet {
 		if ( ! $sheet ) { return new WP_Error( 'ncd_xlsx', 'The first worksheet could not be read.' ); }
 		$matrix = array();
 		foreach ( $sheet->sheetData->row as $row ) {
-			if ( count( $matrix ) > self::MAX_ROWS ) { break; }
+			if ( count( $matrix ) > self::MAX_ROWS ) { return self::too_many(); }
 			$line = array();
 			foreach ( $row->c as $c ) {
 				$ref = (string) $c['r'];
