@@ -110,6 +110,7 @@ require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine-code-visual-editor.ph
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-form.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-data-backup.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine55-ultron-data.php';
+require_once NINE55_ULTRON_DATA_DIR . 'includes/class-ninecode-universal-data-manager.php';
 Nine_Code_Visual_Editor::instance();
 Nine10_Form::instance();
 Nine10_Data_Backup::instance();
