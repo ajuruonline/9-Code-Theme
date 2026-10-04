@@ -31,7 +31,7 @@ final class NCD_Store {
 		switch ( $entity['kind'] ) {
 			case 'post':
 				$status  = sanitize_key( (string) ( $args['status'] ?? 'any' ) );
-				$allowed = array_merge( $entity['statuses'], array( 'inherit' ) );
+				$allowed = array_merge( $entity['statuses'], array( 'inherit', 'trash' ) );
 				$q = array(
 					'post_type'              => $entity['object_type'],
 					'post_status'            => ( 'any' === $status || '' === $status ) ? ( 'attachment' === $entity['object_type'] ? 'inherit' : $entity['statuses'] ) : ( in_array( $status, $allowed, true ) ? $status : 'publish' ),

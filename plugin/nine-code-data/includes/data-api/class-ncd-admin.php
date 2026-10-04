@@ -27,7 +27,8 @@ final class NCD_Admin {
 	public function assets( $hook ) {
 		if ( false === strpos( (string) $hook, self::SLUG ) ) { return; }
 		wp_enqueue_media();
-		wp_enqueue_style( 'ncd-workspace', NINE55_ULTRON_DATA_URL . 'assets/data-workspace.css', array(), NINE55_ULTRON_DATA_VERSION );
+		wp_enqueue_editor();
+		wp_enqueue_style( 'ncd-workspace', NINE55_ULTRON_DATA_URL . 'assets/data-workspace.css', array( 'dashicons' ), NINE55_ULTRON_DATA_VERSION );
 		wp_enqueue_script( 'ncd-workspace', NINE55_ULTRON_DATA_URL . 'assets/data-workspace.js', array( 'wp-api-fetch' ), NINE55_ULTRON_DATA_VERSION, true );
 		wp_localize_script( 'ncd-workspace', 'NCDWorkspace', array(
 			'root'     => esc_url_raw( rest_url( NCD_REST::NS ) ),

@@ -191,7 +191,8 @@ final class NCD_Service {
 	private static function lock( array $entity, $id ) {
 		$name = 'ncd_lock_' . md5( $entity['provider'] . '.' . $entity['id'] . '.' . (int) $id );
 		if ( add_option( $name, time(), '', false ) ) { return $name; }
-		if ( (int) get_option( $name ) < time() - 60 ) { update_option( $name, time(), false ); return $name; } // stale lock
+		// Stale lock (crashed request): remove it and compete again atomically through add_option.
+		if ( (int) get_option( $name ) < time() - 60 ) { delete_option( $name ); if ( add_option( $name, time(), '', false ) ) { return $name; } }
 		return false;
 	}
 
@@ -340,11 +341,13 @@ final class NCD_Service {
 		foreach ( array_reverse( $h['records'] ) as $rec ) {
 			$id = (int) $rec['id'];
 			if ( 'create' === $rec['action'] ) {
+				if ( NCD_Store::exists( $entity, $id ) && ! self::can( 'trash', $entity, $id ) ) { $report['errors'][ $id ] = 'You cannot trash this record'; continue; }
 				$r = NCD_Store::exists( $entity, $id ) ? NCD_Store::trash( $entity, $id ) : true;
 				if ( is_wp_error( $r ) ) { $report['errors'][ $id ] = $r->get_error_message(); } else { $report['restored'][] = $id; $records[] = array( 'id' => $id, 'action' => 'trash', 'before' => array(), 'after' => array() ); }
 				continue;
 			}
 			if ( 'trash' === $rec['action'] ) {
+				if ( ! self::can( 'trash', $entity, $id ) ) { $report['errors'][ $id ] = 'You cannot restore this record'; continue; }
 				$r = NCD_Store::untrash( $entity, $id );
 				if ( ! is_wp_error( $r ) && 'post' === $entity['kind'] && ! empty( $rec['before']['_status'] ) ) { wp_update_post( array( 'ID' => $id, 'post_status' => sanitize_key( $rec['before']['_status'] ) ) ); }
 				if ( is_wp_error( $r ) ) { $report['errors'][ $id ] = $r->get_error_message(); } else { $report['restored'][] = $id; }

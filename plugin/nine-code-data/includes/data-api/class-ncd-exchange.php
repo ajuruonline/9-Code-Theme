@@ -358,6 +358,10 @@ final class NCD_Exchange {
 				if ( true === $pick || '1' === $pick || 'all' === $pick ) { if ( 'change' === $pf['status'] ) { $allowed[] = $pf['key']; } }
 				elseif ( is_array( $pick ) && in_array( $pf['key'], $pick, true ) && in_array( $pf['status'], array( 'change', 'conflict' ), true ) ) { $allowed[] = $pf['key']; }
 			}
+			$skipped = array();
+			foreach ( $plan['fields'] as $pf ) {
+				if ( ! in_array( $pf['key'], $allowed, true ) ) { $skipped[ $pf['key'] ] = $pf['message'] ? $pf['message'] : 'Not selected'; }
+			}
 			if ( 'trash' === $rec['action'] ) {
 				$prev_status = NCD_Store::summary( $entity, $rec['id'] )['status'];
 				$r = NCD_Service::trash( $entity, $rec['id'], $ctx );
@@ -367,23 +371,24 @@ final class NCD_Exchange {
 				continue;
 			}
 			$changes = array_intersect_key( $fields, array_flip( $allowed ) );
-			if ( ! $changes ) { $results[] = array( 'index' => $index, 'ok' => true, 'id' => $rec['id'], 'action' => 'none', 'message' => 'Nothing selected' ); continue; }
+			if ( ! $changes ) { $results[] = array( 'index' => $index, 'ok' => true, 'id' => $rec['id'], 'action' => 'none', 'message' => 'Nothing selected', 'skipped' => $skipped ); continue; }
 			if ( 'create' === $rec['action'] ) {
 				$r = NCD_Service::create( $entity, $changes, $ctx );
 				if ( is_wp_error( $r ) ) { $results[] = array( 'index' => $index, 'ok' => false, 'message' => $r->get_error_message() ); continue; }
 				if ( $r['id'] ) { $history[] = array( 'id' => $r['id'], 'action' => 'create', 'before' => array(), 'after' => array() ); }
-				$results[] = array( 'index' => $index, 'ok' => $r['ok'], 'id' => $r['id'], 'action' => 'create', 'errors' => $r['errors'], 'warnings' => $r['warnings'] );
+				$results[] = array( 'index' => $index, 'ok' => $r['ok'], 'id' => $r['id'], 'action' => 'create', 'errors' => $r['errors'], 'warnings' => $r['warnings'], 'skipped' => $skipped );
 				continue;
 			}
 			$r = NCD_Service::save( $entity, $rec['id'], $changes, $ctx );
 			if ( is_wp_error( $r ) ) { $results[] = array( 'index' => $index, 'ok' => false, 'message' => $r->get_error_message() ); continue; }
 			if ( $r['changed'] ) { $history[] = array( 'id' => $rec['id'], 'action' => 'edit', 'before' => array_intersect_key( $r['before'], $r['after'] ), 'after' => $r['after'] ); }
-			$results[] = array( 'index' => $index, 'ok' => $r['ok'], 'id' => $rec['id'], 'action' => 'update', 'changed' => $r['changed'], 'errors' => $r['errors'], 'warnings' => $r['warnings'] );
+			$results[] = array( 'index' => $index, 'ok' => $r['ok'], 'id' => $rec['id'], 'action' => 'update', 'changed' => $r['changed'], 'errors' => $r['errors'], 'warnings' => $r['warnings'], 'skipped' => $skipped );
 		}
 		$hid = absint( $options['history_id'] ?? 0 );
 		if ( $history ) {
-			if ( $hid && NCD_History::get( $hid ) ) { NCD_History::append( $hid, $history ); }
-			else { $hid = NCD_History::add( $entity['provider'], $entity['id'], 'import', $options['source'] ?? 'import', 'Import into ' . $entity['label'], $history ); }
+			$prev = $hid ? NCD_History::get( $hid ) : null;
+			$same = $prev && 'import' === $prev['operation'] && $prev['provider'] === $entity['provider'] && $prev['entity'] === $entity['id'];
+			if ( ! $same || ! NCD_History::append( $hid, $history ) ) { $hid = NCD_History::add( $entity['provider'], $entity['id'], 'import', $options['source'] ?? 'import', 'Import into ' . $entity['label'], $history ); }
 		}
 		return array( 'results' => $results, 'history_id' => $hid, 'applied' => count( $history ) );
 	}

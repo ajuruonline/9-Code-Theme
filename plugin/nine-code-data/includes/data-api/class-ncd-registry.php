@@ -112,7 +112,14 @@ final class NCD_Registry {
 		}
 		$fields = array();
 		foreach ( (array) ( $e['fields'] ?? array() ) as $key => $field ) {
+			$problem = self::check_field( (string) $key, (array) $field );
+			if ( $problem ) { return new WP_Error( 'ncd_field', sprintf( 'Entity %s.%s: %s', $provider['id'], $entity_id, $problem ) ); }
 			$f = self::normalize_field( (string) $key, (array) $field );
+			// A custom entity without a write callback cannot persist fields that have no write callback of their own.
+			if ( 'custom' === $kind && empty( $e['write_callback'] ) && empty( $f['write'] ) && $f['writable'] ) {
+				$f['writable'] = false;
+				$f['reason']   = $f['reason'] ? $f['reason'] : 'The owning plugin does not accept edits to this field';
+			}
 			$fields[ $f['key'] ] = $f;
 		}
 		foreach ( (array) ( $e['protected_fields'] ?? array() ) as $pk ) {
@@ -152,6 +159,29 @@ final class NCD_Registry {
 				'transaction' => $e['transaction_callback'] ?? null,
 			) ),
 		);
+	}
+
+	const STORAGES = array( 'post_field', 'meta', 'taxonomy', 'acf', 'thumbnail', 'user_field', 'term_field', 'callback', 'none' );
+
+	/** Contract check for one raw field definition (recursive). Returns '' when valid. */
+	private static function check_field( $key, array $f ) {
+		if ( '' === $key ) { return 'field keys must be non-empty'; }
+		if ( isset( $f['type'] ) && ! in_array( sanitize_key( $f['type'] ), self::FIELD_TYPES, true ) ) { return sprintf( 'field "%s" has unknown type "%s"', $key, $f['type'] ); }
+		if ( isset( $f['storage'] ) && ! in_array( sanitize_key( $f['storage'] ), self::STORAGES, true ) ) { return sprintf( 'field "%s" has unknown storage "%s"', $key, $f['storage'] ); }
+		foreach ( array( 'validate_callback', 'sanitize_callback', 'read_callback', 'write_callback' ) as $cb ) {
+			if ( isset( $f[ $cb ] ) && ! is_callable( $f[ $cb ] ) ) { return sprintf( 'field "%s": %s is not callable', $key, $cb ); }
+		}
+		foreach ( (array) ( $f['sub_fields'] ?? array() ) as $sk => $sf ) {
+			$p = self::check_field( (string) ( $sf['key'] ?? $sk ), (array) $sf );
+			if ( $p ) { return $p; }
+		}
+		foreach ( (array) ( $f['layouts'] ?? array() ) as $layout ) {
+			foreach ( (array) ( $layout['sub_fields'] ?? array() ) as $sk => $sf ) {
+				$p = self::check_field( (string) ( $sf['key'] ?? $sk ), (array) $sf );
+				if ( $p ) { return $p; }
+			}
+		}
+		return '';
 	}
 
 	/** Normalize one field definition (also used recursively for group/repeater sub-fields). */
