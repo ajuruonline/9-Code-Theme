@@ -28,6 +28,13 @@ function ncu_editor_workspace_is_block_editor() {
     return (bool) ( $screen && is_callable( array( $screen, 'is_block_editor' ) ) && $screen->is_block_editor() );
 }
 
+function ncu_editor_workspace_consolidates_topbar() {
+    if ( ! ncu_editor_workspace_is_block_editor() ) { return false; }
+    $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+    $post_type = $screen && ! empty( $screen->post_type ) ? sanitize_key( (string) $screen->post_type ) : '';
+    return in_array( $post_type, array( 'post', 'page' ), true );
+}
+
 /**
  * Per-user presentation overrides for editor panels.
  * Values are booleans keyed by a stable panel identifier. They do not alter
@@ -64,6 +71,7 @@ function ncu_editor_workspace_body_class( $classes ) {
     $s = ncu_get_settings();
     $classes .= ' ncu-editor-workspace';
     if ( ! empty( $s['admin_editor_tools_drawer'] ) ) { $classes .= ' ncu-editor-tools-enabled'; }
+    if ( ncu_editor_workspace_consolidates_topbar() ) { $classes .= ' ncu-editor-topbar-consolidated'; }
     if ( ! empty( $s['admin_editor_high_contrast'] ) ) { $classes .= ' ncu-editor-high-contrast'; }
     return $classes;
 }
@@ -103,6 +111,7 @@ function ncu_editor_workspace_assets() {
         'enabled'          => true,
         'isBlockEditor'    => ncu_editor_workspace_is_block_editor(),
         'toolsDrawer'      => ! empty( $s['admin_editor_tools_drawer'] ),
+        'consolidateTopbar'=> ncu_editor_workspace_consolidates_topbar(),
         'focusPanels'      => false,
         'hidePluginPanels' => false,
         'breakpoint'       => (int) apply_filters( 'ncu_editor_workspace_breakpoint', 1180 ),
@@ -148,7 +157,7 @@ function ncu_editor_workspace_theme_controls() {
     <hr>
     <section id="ncu-mobile-editor-controls" style="max-width:860px">
         <h2><?php esc_html_e( 'Mobile Editor Workspace', 'nine-code' ); ?></h2>
-        <p><strong><?php esc_html_e( 'Native editor space is protected.', 'nine-code' ); ?></strong> <?php esc_html_e( 'Post Content and all available metadata/meta boxes remain in the normal WordPress editor flow. 9CODE settings, shortcuts and nonessential editor/plugin toolbar actions use the hamburger popover instead of covering the editor.', 'nine-code' ); ?></p>
+        <p><strong><?php esc_html_e( 'Native editor space is protected.', 'nine-code' ); ?></strong> <?php esc_html_e( 'On Posts and Pages, Save and Publish/Update stay visible while every other editor/plugin top-bar action is collected in the hamburger popover. Post Content and all available metadata/meta boxes remain in the normal WordPress editor flow.', 'nine-code' ); ?></p>
         <p class="description"><?php esc_html_e( 'The former full-screen Edit Panels overlay and automatic plugin-meta-box hiding are retired in 15.0.2. The hamburger is non-modal: it has no full-screen shell, backdrop or body scroll lock.', 'nine-code' ); ?></p>
     </section>
     <?php
