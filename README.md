@@ -32,9 +32,10 @@ bin/build.sh                                       # dist/*.zip
 CI runs all of the above (`.github/workflows/ci.yml`).
 
 ### The invariant
-On `post.php` / `post-new.php`, **Post Content and post metadata must always be directly visible and editable**,
-Save/Update visible, and **no Nine Code full-screen layer, backdrop or body scroll lock may exist**.
-`tests/e2e/editor.mjs` and `bin/lint.sh` enforce this.
+On standard **Posts and Pages** in `post.php` / `post-new.php`, **Post Content and post metadata must always be directly visible and editable**.
+**Save/Save Draft and Publish/Update stay visible; every other editor/plugin top-bar action (including Edit with Elementor) belongs in the single hamburger menu at desktop and mobile widths.**
+No Nine Code full-screen layer, backdrop or body scroll lock may exist.
+`tests/e2e/editor.mjs` and `bin/lint.sh` enforce the editor safety contract.
 
 ### Rules for changes
 - Do not rename option names, post meta keys, CPT slugs, taxonomies, REST routes or hooks without a migration.
