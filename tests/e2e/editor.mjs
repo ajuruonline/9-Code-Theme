@@ -41,6 +41,21 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
   await page.keyboard.press('Escape');
   t.ok((await page.evaluate(coverCheck)).length === 0, `${tag}: no Nine Code viewport-sized layer`);
   t.ok(await page.locator('.editor-post-publish-button, .editor-post-publish-panel__toggle').first().isVisible(), `${tag}: Update/Publish button visible`);
+  const topbar = await page.evaluate(() => {
+    const header = document.querySelector('.editor-header,.edit-post-header,.interface-interface-skeleton__header');
+    const toggle = document.querySelector('.ncu-editor-tools-toggle');
+    const visible = (node) => {
+      const s = getComputedStyle(node);
+      return s.display !== 'none' && s.visibility !== 'hidden' && +s.opacity !== 0 && node.getClientRects().length > 0;
+    };
+    const allowed = (node) => node.matches('.ncu-editor-tools-toggle,.editor-post-save-draft,.editor-post-publish-button,.editor-post-publish-panel__toggle') ||
+      !!node.closest('.ncu-editor-tools-toggle,.editor-post-save-draft,.editor-post-publish-button,.editor-post-publish-panel__toggle');
+    const label = (node) => String(node.getAttribute('aria-label') || node.getAttribute('title') || node.textContent || '').replace(/\s+/g, ' ').trim();
+    const extra = header ? [...header.querySelectorAll('button,a,[role="button"]')].filter(visible).filter((node) => !allowed(node)).map(label).filter(Boolean) : ['header missing'];
+    return { hamburgerVisible: !!(toggle && visible(toggle)), extra };
+  });
+  t.ok(topbar.hamburgerVisible, `${tag}: one hamburger is visible for editor actions`);
+  t.ok(topbar.extra.length === 0, `${tag}: only Save/Publish and the hamburger remain in the top bar${topbar.extra.length ? ' :: ' + topbar.extra.join(' | ') : ''}`);
   const frame = page.frameLocator('iframe[name="editor-canvas"]');
   const title = frame.locator('h1.wp-block-post-title, .editor-post-title__input').first();
   await title.click(); await page.keyboard.press('End'); await page.keyboard.type(` GB${vp.width}`);
