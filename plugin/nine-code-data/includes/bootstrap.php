@@ -53,6 +53,15 @@ function nine10_data_component_contract( $contracts ) {
         'elementor_policy' => 'presentation-owner',
         'taxonomy_policy' => 'registered-object-taxonomies-only',
     );
+    $contracts['nine-code-team'] = array(
+        'id' => 'nine-code-team',
+        'version' => NINE55_ULTRON_DATA_VERSION,
+        'role' => 'coordinated-suite',
+        'members' => array( 'core', 'manager', 'data-manager', 'team-integrations' ),
+        'data_owner' => 'data-manager',
+        'discovery' => 'registered-wordpress-objects-and-provider-contracts',
+        'round_trip' => array( 'json', 'csv', 'xlsx', 'ai' ),
+    );
     return $contracts;
 }
 add_filter( 'ninecodepress_component_contracts', 'nine10_data_component_contract', 30 );
