@@ -5,6 +5,7 @@
 #   - Open Scholar, Conference.lat and the Nine Code apps from their repositories/branches, when available.
 # Apps that cannot be fetched are skipped; their integration checks then report SKIP.
 set -uo pipefail
+export GIT_TERMINAL_PROMPT=0   # never block on a credentials prompt (CI); unreachable apps are skipped
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"; DIR="${WP_TEST_DIR:-$ROOT/.wp-test}"
 WP="php -d memory_limit=1G $DIR/wp-cli.phar --allow-root --path=$DIR/wp"
 PLUG="$DIR/wp/wp-content/plugins"; MU="$DIR/wp/wp-content/mu-plugins"; SRC="${NCD_APPS_DIR:-$DIR/apps}"
