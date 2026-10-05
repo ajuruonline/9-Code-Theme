@@ -11,8 +11,9 @@ final class NCD_Types {
 
 	public static function sanitize( array $field, $value ) {
 		if ( $field['sanitize'] ) {
+			// Contract: return the clean value, or a WP_Error to reject the input.
 			$r = call_user_func( $field['sanitize'], $value, $field );
-			return is_array( $r ) && 2 === count( $r ) && array_key_exists( 0, $r ) ? array( $r[0], (string) $r[1] ) : array( $r, '' );
+			return is_wp_error( $r ) ? array( null, $r->get_error_message() ) : array( $r, '' );
 		}
 		$type = $field['type'];
 		if ( null === $value ) { $value = ''; }

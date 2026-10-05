@@ -62,7 +62,7 @@ final class NCD_Generic_Provider {
 			$fields['post_status'] = array( 'label' => 'Status', 'type' => 'status', 'storage' => 'post_field', 'group' => 'publishing', 'origin' => 'core',
 				'choices' => array( 'draft' => 'Draft', 'pending' => 'Pending review', 'private' => 'Private', 'publish' => 'Published', 'future' => 'Scheduled' ),
 				'help' => 'Changing the status requires the explicit "Allow status / publishing changes" permission.' );
-			$fields['post_name'] = array( 'label' => 'Slug', 'type' => 'text', 'storage' => 'post_field', 'group' => 'publishing', 'origin' => 'core', 'sanitize_callback' => static function ( $v ) { return array( sanitize_title( (string) $v ), '' ); } );
+			$fields['post_name'] = array( 'label' => 'Slug', 'type' => 'text', 'storage' => 'post_field', 'group' => 'publishing', 'origin' => 'core', 'sanitize_callback' => static function ( $v ) { return sanitize_title( (string) $v ); } );
 			$fields['post_date'] = array( 'label' => 'Publish date', 'type' => 'datetime', 'storage' => 'post_field', 'group' => 'publishing', 'origin' => 'core' );
 		}
 		if ( post_type_supports( $post_type, 'author' ) ) {
