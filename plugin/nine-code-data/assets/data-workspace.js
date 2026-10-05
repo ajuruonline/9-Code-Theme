@@ -528,7 +528,12 @@
 			setTimeout( function () {
 				if ( ! document.getElementById( eid ) ) { return; }
 				window.wp.editor.initialize( eid, {
-					tinymce: { wpautop: true, plugins: 'charmap,colorpicker,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpautoresize,wpeditimage,wpemoji,wpgallery,wplink,wpdialogs,wptextpattern,wpview', toolbar1: 'formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,wp_more,fullscreen,wp_adv', toolbar2: 'strikethrough,hr,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo', setup: function ( ed ) { ed.on( 'change keyup undo redo SetContent', function () { onchange( ed.getContent() ); } ); } },
+					tinymce: { wpautop: true, plugins: 'charmap,colorpicker,hr,lists,media,paste,tabfocus,textcolor,fullscreen,wordpress,wpautoresize,wpeditimage,wpemoji,wpgallery,wplink,wpdialogs,wptextpattern,wpview', toolbar1: 'formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,wp_more,fullscreen,wp_adv', toolbar2: 'strikethrough,hr,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo', setup: function ( ed ) {
+						// TinyMCE re-formats content on load (wpautop); only real edits count as changes.
+						var base = null;
+						ed.on( 'init', function () { base = ed.getContent(); } );
+						ed.on( 'change keyup undo redo input', function () { if ( base === null ) { return; } var c = ed.getContent(); onchange( c === base ? value : c ); } );
+					} },
 					quicktags: true,
 					mediaButtons: true,
 				} );

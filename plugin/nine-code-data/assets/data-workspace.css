@@ -192,3 +192,16 @@ progress { width: 100%; height: 12px; }
 
 .ncd-lock { font-size: 14px; width: 14px; height: 14px; vertical-align: -2px; margin-right: 2px; }
 .ncd-media__ph.dashicons { font-size: 40px; width: 96px; height: 96px; line-height: 96px; }
+
+/* Phones: a fixed, compact save bar (sticky is unreliable when an admin skin sets overflow on #wpwrap). */
+@media (max-width: 782px) {
+	.ncd-savebar { position: fixed; left: 0; right: 0; bottom: 0; border-radius: 0; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); gap: 6px; z-index: 99990; }
+	.ncd-savebar .ncd-toggle { min-height: 36px; padding: 0; flex: 1 1 100%; order: -1; }
+	.ncd-savebar .ncd-toggle small { display: none; }
+	.ncd-savebar > span:not(.ncd-dirty) { flex: 1 1 100%; font-size: 12px; }
+	.ncd-form, .ncd-app { padding-bottom: 120px; }
+}
+@media (max-width: 782px) {
+	/* Leave room for the theme's floating admin buttons on the right edge. */
+	.ncd-savebar { padding-right: 60px; }
+}
