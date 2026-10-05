@@ -63,13 +63,14 @@ final class NCD_Policy {
 		if ( self::is_secret_key( $key ) ) {
 			return array( 'protected' => true, 'secret' => true, 'reason' => 'Secret value: never shown or exported', 'acf' => false );
 		}
-		foreach ( self::structural_patterns() as $pattern => $reason ) {
-			if ( preg_match( $pattern, $key ) ) { return array( 'protected' => true, 'secret' => false, 'reason' => $reason, 'acf' => false ); }
-		}
+		// ACF storage first: a field's own name may start with any prefix, including protected ones.
 		foreach ( $acf_names as $name ) {
 			if ( $key === '_' . $name || 0 === strpos( $key, '_' . $name . '_' ) || preg_match( '/^_?' . preg_quote( $name, '/' ) . '_\d+_/', $key ) ) {
 				return array( 'protected' => true, 'secret' => false, 'reason' => 'ACF storage (edit through the ACF field)', 'acf' => true );
 			}
+		}
+		foreach ( self::structural_patterns() as $pattern => $reason ) {
+			if ( preg_match( $pattern, $key ) ) { return array( 'protected' => true, 'secret' => false, 'reason' => $reason, 'acf' => false ); }
 		}
 		if ( 0 === strpos( $key, '_' ) ) {
 			$out['protected'] = true;
