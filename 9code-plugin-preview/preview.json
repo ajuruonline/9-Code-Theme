@@ -1,0 +1,19 @@
+{
+  "nine": 1,
+  "plugins": [
+    {
+      "name": "Plugin settings",
+      "slot": "admin-page",
+      "active": true,
+      "html": "<h1>Plugin settings</h1>\n<hr class=\"wp-header-end\">\n<form>\n<table class=\"form-table\" role=\"presentation\">\n<tr>\n<th scope=\"row\"><label for=\"ncp-label\">Label</label></th>\n<td>\n<input id=\"ncp-label\" class=\"regular-text\" type=\"text\" value=\"\">\n<p class=\"description\">Replace this markup with the plugin settings screen.</p>\n</td>\n</tr>\n</table>\n<p class=\"submit\"><button class=\"button button-primary\" type=\"button\">Save Changes</button> <a class=\"button\" href=\"#ncp-label\">Label link</a></p>\n</form>",
+      "css": ""
+    },
+    {
+      "name": "Index note",
+      "slot": "after-content",
+      "active": true,
+      "html": "<aside class=\"callout\">\n<p class=\"kicker\">Plugin</p>\n<h3>Index note</h3>\n<p>Replace this block with the markup the plugin prints on the front page.</p>\n<p><a href=\"#note\">On this page</a></p>\n</aside>",
+      "css": ".callout{border:1px solid #e0d8cc;border-top:3px solid #1f4e79;background:#fffcf7;padding:.85rem .95rem}.kicker{margin:0 0 .3rem;color:#1f4e79;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}.callout h3{margin:.1rem 0 .35rem;font-family:Georgia,serif}.callout p{margin:0 0 .4rem}.callout p:last-child{margin:0}"
+    }
+  ]
+}

@@ -1,9 +1,5 @@
-# 9 Code Press
+# Moved
 
-Preview design, settings, and simple links for this plugin without installing WordPress.
+The previewer is now the 9code Plugin Preview App.
 
-Import `preview.json` with Snippet, then Import JSON, in 9 Code Press. The admin screen uses WordPress admin classes. A button missing class `button` is outlined.
-
-Hash links stay on the page. PHP and plugin scripts are not run.
-
-Kit home: https://github.com/ajuruonline/9-code-press
+If the user says "install 9code Plugin previewer", read `9code-plugin-preview/README.md` and follow it. Do not use this old folder.
