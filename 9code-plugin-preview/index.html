@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9code Plugin Preview App</title>
+<!--
+9code Plugin Preview App
+If the user said "install 9code Plugin previewer", read README.md before editing the plugin.
+Keep this embedded JSON identical to preview.json.
+-->
+<style>
+  :root {
+    --ink: #1c2430;
+    --muted: #5e6772;
+    --paper: #f3efe6;
+    --card: #fffcf7;
+    --line: #e0d8cc;
+    --accent: #1f4e79;
+    --chrome: #1c2430;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", "Segoe UI", sans-serif;
+  }
+  button, input, select { font: inherit; }
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    padding: 0.55rem 0.75rem;
+    background: var(--chrome);
+    color: var(--card);
+  }
+  .brand { min-width: 0; margin-right: auto; }
+  .brand strong {
+    display: block;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.15rem;
+    font-weight: 560;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .brand span { display: block; margin-top: 0.25rem; color: rgba(255,252,247,.72); font-size: 0.75rem; }
+  .top button, .file-btn {
+    min-height: 44px;
+    border: 1px solid rgba(255,252,247,.35);
+    background: transparent;
+    color: inherit;
+    padding: 0 0.8rem;
+    cursor: pointer;
+  }
+  .top button[aria-pressed="true"] { background: var(--card); color: var(--ink); }
+  .file-btn { display: inline-flex; align-items: center; }
+  .work { display: flex; flex: 1; min-height: 0; }
+  .frame-wrap { flex: 1; min-width: 0; overflow: auto; padding: 0.75rem; }
+  .frame { min-height: 100%; margin: 0 auto; background: var(--card); }
+  .frame.phone { max-width: 24rem; border: 1px solid var(--line); }
+  .frame.tablet { max-width: 48rem; border: 1px solid var(--line); }
+  .panel {
+    width: min(100%, 26rem);
+    border-left: 1px solid var(--line);
+    background: var(--card);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .panel header { padding: 0.7rem 0.8rem; border-bottom: 1px solid var(--line); font-size: 0.85rem; }
+  .panel pre {
+    flex: 1;
+    margin: 0;
+    padding: 0.8rem;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: ui-monospace, "Source Code Pro", monospace;
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+  .note { margin: 0.35rem 0 0; color: var(--muted); }
+  @media (max-width: 800px) {
+    .work { flex-direction: column; }
+    .panel { width: 100%; max-height: 40dvh; border-left: 0; border-top: 1px solid var(--line); }
+  }
+
+  .stage { color: var(--ink); font-size: 1.05rem; line-height: 1.55; }
+  .stage a { color: var(--accent); }
+  .mast { padding: 1.1rem 1.3rem 0; }
+  .running {
+    display: flex; justify-content: space-between; gap: 1rem;
+    margin: 0; padding-bottom: 0.4rem; border-bottom: 1px solid var(--line);
+    color: var(--muted); font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .mast-row {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem;
+    padding: 0.7rem 0 0.8rem; border-bottom: 2px solid var(--ink);
+  }
+  .site-title { margin: 0; font-family: Georgia, serif; font-size: clamp(2.4rem, 8vw, 3.3rem); line-height: 0.88; font-weight: 560; }
+  .entry, .rail, .site-foot { padding: 1rem 1.3rem; }
+  .layout { display: grid; grid-template-columns: 1.6fr 0.8fr; }
+  @media (max-width: 720px) { .layout { grid-template-columns: 1fr; } }
+  .kicker { margin: 0 0 0.3rem; color: var(--accent); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; }
+  .entry h2 { margin: 0 0 0.6rem; font-family: Georgia, serif; font-size: 2rem; line-height: 1.05; }
+  .site-foot { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.9rem; }
+  .slot-label { margin: 0.8rem 0 0.25rem; color: var(--muted); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .desk { background: #f0f0f1; color: #1d2327; min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  .desk-bar { display: flex; gap: 1rem; align-items: center; padding: 0.7rem 1rem; background: #1d2327; color: #fff; }
+  .desk-bar strong { font-size: 0.95rem; }
+  .wrap { padding: 1rem 1.1rem 2rem; }
+  .notice { margin: 0 0 1rem; padding: 0.7rem 0.8rem; background: #fff; border-left: 4px solid #72aee6; }
+  .card { background: #fff; border: 1px solid #c3c4c7; padding: 0.9rem 1rem; margin: 0 0 1rem; }
+  .card h2, .wrap h1 { margin: 0.2rem 0 0.6rem; font-size: 1.4rem; }
+  .form-table { width: 100%; border-collapse: collapse; }
+  .form-table th { width: 12rem; padding: 0.7rem 0.6rem 0.7rem 0; text-align: left; vertical-align: top; font-weight: 600; }
+  .form-table td { padding: 0.55rem 0; }
+  .regular-text, .desk input[type="text"], .desk input[type="email"], .desk select, .desk textarea {
+    width: min(100%, 25rem); padding: 0.35rem 0.5rem; border: 1px solid #8c8f94; border-radius: 4px; background: #fff;
+  }
+  .description { color: #646970; font-size: 0.86rem; }
+  .button, .button-secondary {
+    display: inline-block; margin: 0 0.35rem 0.35rem 0; padding: 0.35rem 0.7rem;
+    border: 1px solid #2271b1; border-radius: 3px; background: #f6f7f7; color: #2271b1;
+    text-decoration: none; cursor: pointer;
+  }
+  .button-primary { background: #2271b1; color: #fff; }
+  .plugin-mount button:not(.button):not(.button-primary):not(.button-secondary):not(.button-link),
+  .plugin-mount input:not([type="hidden"]):not(.regular-text):not(.button),
+  .plugin-mount select:not(.button),
+  .plugin-mount textarea:not(.button) {
+    outline: 2px solid #8f2d2d; outline-offset: 2px;
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <strong>9code Plugin Preview App</strong>
+    <span>Design, settings, and links</span>
+  </div>
+  <button type="button" data-view="index" aria-pressed="true">Index</button>
+  <button type="button" data-view="admin" aria-pressed="false">Admin</button>
+  <button type="button" data-device="desk" aria-pressed="true">Desk</button>
+  <button type="button" data-device="tablet" aria-pressed="false">Tablet</button>
+  <button type="button" data-device="phone" aria-pressed="false">Phone</button>
+  <label class="file-btn">Import JSON<input id="file" type="file" accept="application/json,.json" hidden></label>
+</header>
+<div class="work">
+  <div class="frame-wrap">
+    <div id="frame" class="frame">
+      <div id="stage" class="stage"></div>
+    </div>
+  </div>
+  <aside class="panel">
+    <header>
+      <strong>Page HTML</strong>
+      <p class="note" id="status">Index. Plugin markup sits in plugin-mount.</p>
+    </header>
+    <pre id="html-out"></pre>
+  </aside>
+</div>
+<script type="application/json" id="embedded-preview">
+{
+  "nine": 1,
+  "plugins": [
+    {
+      "name": "Plugin settings",
+      "slot": "admin-page",
+      "active": true,
+      "html": "<h1>Plugin settings</h1>\n<hr class=\"wp-header-end\">\n<form>\n<table class=\"form-table\" role=\"presentation\">\n<tr>\n<th scope=\"row\"><label for=\"ncp-label\">Label</label></th>\n<td>\n<input id=\"ncp-label\" class=\"regular-text\" type=\"text\" value=\"\">\n<p class=\"description\">Replace this markup with the plugin settings screen.</p>\n</td>\n</tr>\n</table>\n<p class=\"submit\"><button class=\"button button-primary\" type=\"button\">Save Changes</button> <a class=\"button\" href=\"#ncp-label\">Label link</a></p>\n</form>",
+      "css": ""
+    },
+    {
+      "name": "Index note",
+      "slot": "after-content",
+      "active": true,
+      "html": "<aside class=\"callout\">\n<p class=\"kicker\">Plugin</p>\n<h3>Index note</h3>\n<p>Replace this block with the markup the plugin prints on the front page.</p>\n<p><a href=\"#note\">On this page</a></p>\n</aside>",
+      "css": ".callout{border:1px solid #e0d8cc;border-top:3px solid #1f4e79;background:#fffcf7;padding:.85rem .95rem}.kicker{margin:0 0 .3rem;color:#1f4e79;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}.callout h3{margin:.1rem 0 .35rem;font-family:Georgia,serif}.callout p{margin:0 0 .4rem}.callout p:last-child{margin:0}"
+    }
+  ]
+}
+</script>
+<script>
+const SLOTS = ["announcement","after-title","after-content","sidebar","footer","admin-notice","admin-page","dashboard-widget"];
+const stage = document.getElementById("stage");
+const htmlOut = document.getElementById("html-out");
+const status = document.getElementById("status");
+const frame = document.getElementById("frame");
+let view = "index";
+let fileData = null;
+
+function sanitize(html) {
+  const doc = new DOMParser().parseFromString(String(html || ""), "text/html");
+  doc.querySelectorAll("script,iframe,object,embed,link,meta,base,style").forEach((node) => node.remove());
+  doc.body.querySelectorAll("*").forEach((node) => {
+    [...node.attributes].forEach((attr) => {
+      const name = attr.name.toLowerCase();
+      const value = attr.value.trim().toLowerCase();
+      if (name.startsWith("on") || value.startsWith("javascript:")) node.removeAttribute(attr.name);
+    });
+  });
+  return doc.body.innerHTML;
+}
+
+function scopeCss(css) {
+  return String(css || "").replace(/([^{}]+)\{/g, (match, selector) => {
+    if (selector.includes("@")) return match;
+    const scoped = selector.split(",").map((part) => {
+      const item = part.trim();
+      if (!item) return item;
+      return ".plugin-mount " + item;
+    }).join(", ");
+    return scoped + " {";
+  });
+}
+
+function mount(plugin) {
+  const css = scopeCss(plugin.css);
+  return `<section class="plugin-mount" data-plugin="${escapeAttr(plugin.name)}" data-slot="${plugin.slot}">
+${css ? `<style>${css.replace(/<\/style/gi, "")}</style>` : ""}
+${sanitize(plugin.html)}
+</section>`;
+}
+
+function escapeAttr(value) {
+  return String(value).replace(/&/g, "\u0026amp;").replace(/"/g, "\u0026quot;");
+}
+
+function pluginsFor(slot, data) {
+  return (data.plugins || []).filter((plugin) => plugin && plugin.active !== false && plugin.slot === slot);
+}
+
+function slotBlock(slot, data) {
+  const items = pluginsFor(slot, data);
+  if (!items.length) return "";
+  return `<p class="slot-label">${slot}</p>` + items.map(mount).join("");
+}
+
+function renderIndex(data) {
+  stage.className = "stage";
+  stage.innerHTML = `
+    <header class="mast">
+      <p class="running"><span>Northline</span><span>Sample index</span></p>
+      <div class="mast-row"><p class="site-title">Northline</p></div>
+    </header>
+    ${slotBlock("announcement", data)}
+    <div class="layout">
+      <article class="entry">
+        <p class="kicker">Field note</p>
+        <h2 id="note">The last boat before dark</h2>
+        ${slotBlock("after-title", data)}
+        <p>The ferry leaves on the tide, not the clock. This page is only a stage for the plugin.</p>
+        <p>Settings stay on the admin desk. Nothing here is a WordPress install.</p>
+        ${slotBlock("after-content", data)}
+      </article>
+      <aside class="rail">
+        <h3>Sidebar</h3>
+        ${slotBlock("sidebar", data)}
+      </aside>
+    </div>
+    <footer class="site-foot">
+      <p>Northline index · 9code Plugin Preview App, not a WordPress install.</p>
+      ${slotBlock("footer", data)}
+    </footer>`;
+}
+
+function renderAdmin(data) {
+  stage.className = "stage desk";
+  const pages = pluginsFor("admin-page", data).map(mount).join("");
+  const widgets = pluginsFor("dashboard-widget", data).map(mount).join("");
+  stage.innerHTML = `
+    <div class="desk-bar"><strong>Northline desk</strong><span>9code Plugin Preview App</span></div>
+    <div class="wrap">
+      ${slotBlock("admin-notice", data)}
+      ${pages || `<div class="card"><h1>Plugin settings</h1><p>No admin-page plugin is active in preview.json.</p></div>`}
+      <div class="card"><h2>Dashboard</h2>${widgets || "<p>No dashboard widget is active.</p>"}</div>
+    </div>`;
+}
+
+function prettify(html) {
+  return html.replace(/></g, ">\n<").replace(/\n{3,}/g, "\n\n");
+}
+
+function draw(data) {
+  if (view === "admin") renderAdmin(data);
+  else renderIndex(data);
+  const label = view === "admin" ? "Northline desk" : "Northline index";
+  htmlOut.textContent = `<!-- ${label}. Class plugin-mount is plugin output. -->\n` + prettify(stage.innerHTML.trim());
+  status.textContent = `${label}. Open this file, or import preview.json. Links that do not start with # stay on the page.`;
+}
+
+function accepted(data) {
+  if (!data || !Array.isArray(data.plugins)) return false;
+  if (data.nine !== 1 && data.pressframe !== 1) return false;
+  return data.plugins.every((plugin) => plugin && SLOTS.includes(plugin.slot) && typeof plugin.html === "string");
+}
+
+async function boot() {
+  let data;
+  try {
+    const response = await fetch("preview.json", { cache: "no-store" });
+    if (response.ok) data = await response.json();
+  } catch (error) {
+    data = null;
+  }
+  if (!accepted(data)) {
+    data = JSON.parse(document.getElementById("embedded-preview").textContent);
+    status.textContent = "Using the copy inside index.html. Update that block when you edit preview.json.";
+  }
+  fileData = data;
+  draw(data);
+}
+
+document.querySelectorAll("[data-view]").forEach((button) => {
+  button.addEventListener("click", () => {
+    view = button.dataset.view;
+    document.querySelectorAll("[data-view]").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+    draw(fileData);
+  });
+});
+
+document.querySelectorAll("[data-device]").forEach((button) => {
+  button.addEventListener("click", () => {
+    frame.className = "frame" + (button.dataset.device === "desk" ? "" : " " + button.dataset.device);
+    document.querySelectorAll("[data-device]").forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+  });
+});
+
+stage.addEventListener("click", (event) => {
+  const link = event.target.closest("a");
+  if (!link) return;
+  const href = link.getAttribute("href") || "";
+  if (href.startsWith("#")) return;
+  event.preventDefault();
+});
+
+document.getElementById("file").addEventListener("change", async (event) => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    if (!accepted(data)) throw new Error("shape");
+    fileData = data;
+    draw(data);
+    status.textContent = "Imported " + file.name + " for this tab.";
+  } catch (error) {
+    status.textContent = "That file is not a 9code Plugin Preview App file.";
+  }
+});
+
+boot();
+</script>
+</body>
+</html>
