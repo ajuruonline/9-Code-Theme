@@ -27,14 +27,14 @@ final class NCD_Generic_Provider {
 
 		foreach ( get_post_types( array(), 'objects' ) as $name => $object ) {
 			if ( in_array( $name, self::SKIP_POST_TYPES, true ) || isset( $claimed_types[ $name ] ) ) { continue; }
-			if ( empty( $object->show_ui ) && empty( $object->public ) ) { continue; }
 			$entities[ 'type-' . $name ] = self::post_entity_definition( $name );
 		}
 		foreach ( get_taxonomies( array(), 'objects' ) as $name => $tax ) {
 			if ( in_array( $name, self::SKIP_TAXONOMIES, true ) || isset( $claimed_taxes[ $name ] ) || empty( $tax->show_ui ) ) { continue; }
 			$entities[ 'tax-' . $name ] = self::term_entity_definition( $name );
 		}
-		$entities['users'] = self::user_entity_definition();
+		$entities['users']    = self::user_entity_definition();
+		$entities['comments'] = self::comment_entity_definition();
 
 		NCD_Registry::register( self::ID, array(
 			'label'       => 'WordPress & plugins (auto-discovered)',
@@ -135,6 +135,90 @@ final class NCD_Generic_Provider {
 			'allow_create' => true,
 			'allow_trash'  => false,
 			'columns'      => array( 'name', 'slug' ),
+		);
+	}
+
+	/* -------------------------------------------------------------- comments */
+
+	public static function comment_entity_definition() {
+		$status_map = array( '1' => 'approve', '0' => 'hold', 'spam' => 'spam', 'trash' => 'trash' );
+		return array(
+			'label'        => 'Comments',
+			'singular'     => 'Comment',
+			'kind'         => 'custom',
+			'description'  => 'Visitor comments on every post type. Moderation uses WordPress\' own comment functions.',
+			'fields'       => array(
+				'comment_author'       => array( 'label' => 'Author name', 'type' => 'text', 'storage' => 'callback', 'group' => 'author', 'origin' => 'core', 'required' => true ),
+				'comment_author_email' => array( 'label' => 'Author email', 'type' => 'email', 'storage' => 'callback', 'group' => 'author', 'origin' => 'core' ),
+				'comment_author_url'   => array( 'label' => 'Author website', 'type' => 'url', 'storage' => 'callback', 'group' => 'author', 'origin' => 'core' ),
+				'comment_content'      => array( 'label' => 'Comment', 'type' => 'textarea', 'storage' => 'callback', 'group' => 'content', 'origin' => 'core', 'required' => true ),
+				'comment_approved'     => array( 'label' => 'Status', 'type' => 'status', 'storage' => 'callback', 'group' => 'moderation', 'origin' => 'core',
+					'choices' => array( '1' => 'Approved', '0' => 'Pending', 'spam' => 'Spam', 'trash' => 'Trash' ),
+					'help'    => 'Approving, holding, spamming or trashing a comment needs the explicit "Allow status / publishing changes" permission.' ),
+				'comment_post_ID'      => array( 'label' => 'On item', 'type' => 'integer', 'storage' => 'callback', 'group' => 'context', 'origin' => 'core', 'protected' => true, 'reason' => 'A comment stays on the item it was posted on' ),
+				'comment_date'         => array( 'label' => 'Posted', 'type' => 'datetime', 'storage' => 'callback', 'group' => 'context', 'origin' => 'core', 'protected' => true, 'reason' => 'Set when the comment was posted' ),
+			),
+			'publish'      => array( 'field' => 'comment_approved', 'values' => array( '1' ) ),
+			'allow_create' => false,
+			'allow_trash'  => true,
+			'columns'      => array( 'comment_author', 'comment_content', 'comment_approved', 'comment_date' ),
+			'permission_callback' => static function () { return current_user_can( 'moderate_comments' ); },
+			'read_callback' => static function ( $id ) {
+				$c = get_comment( $id );
+				if ( ! $c ) { return null; }
+				return array(
+					'comment_author'       => $c->comment_author,
+					'comment_author_email' => $c->comment_author_email,
+					'comment_author_url'   => $c->comment_author_url,
+					'comment_content'      => $c->comment_content,
+					'comment_approved'     => (string) $c->comment_approved,
+					'comment_post_ID'      => (int) $c->comment_post_ID,
+					'comment_date'         => $c->comment_date,
+				);
+			},
+			'write_callback' => static function ( $id, $clean ) {
+				$data = array( 'comment_ID' => (int) $id );
+				foreach ( array( 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content' ) as $key ) {
+					if ( array_key_exists( $key, $clean ) ) { $data[ $key ] = $clean[ $key ]; }
+				}
+				$saved = wp_update_comment( $data, true );
+				if ( is_wp_error( $saved ) ) { return $saved; }
+				return false === $saved ? new WP_Error( 'comment', 'The comment could not be saved.' ) : true;
+			},
+			'publish_callback' => static function ( $id, $value ) use ( $status_map ) {
+				$status = $status_map[ (string) $value ] ?? '';
+				if ( '' === $status ) { return new WP_Error( 'comment_status', 'Unsupported comment status.' ); }
+				return wp_set_comment_status( (int) $id, $status ) ? true : new WP_Error( 'comment_status', 'The comment status could not be changed.' );
+			},
+			'trash_callback' => static function ( $id ) {
+				return wp_trash_comment( (int) $id ) ? true : new WP_Error( 'comment_trash', 'The comment could not be moved to the trash.' );
+			},
+			'list_callback' => static function ( $args ) {
+				$status_map = array( 'publish' => 'approve', 'draft' => 'hold', 'pending' => 'hold', 'spam' => 'spam', 'trash' => 'trash', 'any' => 'any' );
+				$query = array(
+					'status'  => $status_map[ (string) ( $args['status'] ?? 'any' ) ] ?? 'any',
+					'search'  => (string) ( $args['search'] ?? '' ),
+					'orderby' => 'comment_date_gmt',
+					'order'   => 'ASC' === ( $args['order'] ?? 'DESC' ) ? 'ASC' : 'DESC',
+				);
+				if ( ! empty( $args['ids'] ) ) { $query['comment__in'] = array_map( 'absint', (array) $args['ids'] ); }
+				$per_page = max( 1, (int) $args['per_page'] );
+				$ids      = get_comments( $query + array( 'number' => $per_page, 'offset' => ( max( 1, (int) $args['page'] ) - 1 ) * $per_page, 'fields' => 'ids' ) );
+				$total    = (int) get_comments( $query + array( 'count' => true ) );
+				return array( 'ids' => array_map( 'intval', (array) $ids ), 'total' => $total );
+			},
+			'label_callback' => static function ( $id ) {
+				$c = get_comment( $id );
+				if ( ! $c ) { return array(); }
+				$title = get_the_title( (int) $c->comment_post_ID );
+				return array(
+					'label'     => $c->comment_author . ' on ' . ( '' !== $title ? $title : '#' . $c->comment_post_ID ),
+					'status'    => $c->comment_approved,
+					'modified'  => $c->comment_date,
+					'edit_url'  => (string) get_edit_comment_link( $c ),
+					'view_url'  => (string) get_comment_link( $c ),
+				);
+			},
 		);
 	}
 

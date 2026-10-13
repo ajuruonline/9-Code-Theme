@@ -235,4 +235,30 @@ if ( class_exists( 'NWS_DB' ) ) {
 	$wpdb->delete( NWS_DB::table(), array( 'id' => $pid ) );
 	wp_delete_post( $wid, true );
 }
+
+if ( post_type_exists( 'nine10_form_def' ) && class_exists( 'Nine10_Form' ) ) {
+	$fp  = NCD_Registry::provider( 'forms' );
+	ncd_t( $fp && 'bundled' === $fp['adapter'], 'Forms: bundled adapter registered' );
+	ncd_t( ! isset( NCD_Registry::provider( 'wordpress' )['entities']['type-nine10_form_response'] ), 'Forms: responses owned by the Forms adapter, not generic discovery' );
+	$fid = ncd_post( array( 'post_type' => 'nine10_form_def', 'post_title' => 'Feedback form', 'post_status' => 'publish' ) );
+	$fe  = ncd_entity( 'forms', 'form' );
+	$r   = NCD_Service::save( $fe, $fid, array( 'meta:_nine10_form_fields' => '[{"label":"Your name","type":"text","required":true},{"label":"Rating","type":"select","options":"good|bad"}]' ) );
+	ncd_t( $r['ok'], 'Forms: questions saved through the Form Manager field rules' );
+	$saved = (array) get_post_meta( $fid, '_nine10_form_fields', true );
+	ncd_t( 2 === count( $saved ) && 'your_name' === $saved[0]['key'] && array( 'good', 'bad' ) === $saved[1]['options'], 'Forms: stored questions use the Form Manager shape' );
+	$r = NCD_Service::save( $fe, $fid, array( 'meta:_nine10_form_fields' => '[]' ) );
+	ncd_t( ! $r['ok'] && 2 === count( (array) get_post_meta( $fid, '_nine10_form_fields', true ) ), 'Forms: a form without questions is refused and keeps its questions' );
+	$rid = ncd_post( array( 'post_type' => 'nine10_form_response', 'post_status' => 'private', 'post_title' => 'Response' ) );
+	update_post_meta( $rid, '_nine10_form_id', $fid );
+	update_post_meta( $rid, '_nine10_response_data', array( 'your_name' => 'Pat', 'rating' => 'good' ) );
+	update_post_meta( $rid, '_nine10_response_ip_hash', 'deadbeef' );
+	$re = ncd_entity( 'forms', 'response' );
+	$rv = NCD_Store::read( $re, $rid );
+	ncd_t( isset( $rv['answers'] ) && 'Pat' === $rv['answers']['your_name'], 'Forms: visitor answers readable' );
+	ncd_t( ! array_key_exists( 'meta:_nine10_response_ip_hash', $rv ) && false === strpos( wp_json_encode( $rv ), 'deadbeef' ), 'Forms: visitor IP hash never exposed' );
+	$r = NCD_Service::save( $re, $rid, array( 'answers' => array( 'your_name' => 'Changed' ) ) );
+	ncd_t( is_wp_error( $r ) || ! $r['ok'], 'Forms: responses are read-only' );
+	wp_delete_post( $rid, true );
+	wp_delete_post( $fid, true );
+}
 ncd_done();

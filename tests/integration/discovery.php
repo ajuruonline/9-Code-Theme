@@ -21,9 +21,27 @@ $p = NCD_Registry::provider( 'wordpress' );
 ncd_t( $p && 'generic' === $p['adapter'], 'generic provider registered' );
 ncd_t( isset( $p['entities']['type-ncd_book'] ), 'custom post type discovered' );
 ncd_t( isset( $p['entities']['tax-ncd_genre'] ), 'custom taxonomy discovered' );
-ncd_t( ! isset( $p['entities']['type-ncd_hidden'] ), 'non-UI post type skipped' );
+ncd_t( isset( $p['entities']['type-ncd_hidden'] ), 'post type without admin UI discovered' );
 ncd_t( ! isset( $p['entities']['type-revision'] ) && ! isset( $p['entities']['type-acf-field-group'] ), 'internal post types skipped' );
 ncd_t( isset( $p['entities']['users'] ), 'users entity discovered' );
+
+$cpost = ncd_post( array( 'post_type' => 'ncd_book', 'post_title' => 'Commented book' ) );
+$author = 'Ada ' . wp_generate_password( 8, false );
+$cid   = (int) wp_insert_comment( array( 'comment_post_ID' => $cpost, 'comment_author' => $author, 'comment_author_email' => 'ada@example.test', 'comment_content' => 'Great read', 'comment_approved' => '0' ) );
+$ce    = ncd_entity( 'wordpress', 'comments' );
+$l     = NCD_Service::list_records( $ce, array( 'search' => $author ) );
+ncd_t( 1 === $l['total'], 'comments listed through the generic provider' );
+$r = NCD_Service::save( $ce, $cid, array( 'comment_content' => 'Great read, edited' ) );
+ncd_t( $r['ok'] && 'Great read, edited' === get_comment( $cid )->comment_content, 'comment text edited through WordPress' );
+$r = NCD_Service::save( $ce, $cid, array( 'comment_approved' => '1' ) );
+ncd_t( ! $r['ok'] && isset( $r['errors']['comment_approved'] ) && '0' === get_comment( $cid )->comment_approved, 'comment approval refused without allow_status' );
+$r = NCD_Service::save( $ce, $cid, array( 'comment_approved' => '1' ), array( 'allow_status' => true ) );
+ncd_t( $r['ok'] && '1' === get_comment( $cid )->comment_approved, 'comment approved with explicit allow_status' );
+$r = NCD_Service::trash( $ce, $cid, array( 'allow_trash' => true ) );
+ncd_t( $r['ok'] && 'trash' === get_comment( $cid )->comment_approved, 'comment moved to trash through WordPress' );
+ncd_t( ! empty( $ce['fields']['comment_post_ID']['protected'] ), 'comment item link is read-only' );
+wp_delete_comment( $cid, true );
+wp_delete_post( $cpost, true );
 
 $e = $p['entities']['type-ncd_book'];
 $f = $e['fields'];

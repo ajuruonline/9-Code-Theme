@@ -50,6 +50,49 @@ final class NCD_Adapter_Apps {
 				'entities'    => array( 'progress' => self::workshop_progress() ),
 			) );
 		}
+		if ( class_exists( 'Nine10_Form' ) && post_type_exists( 'nine10_form_def' ) && ! NCD_Registry::provider( 'forms' ) && ! isset( $claimed['nine10_form_def'] ) ) {
+			ninecode_data_register_provider( 'forms', array(
+				'label'       => 'Forms',
+				'version'     => '1.0.0',
+				'owner'       => 'nine-code-data',
+				'adapter'     => 'bundled',
+				'description' => 'Form definitions (questions are editable with the Form Manager\'s own field rules) and visitor responses (read-only).',
+				'entities'    => array( 'form' => self::form_definition(), 'response' => self::form_response() ),
+			) );
+		}
+	}
+
+	/* ------------------------------------------------------------ Forms (definitions editable, responses read-only) */
+
+	private static function form_definition() {
+		return self::extend( 'nine10_form_def', 'Form', array(
+			'_nine10_form_fields' => array( 'label' => 'Questions', 'type' => 'json', 'help' => 'Each question has a label, type (text, email, textarea, number, url, select, checkbox), required flag and options for select fields.',
+				'sanitize_callback' => static function ( $v ) {
+					if ( is_string( $v ) ) { $d = json_decode( $v, true ); $v = is_array( $d ) ? $d : null; }
+					$rows = is_array( $v ) ? Nine10_Form::normalize_field_rows( $v ) : array();
+					return $rows ?: new WP_Error( 'questions', 'needs at least one question with a label' );
+				},
+			),
+			'_nine10_form_active' => array( 'label' => 'Accepting responses', 'type' => 'boolean', 'sanitize_callback' => self::flag() ),
+		), array( 'Form Manager\'s attachment settings (which items show the form) are stored per item and managed in each item\'s editor.' ) );
+	}
+
+	private static function form_response() {
+		$e = NCD_Generic_Provider::post_entity_definition( 'nine10_form_response' );
+		foreach ( $e['fields'] as $key => $field ) {
+			$e['fields'][ $key ]['protected'] = true;
+			$e['fields'][ $key ]['reason']    = 'Submitted by a visitor: read-only';
+		}
+		unset( $e['fields']['meta:_nine10_response_data'], $e['fields']['meta:_nine10_response_ip_hash'] );
+		$e['fields']['answers'] = array( 'label' => 'Answers', 'type' => 'json', 'storage' => 'callback', 'group' => 'Form', 'origin' => 'app-adapter', 'protected' => true,
+			'reason' => 'Submitted by a visitor: read-only',
+			'read_callback' => static function ( $id ) { $d = get_post_meta( $id, '_nine10_response_data', true ); return is_array( $d ) ? $d : array(); },
+		);
+		$e['allow_create'] = false;
+		$e['allow_trash']  = false;
+		$e['permission_callback'] = static function ( $action ) { return 'read' === $action && current_user_can( 'edit_others_posts' ); };
+		$e['notes'] = array( 'Read-only. Responses are personal data. The visitor IP is stored only as a salted hash and is never shown.' );
+		return $e;
 	}
 
 	/** Generic definition of $post_type plus authorized/overridden meta fields. */

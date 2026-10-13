@@ -58,6 +58,12 @@ conflicts and wrong-type ids.
 | Conference.lat | Conferences and Conference Notes | Conference.lat 1.7.0 `class-alp-data-manager-bridge.php` |
 | Teaching Player, LectureBoard, Live Lecture | editorial fields of each app | Nine Code Data (bundled adapters) |
 | Workshop Lecture | participant progress table (read-only) | Nine Code Data (bundled adapter) |
+| Forms | form questions (editable) and visitor responses (read-only) | Nine Code Data (bundled adapter) |
+| Comments | author, text, status (moderated through WordPress) on every post type | Nine Code Data (generic discovery) |
+
+Post types that have no admin screen (for example plugin order or submission records) are discovered
+as well. Their private keys stay protected unless their plugin registers them for REST with an
+`auth_callback`, as described in the inventory.
 
 See [DATA-MANAGER-APP-INVENTORY.md](DATA-MANAGER-APP-INVENTORY.md) for every app, what is editable,
 what is protected, and why.
