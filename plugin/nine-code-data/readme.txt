@@ -4,7 +4,7 @@ Tags: editor, data, forms, categories, backup
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 11.0.0
+Stable tag: 17.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,12 @@ Works with the Nine Code theme; the theme also works without this plugin.
 Upgrading from "9 Data Manager": activating Nine Code Data retires the old plugin automatically. Your data is not changed.
 
 == Changelog ==
+
+= 17.0.0 =
+* Quick-action launcher is centred on the right edge (theme 17.0.0 ships the same change).
+* Comments on every post type are an editable data type; status changes go through WordPress moderation and need the explicit permission.
+* Forms: question definitions are editable with the Form Manager's own rules; visitor responses are listed read-only.
+* Post types without an admin screen are discovered; WordPress internals stay hidden.
 
 = 11.0.0 =
 * New Data Workspace (9 Data Manager > Data Workspace): mobile-first discovery, records, editor (ACF groups, repeaters, flexible content, galleries, relationships), bulk edit, History and undo.

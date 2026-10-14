@@ -2,8 +2,9 @@
 
 ## Unreleased
 
-## Theme 16.1.1
+## Theme 17.0.0 / Plugin 17.0.0
 - The quick-action launcher sits in the middle of the right edge on desktop, phones and the front end, instead of the bottom corner where it covered content.
+- Versions of the theme and Nine Code Data are aligned at 17.0.0.
 
 ## Plugin 11.0.0 — Universal Data Manager
 - **Every record type is visible**: post types without an admin screen are discovered too (read-only where their plugin protects them); WordPress internals stay hidden.
