@@ -287,7 +287,7 @@ function ncu_style_takeover_settings_page() {
                 </label>
 
                 <?php foreach ( ncu_style_takeover_registry() as $family ) : ?>
-                    <details class="ncu-style-family" data-ncu-style-family <?php echo ( isset( $family['slug'] ) && ( sanitize_key( $family['slug'] ) === $active['family_slug'] || ( 'custom-brand' === $s['style_takeover_preset'] && 'academic-red' === sanitize_key( $family['slug'] ) ) ) ) ? 'open' : ''; ?>><summary><span><strong><?php echo esc_html( $family['label'] ); ?></strong><small><?php echo esc_html( $family['description'] ); ?></small></span><b>10 variants</b></summary><div class="ncu-style-card-grid">
+                    <details class="ncu-style-family" data-ncu-style-family><summary><span><strong><?php echo esc_html( $family['label'] ); ?></strong><small><?php echo esc_html( $family['description'] ); ?></small></span><b>10 variants</b></summary><div class="ncu-style-card-grid">
                         <?php foreach ( $family['variants'] as $variant ) : $slug = sanitize_key( $variant['slug'] ); $vDark = ncu_style_dark_companion_tokens( $variant ); ?>
                             <label class="ncu-style-card <?php echo $s['style_takeover_preset'] === $slug ? 'is-selected' : ''; ?>" data-ncu-style-card data-search="<?php echo esc_attr( strtolower( $family['label'] . ' ' . $variant['label'] . ' ' . $slug ) ); ?>">
                                 <input type="radio" name="ncu[style_takeover_preset]" value="<?php echo esc_attr( $slug ); ?>" data-ncu-skin-input data-family="<?php echo esc_attr( sanitize_key( $family['slug'] ?? '' ) ); ?>" <?php checked( $s['style_takeover_preset'], $slug ); ?>>

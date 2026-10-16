@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Every collapsible panel in the Header & Footer and Style settings starts closed, so long settings pages are easier to use on phones. The footer settings no longer reopen the last tab on load.
 
 ## Theme 17.0.0 / Plugin 17.0.0
 - The quick-action launcher sits in the middle of the right edge on desktop, phones and the front end, instead of the bottom corner where it covered content.
