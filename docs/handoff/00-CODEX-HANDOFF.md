@@ -1,3 +1,5 @@
+> **Current state:** read `12-CURRENT-HANDOFF-2026-10-16.md` first. This file describes the 15.0.2 white-screen work and is kept as history.
+
 # 9CODE Theme Suite - Codex / Other-AI Handoff
 
 **Handoff date:** 2026-10-01  

@@ -53,9 +53,36 @@ function nine10_data_component_contract( $contracts ) {
         'elementor_policy' => 'presentation-owner',
         'taxonomy_policy' => 'registered-object-taxonomies-only',
     );
+    $contracts['nine-code-team'] = array(
+        'id' => 'nine-code-team',
+        'version' => NINE55_ULTRON_DATA_VERSION,
+        'role' => 'coordinated-suite',
+        'members' => array( 'core', 'manager', 'data-manager', 'team-integrations' ),
+        'data_owner' => 'data-manager',
+        'discovery' => 'registered-wordpress-objects-and-provider-contracts',
+        'round_trip' => array( 'json', 'csv', 'xlsx', 'ai' ),
+        'settings_ui' => array( 'default' => 'closed', 'mobile_first' => true, 'colour_sequence' => array( 'red', 'green' ), 'descriptions' => 'required-when-available' ),
+    );
     return $contracts;
 }
 add_filter( 'ninecodepress_component_contracts', 'nine10_data_component_contract', 30 );
+
+/**
+ * Shared settings presentation for this plugin and every Nine Code app.
+ * Future apps may call this function directly or opt in with the filter below.
+ */
+function ninecode_data_enqueue_settings_ui() {
+    wp_enqueue_style( 'ninecode-settings-ui', NINE55_ULTRON_DATA_URL . 'assets/settings-ui.css', array(), NINE55_ULTRON_DATA_VERSION );
+    wp_enqueue_script( 'ninecode-settings-ui', NINE55_ULTRON_DATA_URL . 'assets/settings-ui.js', array(), NINE55_ULTRON_DATA_VERSION, true );
+}
+
+function ninecode_data_maybe_enqueue_settings_ui( $hook_suffix ) {
+    $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- screen routing only.
+    $is_suite_page = (bool) preg_match( '/(?:^|[-_])(nine|ninecode|nine10|nine55|ncu|9code)(?:[-_]|$)/i', $page . '-' . (string) $hook_suffix );
+    $should_enqueue = (bool) apply_filters( 'ninecode_settings_ui_should_enqueue', $is_suite_page, $page, $hook_suffix );
+    if ( $should_enqueue ) { ninecode_data_enqueue_settings_ui(); }
+}
+add_action( 'admin_enqueue_scripts', 'ninecode_data_maybe_enqueue_settings_ui', 5 );
 
 /**
  * Default editing boundary: native posts/pages plus public provider-owned CPTs.
@@ -110,6 +137,8 @@ require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine-code-visual-editor.ph
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-form.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine10-data-backup.php';
 require_once NINE55_ULTRON_DATA_DIR . 'includes/class-nine55-ultron-data.php';
+require_once NINE55_ULTRON_DATA_DIR . 'includes/data-api/bootstrap.php';
+require_once NINE55_ULTRON_DATA_DIR . 'includes/class-ninecode-universal-data-manager.php';
 Nine_Code_Visual_Editor::instance();
 Nine10_Form::instance();
 Nine10_Data_Backup::instance();
@@ -125,6 +154,9 @@ function nine55_ultron_data_activate() {
     if ( class_exists( 'Nine_AI_Manager' ) && method_exists( 'Nine_AI_Manager', 'activate' ) ) {
         Nine_AI_Manager::activate();
     }
+    if ( class_exists( 'NCD_History' ) ) { NCD_History::install(); }
+    $admin_role = get_role( 'administrator' );
+    if ( $admin_role && ! $admin_role->has_cap( 'manage_ninecode_data' ) ) { $admin_role->add_cap( 'manage_ninecode_data' ); }
     update_option( 'nine55_ultron_data_version', NINE55_ULTRON_DATA_VERSION, false );
     update_option( 'nine55_ultron_data_sources', array(
         'data' => defined( 'NINECODE_ACF_DATA_ENGINE_VERSION' ) ? NINECODE_ACF_DATA_ENGINE_VERSION : 'external',

@@ -486,8 +486,8 @@ class ELHF_F_Settings {
         return $html . '</select>';
     }
 
-    private function section_open( $id, $title, $summary, $open = false ) {
-        echo '<details class="n9f-admin-tab" id="n9f-tab-' . esc_attr( $id ) . '" ' . ( $open ? 'open' : '' ) . '><summary><span><strong>' . esc_html( $title ) . '</strong><small>' . esc_html( $summary ) . '</small></span><span class="n9f-tab-chevron" aria-hidden="true">⌄</span></summary><div class="n9f-tab-body">';
+    private function section_open( $id, $title, $summary ) {
+        echo '<details class="n9f-admin-tab" id="n9f-tab-' . esc_attr( $id ) . '"><summary><span><strong>' . esc_html( $title ) . '</strong><small>' . esc_html( $summary ) . '</small></span><span class="n9f-tab-chevron" aria-hidden="true">⌄</span></summary><div class="n9f-tab-body">';
     }
     private function section_close() { echo '</div></details>'; }
 
@@ -511,7 +511,7 @@ class ELHF_F_Settings {
                 <?php settings_fields( 'n9f_group' ); ?>
                 <div class="elhh-master-switch"><div><strong>Footer</strong><span>OFF means no Theme footer output, including Elementor/global-copy rendering.</span></div><label class="elhh-switch"><input type="hidden" name="n9f_settings[enabled]" value=""><input type="checkbox" name="n9f_settings[enabled]" value="yes" <?php checked('yes',$s['enabled']??''); ?>><span aria-hidden="true"></span><b><?php echo 'yes'===($s['enabled']??'')?'ON':'OFF'; ?></b></label></div>
 
-                <?php $this->section_open( 'sitewide', 'Site-wide Footer', 'Choose Native 9 or an optional Elementor override.', true ); ?>
+                <?php $this->section_open( 'sitewide', 'Site-wide Footer', 'Choose Native 9 or an optional Elementor override.' ); ?>
                     <?php $this->field( 'Footer source', $this->select( 'footer_mode', $s['footer_mode'], [ 'native' => '9 Footer — WordPress Native (default)', 'elementor' => 'Elementor Template Override' ] ) ); ?>
                     <?php $this->field( 'Elementor footer template', $this->elementor_templates( $s['elementor_footer_template_id'] ), 'Used only when Footer source is Elementor Template Override.' ); ?>
                     <?php ob_start(); $this->check( 'suppress_theme_footer', $s, 'Hide the theme/other footer while 9 Footer is active' ); $h = ob_get_clean(); $this->field( 'Theme footer', $h ); ?>

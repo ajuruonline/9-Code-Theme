@@ -43,9 +43,28 @@
         });
     }
 
+    function initialiseSettingsSections() {
+        document.querySelectorAll('[data-ninecode-settings-root]').forEach(function (root) {
+            root.querySelectorAll('[data-ninecode-settings-section]').forEach(function (section, index) {
+                section.open = false;
+                section.classList.add('ninecode-settings-section', index % 2 ? 'ninecode-tone-green' : 'ninecode-tone-red');
+                var summary = section.querySelector(':scope > summary');
+                if (!summary) return;
+                summary.setAttribute('aria-expanded', 'false');
+                section.addEventListener('toggle', function () {
+                    summary.setAttribute('aria-expanded', section.open ? 'true' : 'false');
+                });
+            });
+            root.querySelectorAll('[data-ninecode-settings-field]').forEach(function (field, index) {
+                field.classList.add(index % 2 ? 'ninecode-field-green' : 'ninecode-field-red');
+            });
+        });
+    }
+
     function init() {
         lockMenu();
         modernizeAiEditor();
+        initialiseSettingsSections();
     }
 
     if (document.readyState === 'loading') {

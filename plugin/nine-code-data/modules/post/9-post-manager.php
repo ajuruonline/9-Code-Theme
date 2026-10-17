@@ -2,7 +2,7 @@
 /**
  * Plugin Name: 9 Post Editor — Native Front-End Workspace
  * Description: WordPress-native mobile post workspace with full-screen front-end editing, lightweight site fields, automatic post/plugin field discovery, 9CF AI workflows, bite-sized post/category backup and restore with optional media, and optional legacy ACF compatibility.
- * Version: 4.0.3
+ * Version: 4.0.4
  * Author: Studio 9
  * Requires at least: 6.2
  * Requires PHP: 7.4
@@ -14,7 +14,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'NPM9_VERSION', '4.0.3' );
+define( 'NPM9_VERSION', '4.0.4' );
 define( 'NPM9_FILE', __FILE__ );
 define( 'NPM9_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NPM9_URL', plugin_dir_url( __FILE__ ) );

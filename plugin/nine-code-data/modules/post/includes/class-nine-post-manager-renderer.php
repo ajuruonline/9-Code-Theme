@@ -466,7 +466,7 @@ final class Nine_Post_Manager_Renderer {
         foreach ( $this->interaction_items( $containers ) as $i => $c ) {
             if ( ! $this->container_has_content( $c, $post_id ) ) continue;
             $label = $c['title'] ?? $this->container_label( $c, $i );
-            echo '<details class="npm9r-accordion-item"' . ( 0 === $i ? ' open' : '' ) . '><summary>' . esc_html( $label ) . '</summary><div class="npm9r-accordion-body">';
+            echo '<details class="npm9r-accordion-item"><summary>' . esc_html( $label ) . '</summary><div class="npm9r-accordion-body">';
             $this->render_container( $c, $post_id, true ); echo '</div></details>';
         }
     }
