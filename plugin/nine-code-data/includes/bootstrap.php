@@ -61,10 +61,28 @@ function nine10_data_component_contract( $contracts ) {
         'data_owner' => 'data-manager',
         'discovery' => 'registered-wordpress-objects-and-provider-contracts',
         'round_trip' => array( 'json', 'csv', 'xlsx', 'ai' ),
+        'settings_ui' => array( 'default' => 'closed', 'mobile_first' => true, 'colour_sequence' => array( 'red', 'green' ), 'descriptions' => 'required-when-available' ),
     );
     return $contracts;
 }
 add_filter( 'ninecodepress_component_contracts', 'nine10_data_component_contract', 30 );
+
+/**
+ * Shared settings presentation for this plugin and every Nine Code app.
+ * Future apps may call this function directly or opt in with the filter below.
+ */
+function ninecode_data_enqueue_settings_ui() {
+    wp_enqueue_style( 'ninecode-settings-ui', NINE55_ULTRON_DATA_URL . 'assets/settings-ui.css', array(), NINE55_ULTRON_DATA_VERSION );
+    wp_enqueue_script( 'ninecode-settings-ui', NINE55_ULTRON_DATA_URL . 'assets/settings-ui.js', array(), NINE55_ULTRON_DATA_VERSION, true );
+}
+
+function ninecode_data_maybe_enqueue_settings_ui( $hook_suffix ) {
+    $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- screen routing only.
+    $is_suite_page = (bool) preg_match( '/(?:^|[-_])(nine|ninecode|nine10|nine55|ncu|9code)(?:[-_]|$)/i', $page . '-' . (string) $hook_suffix );
+    $should_enqueue = (bool) apply_filters( 'ninecode_settings_ui_should_enqueue', $is_suite_page, $page, $hook_suffix );
+    if ( $should_enqueue ) { ninecode_data_enqueue_settings_ui(); }
+}
+add_action( 'admin_enqueue_scripts', 'ninecode_data_maybe_enqueue_settings_ui', 5 );
 
 /**
  * Default editing boundary: native posts/pages plus public provider-owned CPTs.

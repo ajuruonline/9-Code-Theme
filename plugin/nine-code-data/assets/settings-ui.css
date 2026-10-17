@@ -1,0 +1,27 @@
+/* Nine Code settings UI contract: mobile first, closed by default, visually separated. */
+[data-ninecode-settings-root] { --ninecode-red:#b4232f; --ninecode-red-soft:#fff6f7; --ninecode-green:#167243; --ninecode-green-soft:#f3fbf6; }
+[data-ninecode-settings-root] *, [data-ninecode-settings-root] *::before, [data-ninecode-settings-root] *::after { box-sizing:border-box; }
+.ninecode-settings-section, [data-ninecode-settings-section] { margin:0 0 12px; border:1px solid #c3c4c7; border-left:6px solid var(--ninecode-section-color,#50575e); border-radius:10px; background:var(--ninecode-section-bg,#fff); overflow:hidden; }
+.ninecode-settings-section:nth-of-type(odd), [data-ninecode-settings-section]:nth-of-type(odd) { --ninecode-section-color:var(--ninecode-red); --ninecode-section-bg:var(--ninecode-red-soft); }
+.ninecode-settings-section:nth-of-type(even), [data-ninecode-settings-section]:nth-of-type(even) { --ninecode-section-color:var(--ninecode-green); --ninecode-section-bg:var(--ninecode-green-soft); }
+.ninecode-settings-section.ninecode-tone-red { --ninecode-section-color:var(--ninecode-red); --ninecode-section-bg:var(--ninecode-red-soft); }
+.ninecode-settings-section.ninecode-tone-green { --ninecode-section-color:var(--ninecode-green); --ninecode-section-bg:var(--ninecode-green-soft); }
+.ninecode-settings-section > summary, [data-ninecode-settings-section] > summary { display:flex; align-items:center; gap:10px; min-height:52px; padding:12px 14px; cursor:pointer; color:#1d2327; font-size:15px; font-weight:700; line-height:1.35; }
+.ninecode-settings-section > summary::marker { color:var(--ninecode-section-color); }
+.ninecode-settings-section[open] > summary { border-bottom:1px solid color-mix(in srgb,var(--ninecode-section-color) 30%,#dcdcde); }
+.ninecode-settings-body { padding:14px; }
+.ninecode-settings-description, [data-ninecode-settings-root] .description { color:#50575e; line-height:1.5; }
+[data-ninecode-settings-field], .ninecode-settings-field { padding:12px; border-left:4px solid transparent; border-radius:7px; }
+.ninecode-field-red { border-left-color:var(--ninecode-red); background:#fffafa; }
+.ninecode-field-green { border-left-color:var(--ninecode-green); background:#f8fcf9; }
+[data-ninecode-settings-root] input:not([type=checkbox]):not([type=radio]), [data-ninecode-settings-root] select, [data-ninecode-settings-root] textarea { width:100%; max-width:100%; min-height:44px; font-size:16px; }
+[data-ninecode-settings-root] button, [data-ninecode-settings-root] .button, [data-ninecode-settings-root] summary { touch-action:manipulation; }
+@media (max-width:782px) {
+	[data-ninecode-settings-root] { width:auto; max-width:100%; margin-right:10px; }
+	.ninecode-settings-section > summary { min-height:56px; padding:14px 12px; }
+	.ninecode-settings-body { padding:12px; }
+	[data-ninecode-settings-root] button, [data-ninecode-settings-root] .button { min-height:44px; white-space:normal; }
+}
+@media (min-width:783px) {
+	[data-ninecode-settings-root] input:not([type=checkbox]):not([type=radio]), [data-ninecode-settings-root] select, [data-ninecode-settings-root] textarea { font-size:14px; }
+}

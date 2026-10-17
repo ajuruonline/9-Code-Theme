@@ -115,23 +115,23 @@ class NineCM_Admin {
         $taxonomies = get_taxonomies( array( 'show_ui' => true ), 'objects' );
         $post_types = get_post_types( array( 'show_ui' => true ), 'objects' );
         ?>
-        <div class="wrap ninecm-admin">
+        <div class="wrap ninecm-admin" data-ninecode-settings-root>
             <?php if ( isset( $_GET['ninecm_notice'] ) && 'baseline_saved' === sanitize_key( wp_unslash( $_GET['ninecm_notice'] ) ) ) : ?><div class="notice notice-success is-dismissible"><p>Infrastructure baseline saved. Structure Drift Guard is now watching for registration changes.</p></div><?php endif; ?>
             <?php if ( isset( $_GET['ninecm_notice'] ) && 'baseline_cleared' === sanitize_key( wp_unslash( $_GET['ninecm_notice'] ) ) ) : ?><div class="notice notice-info is-dismissible"><p>Infrastructure baseline cleared. Site content was not changed.</p></div><?php endif; ?>
             <h1>9 Category Manager — Site Infrastructure Planner <span class="ninecm-version">v<?php echo esc_html( NINECM_VERSION ); ?></span></h1>
             <p class="description"><strong>Infrastructure/planning layer:</strong> create content shells and define taxonomies, tags, authors, parent/child structure, menu order, featured image, title and excerpt. Populate detailed fields/content later in 9 Post Editor.</p>
 
-            <nav class="nav-tab-wrapper">
-                <button class="nav-tab nav-tab-active" type="button" data-tab="infrastructure">Site Infrastructure</button>
-                <button class="nav-tab" type="button" data-tab="categories">Taxonomies & Tags</button>
-                <button class="nav-tab" type="button" data-tab="planning">Content Allocation</button>
-                <button class="nav-tab" type="button" data-tab="bulk">Bulk Builder</button>
-                <button class="nav-tab" type="button" data-tab="health">Health Audit</button>
-                <button class="nav-tab" type="button" data-tab="exports">Exports</button>
-                <button class="nav-tab" type="button" data-tab="settings">Settings</button>
+            <nav class="nav-tab-wrapper ninecm-section-tabs" aria-label="Category Manager sections">
+                <button class="nav-tab" type="button" data-tab="infrastructure" aria-expanded="false" aria-controls="ninecm-panel-infrastructure"><strong>Site Infrastructure</strong><small>Review registered content types, taxonomies and plugin relationships.</small></button>
+                <button class="nav-tab" type="button" data-tab="categories" aria-expanded="false" aria-controls="ninecm-panel-categories"><strong>Taxonomies & Tags</strong><small>Create and organise categories, tags and custom taxonomy terms.</small></button>
+                <button class="nav-tab" type="button" data-tab="planning" aria-expanded="false" aria-controls="ninecm-panel-planning"><strong>Content Allocation</strong><small>Connect content shells to the right categories and relationships.</small></button>
+                <button class="nav-tab" type="button" data-tab="bulk" aria-expanded="false" aria-controls="ninecm-panel-bulk"><strong>Bulk Builder</strong><small>Build larger structures and content shells from prepared text.</small></button>
+                <button class="nav-tab" type="button" data-tab="health" aria-expanded="false" aria-controls="ninecm-panel-health"><strong>Health Audit</strong><small>Find structural gaps and risks without changing site data.</small></button>
+                <button class="nav-tab" type="button" data-tab="exports" aria-expanded="false" aria-controls="ninecm-panel-exports"><strong>Exports</strong><small>Download reusable structure and planning files.</small></button>
+                <button class="nav-tab" type="button" data-tab="settings" aria-expanded="false" aria-controls="ninecm-panel-settings"><strong>Settings</strong><small>Configure defaults, limits and launcher behaviour.</small></button>
             </nav>
 
-            <section data-panel="infrastructure">
+            <section id="ninecm-panel-infrastructure" data-panel="infrastructure" hidden>
                 <div class="ninecm-card">
                     <h2>Site Infrastructure Map</h2>
                     <p>Live discovery of the structural systems registered on this WordPress installation. This is the planning boundary: content types, authors, featured images, excerpts, native parent/order, taxonomies/tags and explicit relationship providers. Body content and detailed fields remain in 9 Post Editor.</p>
@@ -171,7 +171,7 @@ class NineCM_Admin {
                 </div>
             </section>
 
-            <section data-panel="categories" hidden>
+            <section id="ninecm-panel-categories" data-panel="categories" hidden>
                 <div class="ninecm-controls">
                     <select data-ninecm-taxonomy aria-label="Taxonomy"></select>
                     <input type="search" data-ninecm-term-search placeholder="Search term name, slug or hierarchy path">
@@ -196,7 +196,7 @@ class NineCM_Admin {
                 </div>
             </section>
 
-            <section data-panel="planning" hidden>
+            <section id="ninecm-panel-planning" data-panel="planning" hidden>
                 <div class="ninecm-planning-note">
                     <strong>Structure first, content second.</strong> Bulk-allocate the selected taxonomy here, or open an item’s Structure editor to manage all attached taxonomies/tags, author, parent, order, title, excerpt and featured image. Detailed content stays in 9 Post Editor.
                 </div>
@@ -274,7 +274,7 @@ class NineCM_Admin {
                 </div>
             </section>
 
-            <section data-panel="bulk" hidden>
+            <section id="ninecm-panel-bulk" data-panel="bulk" hidden>
                 <div class="ninecm-card">
                     <h2>Taxonomy / Tag Bulk Builder</h2>
                     <p data-ninecm-bulk-help>For hierarchical systems, use <code>&gt;</code> for a child and <code>&gt;&gt;</code> for a grandchild. For flat tag-like systems, enter one term per line. Large plans run in resumable batches.</p>
@@ -294,14 +294,14 @@ class NineCM_Admin {
                 </div>
             </section>
 
-            <section data-panel="health" hidden>
+            <section id="ninecm-panel-health" data-panel="health" hidden>
                 <div class="ninecm-card">
                     <div class="ninecm-health-head"><div><h2>Taxonomy & Planning Health</h2><p>Read-only audit of the currently selected taxonomy/content type. It looks for unassigned content, content stranded only in archived branches, redundant ancestor assignments, stale blank shells, empty leaves, excessive depth, very wide branches and repeated category names.</p></div><button class="button button-primary" type="button" data-ninecm-health-run>Run audit</button></div>
                     <div data-ninecm-health-result><p class="description">Run the audit after major imports, bulk allocation, or restructuring.</p></div>
                 </div>
             </section>
 
-            <section data-panel="exports" hidden>
+            <section id="ninecm-panel-exports" data-panel="exports" hidden>
                 <div class="ninecm-card">
                     <h2>Portable planning exports</h2>
                     <p>Use these for backups, Excel filtering, handoff, auditing, or AI-assisted analysis. CSV downloads include a UTF-8 marker for better Microsoft Excel compatibility.</p>
@@ -323,7 +323,7 @@ class NineCM_Admin {
                 </div>
             </section>
 
-            <section data-panel="settings" hidden>
+            <section id="ninecm-panel-settings" data-panel="settings" hidden>
                 <form method="post" action="options.php" class="ninecm-card">
                     <?php settings_fields( 'ninecm_settings_group' ); ?>
                     <table class="form-table">

@@ -363,9 +363,9 @@
 			groups[ g ].push( k );
 		} );
 		order.sort( function ( a, b ) { return ( a === 'protected' ) - ( b === 'protected' ); } );
-		var form = h( 'form', { class: 'ncd-form', novalidate: true, onsubmit: function ( ev ) { ev.preventDefault(); save(); } } );
+		var form = h( 'form', { class: 'ncd-form', 'data-ninecode-settings-root': true, novalidate: true, onsubmit: function ( ev ) { ev.preventDefault(); save(); } } );
 		order.forEach( function ( g, gi ) {
-			var sec = h( 'details', { class: 'ncd-section' + ( g === 'protected' ? ' ncd-section--locked' : '' ), open: g !== 'protected' && gi < 3 },
+			var sec = h( 'details', { class: 'ncd-section' + ( g === 'protected' ? ' ncd-section--locked' : '' ), 'data-ninecode-settings-section': true },
 				h( 'summary', null, g === 'protected' ? [ lock(), 'Protected & read-only (' + groups[ g ].length + ')' ] : humanize( g ) + ' (' + groups[ g ].length + ')' ) );
 			groups[ g ].forEach( function ( k ) {
 				var f = e.fields[ k ];

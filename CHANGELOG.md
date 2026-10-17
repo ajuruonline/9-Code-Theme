@@ -1,7 +1,13 @@
 # Changelog
 
 ## Unreleased
-- Every collapsible panel in the Header & Footer and Style settings starts closed, so long settings pages are easier to use on phones. The footer settings no longer reopen the last tab on load.
+
+## Theme 17.1.0 / Plugin 17.1.0
+- Every suite settings/data-entry section starts closed; the user chooses what to open and no saved tab state reopens it.
+- Sections, tabs and entry groups alternate subtle red/green navigation colours and stack into touch-friendly controls on phones.
+- Menu & UI, AI Manager, Data Workspace, Category Manager and Post Manager now expose clearer section/field descriptions where available.
+- Added `docs/SETTINGS-UI-CONTRACT.md`, shared assets and an opt-in filter for future plugins, plus a static regression gate in `bin/lint.sh`.
+- Every collapsible panel in the Header & Footer and Style settings continues to start closed; the footer settings no longer reopens the last tab on load.
 
 ## Theme 17.0.0 / Plugin 17.0.0
 - The quick-action launcher sits in the middle of the right edge on desktop, phones and the front end, instead of the bottom corner where it covered content.

@@ -4,7 +4,7 @@ Tags: editor, data, forms, categories, backup
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 17.0.0
+Stable tag: 17.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,10 @@ Works with the Nine Code theme; the theme also works without this plugin.
 Upgrading from "9 Data Manager": activating Nine Code Data retires the old plugin automatically. Your data is not changed.
 
 == Changelog ==
+
+= 17.1.0 =
+* All Data Manager and suite settings sections now start closed, alternate red/green visual groups, stack for mobile use and show explanatory help where available.
+* Added a shared settings UI contract and opt-in API for future Nine Code plugins.
 
 = 17.0.0 =
 * Quick-action launcher is centred on the right edge (theme 17.0.0 ships the same change).

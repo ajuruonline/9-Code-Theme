@@ -68,9 +68,11 @@
 .ncd-record-head h2 { margin: 0; font-size: 20px; }
 .ncd-record-links { display: flex; gap: 12px; align-items: center; }
 .ncd-form { margin: 12px 0 96px; }
-.ncd-section { background: var(--ncd-bg); border: 1px solid var(--ncd-border); border-radius: 8px; margin-bottom: 12px; }
+.ncd-section { --ncd-section-accent:#b4232f; background:#fff7f8; border:1px solid var(--ncd-border); border-left:6px solid var(--ncd-section-accent); border-radius:8px; margin-bottom:12px; overflow:hidden; }
+.ncd-section:nth-of-type(even) { --ncd-section-accent:#167243; background:#f4fbf6; }
 .ncd-section > summary { cursor: pointer; padding: 14px 16px; font-weight: 600; min-height: 44px; }
-.ncd-section[open] > summary { border-bottom: 1px solid var(--ncd-border); }
+.ncd-section > summary::marker { color:var(--ncd-section-accent); }
+.ncd-section[open] > summary { border-bottom:1px solid var(--ncd-border); }
 .ncd-section--locked { background: var(--ncd-soft); }
 .ncd-field { padding: 12px 16px; border-bottom: 1px solid #f0f0f1; }
 .ncd-field:last-child { border-bottom: 0; }
@@ -195,6 +197,7 @@ progress { width: 100%; height: 12px; }
 
 /* Phones: a fixed, compact save bar (sticky is unreliable when an admin skin sets overflow on #wpwrap). */
 @media (max-width: 782px) {
+	.ncd-section > summary { min-height:56px; padding:16px 12px; font-size:15px; }
 	.ncd-savebar { position: fixed; left: 0; right: 0; bottom: 0; border-radius: 0; padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); gap: 6px; z-index: 99990; }
 	.ncd-savebar .ncd-toggle { min-height: 36px; padding: 0; flex: 1 1 100%; order: -1; }
 	.ncd-savebar .ncd-toggle small { display: none; }

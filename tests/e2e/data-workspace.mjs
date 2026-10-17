@@ -39,6 +39,9 @@ for (const vp of [{ width: 390, height: 844 }, { width: 1280, height: 900 }]) {
   // Edit an authorized field; protected field is locked.
   await page.click(`.ncd-col-title a:text-is("E2E ${tag}")`);
   await page.waitForSelector('.ncd-form');
+  const openSections = await page.locator('.ncd-form > details[open]').count();
+  t.ok(openSections === 0, `${tag}: every data-entry section starts closed`);
+  await page.locator('details:has([data-field="post_title"])').evaluate((d) => { d.open = true; });
   const title = page.locator('[data-field="post_title"] input');
   await title.fill(`E2E ${tag} edited`);
   t.ok(await page.locator('.ncd-dirty').innerText() !== 'No changes', `${tag}: unsaved change tracked`);

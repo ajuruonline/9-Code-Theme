@@ -22,4 +22,6 @@ pv=$(grep -m1 ' \* Version:' plugin/nine-code-data/nine-code-data.php | awk '{pr
 [ "$tv" = "$cv" ] || { echo "FAIL theme version header $tv != constant $cv"; fail=1; }
 [ "$pv" = "$pc" ] || { echo "FAIL plugin version header $pv != constant $pc"; fail=1; }
 echo "theme $tv, plugin $pv"
+echo "== Settings UI contract"
+python3 tests/settings-ui-contract.py || fail=1
 [ $fail -eq 0 ] && echo "LINT OK" || { echo "LINT FAILED"; exit 1; }

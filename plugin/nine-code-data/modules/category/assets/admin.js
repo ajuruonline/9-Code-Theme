@@ -46,13 +46,12 @@
 
   document.querySelectorAll('[data-tab]').forEach(function(b){
     b.onclick=function(){
-      document.querySelectorAll('[data-tab]').forEach(function(x){x.classList.remove('nav-tab-active');});
-      b.classList.add('nav-tab-active');
-      document.querySelectorAll('[data-panel]').forEach(function(p){p.hidden=p.dataset.panel!==b.dataset.tab;});
-      try{localStorage.setItem('ninecm_admin_tab',b.dataset.tab);}catch(e){}
+      var opening=!b.classList.contains('nav-tab-active');
+      document.querySelectorAll('[data-tab]').forEach(function(x){x.classList.remove('nav-tab-active');x.setAttribute('aria-expanded','false');});
+      document.querySelectorAll('[data-panel]').forEach(function(p){p.hidden=true;});
+      if(opening){b.classList.add('nav-tab-active');b.setAttribute('aria-expanded','true');var panel=document.querySelector('[data-panel="'+b.dataset.tab+'"]');if(panel)panel.hidden=false;}
     };
   });
-  try{var savedTab=localStorage.getItem('ninecm_admin_tab');var savedTabButton=savedTab&&document.querySelector('[data-tab="'+savedTab+'"]');if(savedTabButton)savedTabButton.click();}catch(e){}
 
   var taxSel=document.querySelector('[data-ninecm-taxonomy]');
   function loadPostTypes(){
@@ -239,7 +238,7 @@
       var taxState={},media={id:parseInt(plan.featuredMedia&&plan.featuredMedia.id||0,10),url:plan.featuredMedia&&plan.featuredMedia.url||''},author={id:parseInt(plan.author&&plan.author.id||0,10),name:plan.author&&plan.author.name||''},parent={id:parseInt(plan.parent&&plan.parent.id||0,10),title:plan.parent&&plan.parent.title||''},providers={},createKey=postId?'':requestId();
       (plan.providers||[]).forEach(function(p){providers[p.key]=p.value==null?'':p.value;});
       (plan.taxonomies||[]).forEach(function(t){var m=new Map();(t.terms||[]).forEach(function(x){m.set(parseInt(x.id,10),{id:parseInt(x.id,10),path:x.path||x.name,archived:!!x.archived});});taxState[t.name]={d:t,m:m};});
-      var taxHtml=(plan.taxonomies||[]).map(function(t){return '<details class="ninecm-struct-tax" data-struct-tax="'+esc(t.name)+'" '+(t.name===tax?'open':'')+'><summary><strong>'+esc(t.label)+'</strong> <span class="ninecm-subtle">'+(t.hierarchical?'hierarchy':'tags / flat')+'</span></summary><div class="ninecm-picker-search"><input type="search" data-struct-tax-search placeholder="Search '+esc(t.label)+'"><button class="button" type="button" data-struct-tax-load>Search</button></div><div class="ninecm-term-results" data-struct-tax-results></div><div class="ninecm-selected-terms" data-struct-tax-selected></div></details>';}).join('')||'<p>No compatible taxonomies are registered for this content type.</p>';
+      var taxHtml=(plan.taxonomies||[]).map(function(t){return '<details class="ninecm-struct-tax" data-struct-tax="'+esc(t.name)+'"><summary><strong>'+esc(t.label)+'</strong> <span class="ninecm-subtle">'+(t.hierarchical?'hierarchy':'tags / flat')+'</span></summary><div class="ninecm-picker-search"><input type="search" data-struct-tax-search placeholder="Search '+esc(t.label)+'"><button class="button" type="button" data-struct-tax-load>Search</button></div><div class="ninecm-term-results" data-struct-tax-results></div><div class="ninecm-selected-terms" data-struct-tax-selected></div></details>';}).join('')||'<p>No compatible taxonomies are registered for this content type.</p>';
       var provHtml=(plan.providers||[]).map(function(p){if(p.type==='select'&&p.hasOptions){return '<label>'+esc(p.label)+'<input type="search" data-struct-provider-search="'+esc(p.key)+'" value="'+esc(p.value==null?'':p.value)+'" placeholder="Search relationship"><input type="hidden" data-struct-provider="'+esc(p.key)+'" value="'+esc(p.value==null?'':p.value)+'"><div class="ninecm-mini-results" data-struct-provider-results="'+esc(p.key)+'"></div></label>';}return '<label>'+esc(p.label)+'<input '+(p.type==='number'?'type="number"':'type="text"')+' data-struct-provider="'+esc(p.key)+'" value="'+esc(p.value==null?'':p.value)+'"></label>';}).join('');
       var mediaHtml=(plan.supports&&plan.supports.thumbnail)?'<div><strong>Featured image</strong><div class="ninecm-admin-media-preview" data-struct-media-preview>'+(media.url?'<img src="'+esc(media.url)+'" alt=""><button type="button" class="button" data-struct-media-clear>Remove</button>':'<span class="ninecm-subtle">No featured image</span>')+'</div>'+(C.canUpload?'<button type="button" class="button" data-struct-media>Choose image</button>':'')+'</div>':'';
       var authorHtml=(plan.supports&&plan.supports.author)?'<label>Author<input type="search" data-struct-author-search value="'+esc(author.name)+'" placeholder="Search authors"><input type="hidden" data-struct-author value="'+author.id+'"><div class="ninecm-mini-results" data-struct-author-results></div></label>':'';

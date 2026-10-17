@@ -31,6 +31,10 @@ violation; violations are also listed in the discovery report for administrators
 
 Registration happens lazily, after `init`, so post types and taxonomies are available.
 
+Provider admin screens and Data Manager-rendered fields also follow the permanent
+[settings UI contract](SETTINGS-UI-CONTRACT.md): sections start closed, alternate red/green visual
+markers, stack for phone use, and display provider descriptions/instructions wherever available.
+
 ## Entities
 
 | Key | Meaning |
