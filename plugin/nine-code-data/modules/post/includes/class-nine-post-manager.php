@@ -78,8 +78,6 @@ final class Nine_Post_Manager {
             return;
         }
         wp_enqueue_style( 'npm9-admin', NPM9_URL . 'assets/admin.css', [], NPM9_VERSION );
-        wp_enqueue_style( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.css', [], NPM9_VERSION );
-        wp_enqueue_script( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.js', [], NPM9_VERSION, true );
         wp_enqueue_script( 'npm9-native-recovery', NPM9_URL . 'assets/native-editor-recovery.js', [], NPM9_VERSION, true );
         wp_localize_script( 'npm9-native-recovery', 'NPM9NativeRecovery', [
             'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
@@ -187,6 +185,8 @@ final class Nine_Post_Manager {
     private function enqueue_workspace_assets() {
         wp_enqueue_media();
         wp_enqueue_style( 'npm9-admin', NPM9_URL . 'assets/admin.css', [], NPM9_VERSION );
+        wp_enqueue_style( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.css', [], NPM9_VERSION );
+        wp_enqueue_script( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.js', [], NPM9_VERSION, true );
         $app_deps = [ 'jquery' ];
         if ( class_exists( 'Nine_Code_Visual_Editor', false ) ) {
             // Visual (WYSIWYG) editor for the Post Content tab; the code textarea remains the fallback.
