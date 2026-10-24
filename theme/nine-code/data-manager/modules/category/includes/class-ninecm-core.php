@@ -53,7 +53,6 @@ final class NineCM_Core {
         add_action( 'wp_enqueue_scripts', array( $this, 'frontend_manager_assets' ), 20 );
         add_action( 'admin_bar_menu', array( $this, 'admin_bar_link' ), 90 );
         add_action( 'wp_footer', array( $this, 'frontend_manager_shell' ) );
-        add_filter( 'plugin_action_links_' . plugin_basename( NINECM_FILE ), array( $this, 'plugin_action_links' ) );
 
         add_shortcode( 'nine_post_of_contents', array( $this, 'shortcode_poc' ) );
         add_shortcode( 'nine_category_manager', array( $this, 'shortcode_manager' ) );
@@ -79,11 +78,6 @@ final class NineCM_Core {
         add_action( 'untrashed_post', array( $this, 'invalidate_public_cache' ), 20, 1 );
         add_action( 'deleted_post', array( $this, 'invalidate_public_cache' ), 20, 1 );
         add_action( 'update_option_ninecm_settings', array( $this, 'settings_changed' ), 20, 3 );
-    }
-
-    public function plugin_action_links( $links ) {
-        array_unshift( $links, '<a href="' . esc_url( admin_url( 'admin.php?page=nine-category-manager' ) ) . '">' . esc_html__( 'Open Manager', 'nine-code-data' ) . '</a>' );
-        return $links;
     }
 
     public function maybe_upgrade() {

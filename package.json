@@ -1,7 +1,7 @@
 {
   "name": "nine-code",
   "private": true,
-  "description": "Nine Code theme + Nine Code Data plugin: tooling and tests",
+  "description": "Nine Code theme, including Data Manager: tooling and tests",
   "scripts": {
     "lint": "bin/lint.sh",
     "build": "bin/build.sh",

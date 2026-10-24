@@ -540,7 +540,8 @@ final class Nine55_Ultron_Data {
 
     public function register_ai_integration( $integrations ) {
         $integrations['nine10_data_edition'] = array(
-            'plugin_file'  => plugin_basename( NINE55_ULTRON_DATA_FILE ),
+            /* Bundled with the theme, so no plugin file matches this entry. */
+            'plugin_file'  => '',
             'plugin_slug'  => 'nine10-data-edition',
             'label'        => '9.10 Data Edition',
             'description'  => 'Unified data/post/taxonomy operating layer. Route data-only changes through Data Engine and post/content changes through Post Editor.',

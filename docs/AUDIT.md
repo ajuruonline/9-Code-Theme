@@ -6,7 +6,7 @@ How the code is checked, and what was reviewed by hand. Run everything with `npm
 | Gate | Command | Status at release |
 |---|---|---|
 | PHP/JS/JSON syntax, no full-screen editor layer, no plugin-only APIs in the theme | `bin/lint.sh` | clean |
-| WordPress **Plugin Check** (official) on Nine Code Data | `bin/plugin-check.sh` | 0 errors (see exception) |
+| WordPress **Plugin Check** (official) on Data Manager, copied from the theme into a temporary plugin folder | `bin/plugin-check.sh` | 0 errors (see exception) |
 | PHP 7.4+ compatibility, deprecated WordPress APIs | `bin/audit.sh` | clean |
 | Public site, admin crawl, post editor, visual editor, upgrade simulation | `npm test`, `bin/test-upgrade.sh` | all pass |
 

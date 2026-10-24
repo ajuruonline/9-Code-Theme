@@ -13,8 +13,8 @@ if (!defined('ABSPATH')) {
 
 define('NINE_AI_MANAGER_VERSION', '2.0.1');
 define('NINE_AI_MANAGER_FILE', __FILE__);
-define('NINE_AI_MANAGER_DIR', plugin_dir_path(__FILE__));
-define('NINE_AI_MANAGER_URL', plugin_dir_url(__FILE__));
+define('NINE_AI_MANAGER_DIR', trailingslashit(dirname(__FILE__)));
+define('NINE_AI_MANAGER_URL', NINE55_ULTRON_DATA_URL . 'modules/ai/');
 
 require_once NINE_AI_MANAGER_DIR . 'includes/class-nine-ai-manager-scanner.php';
 require_once NINE_AI_MANAGER_DIR . 'includes/class-nine-ai-manager-manifest.php';
@@ -24,7 +24,5 @@ require_once NINE_AI_MANAGER_DIR . 'includes/class-nine-ai-manager-plugin-update
 require_once NINE_AI_MANAGER_DIR . 'includes/class-nine-ai-manager-admin.php';
 require_once NINE_AI_MANAGER_DIR . 'includes/class-nine-ai-manager.php';
 
-register_activation_hook(__FILE__, array('Nine_AI_Manager', 'activate'));
-register_deactivation_hook(__FILE__, array('Nine_AI_Manager', 'deactivate'));
 
 Nine_AI_Manager::instance();

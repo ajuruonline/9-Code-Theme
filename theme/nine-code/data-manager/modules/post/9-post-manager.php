@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 define( 'NPM9_VERSION', '4.0.4' );
 define( 'NPM9_FILE', __FILE__ );
-define( 'NPM9_DIR', plugin_dir_path( __FILE__ ) );
-define( 'NPM9_URL', plugin_dir_url( __FILE__ ) );
+define( 'NPM9_DIR', trailingslashit( dirname( __FILE__ ) ) );
+define( 'NPM9_URL', NINE55_ULTRON_DATA_URL . 'modules/post/' );
 
 // Core v4 runtime: WordPress-native and ACF-independent.
 require_once NPM9_DIR . 'includes/class-nine-post-manager.php';
@@ -26,7 +26,11 @@ require_once NPM9_DIR . 'includes/class-nine-post-manager-ninecf.php';
 require_once NPM9_DIR . 'includes/class-nine-post-manager-backup.php';
 require_once NPM9_DIR . 'includes/class-nine-post-manager-design.php';
 
-add_action( 'plugins_loaded', static function () {
+/*
+ * Runs once every plugin has loaded. Data Manager is loaded from the theme, and the theme loads after
+ * plugins_loaded has already fired, so run it now in that case rather than wait for a hook that never fires again.
+ */
+$npm9_boot = static function () {
     Nine_Post_Manager::instance();
     Nine_Post_Manager_Fields::instance();
     Nine_Post_Manager_9CF::instance();
@@ -38,4 +42,5 @@ add_action( 'plugins_loaded', static function () {
         require_once NPM9_DIR . 'includes/class-nine-post-manager-renderer.php';
         Nine_Post_Manager_Renderer::instance();
     }
-}, 20 );
+};
+if ( did_action( 'plugins_loaded' ) ) { $npm9_boot(); } else { add_action( 'plugins_loaded', $npm9_boot, 20 ); }

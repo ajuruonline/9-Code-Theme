@@ -28,7 +28,7 @@ PHP
 mkdir -p wp/wp-content/mu-plugins
 cp "$ROOT/tests/e2e/mu-test-env.php" wp/wp-content/mu-plugins/test-env.php
 ln -sfn "$ROOT/theme/nine-code" wp/wp-content/themes/nine-code
-ln -sfn "$ROOT/plugin/nine-code-data" wp/wp-content/plugins/nine-code-data
+rm -f wp/wp-content/plugins/nine-code-data
 : > wp/debug.log
 
 WP="php $DIR/wp-cli.phar --allow-root --path=$DIR/wp"
@@ -39,7 +39,6 @@ $WP option update siteurl "http://localhost:$PORT" >/dev/null
 $WP option update home "http://localhost:$PORT" >/dev/null
 $WP option update permalink_structure '/%postname%/' >/dev/null
 $WP theme activate nine-code
-$WP plugin activate nine-code-data
 $WP rewrite flush >/dev/null
 $WP term create category News --slug=news >/dev/null 2>&1 || true
 if [ -z "$($WP post list --post_type=post --name=sample-post-1 --format=ids)" ]; then

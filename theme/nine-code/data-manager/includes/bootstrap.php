@@ -1,8 +1,7 @@
 <?php
 /**
- * Nine Code Data bootstrap. Loaded from nine-code-data.php only after the
- * old-plugin guard has passed (top-level declarations here are hoisted by PHP,
- * so they must not live in the main plugin file).
+ * Data Manager bootstrap. Loaded from data-manager/bootstrap.php once the
+ * version constants are defined.
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
@@ -68,7 +67,7 @@ function nine10_data_component_contract( $contracts ) {
 add_filter( 'ninecodepress_component_contracts', 'nine10_data_component_contract', 30 );
 
 /**
- * Shared settings presentation for this plugin and every Nine Code app.
+ * Shared settings presentation for Data Manager and every Nine Code app.
  * Future apps may call this function directly or opt in with the filter below.
  */
 function ninecode_data_enqueue_settings_ui() {
@@ -165,7 +164,18 @@ function nine55_ultron_data_activate() {
         'ai' => defined( 'NINE_AI_MANAGER_VERSION' ) ? NINE_AI_MANAGER_VERSION : 'external',
     ), false );
 }
-register_activation_hook( NINE55_ULTRON_DATA_FILE, 'nine55_ultron_data_activate' );
+/*
+ * Plugin activation hooks do not exist for themes, so the install routine is hooked to theme events.
+ * after_switch_theme runs in the request that switches themes, before this theme's files load, so
+ * the admin_init check is what installs on the first admin request after a switch or an update.
+ * NCD_History::add() also creates the history table on its first write.
+ */
+add_action( 'after_switch_theme', 'nine55_ultron_data_activate' );
+
+function nine55_ultron_data_maybe_activate() {
+    if ( NINE55_ULTRON_DATA_VERSION !== get_option( 'nine55_ultron_data_version' ) ) { nine55_ultron_data_activate(); }
+}
+add_action( 'admin_init', 'nine55_ultron_data_maybe_activate', 4 );
 
 function nine55_ultron_data_deactivate() {
     if ( class_exists( 'NineCode_ACF_Data_Engine' ) && method_exists( 'NineCode_ACF_Data_Engine', 'deactivate' ) ) {
@@ -175,4 +185,4 @@ function nine55_ultron_data_deactivate() {
         Nine_AI_Manager::deactivate();
     }
 }
-register_deactivation_hook( NINE55_ULTRON_DATA_FILE, 'nine55_ultron_data_deactivate' );
+add_action( 'switch_theme', 'nine55_ultron_data_deactivate' );

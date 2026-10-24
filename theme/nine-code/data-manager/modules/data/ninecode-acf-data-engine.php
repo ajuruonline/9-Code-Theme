@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'NINECODE_ACF_DATA_ENGINE_VERSION', '0.16.0' );
 define( 'NINECODE_ACF_DATA_ENGINE_FILE', __FILE__ );
-define( 'NINECODE_ACF_DATA_ENGINE_DIR', plugin_dir_path( __FILE__ ) );
-define( 'NINECODE_ACF_DATA_ENGINE_URL', plugin_dir_url( __FILE__ ) );
+define( 'NINECODE_ACF_DATA_ENGINE_DIR', trailingslashit( dirname( __FILE__ ) ) );
+define( 'NINECODE_ACF_DATA_ENGINE_URL', NINE55_ULTRON_DATA_URL . 'modules/data/' );
 
 require_once NINECODE_ACF_DATA_ENGINE_DIR . 'includes/class-ninecode-scope-lock.php';
 require_once NINECODE_ACF_DATA_ENGINE_DIR . 'includes/class-ninecode-data-exporter.php';
@@ -25,8 +25,5 @@ require_once NINECODE_ACF_DATA_ENGINE_DIR . 'includes/class-ninecode-data-import
 require_once NINECODE_ACF_DATA_ENGINE_DIR . 'includes/class-ninecode-excel.php';
 require_once NINECODE_ACF_DATA_ENGINE_DIR . 'includes/class-ninecode-data-version-manager.php';
 require_once NINECODE_ACF_DATA_ENGINE_DIR . 'includes/class-ninecode-acf-data-engine.php';
-
-register_activation_hook( __FILE__, array( 'NineCode_ACF_Data_Engine', 'activate' ) );
-register_deactivation_hook( __FILE__, array( 'NineCode_ACF_Data_Engine', 'deactivate' ) );
 
 NineCode_ACF_Data_Engine::instance();

@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 define( 'NINECM_VERSION', '4.0.2' );
 define( 'NINECM_FILE', __FILE__ );
-define( 'NINECM_DIR', plugin_dir_path( __FILE__ ) );
-define( 'NINECM_URL', plugin_dir_url( __FILE__ ) );
+define( 'NINECM_DIR', trailingslashit( dirname( __FILE__ ) ) );
+define( 'NINECM_URL', NINE55_ULTRON_DATA_URL . 'modules/category/' );
 
 require_once NINECM_DIR . 'includes/class-ninecm-infrastructure.php';
 require_once NINECM_DIR . 'includes/class-ninecm-drift.php';
@@ -26,5 +26,4 @@ require_once NINECM_DIR . 'includes/class-ninecm-abilities.php';
 require_once NINECM_DIR . 'includes/class-ninecm-admin.php';
 require_once NINECM_DIR . 'includes/class-ninecm-core.php';
 
-register_activation_hook( __FILE__, array( 'NineCM_Core', 'activate' ) );
 NineCM_Core::instance();

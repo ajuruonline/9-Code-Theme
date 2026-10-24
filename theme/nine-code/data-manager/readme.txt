@@ -1,10 +1,10 @@
-=== Nine Code Data ===
+=== Nine Code Data Manager ===
 Contributors: 9igeria
 Tags: editor, data, forms, categories, backup
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 17.1.0
+Stable tag: 18.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Universal data workspace for Nine Code sites: every post type, taxonomy, user, A
 
 == Description ==
 
-Nine Code Data keeps your content tools in a plugin, so your posts, forms, responses and shortcodes keep working even if you change themes.
+Data Manager is built into the Nine Code theme. Installing or updating the theme installs it too, so there is no separate plugin to manage. Your posts, forms, responses and shortcodes stay in your site's database; the screens that edit them are available while the Nine Code theme is active.
 
 * **Data Workspace** - discover every data type (WordPress, ACF, Open Scholar, Conference.lat, Nine Code apps), search, edit on phone or desktop, bulk edit, export JSON (AI package), XLSX or CSV, preview imports field by field, apply selectively, and undo from History. Protected and secret data stays locked; publishing, creating and trashing always need explicit permission.
 * **Post Editor** - edit post content in a visual block editor (images, galleries, headings, lists, buttons, tables, video, forms), post metadata, taxonomies and plugin fields from one mobile-friendly screen.
@@ -22,16 +22,21 @@ Nine Code Data keeps your content tools in a plugin, so your posts, forms, respo
 * **Form Manager** - build forms, collect responses, download CSV.
 * **Data Backup** - scoped backups and restore.
 
-Works with the Nine Code theme; the theme also works without this plugin.
+Ships inside the Nine Code theme. Its version always matches the theme's.
 
 == Installation ==
 
-1. Upload the plugin zip under Plugins > Add New > Upload Plugin and activate it.
-2. Open **9 Data Manager** in the admin menu.
+1. Install or update the Nine Code theme. Data Manager is included and active.
+2. Open **Data Manager** in the admin menu.
 
-Upgrading from "9 Data Manager": activating Nine Code Data retires the old plugin automatically. Your data is not changed.
+Upgrading from the separate "Nine Code Data" plugin or the older "9 Data Manager" plugin: once the Nine Code theme is active, the old plugin is deactivated automatically on the next admin page. Your data is not changed. You can then delete the old plugin.
 
 == Changelog ==
+
+= 18.0.0 =
+* Data Manager is bundled with the Nine Code theme and loads on every request. The separate Nine Code Data plugin is retired and deactivated automatically.
+* The theme and Data Manager share one version number.
+* Option names, meta keys, post types, taxonomies, REST routes, hooks and filters are unchanged. History table is created on the first admin request after an update.
 
 = 17.1.0 =
 * All Data Manager and suite settings sections now start closed, alternate red/green visual groups, stack for mobile use and show explanatory help where available.

@@ -1,7 +1,14 @@
 # Changelog
 
-## Unreleased
-- Waiting screens in the Data Workspace and Post Editor show an animated graduation cap (tassel swinging, reduced motion respected) instead of plain loading text.
+## Theme 18.0.0 (Data Manager bundled, one package)
+- **One package.** Data Manager now lives inside the Nine Code theme (`theme/nine-code/data-manager`). Installing or updating the theme installs and activates it. The separate Nine Code Data plugin is no longer shipped.
+- **Automatic retirement.** Once the theme is active, the old "9 Data Manager" plugin and the separate Nine Code Data plugin are deactivated on the next admin page. No data changes: option names, meta keys, post types, taxonomies, tables, REST routes, hooks and filters are the same.
+- **Theme events instead of plugin hooks.** Activation has no plugin hook in a theme. Installing runs from `after_switch_theme` and from an `admin_init` check against the stored version, so the history table and roles are in place on the first admin request after an update.
+- **Plugin-only APIs are gone** from the Data Manager code. `bin/lint.sh` now keeps activation hooks, `plugin_dir_*`, `plugins_url` and textdomain loading out of the theme. The only exception is `plugin_basename()` in the AI Manager, which updates other plugins.
+- **One version.** Theme and Data Manager are both 18.0.0. `bin/lint.sh` checks the theme header, both constants and the Data Manager readme stable tag.
+- **Waiting screens** in the Data Workspace and Post Editor show an animated graduation cap (tassel swinging, reduced motion respected) instead of plain loading text.
+- **Build and tests:** `bin/build.sh` produces one zip, `nine-code-theme-18.0.0.zip`. `bin/test-upgrade.sh` rehearses the full path from the old 3-package install, through the separate 17.1.0 plugin, to the 18.0.0 theme.
+- **Trade-off:** Data Manager's post types, shortcodes and blocks are registered only while Nine Code is the active theme. Data stays in the database, but those screens and shortcodes stop working under another theme.
 
 ## Theme 17.1.0 / Plugin 17.1.0
 - Every suite settings/data-entry section starts closed; the user chooses what to open and no saved tab state reopens it.
