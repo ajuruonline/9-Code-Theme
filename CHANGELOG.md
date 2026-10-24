@@ -1,5 +1,10 @@
 # Changelog
 
+## Open Scholar Theme 20.1.2
+- Adds an explicit Control Centre `+` / `−` submenu control that reliably reveals Settings, Appearance, Tools, Plugins, Users and Updates on touch screens.
+- Replaces repeated app symbols with contextual icons for lectures, courses, libraries, textbooks, publications, presentations, events, users and system controls.
+- Uses clear `+` / `−` open-close controls in the Open Scholar toolbar and launcher, and a browser-style icon for View Site instead of a house glyph.
+
 ## Open Scholar Theme 20.1.1
 - Adds direct Google Drive OAuth connection and automatic, server-side Drive uploads for completed backup packages; Drive-mounted-folder copies remain supported for hosts where that is preferred.
 - Streams Drive uploads on cURL-enabled hosts to avoid loading full-site packages into PHP memory, and retains a small-package compatibility fallback.

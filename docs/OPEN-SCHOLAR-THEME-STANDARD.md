@@ -1,6 +1,6 @@
 # Open Scholar Theme standard
 
-Open Scholar Theme is the shared host, presentation and administration layer for the Open Scholar application family. Version 20.1.1 uses the Open Scholar design contract evaluated on 24 October 2026.
+Open Scholar Theme is the shared host, presentation and administration layer for the Open Scholar application family. Version 20.1.2 uses the Open Scholar design contract evaluated on 24 October 2026.
 
 ## Identity and palette
 

@@ -27,6 +27,9 @@ for (const width of [360,390,768,1440]) {
     await page.locator('#wp-admin-bar-menu-toggle a').click();
     const scrollInfo=await page.locator('#adminmenuwrap').evaluate(e=>({scrollHeight:e.scrollHeight,clientHeight:e.clientHeight,overflow:getComputedStyle(e).overflowY}));
     assert.equal(scrollInfo.overflow,'scroll','mobile application menu always has a touch scroll container');
+    await page.locator('#toplevel_page_osch-system .osch-menu-expand').click();
+    assert(await page.locator('#toplevel_page_osch-system .wp-submenu').isVisible(),'Control Centre expands to show maintenance submenus on mobile');
+    assert.equal(await page.locator('#toplevel_page_osch-system .osch-menu-expand').textContent(),'−','Control Centre uses an explicit minus when open');
     const after=await page.locator('.osch-workspace').boundingBox();
     assert(Math.abs(before.x-after.x)<1,'opening mobile navigation does not push the workspace sideways');
     if(width===390) await page.screenshot({path:'/tmp/open-scholar-workspace-menu.png',fullPage:false});
@@ -36,6 +39,7 @@ for (const width of [360,390,768,1440]) {
   await page.locator('[data-n9be-quick-toggle]').click();
   await page.locator('#n9be-quick-drawer').waitFor({state:'visible'});
   assert(await page.locator('.n9be-quick-grid svg').count()>0,'launcher SVG icons render');
+  assert(await page.locator('[data-n9be-quick-close] svg path[d="M5 12h14"]').count()>0,'launcher close uses a clear minus control');
   assert(await page.locator('.n9be-quick-configure').isVisible(),'launcher visibly offers arrangement controls');
   if(width===390) await page.screenshot({path:'/tmp/open-scholar-workspace-launcher.png',fullPage:false});
   const panel=await page.locator('.n9be-quick-drawer__panel').boundingBox();
