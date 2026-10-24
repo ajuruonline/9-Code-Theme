@@ -28,7 +28,7 @@ style = read("theme/nine-code/style.css")
 
 checks = {
     "visible theme name": "Theme Name: Open Scholar Theme" in style,
-    "theme version 20": "Version: 20.1.2" in style,
+    "theme version 20": "Version: 20.1.3" in style,
     "legacy slug preserved": (ROOT / "theme/nine-code").is_dir(),
     "header footer engine not loaded": "header-footer/bootstrap.php" not in functions,
     "Data Manager is plugin-owned": "data-manager/bootstrap.php" not in functions,

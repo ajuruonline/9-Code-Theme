@@ -14,6 +14,29 @@ function osch_workspace_apps() {
     return isset( $GLOBALS['osch_workspace_apps'] ) ? $GLOBALS['osch_workspace_apps'] : array();
 }
 
+/** Provide useful distinct symbols before JavaScript loads or where a host
+ * delays admin scripts. This prevents every first-party app inheriting the
+ * same generic plugin Dashicon. */
+function osch_workspace_menu_icon( $label, $slug ) {
+    $text = strtolower( $label . ' ' . $slug );
+    $map = array(
+        '/power[ _-]?lecture|e[ _-]?lecture/' => 'dashicons-video-alt3',
+        '/e[ _-]?step/' => 'dashicons-chart-bar',
+        '/library|textbook/' => 'dashicons-book-alt',
+        '/publication|journal/' => 'dashicons-media-document',
+        '/e[ _-]?learning/' => 'dashicons-welcome-learn-more',
+        '/e[ _-]?clas/' => 'dashicons-feedback',
+        '/presentation/' => 'dashicons-slides',
+        '/conference|event/' => 'dashicons-calendar-alt',
+        '/user|people/' => 'dashicons-groups',
+        '/backup/' => 'dashicons-database-export',
+        '/open[ _-]?navigator|index/' => 'dashicons-location-alt',
+        '/open[ _-]?scholar|nine|ncu|9/' => 'dashicons-welcome-learn-more',
+    );
+    foreach ( $map as $pattern=>$icon ) { if ( preg_match( $pattern, $text ) ) { return $icon; } }
+    return 'dashicons-admin-generic';
+}
+
 add_action( 'admin_menu', 'osch_workspace_collect_apps', PHP_INT_MAX );
 /* Keep essential WordPress administration available without making it compete
  * with the application library. It is one deliberately branded utility menu. */
@@ -53,6 +76,7 @@ function osch_workspace_collect_apps() {
         if ( empty( $item[2] ) || empty( $item[1] ) || ! current_user_can( $item[1] ) ) { continue; }
         $slug = (string) $item[2];
         if ( ! osch_workspace_is_app( $slug, (string) $item[0] ) ) { continue; }
+        $menu[$key][6] = osch_workspace_menu_icon( (string) $item[0], $slug );
         $url = false !== strpos( $slug, '.php' ) ? admin_url( $slug ) : admin_url( 'admin.php?page=' . rawurlencode( $slug ) );
         $apps[ $slug ] = array( 'label'=>trim( wp_strip_all_tags( $item[0] ) ), 'url'=>$url );
     }

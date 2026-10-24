@@ -1,5 +1,9 @@
 # Changelog
 
+## Open Scholar Theme 20.1.3
+- Adds a final high-specificity no-blue lock for current menu rows, submenu focus states and current-menu arrows, including host-injected WordPress colour-scheme rules.
+- Assigns distinct first-party application Dashicons server-side as a fallback before the enhanced SVG icon system runs.
+
 ## Open Scholar Theme 20.1.2
 - Adds an explicit Control Centre `+` / `−` submenu control that reliably reveals Settings, Appearance, Tools, Plugins, Users and Updates on touch screens.
 - Replaces repeated app symbols with contextual icons for lectures, courses, libraries, textbooks, publications, presentations, events, users and system controls.

@@ -1,6 +1,6 @@
 # Upgrading to Open Scholar Theme 20
 
-1. Back up the site, then upload `open-scholar-theme-20.1.2.zip` through **Appearance → Themes → Add New → Upload**.
+1. Back up the site, then upload `open-scholar-theme-20.1.3.zip` through **Appearance → Themes → Add New → Upload**.
 2. Choose **Replace current with uploaded**. The internal `nine-code` folder is unchanged, so WordPress upgrades the active theme in place.
 3. Keep Data Manager, Conference, Teacher, OpenScholar and other application plugins installed and active. Version 20 does not bundle or deactivate them.
 4. Confirm the plugin-provided header/footer, important editing screens, sharing preview and mobile administration.

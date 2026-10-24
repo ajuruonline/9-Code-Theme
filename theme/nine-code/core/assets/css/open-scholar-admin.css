@@ -134,6 +134,21 @@ body.wp-admin #adminmenu a,body.wp-admin #adminmenu div.wp-menu-image:before{col
 body.wp-admin #adminmenu>li>a:hover,body.wp-admin #adminmenu .wp-submenu a:hover,body.wp-admin #adminmenu .wp-submenu a:focus{background:#0b3d22!important;color:#fff!important}
 body.wp-admin #adminmenu>li.current>a,body.wp-admin #adminmenu>li.wp-has-current-submenu>a,body.wp-admin #adminmenu .wp-submenu li.current a{background:var(--osch-soft)!important;color:var(--osch-dark)!important;box-shadow:inset 3px 0 0 var(--osch-accent)!important}
 body.wp-admin #adminmenu>li.current>a .wp-menu-image:before,body.wp-admin #adminmenu>li.wp-has-current-submenu>a .wp-menu-image:before{color:var(--osch-dark)!important}
+/* Final no-blue navigation lock. Some hosts append WordPress colour-scheme
+   rules after theme styles, including a blue current-submenu edge/arrow. */
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-menu-open>a.menu-top{background:#b6f5cf!important;border-color:#b6f5cf!important;color:#082a1b!important;box-shadow:none!important;outline:0!important}
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top:before,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top:after,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top:before,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top:after,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow:after,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow div{display:none!important;border-color:transparent!important;background:transparent!important;box-shadow:none!important}
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu li.current>a,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:hover,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:focus{background:#15482f!important;color:#e9fff1!important;box-shadow:inset 3px 0 0 #86efac!important;outline:0!important}
 body.wp-admin input:focus,body.wp-admin textarea:focus,body.wp-admin select:focus{border-color:var(--osch-accent)!important;box-shadow:0 0 0 1px var(--osch-accent)!important}
 body.wp-admin details[data-ninecode-settings-section]{background:var(--osch-card);border:1px solid var(--osch-border);border-radius:var(--osch-radius)}
 body.wp-admin details[data-ninecode-settings-section]>summary{min-height:44px;color:var(--osch-dark)}

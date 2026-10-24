@@ -17,6 +17,7 @@ for (const width of [360,390,768,1440]) {
   assert.equal(await page.locator('#menu-posts').count(),0,'native posts are in launcher, not app sidebar');
   assert.equal(await page.locator('#toplevel_page_marketing-fixture').count(),0,'unrelated plugin excluded');
   assert.equal(await page.locator('#toplevel_page_power-lecture').count(),1,'first party app retained');
+  assert.notEqual(await page.locator('#toplevel_page_power-lecture .wp-menu-image').innerHTML(),await page.locator('#toplevel_page_osch-system .wp-menu-image').innerHTML(),'application and Control Centre icons are distinct');
   assert.equal(await page.locator('#toplevel_page_osch-system').count(),1,'branded Control Centre retains essential platform controls');
   await page.locator('#osch-app-search').fill('Power Lecture');
   assert.equal(await page.locator('.osch-app-tile:visible').count(),1,'app search filters tiles');
@@ -30,6 +31,8 @@ for (const width of [360,390,768,1440]) {
     await page.locator('#toplevel_page_osch-system .osch-menu-expand').click();
     assert(await page.locator('#toplevel_page_osch-system .wp-submenu').isVisible(),'Control Centre expands to show maintenance submenus on mobile');
     assert.equal(await page.locator('#toplevel_page_osch-system .osch-menu-expand').textContent(),'−','Control Centre uses an explicit minus when open');
+    const submenuColor=await page.locator('#toplevel_page_osch-system .wp-submenu').evaluate(e=>getComputedStyle(e).backgroundColor);
+    assert.notEqual(submenuColor,'rgb(56, 88, 233)','no stock blue submenu background leaks into mobile navigation');
     const after=await page.locator('.osch-workspace').boundingBox();
     assert(Math.abs(before.x-after.x)<1,'opening mobile navigation does not push the workspace sideways');
     if(width===390) await page.screenshot({path:'/tmp/open-scholar-workspace-menu.png',fullPage:false});
