@@ -1,0 +1,12 @@
+{
+  "nine": 1,
+  "plugins": [
+    {
+      "name": "9-Code-Theme settings",
+      "slot": "admin-page",
+      "active": true,
+      "html": "<h1>9-Code-Theme</h1>\n<hr class=\"wp-header-end\">\n<form>\n<table class=\"form-table\" role=\"presentation\">\n<tr>\n<th scope=\"row\"><label for=\"ncp-label\">Label</label></th>\n<td>\n<input type=\"text\" id=\"ncp-label\" class=\"regular-text\" value=\"\">\n<p class=\"description\">Settings preview. Replace this markup with the plugin screen.</p>\n</td>\n</tr>\n</table>\n<p class=\"submit\"><button type=\"button\" class=\"button button-primary\">Save Changes</button> <a class=\"button\" href=\"#ncp-label\">Label link</a></p>\n</form>",
+      "css": ""
+    }
+  ]
+}

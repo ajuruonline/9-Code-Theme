@@ -2,7 +2,6 @@
 <ruleset name="Nine Code audit">
 	<description>Security, i18n, deprecation and PHP-compatibility checks for the theme and the plugin.</description>
 	<file>theme</file>
-	<file>plugin</file>
 	<arg name="extensions" value="php"/>
 	<arg value="s"/>
 

@@ -36,6 +36,12 @@ jobs:
         run: node tests/e2e/editor.mjs
       - name: Visual editor
         run: node tests/e2e/visual-editor.mjs
+      - name: Data Manager integration environment (SCF, fixtures, partner plugins and apps when reachable)
+        run: bin/setup-integration-env.sh
+      - name: Data Manager integration suites
+        run: tests/integration/run.sh
+      - name: Data Workspace end-to-end (phone + desktop)
+        run: node tests/e2e/data-workspace.mjs
       - name: WordPress Plugin Check
         run: bin/plugin-check.sh
       - name: Upgrade from the old 3-package install

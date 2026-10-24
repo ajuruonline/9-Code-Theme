@@ -1,0 +1,46 @@
+<?php
+/**
+ * Plugin Name: 9 Post Editor — Native Front-End Workspace
+ * Description: WordPress-native mobile post workspace with full-screen front-end editing, lightweight site fields, automatic post/plugin field discovery, 9CF AI workflows, bite-sized post/category backup and restore with optional media, and optional legacy ACF compatibility.
+ * Version: 4.0.4
+ * Author: Studio 9
+ * Requires at least: 6.2
+ * Requires PHP: 7.4
+ * Text Domain: nine-post-manager
+ * License: GPL-2.0-or-later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Update URI: false
+ */
+
+if ( ! defined( 'ABSPATH' ) ) { exit; }
+
+define( 'NPM9_VERSION', '4.0.4' );
+define( 'NPM9_FILE', __FILE__ );
+define( 'NPM9_DIR', trailingslashit( dirname( __FILE__ ) ) );
+define( 'NPM9_URL', NINE55_ULTRON_DATA_URL . 'modules/post/' );
+
+// Core v4 runtime: WordPress-native and ACF-independent.
+require_once NPM9_DIR . 'includes/class-nine-post-manager.php';
+require_once NPM9_DIR . 'includes/class-nine-post-manager-fields.php';
+require_once NPM9_DIR . 'includes/class-nine-post-manager-ninecf.php';
+require_once NPM9_DIR . 'includes/class-nine-post-manager-backup.php';
+require_once NPM9_DIR . 'includes/class-nine-post-manager-design.php';
+
+/*
+ * Runs once every plugin has loaded. Data Manager is loaded from the theme, and the theme loads after
+ * plugins_loaded has already fired, so run it now in that case rather than wait for a hook that never fires again.
+ */
+$npm9_boot = static function () {
+    Nine_Post_Manager::instance();
+    Nine_Post_Manager_Fields::instance();
+    Nine_Post_Manager_9CF::instance();
+    Nine_Post_Manager_Backup::instance();
+    Nine_Post_Manager_Design::instance();
+
+    // The old Instant ACF renderer is compatibility-only and loads only on sites that still use ACF.
+    if ( function_exists( 'acf_get_field_groups' ) || class_exists( 'ACF' ) ) {
+        require_once NPM9_DIR . 'includes/class-nine-post-manager-renderer.php';
+        Nine_Post_Manager_Renderer::instance();
+    }
+};
+if ( did_action( 'plugins_loaded' ) ) { $npm9_boot(); } else { add_action( 'plugins_loaded', $npm9_boot, 20 ); }

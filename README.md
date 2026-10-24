@@ -1,17 +1,19 @@
 # Nine Code
 
-One product, two installable pieces:
+One product, one installable package: the **Nine Code** theme (`theme/nine-code`). It contains:
 
-| Piece | Folder | What it is |
+| Part | Folder | What it is |
 |---|---|---|
-| **Nine Code** (theme) | `theme/nine-code` | Public site (templates, header/footer, display settings, patterns) **plus the former 9Core**: Style Authority, admin workspace/branding, editor tools, builders, Doctor, diagnostics. |
-| **Nine Code Data** (plugin) | `plugin/nine-code-data` | The former 9 Data Manager: Post Editor, Category Manager, Post Creator, Form Manager, Data Backup, data engine, AI manager. |
+| Nine Code (theme) | `theme/nine-code` | Public site (templates, header/footer, display settings, patterns) **plus the former 9Core**: Style Authority, admin workspace/branding, editor tools, builders, Doctor, diagnostics. |
+| Data Manager | `theme/nine-code/data-manager` | Post Editor, Category Manager, Post Creator, Form Manager, Data Backup, data engine, AI manager. Until 17.1.0 this was the separate "Nine Code Data" plugin. |
 
-Why the data manager is a plugin and not part of the theme: it registers custom post types
-(`nine10_form_def`, `nine10_form_response`, and data-engine types), owns a database table, and provides
-shortcodes and blocks that live inside your post content. Theme code stops running when a theme is
-switched or updated badly, which would make those post types vanish from wp-admin and leave raw shortcodes
-on pages. Plugins survive theme changes. Everything else belongs in the theme.
+Installing or updating the theme installs Data Manager too. The separate plugin is deactivated automatically
+once the theme is active; your data is not changed.
+
+Trade-off: Data Manager's custom post types (`nine10_form_def`, `nine10_form_response`, data-engine types),
+shortcodes and blocks are registered only while Nine Code is the active theme. Switching to another theme keeps
+the data in the database, but the screens that edit it and the shortcodes on pages stop working until Nine Code
+is active again.
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Updating
@@ -25,8 +27,11 @@ Upgrading from the old three-package install (9Code 15 Theme + 9Core + 9 Data Ma
 ```bash
 npm install
 bin/setup-test-site.sh && bin/serve-test-site.sh   # throw-away WordPress (SQLite) on :8890
-npm test                                           # lint + public + admin crawl + editor acceptance
+npm test                                           # lint + public + crawl + editors + integration + workspace + plugin check
 bin/test-upgrade.sh                                # old 3-package install -> Nine Code
+bin/setup-integration-env.sh                       # + SCF, fixtures, Open Scholar, Conference.lat, Nine Code apps
+tests/integration/run.sh                           # Data Manager integration suites (exact totals)
+node tests/e2e/data-workspace.mjs                  # Data Workspace end-to-end, phone + desktop
 bin/build.sh                                       # dist/*.zip
 ```
 CI runs all of the above (`.github/workflows/ci.yml`).

@@ -22,7 +22,8 @@ for (const url of ['/sample-page/', '/']) {
   await visit(page, url);
   const h1s = await page.locator('h1').allInnerTexts();
   t.ok(h1s.length === 1, `${url}: exactly one h1 (${JSON.stringify(h1s)})`);
-  const box = await page.locator('h1.ncu-entry-title').first().boundingBox();
+  const titleEl = page.locator('h1.ncu-entry-title').first();
+  const box = (await titleEl.count()) ? await titleEl.boundingBox() : null;
   t.ok(!box || box.x >= 8, `${url}: title is not flush against the viewport edge (x=${box && Math.round(box.x)})`);
 }
 await visit(page, '/sample-post-1/');

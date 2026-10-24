@@ -1,6 +1,36 @@
 # Changelog
 
-## Unreleased
+## Theme 18.0.0 (Data Manager bundled, one package)
+- **One package.** Data Manager now lives inside the Nine Code theme (`theme/nine-code/data-manager`). Installing or updating the theme installs and activates it. The separate Nine Code Data plugin is no longer shipped.
+- **Automatic retirement.** Once the theme is active, the old "9 Data Manager" plugin and the separate Nine Code Data plugin are deactivated on the next admin page. No data changes: option names, meta keys, post types, taxonomies, tables, REST routes, hooks and filters are the same.
+- **Theme events instead of plugin hooks.** Activation has no plugin hook in a theme. Installing runs from `after_switch_theme` and from an `admin_init` check against the stored version, so the history table and roles are in place on the first admin request after an update.
+- **Plugin-only APIs are gone** from the Data Manager code. `bin/lint.sh` now keeps activation hooks, `plugin_dir_*`, `plugins_url` and textdomain loading out of the theme. The only exception is `plugin_basename()` in the AI Manager, which updates other plugins.
+- **One version.** Theme and Data Manager are both 18.0.0. `bin/lint.sh` checks the theme header, both constants and the Data Manager readme stable tag.
+- **Waiting screens** in the Data Workspace and Post Editor show an animated graduation cap (tassel swinging, reduced motion respected) instead of plain loading text.
+- **Build and tests:** `bin/build.sh` produces one zip, `nine-code-theme-18.0.0.zip`. `bin/test-upgrade.sh` rehearses the full path from the old 3-package install, through the separate 17.1.0 plugin, to the 18.0.0 theme.
+- **Trade-off:** Data Manager's post types, shortcodes and blocks are registered only while Nine Code is the active theme. Data stays in the database, but those screens and shortcodes stop working under another theme.
+
+## Theme 17.1.0 / Plugin 17.1.0
+- Every suite settings/data-entry section starts closed; the user chooses what to open and no saved tab state reopens it.
+- Sections, tabs and entry groups alternate subtle red/green navigation colours and stack into touch-friendly controls on phones.
+- Menu & UI, AI Manager, Data Workspace, Category Manager and Post Manager now expose clearer section/field descriptions where available.
+- Added `docs/SETTINGS-UI-CONTRACT.md`, shared assets and an opt-in filter for future plugins, plus a static regression gate in `bin/lint.sh`.
+- Every collapsible panel in the Header & Footer and Style settings continues to start closed; the footer settings no longer reopens the last tab on load.
+
+## Theme 17.0.0 / Plugin 17.0.0
+- The quick-action launcher sits in the middle of the right edge on desktop, phones and the front end, instead of the bottom corner where it covered content.
+- Versions of the theme and Nine Code Data are aligned at 17.0.0.
+
+## Plugin 11.0.0 — Universal Data Manager
+- **Every record type is visible**: post types without an admin screen are discovered too (read-only where their plugin protects them); WordPress internals stay hidden.
+- **Comments** are a data type: edit author, email, website and text; approve, hold, spam or trash through WordPress' own moderation functions (status changes need the explicit permission).
+- **Forms**: form questions are editable with the Form Manager's own rules (an empty form is refused); visitor responses are listed with their answers, read-only. The visitor IP stays a hash that is never shown.
+- **Data Workspace**: one mobile-first admin for every data type: WordPress core, custom post types, taxonomies, users, ACF/SCF fields (group, repeater, flexible content, gallery, file, relationship, post object, user, taxonomy), registered and discovered meta, and every Nine Code app.
+- **Provider contract v1** (`docs/DATA-PROVIDER-CONTRACT.md`): identity/version/migrations, entities, fields, storage, validation/sanitization, read/write/permission/publish/transaction callbacks, export/import transforms, protected and secret fields. Open Scholar 4.6.0 and Conference.lat 1.7.0 ship dedicated providers. Teaching Player, LectureBoard, Live Lecture and Workshop progress use bundled adapters.
+- **AI export/import**: JSON package (records + schema + instructions + stable `_ref` ids and revision hashes), XLSX (with Guide sheet) and CSV; staged imports with field-level preview and before/after comparison, conflict detection, selective apply, batching (200 per request), explicit create/trash/status permissions, one History entry per import, undo and downloadable error reports.
+- **Security**: `manage_ninecode_data` plus per-record WordPress/provider capabilities, REST nonce auth, object-type verification, mass-assignment guard, structural/secret key protection, kses for users without `unfiltered_html`, CSV formula guard, exit-guarded staging files, scope locks, compensating rollback, audit history table `{prefix}ncd_history`.
+- **Compatibility**: `ninecode/v1/data/*` routes, the `ninecode-universal-data` page, admin-post actions and draft filters are preserved; the draft import route is now preview-only and the draft's unrestricted meta import was removed. No option names, meta keys, post types, taxonomies or hooks changed.
+- **Tests**: integration suites (`tests/integration/run.sh`: 349 checks) and the Data Workspace end-to-end test (`tests/e2e/data-workspace.mjs`: phone and desktop).
 - Posts and Pages now keep only Save/Save Draft and Publish/Update visible in the editor top bar; every other editor/plugin action, including Edit with Elementor, is routed through the existing hamburger menu on desktop and mobile.
 
 ## Theme 16.0.0 / Plugin 10.0.0 — Nine Code baseline

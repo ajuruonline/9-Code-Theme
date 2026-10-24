@@ -4,8 +4,8 @@
  *
  * Shared infrastructure for the Nine Code theme: settings, Style Authority,
  * admin workspace/branding, editor tools, builders, Doctor and diagnostics.
- * Loaded from functions.php. The Data Manager is a separate plugin
- * (nine-code-data) so data, CPTs and shortcodes survive theme changes.
+ * Loaded from functions.php. The Data Manager is loaded from data-manager/,
+ * so its custom post types and shortcodes are registered only while this theme is active.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -30,8 +30,8 @@ function ncu_core_theme_api_compatible( $theme_api ) {
 }
 
 /**
- * The Data Manager is the separate nine-code-data plugin. Plugins load before
- * the theme, so its version constant is reliable here.
+ * True when Data Manager is loaded. It is bundled in data-manager/ and defines
+ * NINE55_ULTRON_DATA_VERSION before this module's functions run.
  */
 function ncu_core_external_data_edition_active() {
     return defined( 'NINE55_ULTRON_DATA_VERSION' );

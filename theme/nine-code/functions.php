@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'NCU_THEME_VERSION', '16.1.0' );
+define( 'NCU_THEME_VERSION', '18.0.0' );
 define( 'NCU_THEME_RELEASE_SHOT', 'Nine Code baseline' );
 define( 'NCU_THEME_API_VERSION', 14 );
 define( 'NINECODE_SUITE_THEME_VERSION', NCU_THEME_VERSION );
@@ -57,6 +57,14 @@ require_once NCU_THEME_DIR . '/inc/migrate-legacy.php';
 if ( ! function_exists( 'ncu_core_defaults' ) ) {
     require_once NCU_THEME_DIR . '/core/bootstrap.php';
 }
+
+/*
+ * Data Manager (Post Editor, Category Manager, Post Creator, Form Manager, Data Backup).
+ * Bundled with the theme since 18.0.0 and loaded on every request, as the separate
+ * "Nine Code Data" plugin was. A still-active plugin copy takes precedence for this
+ * request; see data-manager/bootstrap.php.
+ */
+require_once NCU_THEME_DIR . '/data-manager/bootstrap.php';
 
 if ( ncu_theme_is_admin_runtime() ) {
     require_once NCU_THEME_DIR . '/inc/helpers.php';
