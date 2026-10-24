@@ -21,7 +21,7 @@ inventory is complete.
 | **9CODE Post Learning Box** 1.4.1 (`e-lecture-engine` / `claude/post-learning-box-v1.4.1`) | `_9plb_*` meta on regular posts; learner notes in user meta | Generic discovery | Post fields | `_9plb_*` keys (private, not registered for REST) and learner notes. To make them editable, register them with `auth_callback` + `show_in_rest`, or ship a provider. |
 | **9stagram** 0.7.0 (`9stagram` / `claude/9stagram-baseline-0.7.0`) | `ninestagram_offer`, `ninestagram_order`, offer category; profile user meta | Generic discovery | Offer posts, categories, unprefixed user meta (`ninestagram_*`) | `_ninestagram_*` offer/order meta (private), the order payload |
 | **9CODE Ultra Home Archive Page** 1.2.29 (`9flix` / `fix-and-enhance-1.2.25`) | `_nine_uha_*` meta on hub pages | Generic discovery | Page fields | `_nine_uha_*` layout keys (private) |
-| **Open Scholar Theme** 20.1.3 (this repo) | Host settings and presentation tokens only | Theme exposes an integration contract; current Data Manager is installed separately | Theme-owned SEO and branding settings | Application data remains plugin-owned |
+| **Open Scholar Theme** 20.1.4 (this repo) | Host settings and presentation tokens only | Theme exposes an integration contract; current Data Manager is installed separately | Theme-owned SEO and branding settings | Application data remains plugin-owned |
 
 **Archives:** `publicationpress` stores earlier versions of several apps (Google Meeting Engine 1.0, Conference App 1.1,
 Publications Author Engine 0.1, 9WhatsApp 0.1, Prompt Engine 1.7–1.9) plus a `temporary-9link` copy.

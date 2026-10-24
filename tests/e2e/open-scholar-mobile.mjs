@@ -70,6 +70,8 @@ assert(await page.locator('.editor-header [aria-label="Edit with Elementor"],.ed
 await page.locator('.ncu-editor-tools-toggle').click();
 assert(await page.locator('.ncu-editor-tools-popover').getByText('Edit with Elementor',{exact:true}).isVisible());
 assert(await page.locator('.ncu-editor-tools-popover').getByText('Search',{exact:true}).isVisible());
+assert(await page.locator('.ncu-editor-tools-popover').getByText('View site',{exact:true}).isVisible(),'new-post editor tools retains View site');
+assert(await page.locator('.ncu-editor-tools-popover').getByText('Post settings',{exact:true}).isVisible(),'editor tools retains Post settings');
 assert((await page.evaluate(()=>document.documentElement.scrollWidth))<=391,'editor has no horizontal page overflow');
 console.log('PASS editor keeps meta button and moves dynamically added Elementor/search to popup');
 await page.screenshot({path:'/tmp/open-scholar-mobile-editor.png',fullPage:false});

@@ -44,12 +44,18 @@ function ncu_open_scholar_admin_assets() {
     wp_enqueue_script( 'open-scholar-admin', NCU_CORE_URL . 'assets/js/open-scholar-admin.js', array(), NCU_CORE_VERSION, true );
     $screen = get_current_screen();
     if ( $screen && 'post' === $screen->base && $screen->is_block_editor() ) {
+        $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+        $post_url = $post_id ? get_permalink( $post_id ) : '';
         wp_enqueue_style( 'ncu-editor-workspace', NCU_CORE_URL . 'assets/css/editor-workspace.css', array(), NCU_CORE_VERSION );
         wp_enqueue_script( 'ncu-editor-workspace', NCU_CORE_URL . 'assets/js/editor-workspace.js', array(), NCU_CORE_VERSION, true );
         wp_localize_script( 'ncu-editor-workspace', 'NCUEditorWorkspace', array(
             'enabled'=>true, 'isBlockEditor'=>true, 'toolsDrawer'=>true,
             'consolidateTopbar'=>true, 'title'=>'Open Scholar Editor',
-            'shortcuts'=>array( array( 'label'=>'View Site', 'url'=>home_url( '/' ) ), array( 'label'=>'Upload Plugin', 'url'=>self_admin_url( 'plugin-install.php?tab=upload' ) ) ),
+            'shortcuts'=>array(
+                array( 'label'=>$post_url ? 'View post' : 'View site', 'url'=>$post_url ?: home_url( '/' ) ),
+                array( 'label'=>'Post settings', 'action'=>'post-settings' ),
+                array( 'label'=>'Upload Plugin', 'url'=>self_admin_url( 'plugin-install.php?tab=upload' ) ),
+            ),
         ) );
     }
 }
