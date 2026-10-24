@@ -8,11 +8,11 @@
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-function osch_backup_external_engine_active() {
+function ncu_osch_backup_external_engine_active() {
     return class_exists( 'Nine_Backup_Manager', false );
 }
 
-if ( ! osch_backup_external_engine_active() ) {
+if ( ! ncu_osch_backup_external_engine_active() ) {
     if ( ! defined( 'NINE_BACKUP_VERSION' ) ) { define( 'NINE_BACKUP_VERSION', '2.2.0-osch.2' ); }
     if ( ! defined( 'NINE_BACKUP_FILE' ) ) { define( 'NINE_BACKUP_FILE', __FILE__ ); }
     if ( ! defined( 'NINE_BACKUP_DIR' ) ) { define( 'NINE_BACKUP_DIR', trailingslashit( NCU_CORE_DIR ) . 'ultra-backup/' ); }
@@ -31,8 +31,8 @@ if ( ! osch_backup_external_engine_active() ) {
     Nine_Backup_Manager::instance();
 
     add_action( 'after_switch_theme', array( 'Nine_Backup_Manager', 'activate' ) );
-    add_action( 'admin_init', 'osch_backup_maybe_activate', 6 );
-    function osch_backup_maybe_activate() {
+    add_action( 'admin_init', 'ncu_osch_backup_maybe_activate', 6 );
+    function ncu_osch_backup_maybe_activate() {
         if ( NINE_BACKUP_VERSION !== (string) get_option( 'nine_backup_version', '' ) ) { Nine_Backup_Manager::activate(); }
     }
 }

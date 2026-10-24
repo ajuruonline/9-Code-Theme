@@ -340,7 +340,7 @@ function ncu_admin_header( $title, $description = '' ) {
 
 function ncu_core_dashboard_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
-    $integrations = function_exists( 'open_scholar_theme_integrations' ) ? open_scholar_theme_integrations() : array();
+    $integrations = function_exists( 'ncu_open_scholar_theme_integrations' ) ? ncu_open_scholar_theme_integrations() : array();
     echo '<div class="wrap ncu-admin" data-ninecode-settings-root>';
     ncu_admin_header( 'Open Scholar', 'A lean mobile-first host for Open Scholar plugins. The theme provides identity, SEO, design tokens and compatibility; plugins own application features and data.' );
     echo '<details class="ncu-panel ncu-panel--padded" data-ninecode-settings-section><summary>Host responsibilities</summary><div class="ninecode-settings-body"><p>The theme supplies public templates, Open Scholar branding, responsive administration, SEO/social metadata, Jetpack restraint and shared plugin contracts. It does not create plugin records, AI packages, forms, blocks or builders.</p></div></details>';
@@ -407,9 +407,9 @@ function ncu_core_health_page() {
         array( 'CMS Engine', version_compare( get_bloginfo( 'version' ), '6.6', '>=' ), get_bloginfo( 'version' ) ),
         array( 'Permalinks', '' !== (string) get_option( 'permalink_structure' ), get_option( 'permalink_structure' ) ? get_option( 'permalink_structure' ) : 'Plain' ),
         array( 'HTTPS', $https_ok, $https_ok ? 'Secure site URL' : 'Site URL is not HTTPS' ),
-        array( 'Plugin host contract', function_exists( 'open_scholar_theme_contract' ), 'Theme does not own plugin data or business logic' ),
+        array( 'Plugin host contract', function_exists( 'ncu_open_scholar_theme_contract' ), 'Theme does not own plugin data or business logic' ),
         array( 'Theme header/footer', true, 'Disabled · shell belongs to a plugin' ),
-        array( 'SEO metadata', function_exists( 'osch_seo_is_available' ), function_exists( 'osch_seo_has_provider' ) && osch_seo_has_provider() ? 'Dedicated SEO plugin detected; theme output yields' : 'Open Scholar fallback active' ),
+        array( 'SEO metadata', function_exists( 'ncu_osch_seo_is_available' ), function_exists( 'ncu_osch_seo_has_provider' ) && ncu_osch_seo_has_provider() ? 'Dedicated SEO plugin detected; theme output yields' : 'Open Scholar fallback active' ),
         array( 'Jetpack UI', true, 'Background services preserved; promotional/editor UI restrained' ),
         array( 'Debug Display', ! $debug_display, $debug_display ? 'Visible debug output is enabled' : 'Errors are not exposed to public visitors' ),
     );

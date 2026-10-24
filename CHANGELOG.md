@@ -1,5 +1,9 @@
 # Changelog
 
+## Open Scholar Theme 20.1.5
+- Prevents fatal conflicts with independently installed Open Scholar plugins by moving the theme’s former generic `osch_*` and `open_scholar_theme_*` PHP functions into a theme-specific `ncu_` namespace.
+- Verifies that the theme and a simulated Open Scholar plugin using the former public names can load together.
+
 ## Open Scholar Theme 20.1.4
 - Restores explicit post-editor shortcuts in the Open Scholar tools menu: View post for existing content, View site for a new draft, and Post settings to open the document settings sidebar.
 - Uses the same clear minus close control in the editor tools popover.

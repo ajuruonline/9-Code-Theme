@@ -104,8 +104,8 @@ function ninecodepress_interop_capabilities() {
  * Small Open Scholar plugin seam. Plugins describe themselves through the
  * filter; the theme never scans or rewrites their private records.
  */
-function open_scholar_theme_integrations() {
-    $items = apply_filters( 'open_scholar_theme_integrations', array() );
+function ncu_open_scholar_theme_integrations() {
+    $items = apply_filters( 'ncu_open_scholar_theme_integrations', array() );
     if ( ! is_array( $items ) ) { return array(); }
     $out = array();
     foreach ( $items as $id => $item ) {
@@ -124,8 +124,8 @@ function open_scholar_theme_integrations() {
     return $out;
 }
 
-function open_scholar_theme_design_tokens() {
-    $contract = function_exists( 'open_scholar_theme_contract' ) ? open_scholar_theme_contract() : array();
+function ncu_open_scholar_theme_design_tokens() {
+    $contract = function_exists( 'ncu_open_scholar_theme_contract' ) ? ncu_open_scholar_theme_contract() : array();
     $tokens = isset( $contract['palette'] ) && is_array( $contract['palette'] ) ? $contract['palette'] : array();
     $tokens = array_merge( $tokens, array(
         'primary' => $tokens['accent'] ?? '#14532d',
@@ -133,16 +133,16 @@ function open_scholar_theme_design_tokens() {
         'radius'  => 8,
         'runtime' => 'plugin-host',
     ) );
-    return apply_filters( 'open_scholar_theme_design_tokens', $tokens );
+    return apply_filters( 'ncu_open_scholar_theme_design_tokens', $tokens );
 }
 
 /** Legacy name retained as an adapter for existing Open Scholar plugins. */
 if ( ! function_exists( 'ninecode_theme_get_design_tokens' ) ) {
-    function ninecode_theme_get_design_tokens() { return open_scholar_theme_design_tokens(); }
+    function ninecode_theme_get_design_tokens() { return ncu_open_scholar_theme_design_tokens(); }
 }
 
-add_action( 'after_setup_theme', 'open_scholar_theme_announce_host', 100 );
-function open_scholar_theme_announce_host() {
-    add_theme_support( 'open-scholar-plugin-host', open_scholar_theme_contract() );
-    do_action( 'open_scholar_theme_ready', open_scholar_theme_contract() );
+add_action( 'after_setup_theme', 'ncu_open_scholar_theme_announce_host', 100 );
+function ncu_open_scholar_theme_announce_host() {
+    add_theme_support( 'open-scholar-plugin-host', ncu_open_scholar_theme_contract() );
+    do_action( 'ncu_open_scholar_theme_ready', ncu_open_scholar_theme_contract() );
 }

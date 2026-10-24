@@ -115,7 +115,7 @@ function ncu_open_scholar_maybe_migrate() {
 }
 
 /** Public contract for Open Scholar-family plugins. */
-function open_scholar_theme_contract() {
+function ncu_open_scholar_theme_contract() {
     return array(
         'id' => 'open-scholar-theme',
         'version' => NCU_THEME_VERSION,
@@ -134,6 +134,6 @@ function open_scholar_theme_contract() {
 add_filter( 'ninecodepress_component_contracts', 'ncu_open_scholar_component_contract', 30 );
 function ncu_open_scholar_component_contract( $contracts ) {
     $contracts = is_array( $contracts ) ? $contracts : array();
-    $contracts['open-scholar-theme'] = open_scholar_theme_contract();
+    $contracts['open-scholar-theme'] = ncu_open_scholar_theme_contract();
     return $contracts;
 }

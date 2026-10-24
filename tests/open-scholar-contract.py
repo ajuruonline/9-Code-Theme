@@ -28,7 +28,7 @@ style = read("theme/nine-code/style.css")
 
 checks = {
     "visible theme name": "Theme Name: Open Scholar Theme" in style,
-    "theme version 20": "Version: 20.1.4" in style,
+    "theme version 20": "Version: 20.1.5" in style,
     "legacy slug preserved": (ROOT / "theme/nine-code").is_dir(),
     "header footer engine not loaded": "header-footer/bootstrap.php" not in functions,
     "Data Manager is plugin-owned": "data-manager/bootstrap.php" not in functions,
@@ -44,6 +44,7 @@ checks = {
     "canonical green exposed": "#14532d" in brand,
     "Open Scholar plugin contract exposed": "open_scholar_theme_contract" in brand,
     "plugin registration seam exposed": "open_scholar_theme_integrations" in integration,
+    "theme avoids Open Scholar plugin function collisions": all("function osch_" not in source and "function open_scholar_theme_" not in source for source in (brand, integration, jetpack, seo, backup)),
     "Jetpack remains active but unobtrusive": "jetpack_show_promotions" in jetpack and "deactivate_plugins" not in jetpack,
     "SEO fallback yields to SEO plugins": "osch_seo_has_provider" in seo,
     "Bluehost-hardened Ultra Backup loaded": "class-nine-backup-manager.php" in backup and "Nine_Backup_Manager::instance" in backup,

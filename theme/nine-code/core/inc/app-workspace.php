@@ -3,21 +3,21 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 /** First-party applications can declare their menu slug explicitly. */
-function osch_workspace_is_app( $slug, $label ) {
+function ncu_osch_workspace_is_app( $slug, $label ) {
     $text = strtolower( wp_strip_all_tags( $label ) );
     $match = (bool) preg_match( '/^(?:open[ _-]?scholar|osch|nine|ncu|n9|9|conference|alp|power[-_]?lecture|e[-_]?lecture|e[-_]?library|e[-_]?learning|e[-_]?textbook|e[-_]?step|e[-_]?clas|e[-_]?presentation|e[-_]?lectura)/i', $slug );
     $match = $match || (bool) preg_match( '/^(?:9\b|9code\b|open\s+(?:scholar|index|navigator|publications|student|share|journal)|power lecture|e[- ]?(?:step|library|learning|clas|presentation|textbooks|lectura)|lecture notes|conference)/i', $text );
     return (bool) apply_filters( 'open_scholar_workspace_is_app', $match, $slug, $label );
 }
 
-function osch_workspace_apps() {
-    return isset( $GLOBALS['osch_workspace_apps'] ) ? $GLOBALS['osch_workspace_apps'] : array();
+function ncu_osch_workspace_apps() {
+    return isset( $GLOBALS['ncu_osch_workspace_apps'] ) ? $GLOBALS['ncu_osch_workspace_apps'] : array();
 }
 
 /** Provide useful distinct symbols before JavaScript loads or where a host
  * delays admin scripts. This prevents every first-party app inheriting the
  * same generic plugin Dashicon. */
-function osch_workspace_menu_icon( $label, $slug ) {
+function ncu_osch_workspace_menu_icon( $label, $slug ) {
     $text = strtolower( $label . ' ' . $slug );
     $map = array(
         '/power[ _-]?lecture|e[ _-]?lecture/' => 'dashicons-video-alt3',
@@ -37,14 +37,14 @@ function osch_workspace_menu_icon( $label, $slug ) {
     return 'dashicons-admin-generic';
 }
 
-add_action( 'admin_menu', 'osch_workspace_collect_apps', PHP_INT_MAX );
+add_action( 'admin_menu', 'ncu_osch_workspace_collect_apps', PHP_INT_MAX );
 /* Keep essential WordPress administration available without making it compete
  * with the application library. It is one deliberately branded utility menu. */
-add_action( 'admin_menu', 'osch_workspace_register_control_centre', 99990 );
-function osch_workspace_register_control_centre() {
+add_action( 'admin_menu', 'ncu_osch_workspace_register_control_centre', 99990 );
+function ncu_osch_workspace_register_control_centre() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
-    add_menu_page( 'Open Scholar Control Centre', 'Control Centre', 'manage_options', 'osch-system', 'osch_workspace_control_centre', 'dashicons-admin-generic', 99 );
-    add_submenu_page( 'osch-system', 'Control Centre', 'Overview', 'manage_options', 'osch-system', 'osch_workspace_control_centre' );
+    add_menu_page( 'Open Scholar Control Centre', 'Control Centre', 'manage_options', 'osch-system', 'ncu_osch_workspace_control_centre', 'dashicons-admin-generic', 99 );
+    add_submenu_page( 'osch-system', 'Control Centre', 'Overview', 'manage_options', 'osch-system', 'ncu_osch_workspace_control_centre' );
     add_submenu_page( 'osch-system', 'Settings', 'Settings', 'manage_options', 'options-general.php' );
     add_submenu_page( 'osch-system', 'Appearance', 'Appearance', 'edit_theme_options', 'themes.php' );
     add_submenu_page( 'osch-system', 'Tools', 'Tools', 'edit_posts', 'tools.php' );
@@ -53,7 +53,7 @@ function osch_workspace_register_control_centre() {
     add_submenu_page( 'osch-system', 'Updates', 'Updates', 'update_core', 'update-core.php' );
 }
 
-function osch_workspace_control_centre() {
+function ncu_osch_workspace_control_centre() {
     $items = array(
         array( 'Settings', 'options-general.php', 'Site name, reading, permalinks and core settings.' ),
         array( 'Appearance', 'themes.php', 'Themes, navigation and visual system controls.' ),
@@ -69,18 +69,18 @@ function osch_workspace_control_centre() {
     echo '</div></main>';
 }
 
-function osch_workspace_collect_apps() {
+function ncu_osch_workspace_collect_apps() {
     global $menu;
     $apps = array();
     foreach ( (array) $menu as $item ) {
         if ( empty( $item[2] ) || empty( $item[1] ) || ! current_user_can( $item[1] ) ) { continue; }
         $slug = (string) $item[2];
-        if ( ! osch_workspace_is_app( $slug, (string) $item[0] ) ) { continue; }
-        $menu[$key][6] = osch_workspace_menu_icon( (string) $item[0], $slug );
+        if ( ! ncu_osch_workspace_is_app( $slug, (string) $item[0] ) ) { continue; }
+        $menu[$key][6] = ncu_osch_workspace_menu_icon( (string) $item[0], $slug );
         $url = false !== strpos( $slug, '.php' ) ? admin_url( $slug ) : admin_url( 'admin.php?page=' . rawurlencode( $slug ) );
         $apps[ $slug ] = array( 'label'=>trim( wp_strip_all_tags( $item[0] ) ), 'url'=>$url );
     }
-    $GLOBALS['osch_workspace_apps'] = $apps;
+    $GLOBALS['ncu_osch_workspace_apps'] = $apps;
     /* Remove navigation entries only; the launcher retains maintenance routes. */
     foreach ( (array) $menu as $key=>$item ) {
         if ( empty( $item[2] ) ) { continue; }
@@ -97,11 +97,11 @@ add_filter( 'admin_body_class', function ( $classes ) {
 } );
 
 /** Render outside the stock widget container so saved widget settings survive. */
-add_action( 'admin_notices', 'osch_workspace_home' );
-function osch_workspace_home() {
+add_action( 'admin_notices', 'ncu_osch_workspace_home' );
+function ncu_osch_workspace_home() {
     $screen = get_current_screen();
     if ( ! $screen || 'dashboard' !== $screen->id ) { return; }
-    $apps = osch_workspace_apps();
+    $apps = ncu_osch_workspace_apps();
     $name = wp_get_current_user()->display_name;
     ?>
     <main class="osch-workspace" aria-label="Open Scholar workspace">
