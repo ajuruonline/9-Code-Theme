@@ -28,8 +28,10 @@ final class NCD_Admin {
 		if ( false === strpos( (string) $hook, self::SLUG ) ) { return; }
 		wp_enqueue_media();
 		wp_enqueue_editor();
-		wp_enqueue_style( 'ncd-workspace', NINE55_ULTRON_DATA_URL . 'assets/data-workspace.css', array( 'dashicons' ), NINE55_ULTRON_DATA_VERSION );
-		wp_enqueue_script( 'ncd-workspace', NINE55_ULTRON_DATA_URL . 'assets/data-workspace.js', array( 'wp-api-fetch' ), NINE55_ULTRON_DATA_VERSION, true );
+		wp_enqueue_style( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.css', array(), NINE55_ULTRON_DATA_VERSION );
+		wp_enqueue_script( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.js', array(), NINE55_ULTRON_DATA_VERSION, true );
+		wp_enqueue_style( 'ncd-workspace', NINE55_ULTRON_DATA_URL . 'assets/data-workspace.css', array( 'dashicons', 'ncd-cap-loader' ), NINE55_ULTRON_DATA_VERSION );
+		wp_enqueue_script( 'ncd-workspace', NINE55_ULTRON_DATA_URL . 'assets/data-workspace.js', array( 'wp-api-fetch', 'ncd-cap-loader' ), NINE55_ULTRON_DATA_VERSION, true );
 		wp_localize_script( 'ncd-workspace', 'NCDWorkspace', array(
 			'root'     => esc_url_raw( rest_url( NCD_REST::NS ) ),
 			'nonce'    => wp_create_nonce( 'wp_rest' ),
@@ -48,7 +50,7 @@ final class NCD_Admin {
 		if ( ! NCD_Service::can_use() ) { wp_die( esc_html__( 'You do not have permission to use Data Manager.', 'nine-code-data' ) ); }
 		echo '<div class="wrap ncd-wrap"><h1 class="ncd-title">' . esc_html__( 'Data Workspace', 'nine-code-data' ) . '</h1>';
 		echo '<p class="ncd-lede">' . esc_html__( 'Find, edit, export and import data from every Nine Code app and plugin. Changes are validated by the plugin that owns the data, recorded in History and can be undone.', 'nine-code-data' ) . '</p>';
-		echo '<div id="ncd-app" class="ncd-app" aria-live="polite"><p class="ncd-loading">' . esc_html__( 'Loading…', 'nine-code-data' ) . '</p></div>';
+		echo '<div id="ncd-app" class="ncd-app" aria-live="polite"></div>';
 		echo '<noscript><p>' . esc_html__( 'Data Workspace needs JavaScript.', 'nine-code-data' ) . '</p></noscript></div>';
 	}
 }

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Waiting screens in the Data Workspace and Post Editor show an animated graduation cap (tassel swinging, reduced motion respected) instead of plain loading text.
 
 ## Theme 17.1.0 / Plugin 17.1.0
 - Every suite settings/data-entry section starts closed; the user chooses what to open and no saved tab state reopens it.

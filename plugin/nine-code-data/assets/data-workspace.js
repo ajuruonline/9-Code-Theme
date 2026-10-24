@@ -90,7 +90,7 @@
 		setTimeout( function () { t.remove(); }, kind === 'error' ? 8000 : 4000 );
 	}
 	function notice( msg, kind ) { return h( 'div', { class: 'ncd-notice ncd-notice--' + ( kind || 'info' ) }, msg ); }
-	function spinner( label ) { return h( 'p', { class: 'ncd-loading', text: label || 'Loading…' } ); }
+	function spinner( label ) { var box = document.createElement( 'div' ); box.innerHTML = window.NCDCap( label ); return box.firstChild; }
 	function button( label, onclick, cls, attrs ) {
 		return h( 'button', Object.assign( { type: 'button', class: 'button ' + ( cls || '' ), onclick: onclick }, attrs || {} ), label );
 	}

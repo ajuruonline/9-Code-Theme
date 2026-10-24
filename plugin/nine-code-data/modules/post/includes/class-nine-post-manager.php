@@ -78,6 +78,8 @@ final class Nine_Post_Manager {
             return;
         }
         wp_enqueue_style( 'npm9-admin', NPM9_URL . 'assets/admin.css', [], NPM9_VERSION );
+        wp_enqueue_style( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.css', [], NPM9_VERSION );
+        wp_enqueue_script( 'ncd-cap-loader', NINE55_ULTRON_DATA_URL . 'assets/cap-loader.js', [], NPM9_VERSION, true );
         wp_enqueue_script( 'npm9-native-recovery', NPM9_URL . 'assets/native-editor-recovery.js', [], NPM9_VERSION, true );
         wp_localize_script( 'npm9-native-recovery', 'NPM9NativeRecovery', [
             'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
@@ -191,7 +193,7 @@ final class Nine_Post_Manager {
             Nine_Code_Visual_Editor::instance()->enqueue();
             $app_deps[] = Nine_Code_Visual_Editor::HANDLE;
         }
-        wp_enqueue_script( 'npm9-app', NPM9_URL . 'assets/app.js', $app_deps, NPM9_VERSION, true );
+        wp_enqueue_script( 'npm9-app', NPM9_URL . 'assets/app.js', array_merge( $app_deps, array( 'ncd-cap-loader' ) ), NPM9_VERSION, true );
         wp_localize_script( 'npm9-app', 'NPM9', $this->js_config() );
     }
 
