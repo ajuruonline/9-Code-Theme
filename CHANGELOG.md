@@ -1,5 +1,47 @@
 # Changelog
 
+## Open Scholar Theme 20.1.1
+- Adds direct Google Drive OAuth connection and automatic, server-side Drive uploads for completed backup packages; Drive-mounted-folder copies remain supported for hosts where that is preferred.
+- Streams Drive uploads on cURL-enabled hosts to avoid loading full-site packages into PHP memory, and retains a small-package compatibility fallback.
+- Shows the tracked Google Drive state for each archive and deletes the matching remote copy when an archive is deleted; a clear warning is shown if the remote copy cannot be removed.
+- Adds a branded Control Centre for WordPress settings, appearance, tools, plugins, users and updates without returning those items to the app-focused sidebar.
+- Replaces duplicated application icons, blue focus/active treatments and the stock toolbar treatment with distinct Open Scholar symbols and controls; makes the mobile application drawer reliably touch-scrollable.
+- Makes Quick Actions configuration discoverable directly in its launcher with an Arrange action.
+
+## Open Scholar Theme 20.1.0
+- Adds immediate accessible backup preparation feedback, prevents duplicate submissions and opens collapsed required fields when validation fails.
+- Replaces the stock dashboard with an Open Scholar campus workspace, searchable first-party app tiles and site/upload shortcuts.
+- Curates the sidebar to 9/Open Scholar apps, keeping maintenance routes accessible through Quick Actions.
+- Fixes menu icon/text overlap and overrides legacy black/blue interaction styles with the emerald application shell.
+- Gives the launcher a matching dark emerald tile layout and consistent local SVG icons.
+
+## Open Scholar Theme 20.0.1
+- Restores the mobile launcher, plugin ZIP install/replace workflow and site preview shortcuts across administration, post editing and signed-in site views.
+- Restores the full 9 Code workspace styling with Open Scholar green tokens, cards, tables, menus, inputs and editor chrome.
+- Opens mobile Quick Actions as a bounded bottom panel and wraps settings tabs to avoid horizontal navigation.
+- Consolidates extra Gutenberg toolbar actions, including Elementor and search, into the editor popup while keeping save/publish, meta fields and essential block controls accessible.
+
+## Open Scholar Theme 20.0.0
+- Recasts the theme as a lean host for independently released Open Scholar plugins; Data Manager, AI tools, builders, forms and custom blocks are no longer loaded or shipped by the theme.
+- Keeps the stable `nine-code` install folder and legacy machine identifiers for safe in-place upgrades, while leaving application plugins active and their data untouched.
+- Adds a small plugin discovery/capability contract and shared design-token API so current and future Open Scholar plugins can integrate without being absorbed into the theme.
+- Adds mobile-first Open Scholar administration with closed-by-default, explained, alternating red/green sections.
+- Keeps Jetpack active for its app and background services while suppressing promotions, dashboard/editor clutter and duplicate social metadata; its settings remain accessible.
+- Adds lightweight meta description, Open Graph, Twitter/X card, robots and schema output, with per-post sharing fields and automatic handoff to recognized SEO plugins.
+- Ports the proven 9 Import, Export & Backup Manager 2.2.0 Bluehost-hardened engine into the Ultra host layer: selective post/page/category/user backups, plugin packages and context, complete records, disaster database/wp-content snapshots, integrity validation, preview-first imports, archives, schedules, cPanel path import and hosting diagnostics.
+- Keeps all Ultra Backup controls mobile-first and closed by default; an active standalone Nine Backup Manager remains authoritative to prevent duplicate schedules or jobs.
+- Retires theme-owned 9 Blocks, AI designer/output, metadata workflow, builders, shortcodes, front-end editor and header/footer application modules from the release package.
+- Builds `open-scholar-theme-20.0.0.zip` with a stable `nine-code` root.
+
+## Open Scholar Theme 19.0.0
+- Rebrands the visible theme, login, profile, admin bar, dashboard, and administration as Open Scholar while preserving internal slugs, options, hooks, permissions, and stored data.
+- Adopts the canonical Open Scholar palette and plugin compatibility boundary.
+- Removes theme-owned public header/footer output and runtime loading; standard hooks remain for 9stagram/Instagram or another Open Scholar shell plugin.
+- Makes registered plugin menus and dashboard content visible even when an older installation saved the former filtering options.
+- Expands Data Manager navigation so data editing, bulk editing, fields, field groups, taxonomies, AI exchange, versions, backups, and health are directly discoverable.
+- Keeps every settings section closed by default, mobile-first, explained, and alternately red/green for navigation.
+- Builds one safe replacement package: `open-scholar-theme-19.0.0.zip`, containing the stable `nine-code` folder.
+
 ## Theme 18.0.0 (Data Manager bundled, one package)
 - **One package.** Data Manager now lives inside the Nine Code theme (`theme/nine-code/data-manager`). Installing or updating the theme installs and activates it. The separate Nine Code Data plugin is no longer shipped.
 - **Automatic retirement.** Once the theme is active, the old "9 Data Manager" plugin and the separate Nine Code Data plugin are deactivated on the next admin page. No data changes: option names, meta keys, post types, taxonomies, tables, REST routes, hooks and filters are the same.

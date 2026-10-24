@@ -41,14 +41,14 @@ function ncu_fallback_icon_url( $size = 'thumbnail' ) {
 
 function ncu_admin_brand_icon_url() {
     $url = ncu_branding_image_url( 'admin_brand_icon_id', 'thumbnail', '' );
-    return $url ? $url : ncu_fallback_icon_url( 'thumbnail' );
+    return $url ? $url : ( function_exists( 'ncu_open_scholar_logo_url' ) ? ncu_open_scholar_logo_url() : ncu_fallback_icon_url( 'thumbnail' ) );
 }
 
 function ncu_login_brand_logo_url() {
     $url = ncu_branding_image_url( 'login_logo_id', 'medium', '' );
     if ( $url ) { return $url; }
     $url = ncu_branding_image_url( 'client_logo_id', 'medium', '' );
-    return $url ? $url : ncu_fallback_icon_url( 'medium' );
+    return $url ? $url : ( function_exists( 'ncu_open_scholar_logo_url' ) ? ncu_open_scholar_logo_url() : ncu_fallback_icon_url( 'medium' ) );
 }
 
 add_action( 'admin_bar_menu', 'ncu_white_label_admin_bar', 999 );
@@ -88,7 +88,7 @@ function ncu_admin_footer_branding( $text ) {
         $parts[] = $managed_url ? 'Managed by <a href="' . $managed_url . '" target="_blank" rel="noopener noreferrer">' . esc_html( $managed_name ) . '</a>' : 'Managed by ' . esc_html( $managed_name );
     }
     if ( $owner_name ) {
-        $parts[] = $owner_url ? 'Nine Code · <a href="' . $owner_url . '" target="_blank" rel="noopener noreferrer">' . esc_html( $owner_name ) . '</a>' : 'Nine Code · ' . esc_html( $owner_name );
+        $parts[] = $owner_url ? 'Open Scholar · <a href="' . $owner_url . '" target="_blank" rel="noopener noreferrer">' . esc_html( $owner_name ) . '</a>' : 'Open Scholar · ' . esc_html( $owner_name );
     }
     return implode( ' &nbsp;·&nbsp; ', $parts );
 }
@@ -97,7 +97,7 @@ add_filter( 'update_footer', 'ncu_admin_version_footer', 999 );
 function ncu_admin_version_footer( $text ) {
     $s = ncu_get_settings();
     if ( empty( $s['white_label_enabled'] ) ) { return $text; }
-    return 'Nine Code ' . esc_html( NCU_CORE_VERSION );
+    return 'Open Scholar ' . esc_html( NCU_CORE_VERSION );
 }
 
 add_filter( 'admin_title', 'ncu_white_label_admin_title', 999 );
@@ -219,7 +219,7 @@ function ncu_branding_settings_page() {
     $s = ncu_get_settings();
     ?>
     <div class="wrap ncu-admin">
-        <?php ncu_admin_header( 'Branding & Ownership', 'Use the CMS engine invisibly while the admin experience carries only the client brand and Nine Code ownership.' ); ?>
+        <?php ncu_admin_header( 'Branding & Ownership', 'Open Scholar branding is applied without modifying the underlying open-source platform or plugin APIs.' ); ?>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
             <input type="hidden" name="action" value="ncu_save_settings">
             <input type="hidden" name="ncu_return_page" value="nine-code-ultra-branding">
@@ -228,8 +228,8 @@ function ncu_branding_settings_page() {
             <section class="ncu-panel ncu-panel--padded">
                 <h2>App branding</h2>
                 <div class="ncu-checks">
-                    <?php ncu_checkbox( 'white_label_enabled', 'Use 9 Code app-style white label', $s ); ?>
-                    <?php ncu_checkbox( 'admin_style_enabled', 'Enable 9 Code/client white-label identity in admin', $s ); ?>
+                    <?php ncu_checkbox( 'white_label_enabled', 'Use Open Scholar application branding', $s ); ?>
+                    <?php ncu_checkbox( 'admin_style_enabled', 'Enable Open Scholar/client identity in administration', $s ); ?>
                     <?php ncu_checkbox( 'admin_bar_brand_enabled', 'Show client/site brand in the admin bar', $s ); ?>
                     <?php ncu_checkbox( 'login_branding_enabled', 'Brand the login screen', $s ); ?>
                     <?php ncu_checkbox( 'admin_footer_branding', 'Show management/theme ownership in admin footer', $s ); ?>
@@ -262,7 +262,7 @@ function ncu_branding_settings_page() {
 
             <section class="ncu-panel ncu-panel--padded">
                 <h2>Theme ownership</h2>
-                <p class="description">This identifies who owns/supports the Nine Code theme deployment. It is shown in the private admin attribution when enabled, not forced into the public footer.</p>
+                <p class="description">This identifies who owns or supports the Open Scholar Theme deployment. It is shown in private administration only and is never forced into the public footer.</p>
                 <div class="ncu-grid">
                     <label><span>Theme owner name</span><input type="text" name="ncu[theme_owner_name]" value="<?php echo esc_attr( $s['theme_owner_name'] ); ?>"></label>
                     <label><span>Theme owner URL</span><input type="url" name="ncu[theme_owner_url]" value="<?php echo esc_attr( $s['theme_owner_url'] ); ?>"></label>
@@ -272,7 +272,7 @@ function ncu_branding_settings_page() {
 
             <section class="ncu-panel ncu-panel--padded">
                 <h2>What the white label changes</h2>
-                <div class="ncu-audit-list"><p>Admin bar platform logo → replaced with client/site identity.</p><p>Login platform logo → client/site branding.</p><p>Admin footer platform attribution/version → Managed by + Nine Code ownership.</p><p>Dashboard platform news/promotions → hidden when selected.</p><p>Public generator branding → removed.</p><p>Core platform files and update mechanisms → untouched for stability and security.</p></div>
+                <div class="ncu-audit-list"><p>Admin bar platform logo → replaced with Open Scholar/client identity.</p><p>Login platform logo → Open Scholar/client branding.</p><p>Admin footer attribution/version → Managed by + Open Scholar ownership.</p><p>Dashboard news/promotions → optional.</p><p>Public generator branding → removed.</p><p>Core platform files, APIs, updates, and security mechanisms → untouched.</p></div>
             </section>
             <p class="submit"><button class="button button-primary button-hero">Save branding</button></p>
         </form>
@@ -294,9 +294,9 @@ function ncu_client_welcome_panel() {
     $icon = ncu_admin_brand_icon_url();
     ?>
     <div class="welcome-panel-content ncu-client-welcome">
-        <div class="ncu-client-welcome__brand"><img src="<?php echo esc_url( $icon ); ?>" alt="" width="42" height="42"><div><small>9 CODE APPLICATION</small><h2><?php echo esc_html( $name ); ?></h2><p>Workspace ready.</p></div></div>
+        <div class="ncu-client-welcome__brand"><img src="<?php echo esc_url( $icon ); ?>" alt="" width="42" height="42"><div><small>OPEN SCHOLAR</small><h2><?php echo esc_html( $name ); ?></h2><p>Workspace ready.</p></div></div>
         <div class="ncu-client-welcome__meta"><code><?php echo esc_html( strtoupper( function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production' ) ); ?></code><code>CORE <?php echo esc_html( NCU_CORE_VERSION ); ?></code><code>API <?php echo esc_html( NCU_CORE_API_VERSION ); ?></code></div>
-        <?php if ( current_user_can( 'manage_options' ) ) : ?><p><a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra' ) ); ?>">Open Nine Code</a> <a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-admin-workspace' ) ); ?>">Admin Workspace</a> <a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-doctor' ) ); ?>">Doctor</a></p><?php endif; ?>
+        <?php if ( current_user_can( 'manage_options' ) ) : ?><p><a class="button button-primary" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra' ) ); ?>">Open Scholar</a> <a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-admin-workspace' ) ); ?>">Admin Workspace</a> <a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra-doctor' ) ); ?>">Doctor</a></p><?php endif; ?>
     </div>
     <?php
 }
@@ -305,7 +305,7 @@ add_filter( 'update_right_now_text', 'ncu_white_label_right_now_text', 99 );
 function ncu_white_label_right_now_text( $text ) {
     $s = ncu_get_settings();
     if ( empty( $s['white_label_enabled'] ) ) { return $text; }
-    return sprintf( 'Nine Code application engine · %s', esc_html( ncu_client_brand_name() ) );
+    return sprintf( 'Open Scholar application · %s', esc_html( ncu_client_brand_name() ) );
 }
 
 add_filter( 'login_title', 'ncu_white_label_login_title', 99, 2 );
@@ -321,5 +321,5 @@ function ncu_login_owner_attribution() {
     if ( empty( $s['login_branding_enabled'] ) || empty( $s['theme_owner_name'] ) ) { return; }
     $name = esc_html( $s['theme_owner_name'] );
     $url = ! empty( $s['theme_owner_url'] ) ? esc_url( $s['theme_owner_url'] ) : '';
-    echo '<p class="ncu-login-owner">Nine Code · ' . ( $url ? '<a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $name . '</a>' : $name ) . '</p>';
+    echo '<p class="ncu-login-owner">Open Scholar · ' . ( $url ? '<a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $name . '</a>' : $name ) . '</p>';
 }

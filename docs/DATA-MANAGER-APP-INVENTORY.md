@@ -1,4 +1,6 @@
-# Nine Code app inventory for Data Manager 11.0
+# Historical app inventory for Data Manager 11.0
+
+> This document records the earlier Data Manager compatibility audit. Data Manager is now an independent Open Scholar plugin and is not distributed by Open Scholar Theme 20.
 
 Inventory of the 29 Nine Code repositories (October 2026). Every plugin with code was installed in the
 disposable test site (`.wp-test`, from the branch listed) and checked with generic discovery and the
@@ -19,7 +21,7 @@ inventory is complete.
 | **9CODE Post Learning Box** 1.4.1 (`e-lecture-engine` / `claude/post-learning-box-v1.4.1`) | `_9plb_*` meta on regular posts; learner notes in user meta | Generic discovery | Post fields | `_9plb_*` keys (private, not registered for REST) and learner notes. To make them editable, register them with `auth_callback` + `show_in_rest`, or ship a provider. |
 | **9stagram** 0.7.0 (`9stagram` / `claude/9stagram-baseline-0.7.0`) | `ninestagram_offer`, `ninestagram_order`, offer category; profile user meta | Generic discovery | Offer posts, categories, unprefixed user meta (`ninestagram_*`) | `_ninestagram_*` offer/order meta (private), the order payload |
 | **9CODE Ultra Home Archive Page** 1.2.29 (`9flix` / `fix-and-enhance-1.2.25`) | `_nine_uha_*` meta on hub pages | Generic discovery | Page fields | `_nine_uha_*` layout keys (private) |
-| **Nine Code theme** 18.0.0, including Data Manager (this repo, `theme/nine-code/data-manager`) | Theme presentation meta (`_ncu_*`, registered), forms, data versions | Generic discovery + plugin's own screens | Theme presentation meta registered with `auth_callback` + `show_in_rest`; shared closed/mobile settings UI contract | `_ncu_render*`, `_npm9_*`, `_ncd_*` internal state |
+| **Open Scholar Theme** 20.1.1 (this repo) | Host settings and presentation tokens only | Theme exposes an integration contract; current Data Manager is installed separately | Theme-owned SEO and branding settings | Application data remains plugin-owned |
 
 **Archives:** `publicationpress` stores earlier versions of several apps (Google Meeting Engine 1.0, Conference App 1.1,
 Publications Author Engine 0.1, 9WhatsApp 0.1, Prompt Engine 1.7–1.9) plus a `temporary-9link` copy.

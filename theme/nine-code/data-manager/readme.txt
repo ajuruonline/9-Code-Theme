@@ -4,7 +4,7 @@ Tags: editor, data, forms, categories, backup
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 18.0.0
+Stable tag: 19.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ Ships inside the Nine Code theme. Its version always matches the theme's.
 Upgrading from the separate "Nine Code Data" plugin or the older "9 Data Manager" plugin: once the Nine Code theme is active, the old plugin is deactivated automatically on the next admin page. Your data is not changed. You can then delete the old plugin.
 
 == Changelog ==
+
+= 19.0.0 =
+* Open Scholar Theme integration, canonical green UI, visible plugin navigation, and plugin-owned public header/footer.
 
 = 18.0.0 =
 * Data Manager is bundled with the Nine Code theme and loads on every request. The separate Nine Code Data plugin is retired and deactivated automatically.

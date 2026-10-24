@@ -46,8 +46,8 @@ final class Nine_Post_Manager {
 
     public function admin_menu() {
         add_menu_page(
-            __( '9 Post Editor', 'nine-code-data' ),
-            __( '9 Post Editor', 'nine-code-data' ),
+            __( 'Open Scholar Post Editor', 'nine-code-data' ),
+            __( 'Post Editor', 'nine-code-data' ),
             'edit_posts',
             $this->menu_slug,
             [ $this, 'render_admin_page' ],
@@ -94,7 +94,7 @@ final class Nine_Post_Manager {
             if ( ! is_object( $post_type ) || 'attachment' === $post_type->name ) { continue; }
             add_meta_box(
                 'npm9-native-content-meta-recovery',
-                __( '9 Data - Post Content & Metadata', 'nine-code-data' ),
+                __( 'Open Scholar Data — Post Content & Metadata', 'nine-code-data' ),
                 [ $this, 'render_native_recovery_metabox' ],
                 $post_type->name,
                 'normal',

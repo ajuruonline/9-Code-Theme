@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 $GLOBALS['ncu13_ui_menu_inventory'] = array();
 
 function ncu13_ui_defaults() {
-    return array('menu_filter'=>1,'dashboard_filter'=>1,'ai_editor_modern'=>1,'runtime_blue_lock'=>1,'auto_show_9code'=>1,'menu_configured'=>0,'visible_slugs'=>array());
+    return array('menu_filter'=>0,'dashboard_filter'=>0,'ai_editor_modern'=>1,'runtime_blue_lock'=>0,'auto_show_9code'=>1,'menu_configured'=>0,'visible_slugs'=>array());
 }
 function ncu13_ui_settings() {
     $saved = get_option( 'ncu13_ui_settings', array() );
@@ -43,17 +43,8 @@ function ncu13_ui_capture_menu_inventory() {
 add_action('admin_menu','ncu13_ui_capture_menu_inventory',PHP_INT_MAX-20);
 
 function ncu13_ui_apply_menu_policy() {
-    if ( ncu13_ui_safe_mode() ) return;
-    $cfg=ncu13_ui_settings(); if(empty($cfg['menu_filter'])) return;
-    global $menu; if(!is_array($menu))return;
-    $selected=array_fill_keys(array_map('strval',(array)$cfg['visible_slugs']),true);
-    $configured=!empty($cfg['menu_configured']);
-    foreach($menu as $priority=>$item){
-        $slug=ncu13_ui_menu_slug($item); if(!$slug)continue; $label=ncu13_ui_menu_label($item);
-        $keep = $configured ? isset($selected[$slug]) : ncu13_ui_is_default_visible($label,$slug);
-        if(!empty($cfg['auto_show_9code']) && ncu13_ui_is_9code_menu($label,$slug)) $keep=true;
-        if(!$keep) unset($menu[$priority]);
-    }
+    /* Open Scholar never removes registered plugin menus. */
+    return;
 }
 add_action('admin_menu','ncu13_ui_apply_menu_policy',PHP_INT_MAX);
 add_action('admin_head','ncu13_ui_apply_menu_policy',0);
@@ -66,7 +57,7 @@ function ncu13_ui_menu_order($order){
     $indexed=array();foreach($order as $i=>$slug)$indexed[]=array($slug,$rank($slug),$i);usort($indexed,function($a,$b){return $a[1]===$b[1]?$a[2]<=>$b[2]:$a[1]<=>$b[1];});return array_column($indexed,0);
 }
 
-function ncu13_ui_sanitize_settings($input){$d=ncu13_ui_defaults();$input=is_array($input)?$input:array();foreach(array('menu_filter','dashboard_filter','ai_editor_modern','runtime_blue_lock','auto_show_9code')as$k)$d[$k]=empty($input[$k])?0:1;$d['menu_configured']=1;$d['visible_slugs']=array_values(array_unique(array_filter(array_map('sanitize_text_field',(array)($input['visible_slugs']??array())))));return $d;}
+function ncu13_ui_sanitize_settings($input){$d=ncu13_ui_defaults();$input=is_array($input)?$input:array();foreach(array('ai_editor_modern','auto_show_9code')as$k)$d[$k]=empty($input[$k])?0:1;$d['menu_filter']=0;$d['dashboard_filter']=0;$d['runtime_blue_lock']=0;$d['menu_configured']=0;$d['visible_slugs']=array();return $d;}
 function ncu13_ui_activation(){if(false===get_option('ncu13_ui_settings',false))add_option('ncu13_ui_settings',ncu13_ui_defaults(),'',false);}
 function ncu13_ui_migrate_legacy_settings(){ if(false!==get_option('ncu13_ui_settings',false))return; $legacy=get_option('ncu12_ui_controller_settings',false); if(is_array($legacy))update_option('ncu13_ui_settings',ncu13_ui_sanitize_settings($legacy),false); }
 add_action('admin_init','ncu13_ui_migrate_legacy_settings',1);
@@ -75,35 +66,33 @@ add_action('admin_post_ncu13_ui_save','ncu13_ui_save');
 function ncu13_ui_save(){if(!current_user_can('manage_options'))wp_die('Permission denied.');check_admin_referer('ncu13_ui_save');$raw=isset($_POST['ncu13_ui'])?wp_unslash($_POST['ncu13_ui']):array();update_option('ncu13_ui_settings',ncu13_ui_sanitize_settings($raw),false);wp_safe_redirect(admin_url('admin.php?page=nine-code-ultra-menu-ui&updated=1'));exit;}
 add_action('admin_post_ncu13_ui_reset','ncu13_ui_reset');
 function ncu13_ui_reset(){if(!current_user_can('manage_options'))wp_die('Permission denied.');check_admin_referer('ncu13_ui_reset');update_option('ncu13_ui_settings',ncu13_ui_defaults(),false);wp_safe_redirect(admin_url('admin.php?page=nine-code-ultra-menu-ui&reset=1'));exit;}
-function ncu13_ui_render_settings_page(){if(!current_user_can('manage_options'))return;$cfg=ncu13_ui_settings();$items=$GLOBALS['ncu13_ui_menu_inventory'];if(empty($items)){global$menu;if(is_array($menu))foreach($menu as$i){$slug=ncu13_ui_menu_slug($i);if($slug)$items[$slug]=array('slug'=>$slug,'label'=>ncu13_ui_menu_label($i),'nine'=>ncu13_ui_is_9code_menu(ncu13_ui_menu_label($i),$slug));}}$selected=array_fill_keys((array)$cfg['visible_slugs'],true);$control_items=array('menu_filter'=>array('Control left menu','Shows only the menu items selected below.'),'dashboard_filter'=>array('9Core-only dashboard','Uses the focused Nine Code dashboard instead of unrelated widgets.'),'ai_editor_modern'=>array('Modern AI Data Manager','Applies the simplified mobile-first layout to AI data screens.'),'runtime_blue_lock'=>array('Runtime zero-blue lock','Keeps the admin shell on the neutral Nine Code colour system.'),'auto_show_9code'=>array('Auto-show 9-family plugins','Makes newly installed Nine Code apps discoverable in the menu automatically.'));?>
+function ncu13_ui_render_settings_page(){if(!current_user_can('manage_options'))return;$cfg=ncu13_ui_settings();$control_items=array('ai_editor_modern'=>array('Modern Data Manager','Applies the simplified mobile-first layout to AI data screens.'),'auto_show_9code'=>array('Discover Open Scholar apps','Keeps new Open Scholar family tools easy to identify without hiding any other plugin.'));?>
 <div class="wrap ncu13-ui-settings" data-ninecode-settings-root>
     <h1>Menu & UI</h1>
-    <p class="ncu13-ui-lead">Nine Code owns one predictable WordPress admin shell. Every settings section starts closed, uses alternating colour markers and remains phone-friendly. Open only the section you need.</p>
+    <p class="ncu13-ui-lead">Open Scholar provides one predictable application shell. Every plugin menu remains visible. Settings sections start closed, explain their purpose, and remain phone-friendly.</p>
     <?php if(isset($_GET['updated']))echo'<div class="notice notice-success is-dismissible"><p>Menu & UI settings saved.</p></div>'; ?>
     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <input type="hidden" name="action" value="ncu13_ui_save"><?php wp_nonce_field('ncu13_ui_save'); ?>
         <details class="ncu13-ui-panel" data-ninecode-settings-section>
             <summary>UI controls</summary>
             <div class="ncu13-ui-panel-body ninecode-settings-body">
-                <p class="description">Choose how Nine Code organises the admin menu, dashboard and Data Manager. These controls change navigation and appearance; they do not delete content.</p>
+                <p class="description">Choose how Open Scholar presents Data Manager. These controls change appearance only; they do not hide plugins or delete content.</p>
                 <div class="ncu13-ui-toggle-grid"><?php foreach($control_items as$k=>$item):?><label class="ncu13-ui-toggle" data-ninecode-settings-field><input type="checkbox" name="ncu13_ui[<?php echo esc_attr($k);?>]" value="1" <?php checked(!empty($cfg[$k]));?>><span><strong><?php echo esc_html($item[0]);?></strong><small><?php echo esc_html($item[1]);?></small></span></label><?php endforeach;?></div>
             </div>
         </details>
         <details class="ncu13-ui-panel" data-ninecode-settings-section>
-            <summary>Left menu visibility</summary>
+            <summary>Plugin visibility</summary>
             <div class="ncu13-ui-panel-body ninecode-settings-body">
-                <p class="description">Select which WordPress menus are visible. Nine Code family plugins remain visible automatically while Auto-show is enabled; hidden menus are not uninstalled and their data is unchanged.</p>
-                <div class="ncu13-ui-menu-grid"><?php foreach($items as$item):$checked=!empty($cfg['menu_configured'])?isset($selected[$item['slug']]):ncu13_ui_is_default_visible($item['label'],$item['slug']);?><label class="ncu13-ui-menu-item <?php echo $item['nine']?'is-nine':'';?>" data-ninecode-settings-field><input type="checkbox" name="ncu13_ui[visible_slugs][]" value="<?php echo esc_attr($item['slug']);?>" <?php checked($checked);?>><span class="ncu13-ui-menu-name"><?php echo esc_html($item['label']?:$item['slug']);?></span><code><?php echo esc_html($item['slug']);?></code><?php if($item['nine']):?><small>9-family · automatic</small><?php endif;?></label><?php endforeach;?></div>
+                <p class="description"><strong>All registered menus are visible.</strong> Open Scholar does not hide plugin sections, Help, or Screen Options. User capabilities still determine what each account may access.</p>
             </div>
         </details>
         <p><button class="button button-primary button-hero">Save menu & UI</button></p>
     </form>
-    <form class="ncu13-ui-reset-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php'));?>" onsubmit="return confirm('Restore the Nine Code default menu policy?');"><input type="hidden" name="action" value="ncu13_ui_reset"><?php wp_nonce_field('ncu13_ui_reset');?><button class="button">Restore defaults</button></form>
-    <p class="ncu13-ui-recovery"><strong>Recovery:</strong> append <code>&ncu_ui_safe=1</code> to an administrator URL to bypass menu filtering for that request.</p>
+    <form class="ncu13-ui-reset-form" method="post" action="<?php echo esc_url(admin_url('admin-post.php'));?>" onsubmit="return confirm('Restore the Open Scholar UI defaults?');"><input type="hidden" name="action" value="ncu13_ui_reset"><?php wp_nonce_field('ncu13_ui_reset');?><button class="button">Restore defaults</button></form>
 </div><?php }
 
 add_action('wp_dashboard_setup','ncu13_ui_filter_dashboard',PHP_INT_MAX);
-function ncu13_ui_filter_dashboard(){if(ncu13_ui_safe_mode()||empty(ncu13_ui_settings()['dashboard_filter']))return;remove_action('welcome_panel','wp_welcome_panel');global$wp_meta_boxes;if(is_array($wp_meta_boxes)){$wp_meta_boxes['dashboard']=array();}wp_add_dashboard_widget('ncu13_data_manager',ncu_core_external_data_edition_active()?'9.10 Data Edition':'Legacy Data Fallback','ncu13_ui_dashboard_widget');wp_add_dashboard_widget('ncu13_responses','Responses','ncu13_ui_responses_widget');}
+function ncu13_ui_filter_dashboard(){return;}
 function ncu13_ui_dashboard_widget(){if(ncu_core_external_data_edition_active()){echo'<p><strong>9 Data owns the Edition 9.10 data workspace.</strong></p><p>Post Editor, Category Manager, Post Creator, Form Manager and Data Backup are owned by 9 Data Manager to preserve one-owner-per-responsibility.</p><p><a class="button button-primary button-hero" href="'.esc_url(admin_url('admin.php?page=nine10-data-edition')).'">Open 9 Data Manager</a></p>';return;}echo'<p><strong>Legacy compatibility fallback.</strong></p><p>Install 9.10 Data Edition for the current data-management workflow.</p><p><a class="button button-primary button-hero" href="'.esc_url(admin_url('admin.php?page=nine-code-ultra')).'">Open fallback</a></p>'; }
 function ncu13_ui_responses_widget(){echo'<p><strong>Open responses collected by installed 9-family forms and workflow plugins.</strong></p><p>Responses stays a hub; each owning plugin keeps its own authoritative records.</p><p><a class="button button-primary" href="'.esc_url(admin_url('admin.php?page=nine-code-ultra-responses')).'">Open Responses</a></p>'; }
 
@@ -114,14 +103,14 @@ function ncu13_ui_admin_body_class($classes){if(ncu13_ui_safe_mode())return$clas
 
 add_action('admin_footer','ncu13_ui_final_neutral_contract',PHP_INT_MAX);
 function ncu13_ui_final_neutral_contract(){if(ncu13_ui_safe_mode())return;?><style id="ncu13-final-neutral-contract">
-body #adminmenuback,body #adminmenuwrap,body #adminmenu,body #adminmenu .wp-submenu{background:#171717!important;border-color:transparent!important;box-shadow:none!important}
+body #adminmenuback,body #adminmenuwrap,body #adminmenu,body #adminmenu .wp-submenu{background:#123d2a!important;border-color:transparent!important;box-shadow:none!important}
 body #adminmenu a,body #adminmenu div.wp-menu-image:before{color:#e7e7e7!important}
-body #adminmenu>li>a.menu-top:hover,body #adminmenu>li>a.menu-top:focus,body #adminmenu>li>a.menu-top:focus-visible,body #adminmenu .wp-submenu a:hover,body #adminmenu .wp-submenu a:focus{background:#303030!important;color:#fff!important;border-color:transparent!important;box-shadow:none!important}
-body #adminmenu>li.current>a.menu-top,body #adminmenu>li.wp-has-current-submenu>a.wp-has-current-submenu,body #adminmenu .wp-submenu li.current a{background:#f4f4f4!important;color:#080808!important;border-color:transparent!important;box-shadow:inset 3px 0 0 #080808!important}
-body #adminmenu>li.current>a.menu-top div.wp-menu-image:before,body #adminmenu>li.wp-has-current-submenu>a.wp-has-current-submenu div.wp-menu-image:before{color:#080808!important}
+body #adminmenu>li>a.menu-top:hover,body #adminmenu>li>a.menu-top:focus,body #adminmenu>li>a.menu-top:focus-visible,body #adminmenu .wp-submenu a:hover,body #adminmenu .wp-submenu a:focus{background:#0b3d22!important;color:#fff!important;border-color:transparent!important;box-shadow:none!important}
+body #adminmenu>li.current>a.menu-top,body #adminmenu>li.wp-has-current-submenu>a.wp-has-current-submenu,body #adminmenu .wp-submenu li.current a{background:#e5f2eb!important;color:#123d2a!important;border-color:transparent!important;box-shadow:inset 3px 0 0 #14532d!important}
+body #adminmenu>li.current>a.menu-top div.wp-menu-image:before,body #adminmenu>li.wp-has-current-submenu>a.wp-has-current-submenu div.wp-menu-image:before{color:#123d2a!important}
 body #adminmenu .wp-menu-arrow,body #adminmenu .wp-menu-arrow div,body #adminmenu:before,body #adminmenuwrap:before,body #adminmenuback:before{background:transparent!important;border-color:transparent!important;box-shadow:none!important}
-body.ncu13-ui-controller .wp-core-ui .button-primary,body.ncu13-ui-controller .components-button.is-primary,body.ncu13-ui-controller .components-button.is-pressed{background:#111!important;border-color:#111!important;color:#fff!important;box-shadow:none!important;text-shadow:none!important}
-body.ncu13-ui-controller .wp-core-ui .button-primary:hover,body.ncu13-ui-controller .wp-core-ui .button-primary:focus,body.ncu13-ui-controller .components-button.is-primary:hover,body.ncu13-ui-controller .components-button.is-primary:focus{background:#303030!important;border-color:#303030!important;color:#fff!important}
+body.ncu13-ui-controller .wp-core-ui .button-primary,body.ncu13-ui-controller .components-button.is-primary,body.ncu13-ui-controller .components-button.is-pressed{background:#14532d!important;border-color:#14532d!important;color:#fff!important;box-shadow:none!important;text-shadow:none!important}
+body.ncu13-ui-controller .wp-core-ui .button-primary:hover,body.ncu13-ui-controller .wp-core-ui .button-primary:focus,body.ncu13-ui-controller .components-button.is-primary:hover,body.ncu13-ui-controller .components-button.is-primary:focus{background:#0b3d22!important;border-color:#0b3d22!important;color:#fff!important}
 @media(max-width:782px){body.wp-responsive-open #adminmenuback,body.wp-responsive-open #adminmenuwrap,body.wp-responsive-open #adminmenu{width:min(280px,88vw)!important;max-width:88vw!important}body.wp-responsive-open #adminmenuwrap,body.wp-responsive-open #adminmenuback{position:fixed!important;left:0!important;top:46px!important;bottom:0!important;height:auto!important;transform:none!important}body.wp-responsive-open #adminmenuwrap{overflow-x:hidden!important;overflow-y:auto!important;z-index:100000!important}body.ncu13-ui-controller #wpcontent,body.ncu13-ui-controller #wpfooter{margin-left:0!important;transform:none!important}body.ncu13-ui-controller #adminmenu>li>a.menu-top{display:grid!important;grid-template-columns:42px minmax(0,1fr)!important;align-items:center!important;min-height:48px!important;height:auto!important;padding:0!important}body.ncu13-ui-controller #adminmenu div.wp-menu-image{position:static!important;float:none!important;display:grid!important;place-items:center!important;width:42px!important;min-width:42px!important;height:48px!important;margin:0!important;padding:0!important}body.ncu13-ui-controller #adminmenu div.wp-menu-name{min-width:0!important;margin:0!important;padding:9px 12px 9px 3px!important;line-height:1.28!important;white-space:normal!important;overflow-wrap:anywhere!important}body.ncu13-ui-controller #adminmenu .wp-has-current-submenu>.wp-submenu,body.ncu13-ui-controller #adminmenu .wp-menu-open>.wp-submenu{position:static!important;width:100%!important;min-width:0!important;padding:4px 6px 6px 42px!important;box-sizing:border-box!important}body.ncu13-ui-controller #adminmenu .wp-submenu>li>a{display:block!important;width:100%!important;min-height:40px!important;height:auto!important;padding:10px 8px!important;line-height:1.25!important;white-space:normal!important;overflow-wrap:anywhere!important}}
 </style><?php }
 

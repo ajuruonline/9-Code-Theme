@@ -1,7 +1,7 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 ?>
-<?php if ( function_exists( 'ncu_safe_render_site_footer' ) ) { ncu_safe_render_site_footer(); } ?>
+<?php /* Public footer output belongs to the installed Open Scholar shell plugin. */ ?>
 <?php wp_footer(); ?>
 </body>
 </html>

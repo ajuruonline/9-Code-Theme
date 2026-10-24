@@ -35,18 +35,3 @@ function ncu_widgets_init() {
         'after_title'   => '</h2>',
     ) );
 }
-
-add_action( 'init', 'ncu_register_block_designs' );
-function ncu_register_block_designs() {
-    if ( function_exists( 'register_block_pattern_category' ) ) {
-        register_block_pattern_category( 'nine-code-ultra', array( 'label' => __( 'Nine Code', 'nine-code' ) ) );
-    }
-    if ( function_exists( 'register_block_style' ) ) {
-        register_block_style( 'core/group', array( 'name' => 'ncu-card', 'label' => __( '9code Card', 'nine-code' ), 'inline_style' => '.wp-block-group.is-style-ncu-card{border:1px solid var(--ncu-border);border-radius:var(--ncu-radius);padding:clamp(16px,3vw,28px);background:var(--ncu-surface)}' ) );
-        register_block_style( 'core/details', array( 'name' => 'ncu-accordion', 'label' => __( '9code Accordion', 'nine-code' ), 'inline_style' => '.wp-block-details.is-style-ncu-accordion{border:1px solid var(--ncu-border);border-radius:12px;padding:14px 16px}.wp-block-details.is-style-ncu-accordion summary{font-weight:750}' ) );
-        register_block_style( 'core/list', array( 'name' => 'ncu-clean-list', 'label' => __( '9code Clean List', 'nine-code' ), 'inline_style' => '.wp-block-list.is-style-ncu-clean-list{padding-left:1.25em}.wp-block-list.is-style-ncu-clean-list li{margin:.4em 0}' ) );
-    }
-}
-
-/* Keep the inserter focused on locally available, deterministic patterns. */
-add_filter( 'should_load_remote_block_patterns', '__return_false' );

@@ -32,7 +32,7 @@ class Nine_AI_Manager_Admin {
     }
 
     public function admin_menu() {
-        add_menu_page(__('9 AI Manager', 'nine-code-data' ), __('9 AI Manager', 'nine-code-data' ), 'manage_options', 'nine-ai-manager', array($this,'render_dashboard'), 'dashicons-superhero-alt', 3);
+        add_menu_page(__('Open Scholar AI Manager', 'nine-code-data' ), __('AI Manager', 'nine-code-data' ), 'manage_options', 'nine-ai-manager', array($this,'render_dashboard'), 'dashicons-superhero-alt', 3);
         add_submenu_page('nine-ai-manager', __('AI Dashboard', 'nine-code-data' ), __('AI Dashboard', 'nine-code-data' ), 'manage_options', 'nine-ai-manager', array($this,'render_dashboard'));
         add_submenu_page('nine-ai-manager', __('AI → Anything', 'nine-code-data' ), __('AI → Anything', 'nine-code-data' ), 'manage_options', 'nine-ai-manager-import', array($this,'render_import'));
         add_submenu_page('nine-ai-manager', __('Post Creator', 'nine-code-data' ), __('Post Creator', 'nine-code-data' ), 'manage_options', 'nine-ai-manager-post', array($this,'render_import'));
@@ -55,7 +55,7 @@ class Nine_AI_Manager_Admin {
     }
 
     private function require_admin() {
-        if (!current_user_can('manage_options')) { wp_die(esc_html__('You do not have permission to use 9 AI Manager.', 'nine-code-data' )); }
+        if (!current_user_can('manage_options')) { wp_die(esc_html__('You do not have permission to use Open Scholar AI Manager.', 'nine-code-data' )); }
     }
 
     public function notices() {
@@ -75,7 +75,7 @@ class Nine_AI_Manager_Admin {
         ?>
         <div class="wrap nine-ai-wrap">
             <div class="nine-ai-hero">
-                <div><h1>9 AI Manager</h1><p><?php esc_html_e('The visible communication layer between your AI workspace and WordPress. The site explains itself to AI; AI returns a file; you preview and approve the change.', 'nine-code-data' ); ?></p></div>
+                <div><h1>Open Scholar AI Manager</h1><p><?php esc_html_e('The controlled exchange layer between your AI workspace and Open Scholar. Export a complete package, let AI prepare edits, then preview and approve every change.', 'nine-code-data' ); ?></p></div>
                 <div class="nine-ai-hero-actions">
                     <a class="button button-primary button-hero" href="<?php echo esc_url(wp_nonce_url(admin_url('admin-post.php?action=nine_ai_download_kit'),'nine_ai_download_kit')); ?>"><?php esc_html_e('Check Updates + Download AI File', 'nine-code-data' ); ?></a>
                     <a class="button button-hero" href="<?php echo esc_url(admin_url('admin.php?page=nine-ai-manager-import')); ?>"><?php esc_html_e('Upload AI Package', 'nine-code-data' ); ?></a>

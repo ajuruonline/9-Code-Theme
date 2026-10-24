@@ -322,7 +322,7 @@ function ncu_admin_workspace_context_bar() {
     if ( ! $title && $screen && ! empty( $screen->title ) ) { $title = $screen->title; }
     $environment = function_exists( 'wp_get_environment_type' ) ? wp_get_environment_type() : 'production';
     ?>
-    <div class="ncu-workspace-context" role="region" aria-label="<?php esc_attr_e( '9 Code workspace context', 'nine-code' ); ?>">
+    <div class="ncu-workspace-context" role="region" aria-label="<?php esc_attr_e( 'Open Scholar workspace context', 'nine-code' ); ?>">
         <div class="ncu-workspace-context__identity">
             <span><small>WORKSPACE</small><strong><?php echo esc_html( $title ? $title : ncu_client_brand_name() ); ?></strong></span>
         </div>
@@ -374,7 +374,7 @@ function ncu_admin_workspace_commands() {
     if ( current_user_can( 'moderate_comments' ) ) { $add( __( 'Comments', 'nine-code' ), 'discussion', admin_url( 'edit-comments.php' ), 'Content' ); }
 
     if ( current_user_can( 'manage_options' ) ) {
-        $add( __( 'Nine Code', 'nine-code' ), 'theme control center', admin_url( 'admin.php?page=nine-code-ultra' ), '9 Code' );
+        $add( __( 'Open Scholar', 'nine-code' ), 'theme control center', admin_url( 'admin.php?page=nine-code-ultra' ), 'Open Scholar' );
         $add( __( 'Admin Workspace', 'nine-code' ), 'admin skin interface', admin_url( 'admin.php?page=nine-code-ultra-admin-workspace' ), '9 Code' );
         $add( __( 'Design', 'nine-code' ), 'site design', admin_url( 'admin.php?page=nine-code-ultra-design' ), '9 Code' );
         $add( __( 'Style Takeover', 'nine-code' ), 'design authority', admin_url( 'admin.php?page=nine-code-ultra-style-takeover' ), '9 Code' );
@@ -404,7 +404,7 @@ function ncu_admin_workspace_command_palette() {
         <div class="ncu-command-palette__dialog" role="dialog" aria-modal="true" aria-labelledby="ncu-command-title">
             <div class="ncu-command-palette__head">
                 <span class="ncu-command-palette__mark">9C</span>
-                <div><strong id="ncu-command-title"><?php esc_html_e( 'Command palette', 'nine-code' ); ?></strong><small><?php esc_html_e( 'Navigate the 9 Code workspace', 'nine-code' ); ?></small></div>
+                <div><strong id="ncu-command-title"><?php esc_html_e( 'Command palette', 'nine-code' ); ?></strong><small><?php esc_html_e( 'Navigate the Open Scholar workspace', 'nine-code' ); ?></small></div>
                 <kbd>ESC</kbd>
             </div>
             <label class="ncu-command-palette__search"><span class="screen-reader-text"><?php esc_html_e( 'Search commands', 'nine-code' ); ?></span><input type="search" data-ncu-command-search autocomplete="off" placeholder="Search commands…"></label>
@@ -450,7 +450,7 @@ function ncu_save_admin_workspace() {
         'admin_skin_hide_screen_options',
     );
     $result = ncu_save_settings_subset( $raw, $keys, $booleans );
-    ncu_redirect_after_settings_save( 'nine-code-ultra-admin-workspace', $result, '9 Code Admin Workspace saved and verified.' );
+    ncu_redirect_after_settings_save( 'nine-code-ultra-admin-workspace', $result, 'Open Scholar Admin Workspace saved and verified.' );
 }
 
 add_action( 'admin_post_ncu_force_admin_skin', 'ncu_force_admin_skin' );
@@ -462,7 +462,7 @@ function ncu_force_admin_skin() {
     $s['admin_skin_menu_enabled'] = 1;
     $s['admin_skin_monochrome'] = 1;
     update_option( 'ncu_settings', ncu_sanitize_settings( $s ), false );
-    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( 'Full 9 Code Admin UI enabled.', 'success', 'admin-skin-forced' ); }
+    if ( function_exists( 'ncu_notice_push' ) ) { ncu_notice_push( 'Full Open Scholar Admin UI enabled.', 'success', 'admin-skin-forced' ); }
     wp_safe_redirect( admin_url( 'admin.php?page=nine-code-ultra-admin-workspace' ) );
     exit;
 }
@@ -473,26 +473,26 @@ function ncu_admin_workspace_settings_page() {
     $safe_url = add_query_arg( 'ncu_admin_skin', 'off', admin_url( 'admin.php?page=nine-code-ultra-admin-workspace' ) );
     ?>
     <div class="wrap ncu-admin">
-        <?php ncu_admin_header( 'Admin UI / Skin', 'Ultron admin skin: five lightweight 9 Code workspace personalities over the full application administration.' ); ?>
-        <section class="ncu-panel ncu-panel--padded"><h2>Admin UI status</h2><p><strong>Workspace skin:</strong> <?php echo ! empty( $s['admin_skin_enabled'] ) ? 'ON' : 'OFF'; ?> · <strong>Left menu skin:</strong> <?php echo ! empty( $s['admin_skin_menu_enabled'] ) ? 'ON' : 'OFF'; ?> · <strong>Selected:</strong> <?php echo esc_html( ncu_admin_skin_mode_label( $s['admin_skin_mode'] ) ); ?> · <strong>Monochrome lock:</strong> <?php echo ! empty( $s['admin_skin_monochrome'] ) ? 'ON' : 'OFF'; ?></p><p class="description">v3.3 fixes the hidden dependency that could make the Admin Workspace appear enabled while the separate Branding switch silently prevented it from loading. Admin UI / Skin is now authoritative.</p><?php if ( empty( $s['admin_skin_enabled'] ) || empty( $s['admin_skin_menu_enabled'] ) ) : ?><form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"><input type="hidden" name="action" value="ncu_force_admin_skin"><?php wp_nonce_field( 'ncu_force_admin_skin' ); ?><button class="button button-primary">Enable full 9 Code Admin UI now</button></form><?php endif; ?></section>
+        <?php ncu_admin_header( 'Admin UI / Skin', 'Open Scholar administration uses the canonical academic green system across the full application.' ); ?>
+        <section class="ncu-panel ncu-panel--padded"><h2>Admin UI status</h2><p><strong>Workspace skin:</strong> <?php echo ! empty( $s['admin_skin_enabled'] ) ? 'ON' : 'OFF'; ?> · <strong>Left menu skin:</strong> <?php echo ! empty( $s['admin_skin_menu_enabled'] ) ? 'ON' : 'OFF'; ?> · <strong>Selected:</strong> <?php echo esc_html( ncu_admin_skin_mode_label( $s['admin_skin_mode'] ) ); ?></p><p class="description">The Admin UI applies Open Scholar presentation only. Routes, permissions, plugin data, and editor content remain under their owning components.</p><?php if ( empty( $s['admin_skin_enabled'] ) || empty( $s['admin_skin_menu_enabled'] ) ) : ?><form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"><input type="hidden" name="action" value="ncu_force_admin_skin"><?php wp_nonce_field( 'ncu_force_admin_skin' ); ?><button class="button button-primary">Enable full Open Scholar Admin UI</button></form><?php endif; ?></section>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
             <input type="hidden" name="action" value="ncu_save_admin_workspace"><?php wp_nonce_field( 'ncu_save_admin_workspace' ); ?>
             <section class="ncu-panel ncu-panel--padded">
-                <h2>9 Code Admin Skin</h2>
+                <h2>Open Scholar Admin Skin</h2>
                 <div class="ncu-checks">
-                    <?php ncu_checkbox( 'admin_skin_enabled', 'Enable the 9 Code Admin Workspace skin', $s ); ?>
-                    <?php ncu_checkbox( 'admin_skin_menu_enabled', 'Skin the full WordPress left admin menu as 9 Code', $s ); ?>
-                    <?php ncu_checkbox( 'admin_skin_monochrome', 'Lock WordPress/admin interaction accents to the selected 9 Code monochrome skin', $s ); ?>
+                    <?php ncu_checkbox( 'admin_skin_enabled', 'Enable the Open Scholar Admin Workspace skin', $s ); ?>
+                    <?php ncu_checkbox( 'admin_skin_menu_enabled', 'Skin the full application menu as Open Scholar', $s ); ?>
+                    <?php ncu_checkbox( 'admin_skin_monochrome', 'Use a monochrome variant instead of canonical Open Scholar green', $s ); ?>
                     <?php ncu_checkbox( 'admin_skin_workspace_bar', 'Show compact workspace context bar', $s ); ?>
                     <?php ncu_checkbox( 'admin_skin_command_palette', 'Enable Command Palette (Ctrl/Cmd + K)', $s ); ?>
                     <?php ncu_checkbox( 'admin_skin_editor_chrome', 'Skin Block Editor chrome without altering page content', $s ); ?>
                     <?php ncu_checkbox( 'admin_editor_tools_drawer', 'Mobile/tablet Editor Tools hamburger — keep Save/Update visible and move nonessential toolbar/plugin actions into a compact non-modal popover', $s ); ?>
                     <?php ncu_checkbox( 'admin_editor_high_contrast', 'High-contrast editor chrome — stronger headings, labels, fields and focus states without restyling published content', $s ); ?>
-                    <p class="description"><strong>Native editor protection:</strong> Post Content and metadata/meta boxes are never hidden or moved into a 9CODE full-screen overlay. Use the Editor Tools hamburger for 9CODE settings and shortcuts.</p>
+                    <p class="description"><strong>Native editor protection:</strong> Post Content and metadata/meta boxes are never hidden or moved into a full-screen overlay. Use the Editor Tools button for Open Scholar settings and shortcuts.</p>
                     <?php ncu_checkbox( 'admin_skin_enhance_tables', 'Enhance list tables and data screens', $s ); ?>
                     <?php ncu_checkbox( 'admin_skin_enhance_modals', 'Skin media and core modal surfaces', $s ); ?>
                 </div>
-                <p class="description">This is the master Admin Workspace switch. It no longer depends on the separate Branding setting. When enabled, the left WordPress menu, top chrome and supported admin surfaces receive the selected 9 Code skin while routes, permissions, plugin data and editor content remain untouched.</p>
+                <p class="description">This is the master Admin Workspace switch. The application menu, top chrome, and supported admin surfaces receive Open Scholar styling while routes, permissions, plugin data, and editor content remain untouched.</p>
             </section>
 
             <section class="ncu-panel ncu-panel--padded">

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Open Scholar</title>
+  <rect width="128" height="128" rx="24" fill="#14532d"/>
+  <path fill="#fff" d="M15 43 64 20l49 23-49 23L15 43Zm18 14 31 15 31-15v25c-9 9-19 14-31 14S42 91 33 82V57Zm72-4h8v35h-8V53Z"/>
+</svg>

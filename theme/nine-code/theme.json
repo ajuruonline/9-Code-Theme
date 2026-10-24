@@ -7,11 +7,13 @@
     "color": {
       "defaultPalette": false,
       "palette": [
-        { "slug": "black", "name": "9code Black", "color": "#000000" },
-        { "slug": "charcoal", "name": "Charcoal", "color": "#202124" },
-        { "slug": "muted", "name": "Muted", "color": "#5f6368" },
-        { "slug": "line", "name": "Line", "color": "#e5e7eb" },
-        { "slug": "soft", "name": "Soft", "color": "#f6f7f8" },
+        { "slug": "open-scholar", "name": "Open Scholar Green", "color": "#14532d" },
+        { "slug": "open-scholar-dark", "name": "Open Scholar Dark", "color": "#123d2a" },
+        { "slug": "text", "name": "Text", "color": "#191919" },
+        { "slug": "muted", "name": "Muted", "color": "#5e5e5e" },
+        { "slug": "line", "name": "Line", "color": "#e0dfdc" },
+        { "slug": "soft", "name": "Soft Green", "color": "#e5f2eb" },
+        { "slug": "page", "name": "Page", "color": "#f2f5f3" },
         { "slug": "white", "name": "White", "color": "#ffffff" }
       ]
     },
@@ -25,16 +27,16 @@
     }
   },
   "styles": {
-    "color": { "background": "#ffffff", "text": "#000000" },
+    "color": { "background": "#f2f5f3", "text": "#191919" },
     "typography": { "fontFamily": "var:preset|font-family|system", "lineHeight": "1.65" },
     "elements": {
-      "link": { "color": { "text": "#000000" } },
-      "button": { "color": { "background": "#000000", "text": "#ffffff" }, "border": { "radius": "10px" }, "typography": { "fontWeight": "700" } },
+      "link": { "color": { "text": "#14532d" } },
+      "button": { "color": { "background": "#14532d", "text": "#ffffff" }, "border": { "radius": "4px" }, "typography": { "fontWeight": "700" } },
       "heading": { "typography": { "lineHeight": "1.15", "fontWeight": "750" } }
     },
     "blocks": {
-      "core/code": { "color": { "background": "#111111", "text": "#ffffff" }, "border": { "radius": "10px" } },
-      "core/quote": { "border": { "color": "#000000", "width": "0 0 0 4px" }, "spacing": { "padding": { "left": "1.25rem" } } }
+      "core/code": { "color": { "background": "#123d2a", "text": "#ffffff" }, "border": { "radius": "8px" } },
+      "core/quote": { "border": { "color": "#14532d", "width": "0 0 0 4px" }, "spacing": { "padding": { "left": "1.25rem" } } }
     }
   }
 }

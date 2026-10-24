@@ -97,14 +97,14 @@ class NineCode_ACF_Data_Engine {
             return;
         }
         if ( ! function_exists( 'acf_get_field_groups' ) ) {
-            echo '<div class="notice notice-error"><p><strong>9Code ACF Data Engine:</strong> Advanced Custom Fields (ACF) is not active, so ACF fields are unavailable. Plugin meta and taxonomy data can still be edited here.</p></div>';
+            echo '<div class="notice notice-error"><p><strong>Open Scholar Data Manager:</strong> Advanced Custom Fields (ACF) is not active, so ACF fields are unavailable. Plugin meta and taxonomy data can still be edited here.</p></div>';
         }
     }
 
     public function admin_menu() {
         $this->menu_hook = add_menu_page(
-            '9Code Data Engine',
-            '9Code Data',
+            'Open Scholar Data Manager',
+            'Data Manager',
             $this->capability,
             'ninecode-acf-data-engine',
             array( $this, 'render_browser' ),
@@ -160,13 +160,13 @@ class NineCode_ACF_Data_Engine {
 
     private function require_cap() {
         if ( ! current_user_can( $this->capability ) ) {
-            wp_die( esc_html__( 'You do not have permission to manage 9Code data.', 'nine-code-data' ) );
+            wp_die( esc_html__( 'You do not have permission to manage Open Scholar data.', 'nine-code-data' ) );
         }
     }
 
     private function page_header( $title, $description = '' ) {
         echo '<div class="wrap ninecode-wrap">';
-        echo '<div class="ninecode-hero"><div><span class="ninecode-kicker">9CODE • DATA</span><h1>' . esc_html( $title ) . '</h1>';
+        echo '<div class="ninecode-hero"><div><span class="ninecode-kicker">OPEN SCHOLAR • DATA</span><h1>' . esc_html( $title ) . '</h1>';
         if ( $description ) {
             echo '<p>' . esc_html( $description ) . '</p>';
         }
@@ -182,7 +182,7 @@ class NineCode_ACF_Data_Engine {
         $category_url = apply_filters( 'ninecode_data_engine_category_manager_url', $category_url );
         $post_url = apply_filters( 'ninecode_data_engine_post_manager_url', $post_url );
 
-        echo '<nav class="ninecode-manager-switcher" aria-label="9Code manager switcher">';
+        echo '<nav class="ninecode-manager-switcher" aria-label="Open Scholar manager switcher">';
         echo '<a class="button button-primary is-active" href="' . esc_url( $data_url ) . '">Data Manager</a>';
         if ( $category_url ) {
             echo '<a class="button" href="' . esc_url( $category_url ) . '">Category / Lecture Manager</a>';

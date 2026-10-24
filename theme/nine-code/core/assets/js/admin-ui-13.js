@@ -61,9 +61,35 @@
         });
     }
 
+    function upgradeLegacySettingsPanels() {
+        document.querySelectorAll('.ncu-admin .ncu-panel').forEach(function (panel) {
+            if (panel.tagName === 'DETAILS' || panel.closest('.ncu-dashboard-grid')) return;
+            var heading = panel.querySelector(':scope > h2, :scope > h3');
+            if (!heading) return;
+            var details = document.createElement('details');
+            details.className = panel.className;
+            details.setAttribute('data-ninecode-settings-section', '');
+            var summary = document.createElement('summary');
+            summary.textContent = heading.textContent;
+            var body = document.createElement('div');
+            body.className = 'ninecode-settings-body';
+            Array.prototype.slice.call(panel.childNodes).forEach(function (node) {
+                if (node !== heading) body.appendChild(node);
+            });
+            details.appendChild(summary);
+            details.appendChild(body);
+            details.open = false;
+            panel.replaceWith(details);
+        });
+        document.querySelectorAll('.ncu-admin').forEach(function (root) {
+            root.setAttribute('data-ninecode-settings-root', '');
+        });
+    }
+
     function init() {
         lockMenu();
         modernizeAiEditor();
+        upgradeLegacySettingsPanels();
         initialiseSettingsSections();
     }
 

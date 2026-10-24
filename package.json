@@ -1,7 +1,7 @@
 {
-  "name": "nine-code",
+  "name": "open-scholar-theme",
   "private": true,
-  "description": "Nine Code theme, including Data Manager: tooling and tests",
+  "description": "Open Scholar Theme: lean WordPress host, integration contract, tooling and tests",
   "scripts": {
     "lint": "bin/lint.sh",
     "build": "bin/build.sh",
@@ -10,9 +10,9 @@
     "test:crawl": "node tests/e2e/crawl.mjs",
     "test:editor": "node tests/e2e/editor.mjs",
     "test:upgrade": "bin/test-upgrade.sh",
-    "test": "npm run lint && node tests/e2e/public.mjs && node tests/e2e/crawl.mjs && node tests/e2e/editor.mjs && node tests/e2e/visual-editor.mjs && tests/integration/run.sh && node tests/e2e/data-workspace.mjs && bin/plugin-check.sh",
+    "test": "npm run lint && node tests/e2e/public.mjs && node tests/e2e/crawl.mjs && node tests/e2e/editor.mjs && node tests/e2e/visual-editor.mjs",
     "test:visual": "node tests/e2e/visual-editor.mjs",
-    "test:plugin-check": "bin/plugin-check.sh",
+    "test:legacy-data-manager": "tests/integration/run.sh && node tests/e2e/data-workspace.mjs && bin/plugin-check.sh",
     "audit": "bin/audit.sh",
     "test:integration": "tests/integration/run.sh",
     "test:workspace": "node tests/e2e/data-workspace.mjs"

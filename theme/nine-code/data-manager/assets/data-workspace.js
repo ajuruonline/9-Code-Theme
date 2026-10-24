@@ -347,7 +347,7 @@
 			h( 'div', { class: 'ncd-record-links' },
 				rec.summary.status ? h( 'span', { class: 'ncd-status ncd-status--' + rec.summary.status, text: rec.summary.status } ) : null,
 				rec.summary.view_url ? h( 'a', { href: rec.summary.view_url, target: '_blank', rel: 'noopener', text: 'View' } ) : null,
-				rec.summary.edit_url ? h( 'a', { href: rec.summary.edit_url, text: 'Open in WordPress' } ) : null
+				rec.summary.edit_url ? h( 'a', { href: rec.summary.edit_url, text: 'Open in editor' } ) : null
 			)
 		) );
 

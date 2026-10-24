@@ -99,3 +99,50 @@ function ninecodepress_interop_capabilities() {
     );
     return apply_filters( 'ninecodepress_interop_capabilities', $caps );
 }
+
+/**
+ * Small Open Scholar plugin seam. Plugins describe themselves through the
+ * filter; the theme never scans or rewrites their private records.
+ */
+function open_scholar_theme_integrations() {
+    $items = apply_filters( 'open_scholar_theme_integrations', array() );
+    if ( ! is_array( $items ) ) { return array(); }
+    $out = array();
+    foreach ( $items as $id => $item ) {
+        if ( ! is_array( $item ) ) { continue; }
+        $key = sanitize_key( is_string( $id ) ? $id : ( $item['id'] ?? '' ) );
+        if ( ! $key ) { continue; }
+        $out[ $key ] = array(
+            'id'          => $key,
+            'label'       => sanitize_text_field( $item['label'] ?? $key ),
+            'description' => sanitize_text_field( $item['description'] ?? '' ),
+            'version'     => sanitize_text_field( $item['version'] ?? '' ),
+            'url'         => isset( $item['url'] ) ? esc_url_raw( $item['url'] ) : '',
+            'capabilities'=> array_values( array_filter( array_map( 'sanitize_key', (array) ( $item['capabilities'] ?? array() ) ) ) ),
+        );
+    }
+    return $out;
+}
+
+function open_scholar_theme_design_tokens() {
+    $contract = function_exists( 'open_scholar_theme_contract' ) ? open_scholar_theme_contract() : array();
+    $tokens = isset( $contract['palette'] ) && is_array( $contract['palette'] ) ? $contract['palette'] : array();
+    $tokens = array_merge( $tokens, array(
+        'primary' => $tokens['accent'] ?? '#14532d',
+        'surface' => $tokens['card'] ?? '#ffffff',
+        'radius'  => 8,
+        'runtime' => 'plugin-host',
+    ) );
+    return apply_filters( 'open_scholar_theme_design_tokens', $tokens );
+}
+
+/** Legacy name retained as an adapter for existing Open Scholar plugins. */
+if ( ! function_exists( 'ninecode_theme_get_design_tokens' ) ) {
+    function ninecode_theme_get_design_tokens() { return open_scholar_theme_design_tokens(); }
+}
+
+add_action( 'after_setup_theme', 'open_scholar_theme_announce_host', 100 );
+function open_scholar_theme_announce_host() {
+    add_theme_support( 'open-scholar-plugin-host', open_scholar_theme_contract() );
+    do_action( 'open_scholar_theme_ready', open_scholar_theme_contract() );
+}

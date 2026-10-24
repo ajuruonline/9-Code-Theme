@@ -44,8 +44,8 @@ function ncu_theme_site_feature_default( $feature, $fallback = true ) {
 add_action( 'admin_menu', 'ncu_register_theme_display_defaults_page', 95 );
 function ncu_register_theme_display_defaults_page() {
     add_theme_page(
-        __( 'Nine Code Display', 'nine-code' ),
-        __( '9Code Display', 'nine-code' ),
+        __( 'Open Scholar Display', 'nine-code' ),
+        __( 'Open Scholar Display', 'nine-code' ),
         'edit_theme_options',
         'ninecode-theme-display',
         'ncu_render_theme_display_defaults_page'
@@ -57,7 +57,7 @@ function ncu_render_theme_display_defaults_page() {
     $defaults = ncu_theme_display_defaults();
     ?>
     <div class="wrap">
-        <h1><?php esc_html_e( 'Nine Code Display', 'nine-code' ); ?></h1>
+        <h1><?php esc_html_e( 'Open Scholar Display', 'nine-code' ); ?></h1>
         <p><?php esc_html_e( 'Site-wide defaults for Theme-owned post and page presentation. Specialist plugins can supply their own title and meta without duplication.', 'nine-code' ); ?></p>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
             <input type="hidden" name="action" value="ncu_save_theme_display_defaults">
@@ -237,7 +237,7 @@ function ncu_add_display_settings_metabox() {
         // Gutenberg gets the native document-settings sidebar panel above. Keep
         // this meta box only as a Classic Editor / non-block-editor fallback.
         if ( function_exists( 'use_block_editor_for_post_type' ) && use_block_editor_for_post_type( $type ) ) { continue; }
-        add_meta_box( 'ncu-display-settings', __( '9Code Display', 'nine-code' ), 'ncu_render_display_settings_metabox', $type, 'side', 'default' );
+        add_meta_box( 'ncu-display-settings', __( 'Open Scholar Display', 'nine-code' ), 'ncu_render_display_settings_metabox', $type, 'side', 'default' );
     }
 }
 
@@ -256,7 +256,7 @@ function ncu_render_display_settings_metabox( $post ) {
     $owner = ncu_post_presentation_owner( $post->ID );
     $width = ncu_post_content_width( $post->ID );
     echo '<p><label><strong>Presentation owner</strong><select name="ncu_display[_ncu_presentation_owner]" style="width:100%;margin-top:5px">';
-    foreach ( array( 'auto'=>'Automatic', 'theme'=>'Nine Code', 'plugin'=>'Plugin / custom presentation' ) as $v => $name ) {
+    foreach ( array( 'auto'=>'Automatic', 'theme'=>'Open Scholar Theme', 'plugin'=>'Plugin / custom presentation' ) as $v => $name ) {
         echo '<option value="' . esc_attr( $v ) . '"' . selected( $owner, $v, false ) . '>' . esc_html( $name ) . '</option>';
     }
     echo '</select></label></p><p class="description">Plugin / custom suppresses Theme title, meta, category line, featured image, breadcrumbs, tags and navigation unless explicitly overridden below.</p>';

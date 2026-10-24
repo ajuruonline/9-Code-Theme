@@ -52,15 +52,15 @@ function nine10_data_component_contract( $contracts ) {
         'elementor_policy' => 'presentation-owner',
         'taxonomy_policy' => 'registered-object-taxonomies-only',
     );
-    $contracts['nine-code-team'] = array(
-        'id' => 'nine-code-team',
+    $contracts['open-scholar-team'] = array(
+        'id' => 'open-scholar-team',
         'version' => NINE55_ULTRON_DATA_VERSION,
         'role' => 'coordinated-suite',
         'members' => array( 'core', 'manager', 'data-manager', 'team-integrations' ),
         'data_owner' => 'data-manager',
         'discovery' => 'registered-wordpress-objects-and-provider-contracts',
         'round_trip' => array( 'json', 'csv', 'xlsx', 'ai' ),
-        'settings_ui' => array( 'default' => 'closed', 'mobile_first' => true, 'colour_sequence' => array( 'red', 'green' ), 'descriptions' => 'required-when-available' ),
+        'settings_ui' => array( 'default' => 'closed', 'mobile_first' => true, 'colour_sequence' => array( 'red', 'green' ), 'descriptions' => 'required-when-available', 'touch_target' => 44 ),
     );
     return $contracts;
 }
@@ -77,7 +77,7 @@ function ninecode_data_enqueue_settings_ui() {
 
 function ninecode_data_maybe_enqueue_settings_ui( $hook_suffix ) {
     $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- screen routing only.
-    $is_suite_page = (bool) preg_match( '/(?:^|[-_])(nine|ninecode|nine10|nine55|ncu|9code)(?:[-_]|$)/i', $page . '-' . (string) $hook_suffix );
+    $is_suite_page = (bool) preg_match( '/(?:^|[-_])(open[-_]?scholar|osch|nine|ninecode|nine10|nine55|ncu|9code)(?:[-_]|$)/i', $page . '-' . (string) $hook_suffix );
     $should_enqueue = (bool) apply_filters( 'ninecode_settings_ui_should_enqueue', $is_suite_page, $page, $hook_suffix );
     if ( $should_enqueue ) { ninecode_data_enqueue_settings_ui(); }
 }

@@ -1,13 +1,11 @@
 # Releasing
 
-1. Bump the version in **all four** places. Theme and Data Manager share one version number, and lint fails if they differ:
+1. Bump both theme version declarations:
    - `Version:` in `theme/nine-code/style.css`
    - `NCU_THEME_VERSION` in `theme/nine-code/functions.php`
-   - `NINE55_ULTRON_DATA_VERSION` in `theme/nine-code/data-manager/bootstrap.php`
-   - `Stable tag:` in `theme/nine-code/data-manager/readme.txt`
-   Also update the changelog in `theme/nine-code/data-manager/readme.txt` and `docs/DATA-MANAGER-APP-INVENTORY.md`.
-2. Add a section to `CHANGELOG.md`.
-3. `npm test && bin/test-upgrade.sh && bin/build.sh`
-4. Upload `dist/nine-code-theme-*.zip`. The zip root folder is the install slug, so uploading replaces the old version in place.
+2. Add a section to `CHANGELOG.md` and update compatibility documentation when the host contract changes.
+3. Run `bin/lint.sh` and `bin/build.sh`.
+4. Inspect the ZIP and verify that it contains neither `data-manager/` nor retired application modules.
+5. Upload `dist/open-scholar-theme-*.zip`. Its root remains `nine-code`, the stable install slug, so an upload replaces the prior theme in place.
 
-There is one package. Installing or updating the theme installs Data Manager too.
+Data Manager and other Open Scholar applications have independent plugin releases and versions. Do not couple their versions to the theme.

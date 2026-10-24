@@ -6,63 +6,39 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'admin_menu', 'ncu_core_admin_menu' );
 function ncu_core_admin_menu() {
     $icon = 'dashicons-admin-generic';
-    $cap  = current_user_can( 'manage_ninecode_data' ) ? 'manage_ninecode_data' : 'manage_options';
+    $cap  = 'manage_options';
     add_menu_page(
-        __( 'Nine Code', 'nine-code' ),
-        __( 'Nine Code', 'nine-code' ),
+        __( 'Open Scholar', 'nine-code' ),
+        __( 'Open Scholar', 'nine-code' ),
         $cap,
         'nine-code-ultra',
         'ncu_core_dashboard_page',
         $icon,
         3
     );
-    add_submenu_page( 'nine-code-ultra', __( 'Responses', 'nine-code' ), __( 'Responses', 'nine-code' ), 'edit_posts', 'nine-code-ultra-responses', 'ncu_core_responses_page' );
-
-    /* Data Manager and Responses are the daily workspace, but all established
-     * 9Core settings remain visible and directly accessible under Nine Code. */
-    add_submenu_page( 'nine-code-ultra', __( 'Menu & UI', 'nine-code' ), __( 'Menu & UI', 'nine-code' ), 'manage_options', 'nine-code-ultra-menu-ui', 'ncu13_ui_render_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Design System', 'nine-code' ), __( 'Design System', 'nine-code' ), 'manage_options', 'nine-code-ultra-design', 'ncu_core_design_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Style Authority', 'nine-code' ), __( 'Style Authority', 'nine-code' ), 'manage_options', 'nine-code-ultra-style-takeover', 'ncu_style_takeover_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Header & Footer', 'nine-code' ), __( 'Header & Footer', 'nine-code' ), 'manage_options', 'nine-code-ultra-header-footer', 'ncu_core_header_footer_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Admin Workspace', 'nine-code' ), __( 'Admin Workspace', 'nine-code' ), 'manage_options', 'nine-code-ultra-admin-workspace', 'ncu_admin_workspace_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Admin Dark Mode', 'nine-code' ), __( 'Admin Dark Mode', 'nine-code' ), 'manage_options', 'nine-code-ultra-dark-mode', 'ncu_dark_mode_settings_page' );
     add_submenu_page( 'nine-code-ultra', __( 'Branding & Ownership', 'nine-code' ), __( 'Branding & Ownership', 'nine-code' ), 'manage_options', 'nine-code-ultra-branding', 'ncu_branding_settings_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Builders', 'nine-code' ), __( 'Builders', 'nine-code' ), 'manage_options', 'nine-code-ultra-builders', 'ncu_core_builders_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Backup & Recovery', 'nine-code' ), __( 'Backup & Recovery', 'nine-code' ), 'manage_options', 'nine-code-ultra-backup', 'ncu_core_backup_page' );
-    add_submenu_page( 'nine-code-ultra', __( 'Doctor', 'nine-code' ), __( 'Doctor', 'nine-code' ), 'manage_options', 'nine-code-ultra-doctor', 'ncu_core_doctor_page' );
     add_submenu_page( 'nine-code-ultra', __( 'System Health', 'nine-code' ), __( 'System Health', 'nine-code' ), 'manage_options', 'nine-code-ultra-health', 'ncu_core_health_page' );
 
-    /* Retired Front-End Edit remains routable for legacy bookmarks but stays
-     * out of the visible menu because the feature itself is disabled. */
-    add_submenu_page( null, __( 'Front-End Edit (disabled)', 'nine-code' ), __( 'Front-End Edit', 'nine-code' ), 'manage_options', 'nine-code-ultra-frontend-edit', 'ncu_frontend_edit_settings_page' );
-
     add_theme_page(
-        __( 'Nine Code', 'nine-code' ),
-        __( 'Nine Code', 'nine-code' ),
+        __( 'Open Scholar', 'nine-code' ),
+        __( 'Open Scholar', 'nine-code' ),
         'manage_options',
         'nine-code-ultra-appearance',
         'ncu_core_appearance_bridge_page'
     );
 }
 
-/** Keep the data-first routes first while preserving the complete settings menu. */
+/** Keep the small host menu predictable; plugins retain their own menus. */
 add_action( 'admin_menu', 'ncu_core_order_admin_submenu', 999 );
 function ncu_core_order_admin_submenu() {
     global $submenu;
     if ( empty( $submenu['nine-code-ultra'] ) || ! is_array( $submenu['nine-code-ultra'] ) ) { return; }
     $order = array_flip( array(
         'nine-code-ultra',
-        'nine-code-ultra-responses',
-        'nine-code-ultra-menu-ui',
-        'nine-code-ultra-design',
-        'nine-code-ultra-style-takeover',
-        'nine-code-ultra-header-footer',
-        'nine-code-ultra-admin-workspace',
-        'nine-code-ultra-dark-mode',
+        'open-scholar-seo',
         'nine-code-ultra-branding',
-        'nine-code-ultra-builders',
-        'nine-code-ultra-backup',
-        'nine-code-ultra-doctor',
+        'open-scholar-jetpack',
+        'nine-backup-manager',
         'nine-code-ultra-health',
     ) );
     usort( $submenu['nine-code-ultra'], static function ( $a, $b ) use ( $order ) {
@@ -79,7 +55,7 @@ function ncu_core_admin_assets( $hook ) {
     $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
     $is_ncu = false;
     if ( $screen && isset( $screen->id ) ) {
-        $is_ncu = false !== strpos( (string) $screen->id, 'nine-code' );
+        $is_ncu = false !== strpos( (string) $screen->id, 'nine-code' ) || false !== strpos( (string) $screen->id, 'open-scholar' );
     }
     if ( ! $is_ncu && 'appearance_page_nine-code-ultra-appearance' !== $hook ) {
         return;
@@ -363,18 +339,15 @@ function ncu_admin_header( $title, $description = '' ) {
 }
 
 function ncu_core_dashboard_page() {
-    if ( ! current_user_can( 'manage_ninecode_data' ) && ! current_user_can( 'manage_options' ) ) { return; }
-    if ( ncu_core_external_data_edition_active() ) {
-        echo '<div class="wrap ncu-admin">';
-        ncu_admin_header( 'Nine Code', 'Shared 9CodePress infrastructure. Edition 9.10 Data owns data, AI, post and taxonomy management.' );
-        echo '<section class="ncu-panel ncu-panel--padded"><h2>Edition 9.10 ownership</h2><p>9 Data is active and is the authoritative data-management surface. Core has automatically disabled its legacy embedded data engine to prevent duplicate menus, imports, versions and AI workflows.</p><p><a class="button button-primary button-hero" href="' . esc_url( admin_url( 'admin.php?page=nine10-data-edition' ) ) . '">Open 9 Data Manager</a></p></section></div>';
-        return;
-    }
-    if ( function_exists( 'nce_ai_editor_page' ) ) {
-        nce_ai_editor_page();
-        return;
-    }
-    echo '<div class="wrap"><h1>Legacy Data Fallback</h1><p>Install 9.10 Data Edition for the current data, AI, post and taxonomy workspace.</p></div>';
+    if ( ! current_user_can( 'manage_options' ) ) { return; }
+    $integrations = function_exists( 'open_scholar_theme_integrations' ) ? open_scholar_theme_integrations() : array();
+    echo '<div class="wrap ncu-admin" data-ninecode-settings-root>';
+    ncu_admin_header( 'Open Scholar', 'A lean mobile-first host for Open Scholar plugins. The theme provides identity, SEO, design tokens and compatibility; plugins own application features and data.' );
+    echo '<details class="ncu-panel ncu-panel--padded" data-ninecode-settings-section><summary>Host responsibilities</summary><div class="ninecode-settings-body"><p>The theme supplies public templates, Open Scholar branding, responsive administration, SEO/social metadata, Jetpack restraint and shared plugin contracts. It does not create plugin records, AI packages, forms, blocks or builders.</p></div></details>';
+    echo '<details class="ncu-panel ncu-panel--padded" data-ninecode-settings-section><summary>Connected Open Scholar plugins</summary><div class="ninecode-settings-body">';
+    if ( ! $integrations ) { echo '<p>No plugin has announced an Open Scholar integration yet. Installed plugins still keep their normal menus and functions.</p>'; }
+    foreach ( $integrations as $integration ) { echo '<p><strong>' . esc_html( $integration['label'] ) . '</strong> <span class="description">' . esc_html( $integration['description'] ) . '</span></p>'; }
+    echo '</div></details></div>';
 }
 
 function ncu_dashboard_card( $title, $text, $page, $dashicon ) {
@@ -414,7 +387,7 @@ function ncu_core_backup_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     ?>
     <div class="wrap ncu-admin"><?php ncu_admin_header( 'Backup & Recovery', 'Keep the theme recoverable without depending on another workflow plugin.' ); ?>
-    <section class="ncu-panel ncu-panel--padded"><h2>Export</h2><p>Download a compact JSON backup of Nine Code settings.</p><p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_settings' ), 'ncu_export_settings' ) ); ?>">Export settings</a></p></section>
+    <section class="ncu-panel ncu-panel--padded"><h2>Export</h2><p>Download a compact JSON backup of Open Scholar Theme settings.</p><p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_settings' ), 'ncu_export_settings' ) ); ?>">Export settings</a></p></section>
     <section class="ncu-panel ncu-panel--padded"><h2>Import</h2><form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"><input type="hidden" name="action" value="ncu_import_settings"><?php wp_nonce_field( 'ncu_import_settings' ); ?><input type="file" name="ncu_backup" accept="application/json,.json" required> <button class="button button-secondary">Validate & import</button></form></section>
     <section class="ncu-panel ncu-panel--padded"><h2>Reset</h2><p>Returns theme and builder configuration to the v3.2 safe defaults. Aggressive Style Takeover remains off until you enable it.</p><form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Reset every Nine Code setting to its safe default?');"><input type="hidden" name="action" value="ncu_reset_settings"><?php wp_nonce_field( 'ncu_reset_settings' ); ?><button class="button">Reset defaults</button></form></section></div>
     <?php
@@ -423,37 +396,33 @@ function ncu_core_backup_page() {
 function ncu_core_health_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     $theme = wp_get_theme();
-    $template = $theme->get_template();
     $theme_api = defined( 'NCU_THEME_API_VERSION' ) ? NCU_THEME_API_VERSION : 0;
-    $s = ncu_get_settings();
     $https_ok = 'https' === wp_parse_url( home_url( '/' ), PHP_URL_SCHEME );
     $debug_display = defined( 'WP_DEBUG_DISPLAY' ) ? (bool) WP_DEBUG_DISPLAY : false;
     $checks = array(
-        array( 'Theme', (bool) array_intersect( array( 'nine-code-ultra', '10-code-theme', '9code-12-theme' ), array( $template, $theme->get_stylesheet() ) ), $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ),
+        array( 'Theme', 'Open Scholar Theme' === $theme->get( 'Name' ), $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ),
         array( 'Core API', (int) NCU_CORE_API_VERSION > 0, 'API ' . NCU_CORE_API_VERSION ),
         array( 'Theme/Core API', $theme_api && (int) $theme_api === (int) NCU_CORE_API_VERSION, $theme_api ? 'Theme API ' . $theme_api . ' · Core API ' . NCU_CORE_API_VERSION : 'Theme API not loaded' ),
         array( 'PHP', version_compare( PHP_VERSION, '7.4', '>=' ), PHP_VERSION ),
         array( 'CMS Engine', version_compare( get_bloginfo( 'version' ), '6.6', '>=' ), get_bloginfo( 'version' ) ),
         array( 'Permalinks', '' !== (string) get_option( 'permalink_structure' ), get_option( 'permalink_structure' ) ? get_option( 'permalink_structure' ) : 'Plain' ),
         array( 'HTTPS', $https_ok, $https_ok ? 'Secure site URL' : 'Site URL is not HTTPS' ),
-        array( 'Dark Mode', ! empty( $s['dark_mode_enabled'] ), ! empty( $s['dark_mode_enabled'] ) ? ucfirst( $s['dark_mode_default'] ) . ' · ' . ( ! empty( $s['aggressive_style_takeover'] ) ? 'matched style companion' : $s['dark_palette'] ) : 'Disabled' ),
-        array( 'Style Authority', true, ! empty( $s['aggressive_style_takeover'] ) ? 'Aggressive · ' . $s['style_takeover_preset'] . ' · ' . ( ! empty( $s['style_takeover_strict'] ) ? 'Strict' : 'Standard' ) . ( ! empty( $s['style_takeover_dynamic_bridge'] ) ? ' + Dynamic bridge' : '' ) : 'Normal theme mode · takeover off' ),
-        array( 'Style Library', function_exists( 'ncu_style_takeover_index' ) && count( ncu_style_takeover_index() ) >= 130, function_exists( 'ncu_style_takeover_index' ) ? count( ncu_style_takeover_index() ) . ' presets available' : 'Style library unavailable' ),
-        array( 'App Branding', ! empty( $s['white_label_enabled'] ), ! empty( $s['white_label_enabled'] ) ? 'Client + 9 Code branding active' : 'Standard platform chrome visible' ),
-        array( 'Admin Workspace', ! empty( $s['admin_skin_enabled'] ), ! empty( $s['admin_skin_enabled'] ) ? ncu_admin_skin_mode_label( $s['admin_skin_mode'] ) . ' · ' . ucfirst( $s['admin_skin_density'] ) . ' · Ultron skin active' : 'Skin disabled · standard admin layout' ),
-        array( 'Built-in Footer', empty( $s['footer_enabled'] ), empty( $s['footer_enabled'] ) ? 'Off · duplicate-footer safe' : 'Enabled · external footer ownership still takes priority' ),
+        array( 'Plugin host contract', function_exists( 'open_scholar_theme_contract' ), 'Theme does not own plugin data or business logic' ),
+        array( 'Theme header/footer', true, 'Disabled · shell belongs to a plugin' ),
+        array( 'SEO metadata', function_exists( 'osch_seo_is_available' ), function_exists( 'osch_seo_has_provider' ) && osch_seo_has_provider() ? 'Dedicated SEO plugin detected; theme output yields' : 'Open Scholar fallback active' ),
+        array( 'Jetpack UI', true, 'Background services preserved; promotional/editor UI restrained' ),
         array( 'Debug Display', ! $debug_display, $debug_display ? 'Visible debug output is enabled' : 'Errors are not exposed to public visitors' ),
     );
     ?>
-    <div class="wrap ncu-admin"><?php ncu_admin_header( 'System Health', 'Pre-deployment checks for the minimal Nine Code stack.' ); ?><div class="ncu-health-list">
+    <div class="wrap ncu-admin"><?php ncu_admin_header( 'System Health', 'Pre-deployment checks for the Open Scholar application stack.' ); ?><div class="ncu-health-list">
     <?php foreach ( $checks as $check ) : ?><div class="ncu-health-row"><span class="ncu-health-dot <?php echo $check[1] ? 'is-good' : 'is-warn'; ?>"></span><strong><?php echo esc_html( $check[0] ); ?></strong><span><?php echo esc_html( $check[2] ); ?></span></div><?php endforeach; ?>
-    </div><section class="ncu-panel ncu-panel--padded"><h2>Diagnostics</h2><p><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_diagnostics' ), 'ncu_export_diagnostics' ) ); ?>">Download system diagnostics</a></p><p class="description">For a specific page, use <strong>Nine Code → Doctor</strong> or the Doctor icon in the editor/front end.</p></section></div>
+    </div><details class="ncu-panel ncu-panel--padded" data-ninecode-settings-section><summary>Compatibility policy</summary><div class="ninecode-settings-body"><p>Open Scholar Theme never edits plugin-owned data, registers foreign content types, or replaces plugin business logic. Each plugin remains independently testable and updateable.</p></div></details></div>
     <?php
 }
 
 function ncu_core_appearance_bridge_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
-    ?><div class="wrap ncu-admin"><?php ncu_admin_header( 'Nine Code', 'Theme functions have moved to a dedicated top-level dashboard so they are always easy to find.' ); ?><p><a class="button button-primary button-hero" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra' ) ); ?>">Open Nine Code Dashboard</a></p></div><?php
+    ?><div class="wrap ncu-admin"><?php ncu_admin_header( 'Open Scholar', 'Theme functions are available from the dedicated Open Scholar dashboard.' ); ?><p><a class="button button-primary button-hero" href="<?php echo esc_url( admin_url( 'admin.php?page=nine-code-ultra' ) ); ?>">Open Scholar Dashboard</a></p></div><?php
 }
 
 function ncu_settings_notice() { /* v2.1 uses the one-shot notice queue in inc/notices.php. */ }

@@ -5,7 +5,7 @@ final class N9BE_Quick_Actions {
     const OPTION = 'n9be_quick_actions';
     const CUSTOM_OPTION = 'n9be_quick_custom_actions';
     const USER_SCHEMA = 'n9be_quick_actions_schema';
-    const CURRENT_SCHEMA = 7;
+    const CURRENT_SCHEMA = 9;
 
     public static function boot() {
         /* Theme 14 owns the editor launcher. Remove the 13.x Core copy when present
@@ -46,7 +46,6 @@ final class N9BE_Quick_Actions {
         $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
         // Mobile Editor Update: the post editor for post/page/CPT editing gets one compact Core-owned
         // Editor Tools drawer. Do not add a second Theme rail to that workspace.
-        if ( $screen && 'post' === $screen->base ) { return false; }
         return ! $screen || ! in_array( $screen->base, array( 'customize', 'site-editor' ), true );
     }
 
@@ -69,7 +68,7 @@ final class N9BE_Quick_Actions {
 
 
     public static function defaults() {
-        $defaults = array( 'save', 'menu', 'view_site', 'ninecode_theme' );
+        $defaults = array( 'save', 'menu', 'view_site', 'search', 'ninecode_theme' );
         if ( self::data_manager_ready() ) {
             $defaults = array_merge( $defaults, array( 'data_post_editor', 'data_category_manager', 'data_post_creator', 'data_form_manager', 'data_backup' ) );
         }
@@ -79,10 +78,11 @@ final class N9BE_Quick_Actions {
     public static function catalog() {
         $catalog = array(
             'save' => array( 'label'=>'Save / Update', 'icon'=>'saved', 'handler'=>'save', 'cap'=>'edit_posts' ),
-            'menu' => array( 'label'=>'WordPress Menu', 'icon'=>'menu', 'handler'=>'menu', 'cap'=>'edit_posts' ),
+            'menu' => array( 'label'=>'Open Scholar Menu', 'icon'=>'menu', 'handler'=>'menu', 'cap'=>'edit_posts' ),
             'theme_menu' => array( 'label'=>'Theme Menu', 'icon'=>'menu', 'handler'=>'theme_menu', 'cap'=>'read' ),
             'view_site' => array( 'label'=>'View Site', 'icon'=>'admin-home', 'handler'=>'view_site', 'cap'=>'edit_posts' ),
-            'ninecode_theme' => array( 'label'=>'Nine Code', 'icon'=>'admin-appearance', 'url'=>admin_url( 'themes.php?page=ninecode-theme-display' ), 'cap'=>'edit_theme_options' ),
+            'search' => array( 'label'=>'Search content', 'icon'=>'search', 'url'=>admin_url( 'edit.php' ), 'cap'=>'edit_posts' ),
+            'ninecode_theme' => array( 'label'=>'Open Scholar', 'icon'=>'admin-appearance', 'url'=>admin_url( 'admin.php?page=nine-code-ultra' ), 'cap'=>'edit_theme_options' ),
                         'new_post' => array( 'label'=>'Add Post', 'icon'=>'edit-page', 'url'=>admin_url( 'post-new.php' ), 'cap'=>'edit_posts' ),
             'new_page' => array( 'label'=>'Add Page', 'icon'=>'admin-page', 'url'=>admin_url( 'post-new.php?post_type=page' ), 'cap'=>'edit_pages' ),
             'media_upload' => array( 'label'=>'Upload Media', 'icon'=>'upload', 'url'=>admin_url( 'media-new.php' ), 'cap'=>'upload_files' ),
@@ -133,6 +133,7 @@ final class N9BE_Quick_Actions {
         // Theme-owned drawer while the public rail itself stays intentionally minimal:
         // Theme hamburger, Save and Launcher only. Later manual drawer removals are respected.
         if ( $user_id && (int) get_user_meta( $user_id, self::USER_SCHEMA, true ) < self::CURRENT_SCHEMA ) {
+            $ids = array_merge( $ids, array( 'view_site', 'search' ) );
             $ids = array_values( array_diff( $ids, array( 'mason' ) ) );
             $theme_id = 'ninecode_theme';
             $ids = array_values( array_diff( $ids, array( $theme_id ) ) );
@@ -231,11 +232,11 @@ final class N9BE_Quick_Actions {
         } else {
             echo '<button type="button" class="n9be-rail-button" data-n9be-quick-toggle aria-expanded="false" aria-controls="n9be-quick-drawer" title="Quick Actions"><span class="dashicons dashicons-grid-view"></span><span class="screen-reader-text">Quick Actions</span></button>';
             echo '<button type="button" class="n9be-rail-button" data-n9be-action="save" title="Save or update current work" disabled><span class="dashicons dashicons-saved"></span><span class="screen-reader-text">Save</span></button>';
-            echo '<button type="button" class="n9be-rail-button" data-n9be-action="menu" title="Open or close WordPress menu"><span class="dashicons dashicons-menu"></span><span class="screen-reader-text">WordPress Menu</span></button>';
+            echo '<button type="button" class="n9be-rail-button" data-n9be-action="menu" title="Open or close Open Scholar menu"><span class="dashicons dashicons-menu"></span><span class="screen-reader-text">Open Scholar Menu</span></button>';
         }
         echo '</div>';
-        if ( ! $frontend ) { echo '<button type="button" id="n9be-admin-tablet-menu-backdrop" data-n9be-menu-backdrop aria-label="Close WordPress menu" tabindex="-1"></button>'; }
-        echo '<aside id="n9be-quick-drawer" class="n9be-quick-drawer" hidden aria-label="9Code Quick Actions"><button type="button" class="n9be-quick-drawer__backdrop" data-n9be-quick-close tabindex="-1"></button><section class="n9be-quick-drawer__panel"><header><div><span>9CODE 14 · QUICK ACTIONS</span><strong>Quick Actions</strong></div><button type="button" data-n9be-quick-close aria-label="Close quick actions"><span class="dashicons dashicons-no-alt"></span></button></header><div class="n9be-quick-grid">';
+        if ( ! $frontend ) { echo '<button type="button" id="n9be-admin-tablet-menu-backdrop" data-n9be-menu-backdrop aria-label="Close Open Scholar menu" tabindex="-1"></button>'; }
+        echo '<aside id="n9be-quick-drawer" class="n9be-quick-drawer" hidden aria-label="Open Scholar Quick Actions"><button type="button" class="n9be-quick-drawer__backdrop" data-n9be-quick-close tabindex="-1"></button><section class="n9be-quick-drawer__panel"><header><div><span>OPEN SCHOLAR · QUICK ACTIONS</span><strong>Quick Actions</strong></div><div class="n9be-quick-drawer__tools">' . ( ! $frontend && current_user_can( 'edit_posts' ) ? '<a href="' . esc_url( admin_url( 'admin.php?page=ninecode-quick-actions' ) ) . '" class="n9be-quick-configure">Arrange</a>' : '' ) . '<button type="button" data-n9be-quick-close aria-label="Close quick actions"><span class="dashicons dashicons-no-alt"></span></button></div></header><p class="n9be-quick-drawer__hint">Choose an action now, or use Arrange to add, remove and reorder this launcher.</p><div class="n9be-quick-grid">';
         foreach ( $items as $id => $action ) {
             if ( $frontend && in_array( $id, array( 'save', 'menu', 'theme_menu', 'view_site' ), true ) ) { continue; }
             $href = isset( $action['url'] ) ? $action['url'] : '';
@@ -246,11 +247,11 @@ final class N9BE_Quick_Actions {
             }
         }
         echo '</div><footer>';
-        if ( current_user_can( 'edit_posts' ) ) { echo '<a href="' . esc_url( admin_url( 'admin.php?page=ninecode-quick-actions' ) ) . '">Arrange actions</a>'; }
+        if ( current_user_can( 'edit_posts' ) ) { echo '<a class="n9be-quick-arrange-footer" href="' . esc_url( admin_url( 'admin.php?page=ninecode-quick-actions' ) ) . '">Arrange these actions</a>'; }
         echo '</footer></section></aside>';
 
         if ( self::can_install_replace_plugins() ) {
-            echo '<div id="n9be-plugin-modal" class="n9be-plugin-modal" hidden><button type="button" class="n9be-plugin-backdrop" data-n9be-plugin-close tabindex="-1"></button><section class="n9be-plugin-dialog" role="dialog" aria-modal="true" aria-labelledby="n9be-plugin-title"><header><div><strong id="n9be-plugin-title">Install / Replace Plugin</strong><span>Upload a plugin ZIP. If that plugin already exists, its package is replaced and the current version is activated without leaving the site.</span></div><button type="button" data-n9be-plugin-close aria-label="Close"><span class="dashicons dashicons-no-alt"></span></button></header><form id="n9be-plugin-form"><label>Plugin ZIP<input type="file" name="pluginzip" accept=".zip,application/zip" required></label><button class="button button-primary" type="submit">Install / Replace + Activate</button><p data-n9be-plugin-status role="status">Choose a plugin ZIP. Existing plugin folders may be replaced.</p><a href="' . esc_url( self_admin_url( 'plugin-install.php?tab=upload' ) ) . '">Use WordPress uploader</a></form></section></div>';
+            echo '<div id="n9be-plugin-modal" class="n9be-plugin-modal" hidden><button type="button" class="n9be-plugin-backdrop" data-n9be-plugin-close tabindex="-1"></button><section class="n9be-plugin-dialog" role="dialog" aria-modal="true" aria-labelledby="n9be-plugin-title"><header><div><strong id="n9be-plugin-title">Install / Replace Plugin</strong><span>Upload a plugin ZIP. If that plugin already exists, its package is replaced and the current version is activated without leaving the site.</span></div><button type="button" data-n9be-plugin-close aria-label="Close"><span class="dashicons dashicons-no-alt"></span></button></header><form id="n9be-plugin-form"><label>Plugin ZIP<input type="file" name="pluginzip" accept=".zip,application/zip" required></label><button class="button button-primary" type="submit">Install / Replace + Activate</button><p data-n9be-plugin-status role="status">Choose a plugin ZIP. Existing plugin folders may be replaced.</p><a href="' . esc_url( self_admin_url( 'plugin-install.php?tab=upload' ) ) . '">Open plugin upload page</a></form></section></div>';
         }
     }
 
@@ -281,11 +282,11 @@ final class N9BE_Quick_Actions {
         if ( ! current_user_can( 'edit_posts' ) ) { return; }
         $catalog = self::catalog();
         $configured = self::configured_ids();
-        echo '<div class="wrap n9be-mason"><div class="n9be-mason-hero"><div><span class="n9be-kicker">9CODE 14 · QUICK ACTIONS</span><h1>Quick Actions</h1><p>Choose, switch on/off and drag the WordPress functions that appear in the right-side mobile editing drawer. 9 Data Manager actions are included automatically when the Data Manager is active. Other plugins can still register additional actions through the Block Edition action catalogue.</p></div><div class="n9be-mason-badge">Q</div></div>';
+        echo '<div class="wrap n9be-mason"><div class="n9be-mason-hero"><div><span class="n9be-kicker">OPEN SCHOLAR · QUICK ACTIONS</span><h1>Quick Actions</h1><p>Choose, switch on/off and drag the site functions that appear in the right-side mobile editing drawer. 9 Data Manager actions are included automatically when the Data Manager is active. Other plugins can still register additional actions through the Block Edition action catalogue.</p></div><div class="n9be-mason-badge">Q</div></div>';
         if ( ! empty( $_GET['n9be_saved'] ) ) { echo '<div class="notice notice-success is-dismissible"><p>Quick Actions updated.</p></div>'; }
         echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"><input type="hidden" name="action" value="n9be_quick_actions_save">';
         wp_nonce_field( 'n9be_quick_actions_save' );
-        echo '<div class="n9be-panel"><h2>Enabled actions</h2><p class="description">Drag to arrange. Remove an action by unticking it. On wp-admin, Save and WordPress Menu remain permanent. On the public site, the permanent rail is Theme Menu, Save and Launcher; Post Editor and Category Manager remain inside the drawer.</p><ul id="n9be-action-sortable" class="n9be-action-sortable">';
+        echo '<div class="n9be-panel"><h2>Enabled actions</h2><p class="description">Drag to arrange. Remove an action by unticking it. On wp-admin, Save and Open Scholar Menu remain permanent. On the public site, the permanent rail is Theme Menu, Save and Launcher; Post Editor and Category Manager remain inside the drawer.</p><ul id="n9be-action-sortable" class="n9be-action-sortable">';
         foreach ( $configured as $id ) {
             if ( empty( $catalog[ $id ] ) ) { continue; }
             $a = $catalog[ $id ];
@@ -293,7 +294,7 @@ final class N9BE_Quick_Actions {
         }
         echo '</ul></div>';
         $remaining = array_diff_key( $catalog, array_flip( $configured ) );
-        echo '<div class="n9be-panel"><h2>Add WordPress functions</h2><div class="n9be-action-library">';
+        echo '<div class="n9be-panel"><h2>Add site functions</h2><div class="n9be-action-library">';
         foreach ( $remaining as $id => $a ) {
             if ( ! empty( $a['cap'] ) && ! current_user_can( $a['cap'] ) ) { continue; }
             echo '<label><input type="checkbox" name="action_ids[]" value="' . esc_attr( $id ) . '"><span class="dashicons dashicons-' . esc_attr( $a['icon'] ) . '"></span><b>' . esc_html( $a['label'] ) . '</b><code>' . esc_html( $id ) . '</code></label>';

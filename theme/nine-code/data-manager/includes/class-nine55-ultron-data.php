@@ -31,8 +31,8 @@ final class Nine55_Ultron_Data {
 
     public function register_menu() {
         $hook = add_menu_page(
-            '9 Data Manager',
-            '9 Data Manager',
+            'Open Scholar Data Manager',
+            'Data Manager',
             'edit_posts',
             $this->slug,
             array( $this, 'render_dashboard' ),
@@ -47,6 +47,14 @@ final class Nine55_Ultron_Data {
         }
         $this->add_named_redirect_menu( 'Post Editor', 'post-editor', 'nine-post-manager', 'edit_posts' );
         $this->add_named_redirect_menu( 'Category Manager', 'category-manager', 'nine-category-manager', 'manage_categories' );
+        $this->add_named_redirect_menu( 'Data Editor', 'data-editor', 'ninecode-acf-data-engine', 'edit_posts' );
+        $this->add_named_redirect_menu( 'Edit Many', 'edit-many', 'ninecode-acf-table', 'edit_posts' );
+        $this->add_named_redirect_menu( 'Fields', 'fields', 'ninecode-acf-fields', 'edit_posts' );
+        $this->add_named_redirect_menu( 'Field Groups', 'field-groups', 'ninecode-acf-allocator', 'manage_options' );
+        $this->add_named_redirect_menu( 'Taxonomies', 'taxonomies', 'ninecode-acf-taxonomies', 'manage_categories' );
+        $this->add_named_redirect_menu( 'AI Import / Export', 'ai-exchange', 'ninecode-acf-ai', 'manage_options' );
+        $this->add_named_redirect_menu( 'Versions', 'versions', 'ninecode-acf-versions', 'edit_posts' );
+        $this->add_named_redirect_menu( 'Data Health', 'data-health', 'ninecode-acf-health', 'manage_options' );
         $this->add_named_redirect_menu( 'Post Creator', 'post-creator', 'nine-ai-manager-post', 'manage_options' );
         add_submenu_page( $this->slug, 'Form Manager', 'Form Manager', 'edit_posts', 'nine10-form-manager', array( 'Nine10_Form', 'render_admin_page_static' ) );
         add_submenu_page( $this->slug, 'Data Backup', 'Data Backup', 'edit_posts', 'nine10-data-backup', array( 'Nine10_Data_Backup', 'render_admin_page_static' ) );
@@ -153,8 +161,8 @@ final class Nine55_Ultron_Data {
             'Form Manager'     => admin_url( 'admin.php?page=nine10-form-manager' ),
             'Data Backup'      => admin_url( 'admin.php?page=nine10-data-backup' ),
         );
-        echo '<nav class="ultron955-bar" aria-label="9 Data Manager">';
-        echo '<strong>9 Data Manager</strong><span class="ultron955-bar-links">';
+        echo '<nav class="ultron955-bar" aria-label="Open Scholar Data Manager">';
+        echo '<strong>Open Scholar Data Manager</strong><span class="ultron955-bar-links">';
         foreach ( $links as $label => $url ) { echo '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>'; }
         echo '</span></nav>';
     }
@@ -193,8 +201,8 @@ final class Nine55_Ultron_Data {
         ?>
         <div class="wrap ultron955-wrap">
             <header class="ultron955-hero">
-                <div><p class="ultron955-kicker">EDITORIAL + DATA OPERATING WORKSPACE</p><h1>9 Data Manager</h1><p>Post Editor, Category Manager, Post Creator, Form Manager and Data Backup in one WordPress workspace.</p></div>
-                <div class="ultron955-version">9.10</div>
+                <div><p class="ultron955-kicker">OPEN SCHOLAR • DATA</p><h1>Data Manager</h1><p>Every discoverable Open Scholar record and editable provider field, with human-reviewed AI import/export, in one workspace.</p></div>
+                <div class="ultron955-version">19.0</div>
             </header>
 
             <section class="ultron955-engines" aria-label="Managers">

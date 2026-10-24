@@ -4,18 +4,13 @@
  * (9Code 15 Theme + 9Core 15 plugin + 9 Data Manager plugin).
  *
  * - Deactivates the retired 9Core plugin (its code now lives in this theme).
- * - Deactivates the retired data plugins ("9 Data Manager" and the separate
- *   "Nine Code Data" plugin). Data Manager is bundled with this theme from
- *   18.0.0, so the theme is enough. No data is touched: option names, post
- *   types, meta keys and tables are unchanged.
+ * - Leaves every data/application plugin active. Since 20.0.0 the theme is a
+ *   host only; Data Manager and all business workflows belong to plugins.
  * - Copies theme mods (menus, logo, widgets) from the old theme folder.
  */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function ncu_legacy_core_plugin_file() { return 'nine-code-ultra-core/nine-code-ultra-core.php'; }
-function ncu_legacy_data_plugin_file() { return 'nine10-data-edition/nine55-ultron-data.php'; }
-function ncu_retired_data_plugin_file() { return 'nine-code-data/nine-code-data.php'; }
-
 function ncu_migrate_deactivate_legacy_plugins() {
     if ( ! function_exists( 'is_plugin_active' ) || ! function_exists( 'deactivate_plugins' ) ) {
         require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -24,13 +19,6 @@ function ncu_migrate_deactivate_legacy_plugins() {
     if ( is_plugin_active( $core ) ) {
         deactivate_plugins( $core, true );
         set_transient( 'ncu_migrated_core_notice', 1, DAY_IN_SECONDS );
-    }
-    /* This theme always carries Data Manager, so a separate data plugin is redundant once the theme runs. */
-    foreach ( array( ncu_legacy_data_plugin_file(), ncu_retired_data_plugin_file() ) as $data ) {
-        if ( is_plugin_active( $data ) ) {
-            deactivate_plugins( $data, true );
-            set_transient( 'ncu_migrated_data_notice', 1, DAY_IN_SECONDS );
-        }
     }
 }
 add_action( 'after_switch_theme', 'ncu_migrate_deactivate_legacy_plugins', 1 );
@@ -58,10 +46,6 @@ add_action( 'admin_notices', function () {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     if ( get_transient( 'ncu_migrated_core_notice' ) ) {
         delete_transient( 'ncu_migrated_core_notice' );
-        echo '<div class="notice notice-success is-dismissible"><p><strong>Nine Code:</strong> the old 9Core plugin was deactivated because its features are now built into the theme. You can delete it.</p></div>';
-    }
-    if ( get_transient( 'ncu_migrated_data_notice' ) ) {
-        delete_transient( 'ncu_migrated_data_notice' );
-        echo '<div class="notice notice-success is-dismissible"><p><strong>Nine Code:</strong> Data Manager is now built into the Nine Code theme, and the separate data plugin was deactivated. All your data is unchanged. You can delete the old plugin.</p></div>';
+        echo '<div class="notice notice-success is-dismissible"><p><strong>Open Scholar:</strong> the legacy Core plugin was deactivated because its features are now built into the theme. You can delete it.</p></div>';
     }
 } );

@@ -75,12 +75,6 @@ function ncu_safe_public_enqueue() {
     if ( ncu_safe_should_enqueue_presentation_css() ) {
         wp_enqueue_style( 'ncu-theme-main', NCU_THEME_URI . '/assets/css/main.css', array( 'ncu-theme-style' ), NCU_THEME_VERSION );
     }
-    if ( ! ncu_safe_engine_surface_active( 'header' ) || ! ncu_safe_engine_surface_active( 'footer' ) ) {
-        wp_enqueue_style( 'ncu-site-chrome', NCU_THEME_URI . '/assets/css/site-chrome.css', array( 'ncu-theme-style' ), NCU_THEME_VERSION );
-    }
-    if ( ! ncu_safe_engine_surface_active( 'header' ) && has_nav_menu( 'primary' ) ) {
-        wp_enqueue_script( 'ncu-nav', NCU_THEME_URI . '/assets/js/nav.js', array(), NCU_THEME_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
-    }
     if ( function_exists( 'wp_add_inline_style' ) && function_exists( 'ninecode_theme_get_design_tokens' ) ) {
         $t = ninecode_theme_get_design_tokens();
         $css = ':root{--ncu-accent:' . $t['primary'] . ';--ncu-surface:' . $t['surface'] . ';--ncu-text:' . $t['text'] . ';--ncu-muted:' . $t['muted'] . ';--ncu-border:' . $t['border'] . ';--ncu-radius:' . absint( $t['radius'] ) . 'px;}';
@@ -157,104 +151,20 @@ function ncu_safe_theme_component_contract( $contracts ) {
 }
 add_filter( 'ninecodepress_component_contracts', 'ncu_safe_theme_component_contract', 20 );
 
-/**
- * Minimal logged-in front-end launcher.
- * Uses only stable WordPress APIs. The plugin-install AJAX handler remains in
- * the admin runtime because admin-ajax.php is an admin request.
- */
-function ncu_safe_surface_context() {
-    $defaults = array(
-        'owner'                        => 'wordpress',
-        'owns_shell'                   => false,
-        'suppress_theme_header'        => false,
-        'suppress_theme_footer'        => false,
-        'suppress_theme_quick_actions' => false,
-        'inherit_design_tokens'        => true,
-        'reason'                       => '',
-    );
-    if ( function_exists( 'ninecodepress_surface_context' ) ) {
-        $resolved = ninecodepress_surface_context( $defaults );
-    } else {
-        $resolved = apply_filters( 'ninecodepress_surface_context', $defaults );
-    }
-    return is_array( $resolved ) ? array_merge( $defaults, $resolved ) : $defaults;
-}
-
-function ncu_safe_front_launcher_allowed() {
-    $surface = ncu_safe_surface_context();
-    if ( ! empty( $surface['suppress_theme_quick_actions'] ) ) { return false; }
-    return function_exists( 'is_user_logged_in' ) && is_user_logged_in()
-        && ( current_user_can( 'edit_posts' ) || current_user_can( 'manage_options' ) );
-}
-
-function ncu_safe_front_launcher_assets() {
-    if ( ! ncu_safe_front_launcher_allowed() ) { return; }
-    wp_enqueue_style( 'dashicons' );
-    wp_enqueue_style( 'n9be-quick-actions', NCU_THEME_URI . '/assets/css/block-edition-quick-actions.css', array(), NCU_THEME_VERSION );
-    wp_enqueue_script( 'n9be-quick-actions', NCU_THEME_URI . '/assets/js/block-edition-quick-actions.js', array(), NCU_THEME_VERSION, true );
-    wp_localize_script( 'n9be-quick-actions', 'n9beQuickActions', array(
-        'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-        'nonce' => wp_create_nonce( 'n9be_quick_plugin_install' ),
-        'siteUrl' => home_url( '/' ),
-        'context' => 'frontend',
-        'maxUploadBytes' => (int) wp_max_upload_size(),
-    ) );
-}
-add_action( 'wp_enqueue_scripts', 'ncu_safe_front_launcher_assets', 1001 );
-
-function ncu_safe_front_launcher_item( $label, $icon, $url ) {
-    echo '<a class="n9be-quick-item" href="' . esc_url( $url ) . '"><span class="dashicons dashicons-' . esc_attr( $icon ) . '"></span><b>' . esc_html( $label ) . '</b></a>';
-}
-
-function ncu_safe_front_launcher_markup() {
-    if ( ! ncu_safe_front_launcher_allowed() ) { return; }
-    echo '<div id="n9be-admin-launcher" data-n9be-context="frontend" data-n9be-site-url="' . esc_attr( home_url( '/' ) ) . '">';
-    echo '<button type="button" class="n9be-rail-button" data-n9be-action="theme_menu" title="Theme menu"><span class="dashicons dashicons-menu"></span><span class="screen-reader-text">Theme menu</span></button>';
-    echo '<button type="button" class="n9be-rail-button" data-n9be-action="save" title="Save"><span class="dashicons dashicons-saved"></span><span class="screen-reader-text">Save</span></button>';
-    echo '<button type="button" class="n9be-rail-button" data-n9be-quick-toggle aria-expanded="false" aria-controls="n9be-quick-drawer" title="Quick Actions"><span class="dashicons dashicons-grid-view"></span><span class="screen-reader-text">Quick Actions</span></button>';
-    echo '</div>';
-    echo '<aside id="n9be-quick-drawer" class="n9be-quick-drawer" hidden aria-label="9Code Quick Actions"><button type="button" class="n9be-quick-drawer__backdrop" data-n9be-quick-close tabindex="-1"></button><section class="n9be-quick-drawer__panel"><header><div><span>9CODE · SAFE RUNTIME</span><strong>Quick Actions</strong></div><button type="button" data-n9be-quick-close aria-label="Close quick actions"><span class="dashicons dashicons-no-alt"></span></button></header><div class="n9be-quick-grid">';
-    if ( current_user_can( 'edit_theme_options' ) ) { ncu_safe_front_launcher_item( 'Nine Code', 'admin-appearance', admin_url( 'themes.php?page=ninecode-theme-display' ) ); }
-    if ( defined( 'NINE55_ULTRON_DATA_VERSION' ) || class_exists( 'Nine55_Ultron_Data', false ) ) {
-        if ( current_user_can( 'edit_posts' ) ) { ncu_safe_front_launcher_item( 'Post Editor', 'edit-page', admin_url( 'admin.php?page=nine-post-manager' ) ); }
-        if ( current_user_can( 'manage_categories' ) ) { ncu_safe_front_launcher_item( 'Category Manager', 'category', admin_url( 'admin.php?page=nine-category-manager' ) ); }
-        if ( current_user_can( 'edit_posts' ) ) { ncu_safe_front_launcher_item( 'Form Manager', 'feedback', admin_url( 'admin.php?page=nine10-form-manager' ) ); }
-        if ( current_user_can( 'edit_posts' ) ) { ncu_safe_front_launcher_item( 'Data Backup', 'download', admin_url( 'admin.php?page=nine10-data-backup' ) ); }
-    }
-    if ( current_user_can( 'install_plugins' ) && current_user_can( 'upload_plugins' ) && current_user_can( 'activate_plugins' ) ) {
-        echo '<button type="button" class="n9be-quick-item" data-n9be-action="add_plugin"><span class="dashicons dashicons-plus-alt2"></span><b>Install / Replace Plugin</b></button>';
-    }
-    echo '</div></section></aside>';
-    if ( current_user_can( 'install_plugins' ) && current_user_can( 'upload_plugins' ) && current_user_can( 'activate_plugins' ) ) {
-        echo '<div id="n9be-plugin-modal" class="n9be-plugin-modal" hidden><button type="button" class="n9be-plugin-backdrop" data-n9be-plugin-close tabindex="-1"></button><section class="n9be-plugin-dialog" role="dialog" aria-modal="true" aria-labelledby="n9be-plugin-title"><header><div><strong id="n9be-plugin-title">Install / Replace Plugin</strong><span>Upload a plugin ZIP from the front end.</span></div><button type="button" data-n9be-plugin-close aria-label="Close"><span class="dashicons dashicons-no-alt"></span></button></header><form id="n9be-plugin-form"><label>Plugin ZIP<input type="file" name="pluginzip" accept=".zip,application/zip" required></label><button class="button button-primary" type="submit">Install / Replace + Activate</button><p data-n9be-plugin-status role="status">Choose a plugin ZIP.</p><a href="' . esc_url( self_admin_url( 'plugin-install.php?tab=upload' ) ) . '">Use WordPress uploader</a></form></section></div>';
-    }
-}
-add_action( 'wp_footer', 'ncu_safe_front_launcher_markup', 1001 );
-
-
-/*
- * Native site chrome. The theme renders a simple header and footer unless the
- * Header & Footer engine has been switched on for that surface.
- */
+/* Legacy chrome helpers remain callable for compatibility but never render. */
 function ncu_safe_engine_surface_active( $surface ) {
-    $class = 'footer' === $surface ? 'ELHF_F_Settings' : 'ELHF_H_Settings';
-    return class_exists( $class, false ) && $class::is_enabled();
+    return false;
 }
 
 function ncu_safe_render_site_header() {
-    if ( ncu_safe_engine_surface_active( 'header' ) ) { return; }
-    if ( ! apply_filters( 'ncu_render_native_header', true ) ) { return; }
-    get_template_part( 'template-parts/site-header' );
+    return;
 }
 
 function ncu_safe_render_site_footer() {
-    if ( ncu_safe_engine_surface_active( 'footer' ) ) { return; }
-    if ( ! apply_filters( 'ncu_render_native_footer', true ) ) { return; }
-    get_template_part( 'template-parts/site-footer' );
+    return;
 }
 
 /** Whether a presentation feature (title, meta, comments...) should print for this entry. */
 function ncu_safe_show( $feature, $default = true ) {
-    $id = get_the_ID();
-    return function_exists( 'ncu_should_show_post_feature' ) ? ncu_should_show_post_feature( $id, $feature, $default ) : (bool) $default;
+    return (bool) apply_filters( 'open_scholar_theme_show_' . sanitize_key( $feature ), $default, get_the_ID() );
 }

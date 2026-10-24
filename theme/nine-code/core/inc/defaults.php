@@ -12,6 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function ncu_admin_skin_mode_choices() {
     return array(
+        'open_scholar' => array(
+            'label' => 'Open Scholar',
+            'description' => 'Canonical Open Scholar green, quiet academic canvas, white cards and accessible focus states.',
+        ),
         'github' => array(
             'label' => 'GitHub',
             'description' => 'Repository-style workspace: cool canvas, dark code shell, compact bordered modules.',
@@ -46,7 +50,7 @@ function ncu_admin_skin_normalize_mode( $mode ) {
         $mode = $legacy[ $mode ];
     }
     $choices = ncu_admin_skin_mode_choices();
-    return isset( $choices[ $mode ] ) ? $mode : 'white_future';
+    return isset( $choices[ $mode ] ) ? $mode : 'open_scholar';
 }
 
 function ncu_admin_skin_mode_label( $mode ) {
@@ -58,6 +62,7 @@ function ncu_admin_skin_mode_label( $mode ) {
 function ncu_admin_skin_palette_tokens( $mode ) {
     $mode = ncu_admin_skin_normalize_mode( $mode );
     $palettes = array(
+        'open_scholar' => array( 'canvas'=>'#f2f5f3', 'surface'=>'#ffffff', 'surface_2'=>'#e5f2eb', 'text'=>'#191919', 'muted'=>'#5e5e5e', 'border'=>'#e0dfdc', 'shell'=>'#123d2a', 'shell_2'=>'#0b3d22', 'shell_text'=>'#ffffff', 'focus'=>'#14532d' ),
         'github' => array( 'canvas'=>'#f6f8fa', 'surface'=>'#ffffff', 'surface_2'=>'#f6f8fa', 'text'=>'#1f2328', 'muted'=>'#59636e', 'border'=>'#d0d7de', 'shell'=>'#0d1117', 'shell_2'=>'#161b22', 'shell_text'=>'#f0f6fc', 'focus'=>'#1f2328' ),
         'future' => array( 'canvas'=>'#090a0c', 'surface'=>'#111318', 'surface_2'=>'#0d0f13', 'text'=>'#f4f6f8', 'muted'=>'#a1a8b3', 'border'=>'#2a2e36', 'shell'=>'#050506', 'shell_2'=>'#0d0f12', 'shell_text'=>'#f8fafc', 'focus'=>'#ffffff' ),
         'chatgpt' => array( 'canvas'=>'#f7f7f5', 'surface'=>'#ffffff', 'surface_2'=>'#f1f1ef', 'text'=>'#242421', 'muted'=>'#6b6b66', 'border'=>'#e2e2de', 'shell'=>'#171717', 'shell_2'=>'#242424', 'shell_text'=>'#f7f7f5', 'focus'=>'#242421' ),
@@ -81,21 +86,21 @@ function ncu_core_defaults() {
         'style_takeover_respect_optout'=> 1,
         'style_takeover_strict'        => 1,
         'style_takeover_dynamic_bridge'=> 1,
-        'style_custom_primary'        => '#B00000',
-        'style_custom_secondary'      => '#0B1F3A',
-        'style_custom_accent'         => '#E53935',
+        'style_custom_primary'        => '#14532d',
+        'style_custom_secondary'      => '#123d2a',
+        'style_custom_accent'         => '#14532d',
         'style_custom_surface'        => '#FFFFFF',
-        'style_custom_surface_alt'    => '#F7F8FA',
-        'style_custom_text'           => '#111827',
-        'style_custom_muted'          => '#667085',
-        'style_custom_border'         => '#E5E7EB',
+        'style_custom_surface_alt'    => '#f2f5f3',
+        'style_custom_text'           => '#191919',
+        'style_custom_muted'          => '#5e5e5e',
+        'style_custom_border'         => '#e0dfdc',
         'style_custom_heading_font'   => 'system-sans',
         'style_custom_body_font'      => 'system-sans',
         'style_custom_ui_font'        => 'system-sans',
-        'accent_color'               => '#000000',
+        'accent_color'               => '#14532d',
         'surface_color'              => '#ffffff',
-        'text_color'                 => '#000000',
-        'muted_color'                => '#5f6368',
+        'text_color'                 => '#191919',
+        'muted_color'                => '#5e5e5e',
         'header_background_color'    => '#ffffff',
         'header_icon_color'          => '#000000',
         'header_border_color'        => '#e5e7eb',
@@ -124,14 +129,14 @@ function ncu_core_defaults() {
         'admin_style_enabled'        => 1,
         'admin_skin_enabled'         => 1,
         'admin_skin_menu_enabled'    => 1,
-        'admin_skin_monochrome'      => 1,
+        'admin_skin_monochrome'      => 0,
         'frontend_edit_enabled'      => 0,
         'frontend_edit_badges'       => 0,
         'frontend_edit_theme_regions'=> 0,
         'frontend_edit_content'      => 0,
         'frontend_edit_builder'      => 0,
         'frontend_edit_featured'     => 0,
-        'admin_skin_mode'            => 'white_future',
+        'admin_skin_mode'            => 'open_scholar',
         'admin_skin_density'         => 'compact',
         'admin_skin_workspace_bar'   => 0,
         'admin_skin_command_palette' => 1,
@@ -146,11 +151,11 @@ function ncu_core_defaults() {
         'admin_skin_hide_screen_options' => 0,
         'admin_skin_radius'          => 10,
         'admin_skin_shadow'          => 'soft',
-        'admin_bar_brand_enabled'    => 0,
-        'admin_bar_label'            => '',
+        'admin_bar_brand_enabled'    => 1,
+        'admin_bar_label'            => 'Open Scholar',
         'login_branding_enabled'     => 1,
         'admin_footer_branding'      => 1,
-        'hide_wp_dashboard_news'     => 1,
+        'hide_wp_dashboard_news'     => 0,
         'managed_by_name'            => '9igeria Online Ltd.',
         'managed_by_url'             => 'https://9igeria.online/',
         'managed_by_logo_id'         => 0,
@@ -158,7 +163,7 @@ function ncu_core_defaults() {
         'theme_owner_url'            => 'https://9igeria.online/',
         'theme_owner_logo_id'        => 0,
         'max_width'                  => 1180,
-        'radius'                     => 16,
+        'radius'                     => 8,
         'density'                    => 'comfortable',
         'shadow_strength'            => 'soft',
         'sticky_header'              => 1,

@@ -21,8 +21,8 @@ class NineCM_Admin {
             }
         }
         add_menu_page(
-            '9 Category Manager',
-            '9 Category Manager',
+            'Open Scholar Category Manager',
+            'Category Manager',
             $menu_cap,
             'nine-category-manager',
             array( $this, 'page' ),
