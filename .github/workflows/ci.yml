@@ -28,6 +28,8 @@ jobs:
         run: bin/audit.sh
       - name: Start test site
         run: bin/setup-test-site.sh && bin/serve-test-site.sh
+      - name: Open Theme main.css computed corners (320px, 390px, desktop)
+        run: node tests/e2e/open-theme-main-css-square-corners.mjs
       - name: Public site
         run: node tests/e2e/public.mjs
       - name: Admin crawl
