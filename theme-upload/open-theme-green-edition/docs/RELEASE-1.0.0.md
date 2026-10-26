@@ -38,3 +38,9 @@ On a test WordPress install, desktop (1280px) and phone (390px):
 
 Not verified: import of a full-site package, and Google Drive upload (no Drive account in the test
 environment).
+
+## 1.0.1 — Quick Actions
+
+- The Quick Actions page lists every site function in groups (Content, Post types, Taxonomies, Site & tools) with search.
+- All Posts and All Pages are available. Every public taxonomy has a "Manage" list, so the launcher reaches them.
+- The enabled list holds up to 60 actions (was 30).

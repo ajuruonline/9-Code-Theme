@@ -6,6 +6,7 @@ final class N9BE_Quick_Actions {
     const CUSTOM_OPTION = 'n9be_quick_custom_actions';
     const USER_SCHEMA = 'n9be_quick_actions_schema';
     const CURRENT_SCHEMA = 9;
+    const MAX_ACTIONS = 60;
 
     public static function boot() {
         /* Theme 14 owns the editor launcher. Remove the 13.x Core copy when present
@@ -106,12 +107,19 @@ final class N9BE_Quick_Actions {
             $catalog['data_form_manager'] = array( 'label'=>'Form Manager', 'icon'=>'feedback', 'url'=>admin_url( 'admin.php?page=nine10-form-manager' ), 'cap'=>'edit_posts' );
             $catalog['data_backup'] = array( 'label'=>'Data Backup', 'icon'=>'download', 'url'=>admin_url( 'admin.php?page=nine10-data-backup' ), 'cap'=>'edit_posts' );
         }
+        $catalog['manage_post'] = array( 'label'=>'All Posts', 'icon'=>'admin-post', 'url'=>admin_url( 'edit.php' ), 'cap'=>'edit_posts', 'group'=>'content' );
+        $catalog['manage_page'] = array( 'label'=>'All Pages', 'icon'=>'admin-page', 'url'=>admin_url( 'edit.php?post_type=page' ), 'cap'=>'edit_pages', 'group'=>'content' );
+        foreach ( get_taxonomies( array( 'show_ui'=>true ), 'objects' ) as $tax => $tax_obj ) {
+            if ( in_array( $tax, array( 'post_format', 'nav_menu', 'link_category', 'wp_theme', 'wp_template_part_area', 'wp_pattern_category' ), true ) ) { continue; }
+            $tax_cap = isset( $tax_obj->cap->manage_terms ) ? $tax_obj->cap->manage_terms : 'manage_categories';
+            $catalog[ 'tax_' . $tax ] = array( 'label'=>'Manage ' . $tax_obj->labels->name, 'icon'=>'category', 'url'=>admin_url( 'edit-tags.php?taxonomy=' . $tax ), 'cap'=>$tax_cap, 'group'=>'taxonomies' );
+        }
         $post_types = get_post_types( array( 'show_ui'=>true ), 'objects' );
         foreach ( $post_types as $type => $obj ) {
             if ( in_array( $type, array( 'post', 'page', 'attachment' ), true ) ) { continue; }
             $cap = isset( $obj->cap->edit_posts ) ? $obj->cap->edit_posts : 'edit_posts';
-            $catalog[ 'new_cpt_' . $type ] = array( 'label'=>'Add ' . $obj->labels->singular_name, 'icon'=>'plus-alt2', 'url'=>admin_url( 'post-new.php?post_type=' . $type ), 'cap'=>$cap );
-            $catalog[ 'manage_cpt_' . $type ] = array( 'label'=>$obj->labels->name, 'icon'=>'list-view', 'url'=>admin_url( 'edit.php?post_type=' . $type ), 'cap'=>$cap );
+            $catalog[ 'new_cpt_' . $type ] = array( 'label'=>'Add ' . $obj->labels->singular_name, 'icon'=>'plus-alt2', 'url'=>admin_url( 'post-new.php?post_type=' . $type ), 'cap'=>$cap, 'group'=>'types' );
+            $catalog[ 'manage_cpt_' . $type ] = array( 'label'=>$obj->labels->name, 'icon'=>'list-view', 'url'=>admin_url( 'edit.php?post_type=' . $type ), 'cap'=>$cap, 'group'=>'types' );
         }
         foreach ( self::custom_actions() as $id => $action ) {
             $catalog[ $id ] = array( 'label'=>$action['label'], 'icon'=>$action['icon'], 'url'=>admin_url( ltrim( $action['route'], '/' ) ), 'cap'=>'read', 'custom'=>true );
@@ -154,7 +162,7 @@ final class N9BE_Quick_Actions {
                 $at = false === $at ? min( 6, count( $ids ) ) : $at + 1;
                 array_splice( $ids, $at, 0, array( 'add_plugin' ) );
             }
-            $ids = array_slice( array_values( array_unique( $ids ) ), 0, 30 );
+            $ids = array_slice( array_values( array_unique( $ids ) ), 0, self::MAX_ACTIONS );
             update_user_meta( $user_id, self::OPTION, $ids );
             update_user_meta( $user_id, self::USER_SCHEMA, self::CURRENT_SCHEMA );
         }
@@ -328,7 +336,7 @@ final class N9BE_Quick_Actions {
         $catalog = self::catalog();
         $ids = isset( $_POST['action_ids'] ) && is_array( $_POST['action_ids'] ) ? array_map( 'sanitize_key', wp_unslash( $_POST['action_ids'] ) ) : array();
         $ids = array_values( array_unique( array_filter( $ids, function( $id ) use ( $catalog ) { return isset( $catalog[ $id ] ); } ) ) );
-        update_user_meta( get_current_user_id(), self::OPTION, array_slice( $ids, 0, 30 ) );
+        update_user_meta( get_current_user_id(), self::OPTION, array_slice( $ids, 0, self::MAX_ACTIONS ) );
         if ( current_user_can( 'manage_options' ) && ! empty( $_POST['custom_label'] ) && ! empty( $_POST['custom_route'] ) ) {
             $label = sanitize_text_field( wp_unslash( $_POST['custom_label'] ) );
             $route = sanitize_text_field( wp_unslash( $_POST['custom_route'] ) );
@@ -338,11 +346,19 @@ final class N9BE_Quick_Actions {
                 $custom[ $id ] = array( 'label'=>$label, 'route'=>$route, 'icon'=>sanitize_key( isset( $_POST['custom_icon'] ) ? wp_unslash( $_POST['custom_icon'] ) : 'admin-generic' ) );
                 update_option( self::CUSTOM_OPTION, $custom, false );
                 $ids[] = $id;
-                update_user_meta( get_current_user_id(), self::OPTION, array_slice( array_values( array_unique( $ids ) ), 0, 30 ) );
+                update_user_meta( get_current_user_id(), self::OPTION, array_slice( array_values( array_unique( $ids ) ), 0, self::MAX_ACTIONS ) );
             }
         }
         wp_safe_redirect( add_query_arg( array( 'page'=>'ninecode-quick-actions', 'n9be_saved'=>1 ), admin_url( 'admin.php' ) ) );
         exit;
+    }
+
+    /** Section a catalogue action is listed under on the settings page. */
+    private static function group_of( $id, array $action ) {
+        if ( ! empty( $action['group'] ) ) { return $action['group']; }
+        if ( ! empty( $action['custom'] ) ) { return 'custom'; }
+        if ( 0 === strpos( $id, 'data_' ) ) { return 'data'; }
+        return 'site';
     }
 
     public static function render_settings_page() {
@@ -363,16 +379,28 @@ final class N9BE_Quick_Actions {
         }
         echo '</ul></div>';
         $remaining = array_diff_key( $catalog, array_flip( array_merge( $configured, array( 'save', 'menu', 'theme_menu', 'search' ) ) ) );
-        echo '<div class="n9be-panel"><h2>Add site functions</h2><div class="n9be-action-library">';
+        echo '<div class="n9be-panel"><h2>Add site functions</h2><p class="description">Every post type, list, taxonomy and tool you can use. Type to filter.</p>';
+        echo '<input type="search" class="n9be-action-search" placeholder="Search functions…" aria-label="Search functions">';
+        $groups = array( 'content' => 'Content', 'types' => 'Post types', 'taxonomies' => 'Taxonomies', 'data' => 'Data Manager', 'site' => 'Site & tools', 'custom' => 'Custom' );
+        $by_group = array_fill_keys( array_keys( $groups ), array() );
         foreach ( $remaining as $id => $a ) {
             if ( ! empty( $a['cap'] ) && ! current_user_can( $a['cap'] ) ) { continue; }
-            echo '<label><input type="checkbox" name="action_ids[]" value="' . esc_attr( $id ) . '"><span class="dashicons dashicons-' . esc_attr( $a['icon'] ) . '"></span><b>' . esc_html( $a['label'] ) . '</b><code>' . esc_html( $id ) . '</code></label>';
+            $by_group[ self::group_of( $id, $a ) ][ $id ] = $a;
         }
-        echo '</div></div>';
+        foreach ( $groups as $key => $title ) {
+            if ( empty( $by_group[ $key ] ) ) { continue; }
+            echo '<h3 class="n9be-action-group">' . esc_html( $title ) . '</h3><div class="n9be-action-library">';
+            foreach ( $by_group[ $key ] as $id => $a ) {
+                echo '<label data-n9be-filter="' . esc_attr( strtolower( $a['label'] . ' ' . $id ) ) . '"><input type="checkbox" name="action_ids[]" value="' . esc_attr( $id ) . '"><span class="dashicons dashicons-' . esc_attr( $a['icon'] ) . '"></span><b>' . esc_html( $a['label'] ) . '</b><code>' . esc_html( $id ) . '</code></label>';
+            }
+            echo '</div>';
+        }
+        echo '<script>(function(){var box=document.querySelector(".n9be-action-search");if(!box)return;box.addEventListener("input",function(){var q=box.value.trim().toLowerCase();document.querySelectorAll("[data-n9be-filter]").forEach(function(el){el.hidden=q!==""&&el.getAttribute("data-n9be-filter").indexOf(q)===-1;});});}());</script>';
+        echo '</div>';
         if ( current_user_can( 'manage_options' ) ) {
             echo '<div class="n9be-panel"><h2>Add a custom admin action</h2><p class="description">This adds a safe WordPress admin destination to the action catalogue. Example: <code>edit.php?post_type=workshop</code> or <code>admin.php?page=my-plugin</code>. Future plugins can register richer action functions programmatically.</p><div class="n9be-field-grid"><label>Label<input name="custom_label" placeholder="Workshops"></label><label>Admin route<input name="custom_route" placeholder="edit.php?post_type=workshop"></label><label>Dashicon<input name="custom_icon" value="admin-generic" placeholder="admin-generic"></label></div></div>';
         }
-        echo '<div class="n9be-sticky-save"><button class="button button-primary button-hero">Save Quick Actions</button><span>Up to 30 configured actions · Theme actions plus 9 Data Manager actions</span></div></form></div>';
+        echo '<div class="n9be-sticky-save"><button class="button button-primary button-hero">Save Quick Actions</button><span>Up to ' . self::MAX_ACTIONS . ' configured actions · Theme actions plus 9 Data Manager actions</span></div></form></div>';
     }
 
     public static function ajax_plugin_install() {
