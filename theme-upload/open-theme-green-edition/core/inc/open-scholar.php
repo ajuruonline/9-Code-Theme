@@ -37,6 +37,17 @@ function ncu_open_scholar_visible_platform_terms( $translation, $text, $domain )
 }
 
 add_action( 'admin_enqueue_scripts', 'ncu_open_scholar_admin_assets', PHP_INT_MAX );
+
+add_action( 'admin_enqueue_scripts', 'ncu_open_theme_post_editor_assets', 1100 );
+function ncu_open_theme_post_editor_assets( $hook ) {
+    if ( ! in_array( $hook, array( 'post.php', 'post-new.php' ), true ) ) { return; }
+    wp_enqueue_style( 'open-theme-post-editor', NCU_THEME_URI . '/assets/css/post-editor.css', array(), NCU_THEME_VERSION );
+    wp_enqueue_script( 'open-theme-post-editor', NCU_THEME_URI . '/assets/js/post-editor.js', array(), NCU_THEME_VERSION, true );
+    wp_localize_script( 'open-theme-post-editor', 'OTPostEditor', array(
+        'icon'      => esc_url_raw( ncu_open_scholar_logo_url() ),
+        'menuTitle' => __( 'Editor menu', 'nine-code' ),
+    ) );
+}
 function ncu_open_scholar_admin_assets() {
     wp_enqueue_style( 'ncu-admin-skin', NCU_CORE_URL . 'assets/css/admin-skin.css', array(), NCU_CORE_VERSION );
     wp_enqueue_style( 'ncu-admin-menu', NCU_CORE_URL . 'assets/css/admin-menu.css', array( 'ncu-admin-skin' ), NCU_CORE_VERSION );
