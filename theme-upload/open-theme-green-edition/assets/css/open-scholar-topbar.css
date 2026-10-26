@@ -3,37 +3,37 @@
 .n9be-side-popup[hidden],.n9be-side-popup[hidden] *{display:none!important}
 .n9be-side-popup{position:fixed;inset:0;z-index:170020;isolation:isolate;box-sizing:border-box;font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .n9be-side-backdrop{position:absolute;inset:0;border:0;padding:0;margin:0;width:100%;height:100%;background:rgba(4,27,17,.16);cursor:default}
-.n9be-side-panel{position:absolute;top:50%;right:max(65px,calc(55px + env(safe-area-inset-right)));transform:translateY(-50%);width:min(350px,calc(100vw - 82px));max-height:min(72dvh,610px);display:flex;flex-direction:column;overflow:hidden;border:1px solid #a7cbb5;border-radius:17px;background:#f8faf4;color:#103d28;box-shadow:0 20px 68px #041b1155;box-sizing:border-box}
+.n9be-side-panel{position:absolute;top:50%;right:max(65px,calc(55px + env(safe-area-inset-right)));transform:translateY(-50%);width:min(350px,calc(100vw - 82px));max-height:min(72dvh,610px);display:flex;flex-direction:column;overflow:hidden;border:1px solid #a7cbb5;border-radius:0;background:#f8faf4;color:#103d28;box-shadow:0 20px 68px #041b1155;box-sizing:border-box}
 .n9be-side-panel header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex:0 0 auto;background:#103d28;color:#fff;padding:12px 14px}
 .n9be-side-panel header h2{font-size:18px!important;font-weight:750!important;color:#fff!important;margin:3px 0 0!important;line-height:1.2!important}
 .n9be-side-panel header small{font-size:10px;color:#beeacb;letter-spacing:.07em}
-.n9be-side-panel header button{width:42px;height:42px;min-width:42px;border-radius:10px;border:1px solid #58946b;background:#1c5638;color:#fff;font-size:27px;line-height:1;cursor:pointer}
+.n9be-side-panel header button{width:42px;height:42px;min-width:42px;border-radius:0;border:1px solid #58946b;background:#1c5638;color:#fff;font-size:27px;line-height:1;cursor:pointer}
 .n9be-side-content{overflow-y:auto;overscroll-behavior:contain;padding:12px;min-height:0;flex:1 1 auto}
 .n9be-side-content h3{font-size:12px!important;font-weight:750!important;color:#24553b!important;margin:17px 0 8px!important;letter-spacing:.02em}
 .n9be-side-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.n9be-side-actions>a,.n9be-side-actions>button,.n9be-tool-list>a,.n9be-tool-list>button{box-sizing:border-box;display:flex;align-items:center;gap:9px;text-align:left;min-height:43px;border:1px solid #d2e4d7;border-radius:10px;background:#fff;color:#18442d!important;padding:10px 11px;text-decoration:none!important;font-weight:650;font-size:12px;line-height:1.35;cursor:pointer;overflow-wrap:anywhere}
+.n9be-side-actions>a,.n9be-side-actions>button,.n9be-tool-list>a,.n9be-tool-list>button{box-sizing:border-box;display:flex;align-items:center;gap:9px;text-align:left;min-height:43px;border:1px solid #d2e4d7;border-radius:0;background:#fff;color:#18442d!important;padding:10px 11px;text-decoration:none!important;font-weight:650;font-size:12px;line-height:1.35;cursor:pointer;overflow-wrap:anywhere}
 .n9be-side-actions .dashicons{flex:0 0 18px;color:#14532d;font-size:18px}
 .n9be-side-actions>a:hover,.n9be-side-actions>button:hover,.n9be-tool-list>a:hover,.n9be-tool-list>button:hover{background:#e5f2eb;border-color:#619a74}
 .n9be-tool-list{display:grid;grid-template-columns:1fr;gap:7px}
 .n9be-tool-empty{margin:0;color:#577763;font-size:12px;line-height:1.5}
-.n9be-toolbar-extra{margin-top:16px;padding:10px;border:1px solid #d2e4d7;border-radius:10px}
+.n9be-toolbar-extra{margin-top:16px;padding:10px;border:1px solid #d2e4d7;border-radius:0}
 .n9be-toolbar-extra summary{font-size:12px;font-weight:750;color:#14532d;cursor:pointer}
 .n9be-toolbar-extra .n9be-tool-list{margin-top:10px}
 .n9be-search-form{display:grid;gap:8px}
 .n9be-search-form label{font-size:12px;font-weight:700;color:#24553b}
 .n9be-search-form .n9be-search-fields{display:flex;gap:7px;min-width:0}
-.n9be-side-panel input[type=search],.n9be-side-panel select{width:100%;min-width:0;height:44px!important;min-height:44px!important;background:#fff!important;border:1px solid #a7cbb5!important;border-radius:8px!important;padding:8px 10px!important;color:#183d2b!important;font-size:14px!important;box-shadow:none!important}
+.n9be-side-panel input[type=search],.n9be-side-panel select{width:100%;min-width:0;height:44px!important;min-height:44px!important;background:#fff!important;border:1px solid #a7cbb5!important;border-radius:0!important;padding:8px 10px!important;color:#183d2b!important;font-size:14px!important;box-shadow:none!important}
 .n9be-search-fields button{min-width:62px;border:0;border-radius:8px;background:#14532d;color:#fff;padding:8px 12px;font-size:12px;font-weight:750;cursor:pointer}
-.n9be-side-popup :focus-visible{outline:2px solid #16844b!important;outline-offset:2px!important}
+.n9be-side-popup :focus-visible{outline:2px solid #16844b!important;outline-offset:2px!important;border-radius:0!important}
 /* Hide public WordPress toolbar only where an authorized side launcher is actually present.
    Other users retain their normal WordPress account/logout bar. */
 body.admin-bar:not(.wp-admin):has(#n9be-admin-launcher[data-n9be-context="frontend"]) #wpadminbar{display:none!important}
 html:has(body:not(.wp-admin) #n9be-admin-launcher[data-n9be-context="frontend"]){margin-top:0!important}
 body.admin-bar:not(.wp-admin):has(#n9be-admin-launcher[data-n9be-context="frontend"]){margin-top:0!important}
-@media(max-width:782px){.n9be-side-panel{right:max(59px,calc(55px + env(safe-area-inset-right)));width:min(78vw,350px);max-width:350px;max-height:72dvh;border-radius:13px}.n9be-side-content{padding:10px}.n9be-side-actions{gap:6px}.n9be-side-actions>a,.n9be-side-actions>button{padding:9px 7px;font-size:11px}.n9be-side-panel header{padding:10px 11px}}
+@media(max-width:782px){.n9be-side-panel{right:max(59px,calc(55px + env(safe-area-inset-right)));width:min(78vw,350px);max-width:350px;max-height:72dvh;border-radius:0}.n9be-side-content{padding:10px}.n9be-side-actions{gap:6px}.n9be-side-actions>a,.n9be-side-actions>button{padding:9px 7px;font-size:11px}.n9be-side-panel header{padding:10px 11px}}
 @media(prefers-reduced-motion:reduce){.n9be-side-panel{scroll-behavior:auto}}
 
-.n9be-clear-cache-button{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;margin:0 0 7px;padding:10px 12px;border-radius:10px;border:1px solid #a8cbb6;background:#e7f3ea;color:#14532d;font-weight:750;text-align:left;cursor:pointer}
+.n9be-clear-cache-button{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:44px;margin:0 0 7px;padding:10px 12px;border-radius:0;border:1px solid #a8cbb6;background:#e7f3ea;color:#14532d;font-weight:750;text-align:left;cursor:pointer}
 .n9be-clear-cache-button small{font-size:10px;font-weight:500;color:#527361}
 .n9be-clear-cache-button:disabled{opacity:.6;cursor:wait}
 .n9be-cache-result{font-size:11px;line-height:1.5;color:#24553b;margin:4px 0 10px}
