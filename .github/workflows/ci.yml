@@ -22,6 +22,8 @@ jobs:
       - run: npm ci || npm install
       - run: composer install --no-interaction
       - run: npx playwright install --with-deps chromium
+      - name: Open Scholar side-popup computed Chromium CSS (320/390/1280px)
+        run: node tests/e2e/side-popup-square-corners.mjs
       - name: Lint
         run: bin/lint.sh
       - name: Build zips
