@@ -17,6 +17,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Open Scholar side-popup square-corner regression (Node)
+        run: node --test tests/unit/open-scholar-topbar-square-corners.test.mjs
       - run: npm ci || npm install
       - run: composer install --no-interaction
       - run: npx playwright install --with-deps chromium
