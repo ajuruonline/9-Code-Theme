@@ -172,6 +172,7 @@ final class N9BE_Quick_Actions {
         wp_enqueue_style( 'n9be-topbar-popup', NCU_THEME_URI . '/assets/css/open-scholar-topbar.css', array( 'n9be-quick-actions' ), NCU_THEME_VERSION );
         if ( 'frontend' === $context ) {
             wp_enqueue_style( 'osch-compact-frontend', NCU_THEME_URI . '/assets/css/open-scholar-compact.css', array( 'n9be-topbar-popup' ), NCU_THEME_VERSION );
+            wp_enqueue_style( 'oge-green-edition', NCU_THEME_URI . '/assets/css/green-edition.css', array( 'osch-compact-frontend' ), NCU_THEME_VERSION );
         }
         wp_enqueue_script( 'n9be-quick-actions', NCU_THEME_URI . '/assets/js/block-edition-quick-actions.js', array(), NCU_THEME_VERSION, true );
         wp_enqueue_script( 'n9be-topbar-popup', NCU_THEME_URI . '/assets/js/open-scholar-topbar.js', array( 'n9be-quick-actions' ), NCU_THEME_VERSION, true );
@@ -222,6 +223,28 @@ final class N9BE_Quick_Actions {
         do_action( 'ninecode_theme_quick_actions_frontend_error', $stage, $error );
     }
 
+    /** Editor URL for whatever the visitor is viewing, or '' when it cannot be edited by this user. */
+    private static function current_edit_url() {
+        if ( is_admin() ) { return ''; }
+        if ( is_home() && ! is_front_page() && get_option( 'page_for_posts' ) ) {
+            $id = (int) get_option( 'page_for_posts' );
+            return current_user_can( 'edit_post', $id ) ? (string) get_edit_post_link( $id, 'raw' ) : '';
+        }
+        if ( is_singular() || ( is_front_page() && 'page' === get_option( 'show_on_front' ) ) ) {
+            $id = (int) get_queried_object_id();
+            return $id && current_user_can( 'edit_post', $id ) ? (string) get_edit_post_link( $id, 'raw' ) : '';
+        }
+        if ( is_category() || is_tag() || is_tax() ) {
+            $term = get_queried_object();
+            return $term instanceof WP_Term && current_user_can( 'edit_term', $term->term_id ) ? (string) get_edit_term_link( $term, $term->taxonomy ) : '';
+        }
+        if ( is_author() ) {
+            $id = (int) get_queried_object_id();
+            return $id && current_user_can( 'edit_user', $id ) ? (string) get_edit_user_link( $id ) : '';
+        }
+        return '';
+    }
+
     private static function render_markup( $context ) {
         $frontend = 'frontend' === $context;
         $catalog = self::catalog();
@@ -242,6 +265,10 @@ final class N9BE_Quick_Actions {
         } else {
             echo '<button type="button" class="n9be-rail-button" data-n9be-quick-toggle aria-expanded="false" aria-controls="n9be-quick-drawer" title="Quick Actions"><span class="dashicons dashicons-grid-view"></span><span class="screen-reader-text">Quick Actions</span></button>';
             echo '<button type="button" class="n9be-rail-button" data-n9be-action="save" title="Save or update current work" disabled><span class="dashicons dashicons-saved"></span><span class="screen-reader-text">Save</span></button>';
+        }
+        $edit_url = self::current_edit_url();
+        if ( $edit_url ) {
+            echo '<a class="n9be-rail-button n9be-edit-launch" data-n9be-edit href="' . esc_url( $edit_url ) . '" title="' . esc_attr__( 'Edit this page', 'nine-code' ) . '"><span class="dashicons dashicons-edit"></span><span class="screen-reader-text">' . esc_html__( 'Edit this page', 'nine-code' ) . '</span></a>';
         }
         // Permanent right rail: search and toolbar access, not a duplicate hamburger.
         echo '<button type="button" class="n9be-rail-button" data-n9be-search-toggle aria-expanded="false" aria-controls="n9be-search-popup" title="Search"><span class="dashicons dashicons-search"></span><span class="screen-reader-text">Search</span></button>';

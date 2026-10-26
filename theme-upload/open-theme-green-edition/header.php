@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 </head>
 <body <?php body_class(); ?>>
 <?php
-/* Open Scholar Theme intentionally renders no theme header. Keep wp_body_open()
+/* Open Theme intentionally renders no theme header. Keep wp_body_open()
  * so 9stagram/Instagram and other shell-owner plugins can render their header. */
 wp_body_open();
 ?>

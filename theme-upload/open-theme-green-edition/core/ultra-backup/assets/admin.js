@@ -29,7 +29,7 @@
         if(summary){summary.setAttribute('aria-expanded','false');this.addEventListener('toggle',function(){summary.setAttribute('aria-expanded',this.open?'true':'false');});}
     });
     function tokens(){
-        return $('#nine-selected-tokens').val().split(/[\n,]+/).map(function(v){return v.trim();}).filter(Boolean);
+        return String($('#nine-selected-tokens').val()||'').split(/[\n,]+/).map(function(v){return v.trim();}).filter(Boolean);
     }
     function renderSelected(){
         var list=tokens(), $box=$('#nine-selected-list');

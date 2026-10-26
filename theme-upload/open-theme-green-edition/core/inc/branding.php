@@ -262,7 +262,7 @@ function ncu_branding_settings_page() {
 
             <section class="ncu-panel ncu-panel--padded">
                 <h2>Theme ownership</h2>
-                <p class="description">This identifies who owns or supports the Open Scholar Theme deployment. It is shown in private administration only and is never forced into the public footer.</p>
+                <p class="description">This identifies who owns or supports this Open Theme deployment. It is shown in private administration only and is never forced into the public footer.</p>
                 <div class="ncu-grid">
                     <label><span>Theme owner name</span><input type="text" name="ncu[theme_owner_name]" value="<?php echo esc_attr( $s['theme_owner_name'] ); ?>"></label>
                     <label><span>Theme owner URL</span><input type="url" name="ncu[theme_owner_url]" value="<?php echo esc_attr( $s['theme_owner_url'] ); ?>"></label>

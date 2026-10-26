@@ -222,7 +222,6 @@ class Nine_Backup_Manager {
               <input type="hidden" name="action" value="nine_backup_quick_export">
               <input type="hidden" name="export_kind" value="<?php echo esc_attr($kind); ?>">
               <?php wp_nonce_field('nine_backup_quick_export'); ?>
-              <label class="block">Confirm your password<input type="password" name="confirmation_password" autocomplete="current-password" required class="regular-text" aria-label="Administrator password for <?php echo esc_attr($item[0]); ?>"></label>
               <button class="button button-primary" type="submit">Download ZIP</button>
             </form>
           </div>
@@ -240,7 +239,7 @@ class Nine_Backup_Manager {
           <p><a class="button" href="<?php echo esc_url(admin_url('admin.php?page=nine-backup-manager&tab=import')); ?>">Conflict handling &amp; import history</a>
           <a class="button" href="<?php echo esc_url(admin_url('admin.php?page=nine-backup-manager&tab=export')); ?>">Advanced selective export</a></p>
         </div>
-        <p class="description"><strong>Privacy:</strong> Administrator permissions, CSRF protection and a fresh account-password check protect direct exports. ZIPs are not encrypted and may contain private user information. Transfer only through trusted storage. Large sites may need the Advanced Export safe-mode workflow instead of one single download.</p>
+        <p class="description"><strong>Privacy:</strong> Exports need administrator permission and a CSRF check. Passwords, password hashes, API keys and tokens are never exported. ZIPs are not encrypted and may contain private user information. Transfer only through trusted storage. Large sites may need the Advanced Export safe-mode workflow instead of one single download.</p>
         <p class="description"><strong>WordPress interoperability:</strong> Standard WordPress XML is separately available through <a href="<?php echo esc_url(admin_url('export.php')); ?>">Tools → Export</a> and <a href="<?php echo esc_url(admin_url('import.php')); ?>">Tools → Import</a>. The ZIP importer here accepts this engine’s ZIP format, not arbitrary third-party ZIPs.</p>
         <?php
     }
@@ -303,16 +302,6 @@ class Nine_Backup_Manager {
         <?php
     }
 
-    private function require_export_password() {
-        // Password confirmation limits the damage from a stolen admin session/nonce.
-        // It does not encrypt the ZIP once it has been downloaded.
-        $password = isset($_POST['confirmation_password']) && is_string($_POST['confirmation_password']) ? wp_unslash($_POST['confirmation_password']) : '';
-        $user = wp_get_current_user();
-        if ( ! $user || ! $user->exists() || !is_string($password) || !$password || !wp_check_password($password,$user->user_pass,$user->ID) ) {
-            wp_die(esc_html__('Administrator password confirmation failed. No data was exported.','nine-code'), '', array('response'=>403));
-        }
-    }
-
     private function stream_protected_zip( $path, $remove_after_download = false ) {
         $real = realpath($path);
         $dir = realpath(Nine_Backup_Exporter::archive_dir());
@@ -336,10 +325,9 @@ class Nine_Backup_Manager {
         exit;
     }
 
-    /** Password-confirmed direct transfer; records are never retained as server backups. */
+    /** Direct transfer for administrators; records are never retained as server backups. */
     public function handle_quick_export() {
         $this->guard(); check_admin_referer('nine_backup_quick_export');
-        $this->require_export_password();
         $kind = sanitize_key(wp_unslash($_POST['export_kind'] ?? ''));
         $allowed = array('posts', 'users', 'media', 'terms', 'menus', 'site_settings', 'all_records', 'all_portable');
         if (!in_array($kind, $allowed, true)) { wp_die('Unsupported export type.', '', array('response'=>400)); }
@@ -360,7 +348,21 @@ class Nine_Backup_Manager {
             'copy_to_drive_folder'=>false,
             'source'=>'direct-download',
         );
-        $result = (new Nine_Backup_Exporter($config))->create_package();
+        // Whole-site and media transfers run as a resumable chunked job on shared hosting, so one request
+        // never has to build the whole package. The finished ZIP appears under Local archives.
+        $settings = get_option('nine_backup_settings', array());
+        $safe_mode = ! array_key_exists('shared_host_safe_mode', $settings) || ! empty($settings['shared_host_safe_mode']);
+        if ($safe_mode && in_array($kind, array('media','all_records','all_portable'), true)) {
+            $job = $this->create_safe_job($config);
+            if (is_wp_error($job)) { $this->redirect_error($job->get_error_message(),'transfer'); }
+            wp_safe_redirect(admin_url('admin.php?page=nine-backup-manager&tab=archives&nine_notice=safe_started')); exit;
+        }
+        try {
+            $result = (new Nine_Backup_Exporter($config))->create_package();
+        } catch (Throwable $error) {
+            Nine_Backup_Health::log('quick-export', $error->getMessage());
+            $this->redirect_error('Export failed: '.$error->getMessage(),'transfer');
+        }
         if (is_wp_error($result)) { $this->redirect_error($result->get_error_message(),'transfer'); }
         if (empty($result['path'])) { $this->redirect_error('No downloadable export package was created.','transfer'); }
         $this->stream_protected_zip($result['path'], true);
@@ -500,7 +502,6 @@ class Nine_Backup_Manager {
                 <label class="block"><input type="checkbox" name="plugin_include_tables" value="1" checked> Include detected plugin database tables and their rows</label>
                 <label class="block"><input type="checkbox" name="plugin_include_records" value="1" checked> Include plugin-owned custom post types/taxonomies when they can be detected or registered</label>
                 <label class="block"><input type="checkbox" name="plugin_include_dependencies" value="1" checked> Include installed plugins declared in the plugin's <code>Requires Plugins</code> dependency header</label>
-                <label class="block"><input type="checkbox" name="include_sensitive_settings" value="1"> Include detected passwords/API keys/tokens/license secrets <strong>(OFF by default)</strong></label>
                 <p class="description">The manager scans plugin PHP for literal WordPress option calls and plugin table declarations, also checks slug-based option prefixes, and supports an explicit <code>nine_backup_plugin_registry</code> filter for exact Nine-plugin declarations. Sensitive option names are listed but redacted unless you explicitly include them.</p>
             </div></details>
 
@@ -656,7 +657,7 @@ class Nine_Backup_Manager {
         if ( ! $files ) { echo '<p>No archives yet.</p>'; return; }
         echo '<table class="widefat striped"><thead><tr><th>Package</th><th>Created</th><th>Size</th><th>Google Drive</th><th>Actions</th></tr></thead><tbody>';
         foreach ( $files as $file ) {
-            $download_form = '<form method="post" action="'.esc_url(admin_url('admin-post.php')).'" class="nine-archive-download-form" style="display:inline-block"><input type="hidden" name="action" value="nine_backup_download_archive"><input type="hidden" name="file" value="'.esc_attr(basename($file)).'">'.wp_nonce_field('nine_backup_archive_'.basename($file),'_wpnonce',true,false).'<input type="password" name="confirmation_password" placeholder="Admin password" autocomplete="current-password" aria-label="Confirm administrator password" required style="max-width:135px"><button class="button button-primary" type="submit">Download ZIP</button></form>';
+            $download_form = '<form method="post" action="'.esc_url(admin_url('admin-post.php')).'" class="nine-archive-download-form" style="display:inline-block"><input type="hidden" name="action" value="nine_backup_download_archive"><input type="hidden" name="file" value="'.esc_attr(basename($file)).'">'.wp_nonce_field('nine_backup_archive_'.basename($file),'_wpnonce',true,false).'<button class="button button-primary" type="submit">Download ZIP</button></form>';
             $delete = wp_nonce_url( admin_url( 'admin-post.php?action=nine_backup_delete_archive&file=' . rawurlencode( basename( $file ) ) ), 'nine_backup_archive_' . basename( $file ) );
             $remote = class_exists('Nine_Backup_Google_Drive') ? Nine_Backup_Google_Drive::file(basename($file)) : array();
             $drive_label = !empty($remote['id']) ? (!empty($remote['url']) ? '<a href="'.esc_url($remote['url']).'" target="_blank" rel="noopener">Uploaded ↗</a>' : 'Uploaded') : 'Local only';
@@ -851,7 +852,7 @@ class Nine_Backup_Manager {
             'plugin_include_tables'=>!empty($request['plugin_include_tables']),
             'plugin_include_records'=>!empty($request['plugin_include_records']),
             'plugin_include_dependencies'=>!empty($request['plugin_include_dependencies']),
-            'include_sensitive_settings'=>!empty($request['include_sensitive_settings']),
+            'include_sensitive_settings'=>false,
             'plugin_files'=>array(),
             'option_names'=>$lines($request['option_names'] ?? ''),
             'table_names'=>$lines($request['table_names'] ?? ''),
@@ -1151,7 +1152,7 @@ class Nine_Backup_Manager {
     }
 
     public function download_archive() {
-        $this->guard(); $file = sanitize_file_name(wp_unslash($_POST['file'] ?? '')); check_admin_referer('nine_backup_archive_'.$file); $this->require_export_password();
+        $this->guard(); $file = sanitize_file_name(wp_unslash($_POST['file'] ?? '')); check_admin_referer('nine_backup_archive_'.$file);
         $path = trailingslashit(Nine_Backup_Exporter::archive_dir()) . $file;
         if ( !file_exists($path) || strtolower(pathinfo($path, PATHINFO_EXTENSION)) !== 'zip' ) { wp_die('Archive not found.'); }
         $this->stream_protected_zip($path);

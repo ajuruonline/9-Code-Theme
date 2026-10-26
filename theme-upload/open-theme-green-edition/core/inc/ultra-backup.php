@@ -12,7 +12,10 @@ function ncu_osch_backup_external_engine_active() {
     return class_exists( 'Nine_Backup_Manager', false );
 }
 
-if ( ! ncu_osch_backup_external_engine_active() ) {
+// Decided before the bundled engine loads: afterwards the class exists either way.
+$ncu_osch_backup_external = ncu_osch_backup_external_engine_active();
+
+if ( ! $ncu_osch_backup_external ) {
     if ( ! defined( 'NINE_BACKUP_VERSION' ) ) { define( 'NINE_BACKUP_VERSION', '2.2.2-osch.5' ); }
     if ( ! defined( 'NINE_BACKUP_FILE' ) ) { define( 'NINE_BACKUP_FILE', __FILE__ ); }
     if ( ! defined( 'NINE_BACKUP_DIR' ) ) { define( 'NINE_BACKUP_DIR', trailingslashit( NCU_CORE_DIR ) . 'ultra-backup/' ); }
@@ -39,11 +42,12 @@ if ( ! ncu_osch_backup_external_engine_active() ) {
 
 // An independently installed backup plugin loads before the theme and can own
 // the Nine_Backup_Manager class. Do not silently claim the bundled update runs.
-if ( ncu_osch_backup_external_engine_active() ) {
+if ( $ncu_osch_backup_external ) {
     add_action( 'admin_notices', function () {
         if ( ! current_user_can('manage_options') ) { return; }
         $screen = function_exists('get_current_screen') ? get_current_screen() : null;
         if ( ! $screen || (false===strpos((string)$screen->id,'nine-backup') && false===strpos((string)$screen->id,'nine-code-ultra')) ) { return; }
-        echo '<div class="notice notice-warning"><p><strong>Open Scholar Data & Recovery:</strong> A separate backup plugin owns the backup engine, so the bundled theme version is not running. To use this theme update, first keep a copy of your existing backups, then deactivate (do not delete) the older standalone backup manager in <a href="'.esc_url(admin_url('plugins.php')).'">Plugins</a>. Its stored options and archives are not intentionally removed by deactivation.</p></div>';
+        echo '<div class="notice notice-warning"><p><strong>Data &amp; Recovery:</strong> A separate backup plugin owns the backup engine, so the bundled theme version is not running. To use this theme update, first keep a copy of your existing backups, then deactivate (do not delete) the older standalone backup manager in <a href="'.esc_url(admin_url('plugins.php')).'">Plugins</a>. Its stored options and archives are not intentionally removed by deactivation.</p></div>';
     } );
 }
+unset( $ncu_osch_backup_external );

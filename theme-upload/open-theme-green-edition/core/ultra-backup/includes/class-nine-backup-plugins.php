@@ -103,7 +103,7 @@ class Nine_Backup_Plugins {
         $include_files = ! empty( $config['plugin_include_files'] );
         $include_settings = ! empty( $config['plugin_include_settings'] );
         $include_tables = ! empty( $config['plugin_include_tables'] );
-        $include_sensitive = ! empty( $config['include_sensitive_settings'] );
+        $include_sensitive = false;
         $registry = self::registry();
 
         foreach ( $plugin_files as $plugin_file ) {

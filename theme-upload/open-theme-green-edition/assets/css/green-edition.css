@@ -1,0 +1,53 @@
+/* Open Theme Green Edition: final visual layer (admin workspace and side rail).
+ * Loaded last. Bordered elements keep square corners (OS-STD border rule). */
+:root{
+ --oge-ink:#04140d;--oge-deep:#082a1b;--oge-mint:#b8f5cf;--oge-neon:#4ade80;--oge-line:rgba(184,245,207,.22);
+ --oge-glow:0 0 0 1px rgba(74,222,128,.55),0 0 22px rgba(74,222,128,.28);
+ --oge-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+
+/* Workspace hero: grid field, aurora and a slow scan line. */
+.osch-workspace-hero{position:relative;isolation:isolate;overflow:hidden;
+ background:radial-gradient(120% 140% at 85% -20%,rgba(74,222,128,.28),transparent 55%),radial-gradient(90% 120% at 0% 120%,rgba(20,83,45,.85),transparent 60%),linear-gradient(135deg,var(--oge-ink),var(--oge-deep) 55%,#0d3a25)!important}
+.osch-workspace-hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+ background-image:linear-gradient(var(--oge-line) 1px,transparent 1px),linear-gradient(90deg,var(--oge-line) 1px,transparent 1px);background-size:32px 32px;
+ -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.55),transparent 85%);mask-image:linear-gradient(180deg,rgba(0,0,0,.55),transparent 85%)}
+.osch-workspace-hero::after{content:"";position:absolute;left:0;right:0;top:-40%;height:40%;z-index:-1;pointer-events:none;
+ background:linear-gradient(180deg,transparent,rgba(184,245,207,.10),transparent);animation:ogeScan 7s linear infinite}
+.osch-workspace-hero h1{background:linear-gradient(92deg,#fff 0%,var(--oge-mint) 60%,var(--oge-neon) 100%);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+@keyframes ogeScan{to{transform:translateY(350%)}}
+
+/* Eyebrow labels read as instrument labels. */
+.osch-workspace .osch-eyebrow,.osch-workspace [class*="eyebrow"],.osch-workspace-hero small{font-family:var(--oge-mono)!important;letter-spacing:.16em!important}
+
+/* App tiles: glass surface, lit top edge and a neon edge on hover/focus. */
+.osch-app-tile{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(237,245,240,.92))!important;
+ transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.osch-app-tile::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--oge-neon),transparent);opacity:0;transition:opacity .18s ease}
+.osch-app-tile:hover,.osch-app-tile:focus-within{transform:translateY(-2px);box-shadow:var(--oge-glow),0 12px 28px rgba(8,42,27,.14)!important}
+.osch-app-tile:hover::after,.osch-app-tile:focus-within::after{opacity:1}
+
+/* Controls: crisp, square, with a neon focus ring. */
+body.ncu-admin-skin .osch-sharp-lined:focus-visible,body.ncu-admin-skin .button:focus-visible,body.ncu-admin-skin input:focus-visible,body.ncu-admin-skin select:focus-visible,body.ncu-admin-skin textarea:focus-visible{outline:none!important;box-shadow:var(--oge-glow)!important}
+body.ncu-admin-skin .osch-sharp-lined.is-active{box-shadow:inset 0 -2px 0 var(--oge-neon)}
+
+/* Data & Recovery panels share the glass surface. */
+body.ncu-admin-skin .nine-box,body.ncu-admin-skin .nine-card{border-radius:0!important;background:linear-gradient(180deg,#fff,#f3f9f5)!important;transition:box-shadow .18s ease}
+body.ncu-admin-skin .nine-box:hover,body.ncu-admin-skin .nine-card:hover{box-shadow:var(--oge-glow)}
+
+/* Side rail: glass column with square, glowing controls; slimmer on phones so it covers less text. */
+#n9be-admin-launcher{gap:6px!important;padding:6px;background:rgba(4,20,13,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--oge-line);border-radius:0}
+#n9be-admin-launcher .n9be-rail-button{border-radius:0!important;background:rgba(8,42,27,.9)!important;border:1px solid rgba(184,245,207,.28)!important;color:#eafff2!important;box-shadow:none!important;transition:box-shadow .15s ease,background .15s ease,color .15s ease}
+#n9be-admin-launcher .n9be-rail-button:hover,#n9be-admin-launcher .n9be-rail-button:focus-visible{background:var(--oge-mint)!important;color:var(--oge-deep)!important;outline:none!important;box-shadow:var(--oge-glow)!important}
+#n9be-admin-launcher .n9be-edit-launch{border-color:var(--oge-neon)!important;color:var(--oge-mint)!important}
+@media (max-width:782px){
+ #n9be-admin-launcher{padding:4px;gap:4px!important;opacity:.82;transition:opacity .15s ease}
+ #n9be-admin-launcher:hover,#n9be-admin-launcher:focus-within{opacity:1}
+ #n9be-admin-launcher .n9be-rail-button{width:36px!important;height:36px!important}
+}
+
+@media (prefers-reduced-motion:reduce){
+ .osch-workspace-hero::after{animation:none;display:none}
+ .osch-app-tile,.osch-app-tile::after,#n9be-admin-launcher .n9be-rail-button{transition:none}
+ .osch-app-tile:hover,.osch-app-tile:focus-within{transform:none}
+}

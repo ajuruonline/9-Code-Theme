@@ -2,7 +2,8 @@
 /** Open Scholar host infrastructure. Application features belong to plugins. */
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'NCU_CORE_VERSION', NCU_THEME_VERSION );
+// Internal schema version for upgrade routines; continues from the Open Scholar Theme 20.x series.
+define( 'NCU_CORE_VERSION', '20.2.7' );
 define( 'NCU_CORE_RELEASE_SHOT', 'Lean plugin host' );
 define( 'NCU_CORE_API_VERSION', 14 );
 define( 'NINECODE_SUITE_CORE_VERSION', NCU_THEME_VERSION );

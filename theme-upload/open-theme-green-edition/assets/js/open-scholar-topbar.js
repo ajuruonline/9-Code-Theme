@@ -1,4 +1,4 @@
-/* Open Scholar Theme v20.2.1 — preserve toolbar functionality without a top strip. */
+/* Preserve toolbar functionality without a top strip. */
 (function () {
     'use strict';
     var originalToolbarActions = [];

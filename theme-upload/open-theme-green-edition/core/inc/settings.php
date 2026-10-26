@@ -387,7 +387,7 @@ function ncu_core_backup_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     ?>
     <div class="wrap ncu-admin"><?php ncu_admin_header( 'Backup & Recovery', 'Keep the theme recoverable without depending on another workflow plugin.' ); ?>
-    <section class="ncu-panel ncu-panel--padded"><h2>Export</h2><p>Download a compact JSON backup of Open Scholar Theme settings.</p><p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_settings' ), 'ncu_export_settings' ) ); ?>">Export settings</a></p></section>
+    <section class="ncu-panel ncu-panel--padded"><h2>Export</h2><p>Download a compact JSON backup of the theme settings.</p><p><a class="button button-primary" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=ncu_export_settings' ), 'ncu_export_settings' ) ); ?>">Export settings</a></p></section>
     <section class="ncu-panel ncu-panel--padded"><h2>Import</h2><form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"><input type="hidden" name="action" value="ncu_import_settings"><?php wp_nonce_field( 'ncu_import_settings' ); ?><input type="file" name="ncu_backup" accept="application/json,.json" required> <button class="button button-secondary">Validate & import</button></form></section>
     <section class="ncu-panel ncu-panel--padded"><h2>Reset</h2><p>Returns theme and builder configuration to the v3.2 safe defaults. Aggressive Style Takeover remains off until you enable it.</p><form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('Reset every Nine Code setting to its safe default?');"><input type="hidden" name="action" value="ncu_reset_settings"><?php wp_nonce_field( 'ncu_reset_settings' ); ?><button class="button">Reset defaults</button></form></section></div>
     <?php
@@ -400,7 +400,7 @@ function ncu_core_health_page() {
     $https_ok = 'https' === wp_parse_url( home_url( '/' ), PHP_URL_SCHEME );
     $debug_display = defined( 'WP_DEBUG_DISPLAY' ) ? (bool) WP_DEBUG_DISPLAY : false;
     $checks = array(
-        array( 'Theme', 'Open Scholar Theme' === $theme->get( 'Name' ), $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ),
+        array( 'Theme', 'Open Theme Green Edition' === $theme->get( 'Name' ), $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ),
         array( 'Core API', (int) NCU_CORE_API_VERSION > 0, 'API ' . NCU_CORE_API_VERSION ),
         array( 'Theme/Core API', $theme_api && (int) $theme_api === (int) NCU_CORE_API_VERSION, $theme_api ? 'Theme API ' . $theme_api . ' · Core API ' . NCU_CORE_API_VERSION : 'Theme API not loaded' ),
         array( 'PHP', version_compare( PHP_VERSION, '7.4', '>=' ), PHP_VERSION ),
