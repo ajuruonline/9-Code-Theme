@@ -180,7 +180,7 @@ final class N9BE_Quick_Actions {
         wp_enqueue_style( 'n9be-topbar-popup', NCU_THEME_URI . '/assets/css/open-scholar-topbar.css', array( 'n9be-quick-actions' ), NCU_THEME_VERSION );
         if ( 'frontend' === $context ) {
             wp_enqueue_style( 'osch-compact-frontend', NCU_THEME_URI . '/assets/css/open-scholar-compact.css', array( 'n9be-topbar-popup' ), NCU_THEME_VERSION );
-            wp_enqueue_style( 'oge-green-edition', NCU_THEME_URI . '/assets/css/green-edition.css', array( 'osch-compact-frontend' ), NCU_THEME_VERSION );
+            wp_enqueue_style( 'open-theme-visual', NCU_THEME_URI . '/assets/css/open-theme.css', array( 'osch-compact-frontend' ), NCU_THEME_VERSION );
         }
         wp_enqueue_script( 'n9be-quick-actions', NCU_THEME_URI . '/assets/js/block-edition-quick-actions.js', array(), NCU_THEME_VERSION, true );
         wp_enqueue_script( 'n9be-topbar-popup', NCU_THEME_URI . '/assets/js/open-scholar-topbar.js', array( 'n9be-quick-actions' ), NCU_THEME_VERSION, true );

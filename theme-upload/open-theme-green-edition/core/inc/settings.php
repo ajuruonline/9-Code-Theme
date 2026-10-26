@@ -400,7 +400,7 @@ function ncu_core_health_page() {
     $https_ok = 'https' === wp_parse_url( home_url( '/' ), PHP_URL_SCHEME );
     $debug_display = defined( 'WP_DEBUG_DISPLAY' ) ? (bool) WP_DEBUG_DISPLAY : false;
     $checks = array(
-        array( 'Theme', 'Open Theme Green Edition' === $theme->get( 'Name' ), $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ),
+        array( 'Theme', 'Open Theme' === $theme->get( 'Name' ), $theme->get( 'Name' ) . ' ' . $theme->get( 'Version' ) ),
         array( 'Core API', (int) NCU_CORE_API_VERSION > 0, 'API ' . NCU_CORE_API_VERSION ),
         array( 'Theme/Core API', $theme_api && (int) $theme_api === (int) NCU_CORE_API_VERSION, $theme_api ? 'Theme API ' . $theme_api . ' · Core API ' . NCU_CORE_API_VERSION : 'Theme API not loaded' ),
         array( 'PHP', version_compare( PHP_VERSION, '7.4', '>=' ), PHP_VERSION ),

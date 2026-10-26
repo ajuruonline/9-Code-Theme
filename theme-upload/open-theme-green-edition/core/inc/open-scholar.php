@@ -44,8 +44,8 @@ function ncu_open_scholar_admin_assets() {
     wp_enqueue_style( 'open-scholar-popup', NCU_CORE_URL . 'assets/css/open-scholar-popup.css', array( 'open-scholar-admin' ), NCU_CORE_VERSION );
     // Final density layer: retain green brand while removing wasted margins throughout wp-admin.
     wp_enqueue_style( 'osch-compact-admin', NCU_THEME_URI . '/assets/css/open-scholar-compact.css', array( 'open-scholar-popup' ), NCU_THEME_VERSION );
-    // Green Edition visual layer loads last so it can refine every surface above.
-    wp_enqueue_style( 'oge-green-edition', NCU_THEME_URI . '/assets/css/green-edition.css', array( 'osch-compact-admin' ), NCU_THEME_VERSION );
+    // Open Theme visual layer loads last so it can refine every surface above.
+    wp_enqueue_style( 'open-theme-visual', NCU_THEME_URI . '/assets/css/open-theme.css', array( 'osch-compact-admin' ), NCU_THEME_VERSION );
     wp_enqueue_script( 'open-scholar-admin', NCU_CORE_URL . 'assets/js/open-scholar-admin.js', array(), NCU_CORE_VERSION, true );
     wp_enqueue_script( 'osch-sharp-borders', NCU_THEME_URI . '/assets/js/open-scholar-sharp-borders.js', array(), NCU_THEME_VERSION, true );
     // Prefer WordPress Site Icon; the Open Scholar academic cap is the fallback.

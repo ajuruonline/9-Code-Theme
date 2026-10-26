@@ -1,4 +1,4 @@
-/* Open Theme Green Edition: final visual layer (admin workspace and side rail).
+/* Open Theme: final visual layer (admin workspace and side rail).
  * Loaded last. Bordered elements keep square corners (OS-STD border rule). */
 :root{
  --oge-ink:#04140d;--oge-deep:#082a1b;--oge-mint:#b8f5cf;--oge-neon:#4ade80;--oge-line:rgba(184,245,207,.22);
