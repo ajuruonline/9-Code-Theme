@@ -1,0 +1,416 @@
+:root{
+  --osch-accent:#14532d;--osch-dark:#123d2a;--osch-page:#f2f5f3;
+  --osch-card:#fff;--osch-text:#191919;--osch-muted:#5e5e5e;
+  --osch-border:#e0dfdc;--osch-soft:#e5f2eb;--osch-radius:8px;
+  --wp-admin-theme-color:#14532d;--wp-admin-theme-color-darker-10:#123d2a;
+  --wp-admin-theme-color-darker-20:#0b3d22;
+}
+/* Open Scholar product shell: one visual authority over legacy menu rules. */
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenuback,
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenuwrap,
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu,
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu{background:#082a1b!important;color:#e4f8eb!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenuwrap{--wp-admin-theme-color:#64e79b!important;--wp-admin-theme-color-darker-10:#36b86d!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top{display:grid!important;grid-template-columns:36px minmax(0,1fr)!important;align-items:center!important;min-height:48px!important;height:auto!important;padding:6px 10px!important;gap:6px!important;border-radius:10px!important;color:#d5ecde!important}
+/* Icons are independent line symbols, not badges. Keeping the hit area while
+   removing its tile makes the launcher read as a purpose-built app rail. */
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-image{position:static!important;float:none!important;display:grid!important;place-items:center!important;width:32px!important;height:32px!important;min-width:32px!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-image:before{position:static!important;color:#85e7aa!important;font-size:18px!important;line-height:20px!important;margin:0!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-name{position:static!important;display:block!important;float:none!important;line-height:1.35!important;white-space:normal!important;overflow-wrap:anywhere!important;padding:0!important;font-size:12px!important;letter-spacing:.01em!important;color:inherit!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li:hover>a.menu-top,
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.opensub>a.menu-top{background:#15482f!important;box-shadow:none!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top,
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top{background:#b6f5cf!important;color:#082a1b!important;box-shadow:none!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a{color:#d5ecde!important;line-height:1.5!important;padding:10px 16px!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:hover,
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu li.current a{background:#15482f!important;color:#b6f5cf!important;box-shadow:none!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-arrow{display:none!important}
+body.wp-admin #wpadminbar{border-bottom:1px solid #2a563d;box-shadow:none}
+body.wp-admin #wpadminbar .osch-bar-brand>.ab-item{font-weight:750;letter-spacing:.06em;color:#b6f5cf!important}
+body.osch-workspace-home #wpbody-content>.wrap{display:none!important}
+body.osch-workspace-home #screen-meta-links,body.osch-workspace-home #wpfooter{display:none}
+.osch-workspace{max-width:1440px;margin:auto;padding:24px 32px 80px;box-sizing:border-box;color:#133723}
+.osch-workspace-hero{position:relative;overflow:hidden;padding:32px;border:1px solid #2d6544;border-radius:24px;background:radial-gradient(ellipse at 90% 5%,#1c6544 0,transparent 60%),#082a1b;color:#e9fff1;box-shadow:0 12px 32px #082a1b12}
+.osch-workspace-hero:after{content:'';pointer-events:none;position:absolute;width:260px;height:260px;border:1px solid #76d89d30;border-radius:50%;right:-70px;top:55px;box-shadow:0 0 0 38px #76d89d08,0 0 0 76px #76d89d06}
+.osch-workspace-identity{display:flex;gap:12px;align-items:center;font-size:14px;font-weight:750;letter-spacing:.12em}
+.osch-workspace-identity img{background:#b6f5cf;border-radius:14px;padding:8px;box-sizing:border-box}
+.osch-workspace-identity small{display:block;font-size:9px;font-weight:500;letter-spacing:.18em;color:#9bc7ac;margin-top:5px}
+.osch-workspace-status{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#b6f5cf;margin-top:25px}
+.osch-workspace-status i{width:6px;height:6px;border-radius:50%;background:#74efa1;box-shadow:0 0 10px #74efa16b}
+body.wp-admin .osch-workspace-hero h1{font-size:clamp(30px,4vw,52px);line-height:1.08;letter-spacing:-.045em;font-weight:750;color:#f2fff7;margin:16px 0}
+.osch-workspace-hero p{color:#b6d5c2;font-size:14px;max-width:440px}
+.osch-workspace-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px;position:relative;z-index:1}
+body.wp-admin .osch-workspace-actions a{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:12px 16px;min-height:44px;box-sizing:border-box;border-radius:10px;border:1px solid #487958;background:#123f29;color:#d6f8e3;text-decoration:none;font-size:12px;font-weight:650}
+body.wp-admin .osch-workspace-actions a:first-child{background:#b6f5cf;border-color:#b6f5cf;color:#082a1b}
+.osch-apps{margin-top:30px}.osch-apps-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.osch-eyebrow{font-size:9px;font-weight:700;letter-spacing:.15em;color:#527361}.osch-apps-heading h2{font-size:24px;font-weight:750;letter-spacing:-.03em;margin:5px 0;color:#133723}
+.osch-app-search input{background:#fff!important;border:1px solid #b9d2c2!important;border-radius:12px!important;min-height:44px;width:240px;padding:8px 14px!important}
+.osch-app-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+body.wp-admin .osch-app-tile{position:relative;display:block;border:1px solid #cadfd1;border-radius:16px;padding:20px;background:#fff;text-decoration:none;color:#133723;transition:border-color .15s,box-shadow .15s}
+body.wp-admin .osch-app-tile:hover{border-color:#3d9360;box-shadow:0 8px 22px #103d2810}.osch-app-tile[hidden]{display:none!important}
+.osch-app-symbol{display:grid;place-items:center;width:44px;height:44px;background:#e5f2eb;border:1px solid #c3dfcc;border-radius:12px;color:#14532d}.osch-app-number{position:absolute;right:20px;top:20px;font:11px ui-monospace,monospace;color:#71917c}.osch-app-tile h3{font-size:15px;letter-spacing:-.02em;color:#133723;margin:18px 0 12px}.osch-app-open{display:flex;justify-content:space-between;align-items:center;color:#527361;font-size:11px}.osch-workspace-footer{display:flex;justify-content:space-between;gap:16px;margin-top:28px;padding-top:18px;border-top:1px solid #cadfd1;font-size:9px;letter-spacing:.13em;color:#527361}.osch-workspace-footer span{letter-spacing:0}
+@media(max-width:782px){.osch-workspace{padding:12px 12px 80px}.osch-workspace-hero{padding:22px;border-radius:18px}.osch-workspace-identity{font-size:12px}.osch-apps-heading{align-items:stretch;flex-direction:column;gap:12px}.osch-app-search input{width:100%}.osch-app-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.osch-app-tile{padding:14px!important}.osch-app-tile h3{font-size:13px;overflow-wrap:anywhere}.osch-app-number{right:14px;top:14px}.osch-app-open{font-size:10px}.osch-workspace-footer{flex-wrap:wrap}}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu li>a:after{display:none!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .osch-nav-symbol{background-image:none!important;color:#85e7aa!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .osch-nav-symbol:before{display:none!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu li.current>a .wp-menu-image:before,
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu li.wp-has-current-submenu>a .wp-menu-image:before{color:#85e7aa!important}
+@media(max-width:782px){
+ body.wp-admin .wp-responsive-open #wpbody{right:0!important;left:0!important;transform:none!important}
+ body.wp-admin .wp-responsive-open #wpcontent{margin-left:0!important;left:0!important;transform:none!important}
+ body.wp-admin .wp-responsive-open #adminmenuwrap{position:fixed!important;top:46px!important;bottom:0!important;width:min(280px,80vw)!important;overflow-y:auto!important;z-index:100100!important;box-shadow:16px 0 50px #031b1540!important}
+ body.wp-admin .wp-responsive-open #adminmenu{width:100%!important}
+}
+/* Restore the complete 9 Code workspace geometry with Open Scholar tokens. */
+body.wp-admin.ncu-admin-skin{
+ --ncu-admin-canvas:#edf5f0;--ncu-admin-surface:#fff;--ncu-admin-surface-2:#e5f2eb;--ncu-admin-surface-3:#d7e9de;
+ --ncu-admin-text:#132c20;--ncu-admin-muted:#52685b;--ncu-admin-border:#cadfd1;--ncu-admin-border-strong:#93b89f;
+ --ncu-admin-shell:#082a1b;--ncu-admin-shell-2:#103d28;--ncu-admin-shell-sub:#092d1d;--ncu-admin-shell-hover:#185335;
+ --ncu-admin-shell-border:#27543b;--ncu-admin-shell-text:#f1fff6;--ncu-admin-shell-muted:#abd4bb;
+ --ncu-admin-shell-active-bg:#b8f5cf;--ncu-admin-shell-active-text:#082a1b;--ncu-admin-focus:#14532d;
+ --ncu-admin-info:#14532d;--ncu-admin-radius:12px;--ncu-admin-shadow:0 8px 26px #0b382910;
+ --ncu-command-bg:#082a1b;--ncu-command-bg-2:#103d28;--ncu-command-text:#f1fff6;
+ --wp-admin-theme-color:#14532d!important;--wp-admin-theme-color-darker-10:#103d28!important;--wp-admin-theme-color-darker-20:#082a1b!important;--wp-components-color-accent:#14532d!important;
+ font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+}
+body.wp-admin .wrap{max-width:1440px;margin-inline:auto;padding:16px;box-sizing:border-box;min-width:0}
+body.wp-admin .wrap>h1{font-weight:750;letter-spacing:-.035em}
+body.wp-admin .wp-list-table,body.wp-admin .postbox,body.wp-admin .welcome-panel,body.wp-admin .card{background:#fff;border:1px solid #cadfd1;box-shadow:0 6px 24px #0b382909;border-radius:12px}
+body.wp-admin .wp-list-table thead,body.wp-admin .postbox-header{background:#e5f2eb}
+body.wp-admin .button,body.wp-admin .components-button.is-secondary{border-color:#93b89f;color:#14532d;border-radius:8px}
+body.wp-admin .nav-tab-active,body.wp-admin .nav-tab:hover{background:#e5f2eb;border-color:#93b89f;color:#14532d}
+body.wp-admin input[type=checkbox]:checked::before{filter:hue-rotate(265deg)}
+body.wp-admin .components-toggle-control .components-form-toggle.is-checked .components-form-toggle__track{background:#14532d}
+body.wp-admin .notice-info{border-left-color:#14532d}
+body.wp-admin #wpbody-content{min-width:0}
+body.wp-admin .ncu-editor-tools-popover{background:#edf5f0;border-color:#93b89f}
+body.wp-admin .ncu-editor-tools-popover>header{background:#103d28;color:#fff;border-color:#27543b}
+body.wp-admin .ncu-editor-tools-popover>header strong{color:#fff}
+body.wp-admin .ncu-editor-tools-popover>header small{color:#b8f5cf}
+body.wp-admin .ncu-editor-tools-item{border-color:#cadfd1;color:#103d28}
+/* The product toolbar is a compact Open Scholar control bar, not a stock
+   WordPress strip. Focus/active colours are explicitly green to beat host
+   colour schemes and browser blue focus rings. */
+body.wp-admin #wpadminbar{height:46px;background:linear-gradient(90deg,#062418,#103d28)!important;border-bottom-color:#2d6544!important}
+body.wp-admin #wpadminbar .ab-item,body.wp-admin #wpadminbar a.ab-item{height:46px!important;line-height:46px!important;color:#dff8e8!important;font-size:12px!important}
+body.wp-admin #wpadminbar .ab-item:hover,body.wp-admin #wpadminbar .ab-item:focus,body.wp-admin #wpadminbar li:hover>.ab-item{background:#1b5939!important;color:#fff!important;box-shadow:inset 0 -2px 0 #86efac!important;outline:0!important}
+body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle .ab-icon{position:relative!important;display:grid!important;place-items:center!important;width:26px!important;height:26px!important;margin:10px 8px!important;border:1px solid #4d8a66!important;border-radius:8px!important;background:#123f29!important}
+body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle .ab-icon:before{content:'+'!important;position:static!important;width:auto!important;height:auto!important;margin:0!important;background:none!important;color:#b6f5cf!important;font:500 23px/20px ui-monospace,monospace!important}
+body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle .ab-icon:after{display:none!important}
+body.wp-admin.wp-responsive-open #wpadminbar #wp-admin-bar-menu-toggle .ab-icon:before{content:'−'!important;color:#fff!important}
+body.wp-admin #wpadminbar #wp-admin-bar-osch-workspace .ab-item{font-weight:800!important;letter-spacing:.1em!important}
+body.wp-admin #wpadminbar #wp-admin-bar-my-account>.ab-item{border-left:1px solid #2d6544!important}
+body.wp-admin #wpadminbar .ab-sub-wrapper{background:#082a1b!important;border:1px solid #2d6544!important;border-radius:0 0 12px 12px!important;box-shadow:0 14px 30px #031b1540!important}
+body.wp-admin #wpadminbar .ab-submenu .ab-item{height:auto!important;min-height:38px!important;line-height:1.3!important;padding:10px 14px!important}
+body.wp-admin #adminmenu a:focus,body.wp-admin #adminmenu a:active,body.wp-admin #wpadminbar a:focus,body.wp-admin .button:focus,body.wp-admin button:focus{outline:2px solid #86efac!important;outline-offset:-2px!important;box-shadow:0 0 0 1px #14532d!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top:focus,body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.menu-top>a.menu-top:active{background:#1b5939!important;color:#fff!important;outline:2px solid #86efac!important;box-shadow:none!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top:focus,body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top:focus{background:#b6f5cf!important;color:#082a1b!important;outline-color:#14532d!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu #toplevel_page_osch-system{position:relative!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .osch-menu-expand{position:absolute!important;right:9px!important;top:10px!important;z-index:3!important;width:28px!important;height:28px!important;padding:0!important;border:1px solid #4d8a66!important;border-radius:8px!important;background:#103d28!important;color:#b6f5cf!important;font:500 21px/24px ui-monospace,monospace!important;cursor:pointer!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .osch-menu-expand:hover,body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .osch-menu-expand:focus{background:#1c5035!important;color:#fff!important;outline:2px solid #86efac!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu #toplevel_page_osch-system.osch-submenu-open>.wp-submenu{display:block!important;position:static!important;width:calc(100% - 12px)!important;margin:2px 6px 8px!important;padding:5px 0!important;border:1px solid #2d6544!important;border-radius:10px!important;box-shadow:inset 0 0 24px #041b1122!important}
+body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu #toplevel_page_osch-system.osch-submenu-open>.wp-submenu a{padding:11px 14px 11px 18px!important}
+.osch-control-centre{max-width:1100px;margin:30px auto;padding:28px;box-sizing:border-box}.osch-control-centre h1{margin:6px 0;color:#123d2a;font-size:clamp(30px,5vw,44px);letter-spacing:-.04em}.osch-control-centre>p{max-width:620px;color:#527361}.osch-control-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:28px}.osch-control-grid a{position:relative;display:grid;gap:8px;min-height:130px;padding:18px;border:1px solid #cadfd1;border-radius:16px;background:#fff;color:#123d2a;text-decoration:none}.osch-control-grid a:hover,.osch-control-grid a:focus{border-color:#3d9360;background:#f3fbf6}.osch-control-grid strong{font-size:16px}.osch-control-grid span{color:#527361;font-size:12px;line-height:1.45}.osch-control-grid b{position:absolute;right:16px;bottom:14px;color:#14532d}
+@media(max-width:782px){
+ html.wp-toolbar{overflow-x:clip}
+ body.wp-admin{min-width:0}
+ body.wp-admin #wpcontent{margin-left:0!important;padding-left:0!important;max-width:100%;box-sizing:border-box}
+ body.wp-admin .wrap{margin:0;padding:12px 12px 80px;width:100%;max-width:100%}
+ body.wp-admin #wpbody,body.wp-admin #wpbody-content{width:100%;max-width:100%;box-sizing:border-box}
+ body.wp-admin .nav-tab-wrapper{display:flex;flex-wrap:wrap;white-space:normal;gap:6px;overflow:visible}
+ body.wp-admin .nav-tab-wrapper .nav-tab{float:none;margin:0;white-space:normal}
+ body.wp-admin .ncu-grid,body.wp-admin .ncu-grid--2,body.wp-admin .ncu-dashboard-grid{grid-template-columns:minmax(0,1fr)!important}
+ body.wp-admin .widefat td,body.wp-admin .widefat th{overflow-wrap:anywhere}
+ body.wp-admin .tablenav{height:auto;display:flow-root}
+ body.wp-admin .search-box{float:none;max-width:100%}
+}
+body.wp-admin{background:var(--osch-page);color:var(--osch-text)}
+body.wp-admin #wpadminbar{background:var(--osch-dark)}
+body.wp-admin #wpadminbar #wp-admin-bar-wp-logo{display:none!important}
+body.wp-admin a{color:var(--osch-accent)}
+body.wp-admin .wrap>h1,body.wp-admin .wrap>h2{color:var(--osch-dark)}
+body.wp-admin .postbox,body.wp-admin .card,body.wp-admin .ncu-panel{border-color:var(--osch-border);border-radius:var(--osch-radius)}
+body.wp-admin .button-primary,body.wp-admin .components-button.is-primary{background:var(--osch-accent)!important;border-color:var(--osch-accent)!important;color:#fff!important}
+body.wp-admin .button-primary:hover,body.wp-admin .button-primary:focus,body.wp-admin .components-button.is-primary:hover{background:var(--osch-dark)!important;border-color:var(--osch-dark)!important}
+body.wp-admin #adminmenuback,body.wp-admin #adminmenuwrap,body.wp-admin #adminmenu,body.wp-admin #adminmenu .wp-submenu{background:var(--osch-dark)!important}
+body.wp-admin #adminmenu a,body.wp-admin #adminmenu div.wp-menu-image:before{color:#e5f2eb!important}
+body.wp-admin #adminmenu>li>a:hover,body.wp-admin #adminmenu .wp-submenu a:hover,body.wp-admin #adminmenu .wp-submenu a:focus{background:#0b3d22!important;color:#fff!important}
+body.wp-admin #adminmenu>li.current>a,body.wp-admin #adminmenu>li.wp-has-current-submenu>a,body.wp-admin #adminmenu .wp-submenu li.current a{background:var(--osch-soft)!important;color:var(--osch-dark)!important;box-shadow:inset 3px 0 0 var(--osch-accent)!important}
+body.wp-admin #adminmenu>li.current>a .wp-menu-image:before,body.wp-admin #adminmenu>li.wp-has-current-submenu>a .wp-menu-image:before{color:var(--osch-dark)!important}
+/* Navigation is an Open Scholar application rail, not a recoloured WordPress
+   sidebar. These selectors intentionally do not rely on body classes, so a
+   hosting dashboard or colour-scheme plugin cannot restore its blue state. */
+body.wp-admin #adminmenu .osch-navigation-identity{display:flex!important;align-items:center!important;gap:10px!important;margin:10px 14px 12px!important;padding:8px 4px 14px!important;border-bottom:1px solid #2d6544!important;color:#e9fff1!important;pointer-events:none!important}
+body.wp-admin #adminmenu .osch-navigation-identity b{display:block!important;font:800 11px/1.1 ui-sans-serif,system-ui,sans-serif!important;letter-spacing:.14em!important;color:#e9fff1!important}
+body.wp-admin #adminmenu .osch-navigation-identity small{display:block!important;margin-top:4px!important;font:700 8px/1 ui-sans-serif,system-ui,sans-serif!important;letter-spacing:.12em!important;color:#9bc7ac!important}
+body.wp-admin #adminmenu .osch-navigation-mark{display:grid!important;grid-template-columns:repeat(2,5px)!important;gap:3px!important;width:13px!important;height:13px!important}
+body.wp-admin #adminmenu .osch-navigation-mark i{display:block!important;width:5px!important;height:5px!important;background:#86efac!important;box-shadow:0 0 8px #86efac66!important}
+body.wp-admin #adminmenu>li.menu-top>a.menu-top:focus,body.wp-admin #adminmenu>li.menu-top>a.menu-top:focus-visible,body.wp-admin #adminmenu>li.menu-top>a.menu-top:active{background:#15482f!important;border-color:#4d8a66!important;outline:2px solid #86efac!important;outline-offset:-2px!important;box-shadow:none!important}
+body.wp-admin #adminmenu>li.current>a.menu-top,body.wp-admin #adminmenu>li.wp-has-current-submenu>a.menu-top,body.wp-admin #adminmenu>li.wp-menu-open>a.menu-top{background:#b6f5cf!important;border-color:#b6f5cf!important;color:#082a1b!important;box-shadow:none!important;outline:0!important}
+body.wp-admin #adminmenu>li.current>a.menu-top .wp-menu-image,body.wp-admin #adminmenu>li.wp-has-current-submenu>a.menu-top .wp-menu-image,body.wp-admin #adminmenu>li.wp-menu-open>a.menu-top .wp-menu-image{color:#082a1b!important}
+body.wp-admin #adminmenu>li.current>a.menu-top .wp-menu-image svg,body.wp-admin #adminmenu>li.wp-has-current-submenu>a.menu-top .wp-menu-image svg,body.wp-admin #adminmenu>li.wp-menu-open>a.menu-top .wp-menu-image svg{color:#082a1b!important}
+body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle>a.ab-item{display:grid!important;place-items:center!important;width:46px!important;height:46px!important;padding:0!important;background:#082a1b!important;color:#b6f5cf!important}
+body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle>a.ab-item:focus,body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle>a.ab-item:focus-visible,body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle>a.ab-item:active{background:#15482f!important;color:#fff!important;outline:0!important;box-shadow:inset 0 -2px 0 #86efac!important}
+body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle .ab-icon{border-radius:0!important;border-color:#4d8a66!important;background:#103d28!important}
+body.wp-admin #wpadminbar #wp-admin-bar-menu-toggle .ab-icon:before{color:#b6f5cf!important;text-shadow:none!important}
+body.wp-admin.wp-responsive-open #wpadminbar #wp-admin-bar-menu-toggle>a.ab-item,body.wp-admin.wp-responsive-open #wpadminbar #wp-admin-bar-menu-toggle .ab-icon{background:#14532d!important}
+/* WordPress gives the *current* submenu a more-specific blue scheme rule.
+   Cover that exact layer, including its desktop pointer and submenu heading. */
+html body.wp-admin #adminmenu li.wp-has-submenu>.wp-submenu,
+html body.wp-admin #adminmenu li.wp-has-current-submenu>.wp-submenu,
+html body.wp-admin #adminmenu li.wp-menu-open>.wp-submenu,
+html body.wp-admin #adminmenu .wp-submenu.wp-submenu-wrap,
+html body.wp-admin #adminmenu .wp-submenu .wp-submenu-head{background:#082a1b!important;background-image:none!important;border-color:#2d6544!important;box-shadow:none!important}
+html body.wp-admin #adminmenu li.wp-has-current-submenu>.wp-submenu:before,
+html body.wp-admin #adminmenu li.wp-has-current-submenu>.wp-submenu:after,
+html body.wp-admin #adminmenu li.wp-menu-open>.wp-submenu:before,
+html body.wp-admin #adminmenu li.wp-menu-open>.wp-submenu:after,
+html body.wp-admin #adminmenu .wp-submenu .wp-submenu-head:before,
+html body.wp-admin #adminmenu .wp-submenu .wp-submenu-head:after{background:#082a1b!important;border-color:#082a1b!important;box-shadow:none!important}
+html body.wp-admin #adminmenu li.wp-has-current-submenu .wp-menu-arrow,
+html body.wp-admin #adminmenu li.wp-has-current-submenu .wp-menu-arrow:after,
+html body.wp-admin #adminmenu li.wp-menu-open .wp-menu-arrow,
+html body.wp-admin #adminmenu li.wp-menu-open .wp-menu-arrow:after{background:#082a1b!important;border-right-color:#082a1b!important;border-left-color:transparent!important;border-top-color:transparent!important;border-bottom-color:transparent!important;box-shadow:none!important}
+/* Final no-blue navigation lock. Some hosts append WordPress colour-scheme
+   rules after theme styles, including a blue current-submenu edge/arrow. */
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-menu-open>a.menu-top{background:#b6f5cf!important;border-color:#b6f5cf!important;color:#082a1b!important;box-shadow:none!important;outline:0!important}
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top:before,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.current>a.menu-top:after,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top:before,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu>li.wp-has-current-submenu>a.menu-top:after,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow:after,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-menu-arrow div{display:none!important;border-color:transparent!important;background:transparent!important;box-shadow:none!important}
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu li.current>a,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:hover,
+html body.wp-admin.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:focus{background:#15482f!important;color:#e9fff1!important;box-shadow:inset 3px 0 0 #86efac!important;outline:0!important}
+/* Gutenberg/editor components keep a separate colour-token set. Lock it to
+   the Open Scholar greys and greens so WordPress blue cannot reappear there. */
+html body.wp-admin.ncu-admin-skin .interface-interface-skeleton,
+html body.wp-admin.ncu-admin-skin .edit-post-layout,
+html body.wp-admin.ncu-admin-skin .editor-styles-wrapper{--wp-admin-theme-color:#14532d!important;--wp-admin-theme-color-darker-10:#103d28!important;--wp-admin-theme-color-darker-20:#082a1b!important;--wp-components-color-accent:#14532d!important;--wp-components-color-accent-darker-10:#103d28!important;--wp-components-color-accent-darker-20:#082a1b!important}
+html body.wp-admin.ncu-admin-skin .components-button.is-primary,
+html body.wp-admin.ncu-admin-skin .components-button.is-primary:hover,
+html body.wp-admin.ncu-admin-skin .components-button.is-pressed,
+html body.wp-admin.ncu-admin-skin .components-menu-item.is-selected,
+html body.wp-admin.ncu-admin-skin .components-menu-item.is-selected:hover{background:#14532d!important;border-color:#14532d!important;color:#fff!important;box-shadow:none!important}
+html body.wp-admin.ncu-admin-skin .components-button:focus-visible,
+html body.wp-admin.ncu-admin-skin .components-menu-item:focus-visible,
+html body.wp-admin.ncu-admin-skin .components-tab-panel__tabs-item:focus-visible{outline:2px solid #86efac!important;outline-offset:-2px!important;box-shadow:0 0 0 1px #14532d!important}
+html body.wp-admin.ncu-admin-skin .components-tab-panel__tabs-item.is-active{box-shadow:inset 0 -2px 0 #14532d!important;color:#14532d!important}
+/* WordPress applies blue from several independent systems: admin schemes,
+   native controls, block-editor components and the browser focus fallback.
+   This late, scoped lock deliberately covers their shared state vocabulary. */
+html body.wp-admin.ncu-admin-skin,
+html body.wp-admin.ncu-admin-skin *{accent-color:#14532d!important}
+html body.wp-admin.ncu-admin-skin :is(a,button,input,select,textarea,[role=button],[role=tab],[role=menuitem]):focus,
+html body.wp-admin.ncu-admin-skin :is(a,button,input,select,textarea,[role=button],[role=tab],[role=menuitem]):focus-visible{outline-color:#86efac!important;box-shadow:0 0 0 1px #14532d!important}
+html body.wp-admin.ncu-admin-skin :is(.current,.active,.is-active,.is-selected,.is-pressed)>:is(a,button),
+html body.wp-admin.ncu-admin-skin :is(a,button,[role=tab],[role=menuitem]).is-active,
+html body.wp-admin.ncu-admin-skin :is(a,button,[role=tab],[role=menuitem]).is-selected{border-color:#14532d!important}
+html body.wp-admin.ncu-admin-skin .components-notice.is-info,
+html body.wp-admin.ncu-admin-skin .notice-info{border-left-color:#14532d!important}
+body.wp-admin input:focus,body.wp-admin textarea:focus,body.wp-admin select:focus{border-color:var(--osch-accent)!important;box-shadow:0 0 0 1px var(--osch-accent)!important}
+body.wp-admin details[data-ninecode-settings-section]{background:var(--osch-card);border:1px solid var(--osch-border);border-radius:var(--osch-radius)}
+body.wp-admin details[data-ninecode-settings-section]>summary{min-height:44px;color:var(--osch-dark)}
+body.wp-admin details[data-ninecode-settings-section]:nth-of-type(odd)>summary{border-inline-start:5px solid #b42318}
+body.wp-admin details[data-ninecode-settings-section]:nth-of-type(even)>summary{border-inline-start:5px solid #14532d}
+body.login{background:var(--osch-page)!important;color:var(--osch-text)}
+body.login h1 a{background-image:url(../images/open-scholar-mark.svg)!important;background-size:82px!important;width:96px!important;height:96px!important}
+body.login form,body.login .message,body.login .notice{border-color:var(--osch-border)!important;border-radius:var(--osch-radius)!important}
+body.login .button-primary{background:var(--osch-accent)!important;border-color:var(--osch-accent)!important}
+body.login #nav a,body.login #backtoblog a{color:var(--osch-dark)!important}
+.osch-seo-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.osch-seo-fields>p{grid-column:1/-1}.osch-seo-fields label{display:grid;align-content:start;gap:6px}.osch-seo-fields textarea,.osch-seo-fields input[type=text],.osch-seo-fields input[type=number]{width:100%;max-width:none}.osch-seo-fields small{color:var(--osch-muted)}
+@media(max-width:782px){
+  body.wp-admin input:not([type=checkbox]):not([type=radio]),body.wp-admin select,body.wp-admin textarea,body.wp-admin button,body.wp-admin .button{max-width:100%;min-height:44px}
+  body.wp-admin .form-table,body.wp-admin .form-table tbody,body.wp-admin .form-table tr,body.wp-admin .form-table th,body.wp-admin .form-table td{display:block;width:100%;box-sizing:border-box}
+  .osch-seo-fields{grid-template-columns:1fr}.osch-seo-fields>p{grid-column:auto}
+  body.wp-admin .interface-interface-skeleton__content{overflow-x:hidden}
+  body.wp-admin .edit-post-layout .components-panel__body,body.wp-admin .editor-post-panel__section{padding-inline:12px}
+  body.wp-admin .wp-responsive-open #adminmenuwrap{overflow-y:scroll!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important;touch-action:pan-y!important;padding-bottom:28px!important}
+  body.wp-admin .wp-responsive-open #adminmenu{height:auto!important;min-height:calc(100dvh - 74px)!important;padding-bottom:48px!important}
+  body.wp-admin .wp-responsive-open #adminmenu #toplevel_page_osch-system.osch-submenu-open>.wp-submenu{display:block!important;position:static!important;left:auto!important;top:auto!important;width:calc(100% - 12px)!important}
+  body.wp-admin #wpadminbar{height:46px!important}.osch-control-centre{margin:0;padding:18px 12px 80px}.osch-control-grid{grid-template-columns:1fr}.osch-control-grid a{min-height:104px}
+}
+
+/* Open Scholar 20.2.2 — future-of-education dashboard, restrained university UI. */
+body.osch-workspace-home .osch-workspace{
+ --osch-accent:#14532d;--osch-night:#07291b;--osch-border:#cfe1d5;
+ font-family:"Segoe UI Variable","Aptos","Inter",ui-sans-serif,system-ui,-apple-system,sans-serif;
+ width:100%;max-width:1460px;color:#143c29;letter-spacing:-.008em;
+}
+body.osch-workspace-home .osch-workspace-hero{
+ isolation:isolate;border:1px solid #356b51;border-radius:28px;
+ padding:clamp(24px,3.5vw,48px);
+ background:radial-gradient(ellipse at 93% 25%,#22734b 0%,transparent 45%),linear-gradient(120deg,#062b1c 10%,#10462f 100%);
+ box-shadow:0 20px 48px #0836211a;
+}
+body.osch-workspace-home .osch-workspace-hero:after{width:380px;height:380px;right:-155px;top:4px;box-shadow:0 0 0 46px #76d89d08,0 0 0 92px #76d89d06}
+.osch-workspace-hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;z-index:1;flex-wrap:wrap}
+.osch-workspace-hero-top .osch-workspace-status{margin:0;padding:9px 12px;border:1px solid #5fa77765;border-radius:100px;background:#063b2780;font-size:11px}
+.osch-hero-kicker{display:flex;justify-content:space-between;gap:24px;color:#9ddeb6;font-size:10px;letter-spacing:.17em;font-weight:750}
+.osch-workspace-hero-body{position:relative;z-index:1;margin-top:56px;max-width:690px}
+body.wp-admin .osch-workspace-hero-body h1{font-size:clamp(32px,4.5vw,62px);line-height:1.06;letter-spacing:-.055em;font-weight:720;margin:16px 0 14px;color:#f1fff5}
+.osch-workspace-hero-body h1 em{color:#b6f5cf;font-style:normal}
+.osch-workspace-hero-body p{font-size:clamp(13px,1.25vw,15px);line-height:1.7;max-width:560px;color:#cee5d4}
+.osch-workspace-actions a{gap:12px!important;border-radius:14px!important;font-size:13px!important;transition:transform .2s ease,background-color .2s ease}
+.osch-workspace-actions a:hover{transform:translateY(-2px)}
+.osch-workspace-actions a .dashicons{font-size:18px}
+.osch-eyebrow{font-size:10px;letter-spacing:.13em;font-weight:800;color:#4b7860}
+.osch-latest{margin-top:30px}
+.osch-latest-heading,.osch-apps-heading{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}
+.osch-latest-heading h2,.osch-apps-heading h2{font-size:clamp(21px,2.2vw,27px);line-height:1.2;letter-spacing:-.04em;color:#113c28;margin:5px 0;font-weight:750}
+.osch-apps-heading h2 small{margin-left:7px;font-size:12px;color:#56816b;font-weight:600;letter-spacing:0}
+.osch-apps-heading p{margin:6px 0 0;color:#55705f;font-size:12px}
+.osch-live-stamp{display:inline-flex;align-items:center;gap:8px;color:#456d54;font-size:11px}
+.osch-live-stamp:before{content:"";width:7px;height:7px;background:#31995e;border-radius:50%;box-shadow:0 0 0 4px #3bba7124}
+.osch-latest-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(240px,1fr);gap:14px}
+.osch-latest-panel{padding:20px 22px;border:1px solid var(--osch-border);background:linear-gradient(135deg,#fff,#f6faf7);border-radius:19px;box-shadow:0 8px 26px #123d2a08;min-width:0}
+.osch-latest-panel h3{font-size:14px;font-weight:750;display:flex;align-items:center;gap:8px;color:#164c30;margin:0 0 12px}
+.osch-latest-panel h3 .dashicons{font-size:18px;color:#16864a}
+.osch-latest-panel ul{list-style:none;margin:0 0 12px;padding:0}
+.osch-latest-panel li{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:1px solid #e8efea;padding:10px 0}
+.osch-latest-panel li:last-child{border:0}
+.osch-latest-panel li a{font-size:12px;line-height:1.5;color:#154f30;text-decoration:none;font-weight:650}
+.osch-latest-panel li a:hover{text-decoration:underline}
+.osch-latest-panel li time{flex-shrink:0;color:#718475;font-size:10px}
+.osch-latest-panel p{font-size:12px;line-height:1.6;color:#607567}
+.osch-latest-panel-tools strong{font-size:28px;color:#14532d;margin-right:4px}
+.osch-latest-more{display:inline-flex;gap:8px;align-items:center;font-size:11px;color:#14532d;font-weight:750;text-decoration:none}
+.osch-apps{margin-top:34px}
+.osch-app-search{position:relative;max-width:100%;flex-shrink:0}
+.osch-app-search .dashicons{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#5b8269;pointer-events:none}
+body.osch-workspace-home .osch-app-search input{box-sizing:border-box;width:min(300px,100%);border-radius:13px!important;padding:10px 12px 10px 40px!important;min-height:46px;background:#fff!important}
+.osch-app-filters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 19px}
+body.wp-admin .osch-app-filters button{border:1px solid #ccdfd1;background:#fff;color:#285e3c;min-height:38px;padding:8px 15px;border-radius:999px;font-size:11px;font-weight:750;cursor:pointer}
+body.wp-admin .osch-app-filters button.is-active{background:#14532d;border-color:#14532d;color:#fff}
+body.wp-admin .osch-app-filters button:hover:not(.is-active){background:#e6f4eb}
+.osch-app-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px;align-items:start}
+body.wp-admin .osch-app-tile{padding:18px;min-width:0;border:1px solid #d3e4d8;border-radius:20px;display:flex;flex-direction:column;gap:12px;min-height:230px;box-shadow:0 8px 20px #123d2a06;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+body.wp-admin .osch-app-tile:hover{transform:translateY(-3px);border-color:#8ec4a3;box-shadow:0 14px 30px #123d2a15}
+.osch-app-tile[hidden]{display:none!important}
+.osch-app-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.osch-app-card-head .osch-app-symbol{width:48px;height:48px;flex-shrink:0;border-radius:15px;border:1px solid #cfe5d5;background:linear-gradient(135deg,#def2e5,#f1f9f3);color:#14532d}
+.osch-app-symbol .dashicons{font-size:25px;width:25px;height:25px}
+.osch-app-symbol img{width:30px;height:30px;object-fit:contain}
+.osch-app-type{color:#63826d;font-size:9px;line-height:1.4;letter-spacing:.04em;text-transform:uppercase;text-align:right}
+body.wp-admin .osch-app-title{display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;color:#163d29}
+body.wp-admin .osch-app-title h3{color:inherit;margin:0;font-size:15px;font-weight:750;letter-spacing:-.025em;overflow-wrap:anywhere;line-height:1.35}
+.osch-app-title .dashicons{flex-shrink:0;transform:rotate(45deg);font-size:15px;color:#2d8050}
+.osch-app-desc{margin:0;color:#647469;font-size:11px;line-height:1.6;flex:1}
+.osch-app-submenus{margin-top:auto;border-top:1px solid #e3eee7;padding-top:11px;min-width:0}
+.osch-app-submenus summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px;font-size:11px;font-weight:750;color:#17603a}
+.osch-app-submenus summary::-webkit-details-marker{display:none}
+.osch-app-submenus summary .dashicons{font-size:16px;transition:transform .15s}
+.osch-app-submenus[open] summary .dashicons{transform:rotate(180deg)}
+.osch-app-submenus ul{list-style:none;margin:8px -4px 0;padding:0;max-height:240px;overflow-y:auto}
+.osch-app-submenus li a{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#24583a;font-size:11px;line-height:1.4;padding:10px 7px;text-decoration:none;border-radius:8px;overflow-wrap:anywhere}
+.osch-app-submenus li a:hover,.osch-app-submenus li a:focus-visible{background:#e5f2eb;color:#0c4827}
+.osch-app-submenus li a span{color:#41895d}
+.osch-app-no-submenu{display:block;margin-top:auto;border-top:1px solid #e3eee7;padding-top:14px;color:#377152;font-size:11px;font-weight:650}
+#osch-app-empty{font-size:13px;color:#597461}
+.osch-workspace-footer{margin-top:36px}
+@media(max-width:782px){
+ body.osch-workspace-home .osch-workspace{padding:12px 12px 88px}
+ body.osch-workspace-home .osch-workspace-hero{padding:22px;border-radius:20px}
+ .osch-workspace-hero-body{margin-top:32px}
+ .osch-workspace-hero-top .osch-workspace-status{font-size:10px}
+ .osch-latest-heading,.osch-apps-heading{align-items:stretch;flex-direction:column}
+ .osch-latest-grid{grid-template-columns:minmax(0,1fr)}
+ .osch-latest-panel{padding:16px;border-radius:16px}
+ .osch-app-search{width:100%}
+ body.osch-workspace-home .osch-app-search input{width:100%}
+ .osch-app-filters{flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:thin;padding-bottom:5px}
+ body.wp-admin .osch-app-filters button{flex:0 0 auto}
+ .osch-app-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ body.wp-admin .osch-app-tile{padding:13px;min-height:218px;border-radius:16px;gap:9px}
+ .osch-app-card-head .osch-app-symbol{width:40px;height:40px;border-radius:12px}
+ .osch-app-type{font-size:8px}
+ body.wp-admin .osch-app-title h3{font-size:13px}
+ .osch-app-desc{font-size:10px}
+ .osch-latest-panel li{flex-wrap:wrap;gap:4px}
+}
+@media(max-width:360px){.osch-app-grid{grid-template-columns:1fr}body.wp-admin .osch-app-tile{min-height:0}}
+@media(prefers-reduced-motion:reduce){.osch-app-tile,.osch-workspace-actions a{transition:none!important}.osch-app-tile:hover,.osch-workspace-actions a:hover{transform:none!important}}
+
+/* Open Scholar 20.2.3 · Application recognition system.
+ * The primary shell is still Open Scholar green. Distinct app colours are
+ * deliberate visual-management cues, not alternative site branding. */
+body.wp-admin.osch-workspace-home .osch-app-tile{
+ border-top:3px solid var(--osch-app-ink,#14532d);
+ background:linear-gradient(180deg,var(--osch-app-bg,#f3faf5) -100%,#fff 38%);
+}
+body.wp-admin.osch-workspace-home .osch-app-card-head .osch-app-symbol{
+ position:relative;display:grid;place-items:center;width:58px;height:58px;
+ border-radius:17px;color:var(--osch-app-ink,#14532d)!important;
+ background:var(--osch-app-bg,#e6f4e9)!important;
+ border:1px solid var(--osch-app-edge,#b8dfc3)!important;
+ flex-shrink:0;
+}
+body.wp-admin.osch-workspace-home .osch-app-symbol .osch-app-svg{
+ display:block!important;width:29px;height:29px;stroke:currentColor!important;fill:none;
+ flex:none;overflow:visible;
+}
+body.wp-admin.osch-workspace-home .osch-app-symbol img{
+ width:31px;height:31px;object-fit:contain;
+}
+body.wp-admin.osch-workspace-home .osch-app-symbol .osch-app-monogram{
+ position:absolute;right:-6px;bottom:-5px;display:grid;place-items:center;
+ height:19px;min-width:21px;padding:0 3px;box-sizing:border-box;
+ border-radius:7px;border:2px solid #fff;background:var(--osch-app-ink,#14532d);
+ color:#fff;font-size:8px;font-weight:850;line-height:1;letter-spacing:0;
+}
+body.wp-admin.osch-workspace-home .osch-app-tile:hover{
+ border-color:var(--osch-app-edge,#8ec4a3);border-top-color:var(--osch-app-ink,#14532d);
+}
+body.wp-admin.osch-workspace-home .osch-app-tile:focus-within{
+ outline:2px solid var(--osch-app-ink,#14532d);outline-offset:2px;
+}
+body.wp-admin.osch-workspace-home .osch-app-title h3{font-size:16px;}
+body.wp-admin.osch-workspace-home .osch-app-desc{font-size:12px;line-height:1.55;color:#42574a;}
+body.wp-admin.osch-workspace-home .osch-app-card-head .osch-app-type{
+ max-width:calc(100% - 75px);font-size:10px;line-height:1.5;color:#4c6656;
+}
+/* The first launcher is an always-visible direct link to the dashboard. */
+body.wp-admin #n9be-admin-launcher .n9be-dashboard-launch,
+body #n9be-admin-launcher .n9be-dashboard-launch{
+ background:#14532d!important;border-color:#14532d!important;color:#fff!important;
+ box-shadow:0 3px 12px #0e432748;
+}
+body #n9be-admin-launcher .n9be-dashboard-launch:hover,
+body #n9be-admin-launcher .n9be-dashboard-launch:focus-visible{
+ background:#fff!important;color:#14532d!important;outline-color:#14532d;
+}
+@media(max-width:782px){
+ body.wp-admin.osch-workspace-home .osch-app-card-head .osch-app-symbol{width:49px;height:49px;border-radius:14px}
+ body.wp-admin.osch-workspace-home .osch-app-symbol .osch-app-svg{width:25px;height:25px}
+ body.wp-admin.osch-workspace-home .osch-app-title h3{font-size:13px}
+ body.wp-admin.osch-workspace-home .osch-app-desc{font-size:11px}
+}
+
+/* v20.2.6 site-level dashboard and menu editor: compact, green, mobile first. */
+body.wp-admin .osch-workspace-settings{max-width:1050px;margin:10px 16px 0 0;color:#163f2b}
+body.wp-admin .osch-workspace-settings>h1{font-size:23px;font-weight:800;color:#14532d;margin:0 0 4px}
+body.wp-admin .osch-workspace-settings>p{max-width:850px;margin:0 0 12px;color:#496654}
+body.wp-admin .osch-settings-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0;padding:8px 10px;border-radius:11px;background:#e7f3ea}
+body.wp-admin .osch-settings-toolbar strong{margin-right:auto}
+body.wp-admin .osch-settings-rows{display:grid;gap:5px}
+body.wp-admin .osch-settings-app{background:#fff;border:1px solid #d4e5d8;border-radius:10px;overflow:hidden}
+body.wp-admin .osch-settings-app>summary{display:flex;gap:9px;align-items:center;cursor:pointer;padding:8px 11px;min-height:27px;color:#17492f;list-style:none}
+body.wp-admin .osch-settings-app>summary::-webkit-details-marker{display:none}
+body.wp-admin .osch-settings-app>summary:hover{background:#f2f9f4}
+body.wp-admin .osch-settings-app>summary .dashicons{color:#1b6940}
+body.wp-admin .osch-settings-app>summary small{color:#607768;font-size:11px;overflow-wrap:anywhere}
+body.wp-admin .osch-settings-expand{font-size:11px;margin-left:auto;color:#155e38}
+body.wp-admin .osch-settings-fields{padding:10px;border-top:1px solid #e3ebe6;display:grid;gap:8px}
+body.wp-admin .osch-settings-fields>label{display:grid;gap:3px;font-weight:650}
+body.wp-admin .osch-settings-fields input[type=text]{width:100%;min-height:34px;max-width:100%}
+body.wp-admin .osch-settings-fields select{min-height:34px}
+body.wp-admin .osch-settings-display{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+body.wp-admin .osch-settings-display>label{display:flex;align-items:center;gap:5px}
+body.wp-admin .osch-settings-children{border:1px solid #e0e9e3;border-radius:8px;padding:6px 8px}
+body.wp-admin .osch-settings-children>summary{font-weight:700;cursor:pointer;padding:3px}
+body.wp-admin .osch-settings-subrow{display:grid;grid-template-columns:105px minmax(0,1fr);align-items:center;gap:8px;margin:5px 0}
+body.wp-admin .osch-settings-subrow input[type=text]{width:100%;min-width:0}
+@media(max-width:600px){body.wp-admin .osch-workspace-settings{margin:8px 5px 0 0}body.wp-admin .osch-settings-toolbar{padding:7px}body.wp-admin .osch-settings-app>summary{flex-wrap:wrap}body.wp-admin .osch-settings-app>summary small{width:100%;padding-left:29px}body.wp-admin .osch-settings-subrow{grid-template-columns:75px minmax(0,1fr)}}

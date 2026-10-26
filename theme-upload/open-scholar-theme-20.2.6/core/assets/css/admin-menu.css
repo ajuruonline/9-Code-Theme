@@ -1,0 +1,225 @@
+/* 9Core 14 authoritative WordPress admin navigation skin.
+ * This file owns menu geometry and interaction states. Do not duplicate these
+ * rules in Branding, Admin Workspace or Quick Controls. */
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenuwrap {
+  --wp-admin-theme-color: #b8b8b8 !important;
+  --wp-admin-theme-color-darker-10: #8f8f8f !important;
+  --wp-admin-theme-color-darker-20: #686868 !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenuback,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenuwrap,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu {
+  background: #080808 !important;
+  color: #fff !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu::before,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenuwrap::before {
+  display: none !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu {
+  box-sizing: border-box !important;
+  padding: 4px 0 8px !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.menu-top {
+  box-sizing: border-box !important;
+  margin: 1px 4px !important;
+  width: calc(100% - 8px) !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.menu-top > a.menu-top {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 34px !important;
+  height: 34px !important;
+  padding: 0 7px 0 0 !important;
+  border: 0 !important;
+  border-radius: 5px !important;
+  background: transparent !important;
+  color: #f4f4f4 !important;
+  box-shadow: none !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-image {
+  box-sizing: border-box !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 32px !important;
+  width: 32px !important;
+  min-width: 32px !important;
+  height: 34px !important;
+  padding: 0 !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-image::before {
+  box-sizing: border-box !important;
+  width: 20px !important;
+  height: 20px !important;
+  padding: 0 !important;
+  color: #c8c8c8 !important;
+  line-height: 20px !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-name {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  color: inherit !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 34px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Neutral, visibly distinct hover/focus. This intentionally beats Bluehost,
+ * Jetpack and WordPress colour-scheme selectors without using any blue. */
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.menu-top:hover > a.menu-top,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.opensub > a.menu-top,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li > a.menu-top:hover,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li > a.menu-top:focus {
+  background: #303030 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  outline: 1px solid #696969 !important;
+  outline-offset: -1px !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.menu-top:hover .wp-menu-image::before,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.opensub .wp-menu-image::before,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li > a.menu-top:focus .wp-menu-image::before {
+  color: #fff !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.current > a.menu-top,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.wp-has-current-submenu > a.wp-has-current-submenu,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.wp-menu-open > a.menu-top {
+  background: #fff !important;
+  color: #080808 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.current > a.menu-top .wp-menu-image::before,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.wp-has-current-submenu > a.wp-has-current-submenu .wp-menu-image::before,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.wp-menu-open > a.menu-top .wp-menu-image::before {
+  color: #080808 !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-has-current-submenu .wp-submenu {
+  box-sizing: border-box !important;
+  margin: 2px 4px 4px !important;
+  padding: 2px !important;
+  width: calc(100% - 8px) !important;
+  border: 1px solid #292929 !important;
+  border-radius: 5px !important;
+  background: #111 !important;
+  box-shadow: none !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu .wp-submenu-head,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a {
+  box-sizing: border-box !important;
+  min-height: 29px !important;
+  margin: 0 !important;
+  padding: 5px 8px !important;
+  border: 0 !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: #cfcfcf !important;
+  font-size: 12px !important;
+  line-height: 19px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-shadow: none !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu li.current > a,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:hover,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a:focus {
+  background: #303030 !important;
+  color: #fff !important;
+  outline: 1px solid #696969 !important;
+  outline-offset: -1px !important;
+  box-shadow: none !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-arrow,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-arrow div {
+  display: none !important;
+  background: transparent !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu li.wp-menu-separator {
+  height: 1px !important;
+  margin: 5px 8px !important;
+  background: #282828 !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #collapse-menu {
+  box-sizing: border-box !important;
+  margin: 6px 4px !important;
+  width: calc(100% - 8px) !important;
+  min-height: 32px !important;
+  padding: 4px !important;
+  border-radius: 5px !important;
+  color: #cfcfcf !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #collapse-menu:hover,
+body.ncu-admin-skin.ncu-admin-menu-skin #collapse-menu:focus {
+  background: #303030 !important;
+  color: #fff !important;
+}
+
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .awaiting-mod,
+body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .update-plugins {
+  border: 1px solid #777 !important;
+  background: #fff !important;
+  color: #080808 !important;
+  box-shadow: none !important;
+}
+
+/* Desktop is a separate density contract, not an enlarged mobile menu. The
+ * late PHP lock repeats only these collision-prone values after host skins. */
+@media (min-width: 783px) {
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu {
+    padding: 4px 0 8px !important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.menu-top {
+    margin: 1px 4px !important;
+    width: calc(100% - 8px) !important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.menu-top > a.menu-top {
+    min-height: 34px !important;
+    height: 34px !important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-submenu a {
+    min-height: 29px !important;
+    padding: 5px 8px !important;
+    font-size: 12px !important;
+    line-height: 19px !important;
+  }
+}
+
+@media (max-width: 782px) {
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu > li.menu-top > a.menu-top {
+    min-height: 42px !important;
+    height: 42px !important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-image {
+    height: 42px !important;
+  }
+  body.ncu-admin-skin.ncu-admin-menu-skin #adminmenu .wp-menu-name {
+    line-height: 42px !important;
+  }
+}

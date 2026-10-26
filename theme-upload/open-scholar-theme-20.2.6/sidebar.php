@@ -1,0 +1,1 @@
+<?php if ( is_active_sidebar( 'sidebar-1' ) ) : ?><aside class="ncu-sidebar" aria-label="<?php esc_attr_e( 'Sidebar', 'nine-code' ); ?>"><?php dynamic_sidebar( 'sidebar-1' ); ?></aside><?php endif; ?>

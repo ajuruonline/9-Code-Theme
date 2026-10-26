@@ -1,0 +1,92 @@
+/* Open Scholar Popup Navigation — 20.2.1. An overlay, never an off-canvas WordPress drawer. */
+body.wp-admin.osch-modal-navigation-ready #adminmenuback,
+body.wp-admin.osch-modal-navigation-ready #adminmenuwrap:not(#osch-nav-dialog #adminmenuwrap),
+body.wp-admin.osch-modal-navigation-ready #collapse-menu {display:none!important}
+body.wp-admin.osch-modal-navigation-ready #wpcontent,
+body.wp-admin.osch-modal-navigation-ready #wpfooter{margin-left:0!important;left:auto!important;transform:none!important}
+body.wp-admin.osch-modal-navigation-ready #wpbody,
+body.wp-admin.osch-modal-navigation-ready #wpbody-content{max-width:none!important;box-sizing:border-box!important}
+body.wp-admin.osch-modal-navigation-ready #wpcontent{padding-left:clamp(10px,2vw,30px)!important;padding-right:clamp(10px,2vw,30px)!important}
+body.wp-admin.osch-modal-navigation-ready.wp-responsive-open #wpcontent{margin-left:0!important}
+body.wp-admin.osch-nav-open {overflow:auto!important}
+#osch-nav-launcher{position:fixed!important;z-index:160010!important;bottom:max(15px,env(safe-area-inset-bottom))!important;left:max(14px,env(safe-area-inset-left))!important;display:flex;gap:0;align-items:center;justify-content:center;width:52px;height:52px;min-height:52px;padding:7px;box-sizing:border-box;border:1px solid #c4dcca;border-radius:13px;background:#103f2b;color:#fff;box-shadow:0 6px 20px rgba(9,44,28,.24);font-size:13px;font-weight:700;letter-spacing:.015em;cursor:pointer;touch-action:manipulation}
+#osch-nav-launcher:hover,#osch-nav-launcher:focus-visible{background:#1b5c3b;color:#fff;outline:2px solid #8dd8a5;outline-offset:3px}
+#osch-nav-launcher .osch-launcher-site-icon{height:35px;width:35px;object-fit:contain;border-radius:6px;background:#fff;padding:2px;box-sizing:border-box}
+#osch-nav-dialog[hidden],#osch-nav-dialog[hidden] *{display:none!important}
+#osch-nav-dialog{position:fixed!important;inset:0!important;z-index:160000!important;isolation:isolate!important}
+#osch-nav-dialog .osch-nav-backdrop{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:0;background:rgba(4,23,14,.06);backdrop-filter:none;cursor:default}
+#osch-nav-dialog .osch-nav-popup{position:absolute;bottom:calc(81px + env(safe-area-inset-bottom));left:max(14px,env(safe-area-inset-left));top:auto;right:auto;transform:none;width:min(25vw,420px);min-width:285px;max-width:calc(100vw - 24px);height:min(70dvh,610px);display:flex;flex-direction:column;overflow:hidden;border:1px solid #bfd8c7;border-radius:19px;background:#f8faf4;box-shadow:0 26px 84px rgba(0,0,0,.34);font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#153f2a}
+#osch-nav-dialog .osch-nav-header{display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;gap:14px;padding:12px 14px;background:#0d3826;color:#fff}
+#osch-nav-dialog .osch-nav-brand{display:flex;align-items:center;gap:12px;min-width:0}
+#osch-nav-dialog .osch-nav-brand-mark{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;background:#fff;border-radius:9px;overflow:hidden}
+#osch-nav-dialog .osch-nav-brand-img{display:block;width:100%;height:100%;object-fit:contain}
+#osch-nav-dialog .osch-nav-brand strong{display:block;font-size:17px;letter-spacing:.045em;line-height:1.3;color:#fff}
+#osch-nav-dialog .osch-nav-brand small{display:block;font-size:11px;color:#cfecda;letter-spacing:.015em;line-height:1.4}
+#osch-nav-dialog .osch-nav-close{flex:0 0 42px;width:42px;height:42px;border:1px solid #4b7b60;border-radius:12px;background:#1a5739;color:#fff;font-size:28px;line-height:1;cursor:pointer}
+#osch-nav-dialog .osch-nav-close:hover,#osch-nav-dialog .osch-nav-close:focus-visible{background:#2c704a;outline:2px solid #a5e2b3}
+#osch-nav-dialog .osch-nav-menuhost{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;padding:10px 10px 18px;scrollbar-color:#b0cab7 transparent}
+/* Rehome the real capability-filtered WordPress menu. Kill drawer/menu sizing, hover flyouts, and legacy icon tiles. */
+body.wp-admin #osch-nav-dialog #adminmenuwrap{display:block!important;position:static!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;float:none!important;transform:none!important;width:100%!important;height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important;padding:0!important;margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu{position:static!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:5px 14px!important;width:100%!important;height:auto!important;min-height:0!important;float:none!important;margin:0!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.wp-menu-separator,
+body.wp-admin #osch-nav-dialog #adminmenu>.osch-navigation-identity,
+body.wp-admin #osch-nav-dialog #adminmenu #collapse-menu{display:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top{position:relative!important;display:block!important;float:none!important;clear:none!important;align-self:start!important;min-width:0!important;width:100%!important;box-sizing:border-box!important;margin:0!important;padding:0!important;border:1px solid #d8e6dd!important;border-radius:11px!important;background:#fff!important;color:#16412d!important;box-shadow:none!important;overflow:hidden!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top[hidden]{display:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top>a.menu-top{position:relative!important;display:grid!important;grid-template-columns:34px minmax(0,1fr)!important;gap:9px!important;align-items:center!important;float:none!important;width:100%!important;min-height:54px!important;height:auto!important;box-sizing:border-box!important;margin:0!important;padding:10px 44px 10px 12px!important;border-radius:0!important;border:0!important;outline-offset:-2px!important;background:transparent!important;color:#17462f!important;box-shadow:none!important;text-decoration:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top>a.menu-top:hover,
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top>a.menu-top:focus,
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top.current>a.menu-top,
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top.wp-has-current-submenu>a.menu-top{background:#e7f3ea!important;color:#104125!important;box-shadow:none!important;outline-color:#527c5e!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-image{display:grid!important;place-items:center!important;position:static!important;float:none!important;width:29px!important;min-width:29px!important;height:29px!important;min-height:29px!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;line-height:1!important;color:#205a3c!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-image svg{width:23px!important;height:23px!important;color:#215d3f!important;stroke-width:1.9!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-image img{max-height:23px!important;max-width:23px!important;object-fit:contain!important;filter:none!important;opacity:1!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-image:before{color:#246448!important;font-size:21px!important;line-height:29px!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-nav-symbol:before{display:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-name{display:block!important;min-width:0!important;margin:0!important;padding:0!important;font-size:14px!important;font-weight:670!important;line-height:1.35!important;letter-spacing:0!important;color:inherit!important;white-space:normal!important;overflow-wrap:anywhere!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-submenu-toggle{position:absolute;right:7px;top:10px;z-index:2;width:35px;min-height:34px;border:1px solid #d8e6db;border-radius:9px;background:#f6faf7;color:#164e32;font-weight:700;font-size:21px;line-height:1;cursor:pointer}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-submenu-toggle:hover{background:#ddefe0}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-submenu-toggle:focus-visible{outline:2px solid #14532d;outline-offset:1px}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-arrow,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu-head{display:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu li.menu-top>.wp-submenu,
+body.wp-admin #osch-nav-dialog #adminmenu li.menu-top:hover>.wp-submenu,
+body.wp-admin #osch-nav-dialog #adminmenu li.menu-top.opensub>.wp-submenu{display:none!important;visibility:visible!important;position:static!important;float:none!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;width:100%!important;min-width:0!important;height:auto!important;margin:0!important;padding:5px 7px 8px!important;border:0!important;border-top:1px solid #e1ede4!important;border-radius:0!important;background:#fff!important;box-shadow:none!important;opacity:1!important;transform:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu li.menu-top.osch-submenu-open>.wp-submenu{display:block!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu li{float:none!important;width:100%!important;margin:0!important;padding:0!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu a{display:block!important;position:static!important;width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:9px 10px!important;line-height:1.5!important;font-size:13px!important;border-radius:7px!important;background:transparent!important;color:#315b43!important;text-decoration:none!important;overflow-wrap:anywhere!important;white-space:normal!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu a:hover,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu li.current>a{background:#e9f4ec!important;color:#134d2d!important;outline:none!important;box-shadow:none!important}
+#osch-nav-dialog .osch-nav-footer{display:flex;gap:12px;justify-content:space-between;align-items:center;flex:0 0 auto;padding:8px 12px;border-top:1px solid #dce9df;background:#fff;color:#53715d;font-size:11px}
+#osch-nav-dialog .osch-nav-footer a{color:#165b34;text-decoration:none;font-weight:700}
+@media(max-width:782px){
+ body.wp-admin.osch-modal-navigation-ready #wpcontent{margin-left:0!important;padding-left:9px!important;padding-right:9px!important}
+ #osch-nav-dialog .osch-nav-popup{width:min(78vw,350px);min-width:0;height:min(56dvh,490px);bottom:calc(79px + env(safe-area-inset-bottom));left:max(12px,env(safe-area-inset-left));border-radius:14px}
+ #osch-nav-dialog .osch-nav-header{padding:9px 10px}
+ #osch-nav-dialog .osch-nav-menuhost{padding:8px 9px 14px}
+ body.wp-admin #osch-nav-dialog #adminmenu{grid-template-columns:minmax(0,1fr)!important;gap:7px!important}
+ body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top>a.menu-top{min-height:52px!important}
+ #osch-nav-launcher{bottom:max(14px,env(safe-area-inset-bottom))!important;left:max(12px,env(safe-area-inset-left))!important}
+}
+@media(prefers-reduced-motion:reduce){#osch-nav-dialog .osch-nav-backdrop{backdrop-filter:none}}
+
+/* v20.2.1: remove the entire admin top bar; controls live in the right-side Top Bar popup. */
+html.wp-toolbar:has(body.wp-admin #n9be-admin-launcher){padding-top:0!important}
+body.wp-admin:has(#n9be-admin-launcher) #wpadminbar{display:none!important}
+body.wp-admin:has(#n9be-admin-launcher) #wpbody{padding-top:0!important}
+body.wp-admin:has(#n9be-admin-launcher) #wpcontent{padding-top:0!important}
+body.wp-admin #n9be-admin-launcher{z-index:170030!important}
+@media(max-width:782px){html.wp-toolbar:has(body.wp-admin #n9be-admin-launcher){padding-top:0!important}body.wp-admin:has(#n9be-admin-launcher) #wpbody{margin-top:0!important}body.wp-admin:has(#n9be-admin-launcher) .interface-interface-skeleton{top:0!important}}
+
+/* v20.2.6: remove both WordPress's native triangle accents from the popup.
+   Keep the explicit (+/-) submenu control as the only submenu indicator. */
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-arrow,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-arrow div,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-arrow:before,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-arrow:after,
+body.wp-admin #osch-nav-dialog #adminmenu > li.menu-top > a.menu-top:before,
+body.wp-admin #osch-nav-dialog #adminmenu > li.menu-top > a.menu-top:after,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu:before,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu:after{display:none!important;content:none!important;border:0!important}
+body.wp-admin #osch-nav-dialog #adminmenu > li.menu-top.osch-navigation-hidden,
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu li[hidden]{display:none!important}

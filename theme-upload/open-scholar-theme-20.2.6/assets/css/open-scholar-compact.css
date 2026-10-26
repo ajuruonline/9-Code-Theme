@@ -1,0 +1,251 @@
+/* Open Scholar 20.2.4 — compact-by-default, mobile-first density layer.
+ * Institutional green and per-app recognition colours remain unchanged.
+ * This CSS adjusts spacing only; it does not hide actions, forms, apps or labels.
+ */
+:root{--osch-space-1:4px;--osch-space-2:7px;--osch-space-3:10px;--osch-space-4:14px;--osch-compact-radius:11px}
+
+/* 1. Dashboard: content starts immediately; no billboard-size hero or empty cards. */
+body.wp-admin.osch-workspace-home .osch-workspace{max-width:none!important;margin:0!important;padding:10px 10px 44px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-hero{padding:16px 20px!important;border-radius:16px!important;box-shadow:0 5px 18px #082a1b12!important}
+body.wp-admin.osch-workspace-home .osch-workspace-hero:after{width:190px!important;height:190px!important;top:-95px!important;right:-70px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-identity{gap:8px!important;font-size:12px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-identity img{max-height:38px!important;max-width:38px!important;padding:4px!important;border-radius:9px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-identity small{margin-top:1px!important;letter-spacing:.1em!important}
+body.wp-admin.osch-workspace-home .osch-workspace-hero-top{gap:7px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-hero-top .osch-workspace-status{padding:5px 8px!important;font-size:10px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-hero-body{margin-top:12px!important;max-width:850px!important}
+body.wp-admin.osch-workspace-home .osch-hero-kicker{gap:8px!important;font-size:9px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-hero-body h1{font-size:clamp(26px,3vw,39px)!important;line-height:1.1!important;margin:6px 0 5px!important;letter-spacing:-.038em!important}
+body.wp-admin.osch-workspace-home .osch-workspace-hero-body p{font-size:12px!important;line-height:1.45!important;max-width:740px!important;margin:5px 0!important}
+body.wp-admin.osch-workspace-home .osch-workspace-actions{gap:6px!important;margin-top:10px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-actions a{gap:9px!important;min-height:38px!important;padding:7px 11px!important;border-radius:9px!important;font-size:11px!important}
+body.wp-admin.osch-workspace-home .osch-latest,body.wp-admin.osch-workspace-home .osch-apps{margin-top:14px!important}
+body.wp-admin.osch-workspace-home .osch-latest-heading,body.wp-admin.osch-workspace-home .osch-apps-heading{gap:7px!important;margin-bottom:8px!important}
+body.wp-admin.osch-workspace-home .osch-latest-heading h2,body.wp-admin.osch-workspace-home .osch-apps-heading h2{font-size:20px!important;margin:2px 0!important}
+body.wp-admin.osch-workspace-home .osch-apps-heading p{margin:2px 0 0!important;line-height:1.4!important}
+body.wp-admin.osch-workspace-home .osch-live-stamp{gap:5px!important;font-size:10px!important}
+body.wp-admin.osch-workspace-home .osch-latest-grid{gap:8px!important;grid-template-columns:minmax(0,1.8fr) minmax(220px,1fr)}
+body.wp-admin.osch-workspace-home .osch-latest-panel{padding:11px 13px!important;border-radius:12px!important;box-shadow:0 3px 12px #123d2a08!important}
+body.wp-admin.osch-workspace-home .osch-latest-panel h3{margin:0 0 5px!important;font-size:12px!important}
+body.wp-admin.osch-workspace-home .osch-latest-panel ul{margin-bottom:5px!important}
+body.wp-admin.osch-workspace-home .osch-latest-panel li{gap:6px!important;padding:5px 0!important}
+body.wp-admin.osch-workspace-home .osch-latest-panel p{margin:4px 0!important;line-height:1.4!important}
+body.wp-admin.osch-workspace-home .osch-latest-panel-tools strong{font-size:21px!important}
+body.wp-admin.osch-workspace-home .osch-app-search input{width:min(250px,100%)!important;min-height:38px!important;padding:5px 9px 5px 35px!important;border-radius:9px!important}
+body.wp-admin.osch-workspace-home .osch-app-filters{gap:5px!important;margin:3px 0 9px!important}
+body.wp-admin.osch-workspace-home .osch-app-filters button{min-height:32px!important;padding:5px 11px!important;border-radius:9px!important}
+body.wp-admin.osch-workspace-home .osch-app-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,195px),1fr))!important;gap:8px!important;align-items:start!important}
+body.wp-admin.osch-workspace-home .osch-app-tile{min-height:0!important;padding:10px 11px!important;gap:6px!important;border-radius:12px!important;box-shadow:0 2px 9px #123d2a08!important}
+body.wp-admin.osch-workspace-home .osch-app-card-head{gap:6px!important}
+body.wp-admin.osch-workspace-home .osch-app-card-head .osch-app-symbol{width:40px!important;height:40px!important;border-radius:11px!important}
+body.wp-admin.osch-workspace-home .osch-app-symbol .osch-app-svg{width:22px!important;height:22px!important}
+body.wp-admin.osch-workspace-home .osch-app-symbol img{width:24px!important;height:24px!important}
+body.wp-admin.osch-workspace-home .osch-app-symbol .osch-app-monogram{height:15px!important;min-width:17px!important;font-size:7px!important;right:-4px!important;bottom:-4px!important;border-radius:5px!important}
+body.wp-admin.osch-workspace-home .osch-app-card-head .osch-app-type{max-width:calc(100% - 45px)!important;font-size:9px!important;line-height:1.25!important}
+body.wp-admin.osch-workspace-home .osch-app-title h3{font-size:14px!important;line-height:1.25!important;margin:0!important}
+body.wp-admin.osch-workspace-home .osch-app-title{gap:4px!important}
+body.wp-admin.osch-workspace-home .osch-app-desc{flex:0 0 auto!important;font-size:11px!important;line-height:1.35!important;margin:0!important;color:#42574a!important}
+body.wp-admin.osch-workspace-home .osch-app-submenus{margin-top:2px!important;padding-top:5px!important}
+body.wp-admin.osch-workspace-home .osch-app-submenus summary{min-height:30px!important;gap:5px!important}
+body.wp-admin.osch-workspace-home .osch-app-submenus ul{margin:3px -3px 0!important}
+body.wp-admin.osch-workspace-home .osch-app-submenus li a{padding:6px 7px!important;min-height:30px!important;box-sizing:border-box!important}
+body.wp-admin.osch-workspace-home .osch-app-no-submenu{margin-top:2px!important;padding-top:6px!important}
+body.wp-admin.osch-workspace-home .osch-workspace-footer{margin-top:14px!important;padding-top:9px!important;gap:8px!important}
+
+/* 2. Admin screens: less unused space in settings, lists, panels and forms.
+ * Scope to theme admin classes; do not compress the Gutenberg editing canvas. */
+body.wp-admin.ncu-admin-skin.osch-modal-navigation-ready #wpcontent{padding-left:10px!important;padding-right:10px!important}
+body.wp-admin.ncu-admin-skin #wpbody-content>.wrap{margin:5px 0!important;padding:4px 0 35px!important;max-width:none!important;box-sizing:border-box!important}
+body.wp-admin.ncu-admin-skin .wrap>h1:first-child,body.wp-admin.ncu-admin-skin h1.wp-heading-inline{margin:8px 0!important;font-size:21px!important}
+body.wp-admin.ncu-admin-skin .ncu-workspace-context{min-height:38px!important;gap:6px!important;margin:0 0 4px!important;padding:5px 9px!important}
+body.wp-admin.ncu-admin-skin .ncu-workspace-context__identity{gap:6px!important}
+body.wp-admin.ncu-admin-skin .ncu-workspace-context__actions{gap:4px!important}
+body.wp-admin.ncu-admin-skin .ncu-admin{max-width:none!important}
+body.wp-admin.ncu-admin-skin .ncu-admin__hero{gap:10px!important;margin:7px 0!important;padding:12px!important;border-radius:12px!important}
+body.wp-admin.ncu-admin-skin .ncu-panel{margin:7px 0!important;border-radius:11px!important}
+body.wp-admin.ncu-admin-skin .ncu-panel>summary{padding:9px 11px!important;font-size:14px!important}
+body.wp-admin.ncu-admin-skin .ncu-panel>div,body.wp-admin.ncu-admin-skin .ncu-panel>form,body.wp-admin.ncu-admin-skin .ncu-panel>h3{margin-left:10px!important;margin-right:10px!important}
+body.wp-admin.ncu-admin-skin .ncu-panel--padded{padding:10px!important}
+body.wp-admin.ncu-admin-skin .ncu-panel-heading{padding:9px 11px 4px!important}
+body.wp-admin.ncu-admin-skin .ncu-grid{gap:8px!important;padding:8px 0!important}
+body.wp-admin.ncu-admin-skin .ncu-dashboard-grid{gap:8px!important;margin:9px 0!important}
+body.wp-admin.ncu-admin-skin .ncu-dashboard-card{min-height:0!important;padding:11px!important}
+body.wp-admin.ncu-admin-skin .ncu-dashboard-card h2{margin:5px 0 4px!important;font-size:15px!important}
+body.wp-admin.ncu-admin-skin .ncu-dashboard-card p{min-height:0!important;margin:5px 0!important}
+body.wp-admin.ncu-admin-skin .ncu-status-strip{gap:6px 10px!important;padding:7px 9px!important;margin:8px 0!important}
+body.wp-admin.ncu-admin-skin .ncu-action-row{gap:6px!important;padding:6px 10px!important}
+body.wp-admin.ncu-admin-skin .ncu-tools{gap:5px!important;margin:7px 0!important}
+body.wp-admin.ncu-admin-skin .ncu-checks{gap:7px!important;padding-bottom:7px!important}
+body.wp-admin.ncu-admin-skin .ncu-popup-editor{margin:0 10px 8px!important;padding:7px 9px!important}
+body.wp-admin.ncu-admin-skin .ncu-builder-type-grid,body.wp-admin.ncu-admin-skin .ncu-builder-explain{gap:7px!important}
+body.wp-admin.ncu-admin-skin .ncu-builder-type-grid label,body.wp-admin.ncu-admin-skin .ncu-builder-explain>div{gap:7px!important;padding:8px!important}
+body.wp-admin.ncu-admin-skin .ncu-health-row{padding:7px 10px!important;gap:7px!important}
+body.wp-admin.ncu-admin-skin .ncu-doctor-summary{margin:8px 0!important;padding:8px!important}
+body.wp-admin.ncu-admin-skin .ncu-dark-palette-card,body.wp-admin.ncu-admin-skin .ncu-style-card{gap:6px!important;padding:9px!important}
+body.wp-admin.ncu-admin-skin .ncu-dark-palette-grid,body.wp-admin.ncu-admin-skin .ncu-style-current-preview{gap:8px!important;margin:8px 0!important}
+body.wp-admin.ncu-admin-skin .ncu-style-family{margin:8px 0!important}
+body.wp-admin.ncu-admin-skin .ncu-style-library-heading{gap:9px!important;margin-bottom:8px!important}
+body.wp-admin.ncu-admin-skin .form-table th{padding:9px 10px 8px 0!important}
+body.wp-admin.ncu-admin-skin .form-table td{padding:7px 10px!important}
+body.wp-admin.ncu-admin-skin .form-table tr{border-bottom-color:#d7e9de!important}
+body.wp-admin.ncu-admin-skin .form-table input.regular-text{max-width:min(100%,460px)!important}
+body.wp-admin.ncu-admin-skin .postbox .inside,body.wp-admin.ncu-admin-skin .stuffbox .inside{padding:9px 11px!important;margin:0!important}
+body.wp-admin.ncu-admin-skin .postbox .hndle,body.wp-admin.ncu-admin-skin .postbox-header h2{padding:9px 11px!important}
+body.wp-admin.ncu-admin-skin .postbox{margin-bottom:8px!important}
+body.wp-admin.ncu-admin-skin .tablenav{margin:5px 0!important;min-height:36px!important}
+body.wp-admin.ncu-admin-skin .wrap .nav-tab-wrapper{margin:8px 0!important;padding-top:0!important;gap:5px!important}
+body.wp-admin.ncu-admin-skin .wrap .nav-tab{padding:6px 10px!important;font-size:12px!important}
+body.wp-admin.ncu-admin-skin .submit{margin:8px 0!important;padding-top:8px!important}
+body.wp-admin.ncu-admin-skin .osch-control-centre{max-width:none!important;margin:8px 0!important;padding:11px!important}
+body.wp-admin.ncu-admin-skin .osch-control-centre h1{font-size:clamp(23px,3vw,32px)!important}
+body.wp-admin.ncu-admin-skin .osch-control-grid{gap:8px!important;margin-top:11px!important}
+body.wp-admin.ncu-admin-skin .osch-control-grid a{min-height:0!important;padding:11px!important;gap:5px!important;border-radius:11px!important}
+
+/* 3. Floating right launcher: dense controls, no oversized outer rail or padding. */
+#n9be-admin-launcher{gap:3px!important;right:max(5px,env(safe-area-inset-right))!important}
+#n9be-admin-launcher .n9be-rail-button{width:39px!important;height:39px!important;min-width:39px!important;min-height:39px!important;box-sizing:border-box!important;border-radius:10px!important;box-shadow:0 2px 8px #05291c22!important}
+#n9be-admin-launcher svg{width:21px!important;height:21px!important}
+
+/* 4. Quick Actions: two useful, compact buttons per row, no 112px blank tiles. */
+.n9be-quick-drawer .n9be-quick-drawer__panel{top:50%!important;bottom:auto!important;right:50px!important;transform:translateY(-50%)!important;width:min(326px,calc(100vw - 65px))!important;height:auto!important;max-height:min(76dvh,590px)!important;border-radius:13px!important;overflow:hidden!important}
+.n9be-quick-drawer .n9be-quick-drawer__panel header{align-items:center!important;gap:7px!important;padding:9px 10px!important}
+.n9be-quick-drawer .n9be-quick-drawer__panel header strong{font-size:15px!important;margin-top:0!important}
+.n9be-quick-drawer .n9be-quick-drawer__panel header button{min-width:36px!important;min-height:36px!important;width:36px!important;height:36px!important;border-radius:9px!important}
+.n9be-quick-drawer .n9be-quick-grid{gap:5px!important;padding:8px!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;min-height:0!important;align-content:start!important}
+.n9be-quick-drawer .n9be-quick-item{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:6px!important;min-width:0!important;min-height:43px!important;height:auto!important;padding:7px 8px!important;border-radius:9px!important;background:#fff!important;color:#14532d!important;border-color:#b7d7c0!important}
+.n9be-quick-drawer .n9be-quick-item:hover,.n9be-quick-drawer .n9be-quick-item:focus-visible{background:#e7f3ea!important;border-color:#14532d!important;color:#123d2a!important}
+.n9be-quick-drawer .n9be-quick-item svg{width:18px!important;height:18px!important;flex-shrink:0!important;color:#14532d!important}
+.n9be-quick-drawer .n9be-quick-item .dashicons{font-size:18px!important;flex-basis:18px!important;color:#14532d!important}
+.n9be-quick-drawer .n9be-quick-item b{font-size:11px!important;line-height:1.2!important;font-weight:700!important}
+.n9be-quick-drawer .n9be-quick-drawer__panel footer{padding:7px 10px!important}
+.n9be-plugin-dialog{width:min(400px,calc(100vw - 16px))!important;border-radius:12px!important}
+.n9be-plugin-dialog header{padding:9px 11px!important;gap:7px!important}
+.n9be-plugin-dialog form{gap:8px!important;padding:10px!important}
+
+/* 5. Open Scholar left navigation: content-sized popup, compact menu rows. */
+#osch-nav-launcher{width:44px!important;height:44px!important;min-height:44px!important;padding:5px!important;bottom:max(7px,env(safe-area-inset-bottom))!important;left:max(6px,env(safe-area-inset-left))!important;border-radius:11px!important}
+#osch-nav-launcher .osch-launcher-site-icon{width:30px!important;height:30px!important}
+#osch-nav-dialog .osch-nav-popup{height:auto!important;max-height:min(75dvh,610px)!important;width:min(300px,calc(100vw - 58px))!important;min-width:0!important;bottom:calc(56px + env(safe-area-inset-bottom))!important;left:max(6px,env(safe-area-inset-left))!important;border-radius:13px!important}
+#osch-nav-dialog .osch-nav-header{gap:7px!important;padding:7px 9px!important}
+#osch-nav-dialog .osch-nav-brand{gap:7px!important}
+#osch-nav-dialog .osch-nav-brand-mark{width:32px!important;height:32px!important;flex-basis:32px!important;border-radius:8px!important}
+#osch-nav-dialog .osch-nav-brand strong{font-size:14px!important}
+#osch-nav-dialog .osch-nav-brand small{font-size:10px!important}
+#osch-nav-dialog .osch-nav-close{flex-basis:36px!important;width:36px!important;height:36px!important;border-radius:9px!important;font-size:23px!important}
+#osch-nav-dialog .osch-nav-menuhost{padding:5px 6px 7px!important}
+body.wp-admin #osch-nav-dialog #adminmenu{gap:3px!important;padding:0!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top{border-radius:9px!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top>a.menu-top{grid-template-columns:27px minmax(0,1fr)!important;gap:6px!important;min-height:40px!important;padding:5px 37px 5px 8px!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-image{width:25px!important;min-width:25px!important;height:25px!important;min-height:25px!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-image svg{width:20px!important;height:20px!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-image:before{font-size:19px!important;line-height:25px!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-menu-name{font-size:12px!important;line-height:1.2!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-submenu-toggle{width:31px!important;min-height:30px!important;top:5px!important;right:4px!important;border-radius:8px!important;font-size:18px!important}
+body.wp-admin #osch-nav-dialog #adminmenu li.menu-top>.wp-submenu{padding:3px 5px 5px!important}
+body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu a{padding:6px 8px!important;line-height:1.3!important;font-size:11px!important}
+#osch-nav-dialog .osch-nav-footer{gap:5px!important;padding:6px 8px!important}
+
+/* 6. Top Bar/Search side popups: small gutters, no unused full-screen panels. */
+.n9be-side-panel{width:min(305px,calc(100vw - 61px))!important;right:max(48px,calc(45px + env(safe-area-inset-right)))!important;max-height:min(72dvh,550px)!important;border-radius:12px!important}
+.n9be-side-panel header{padding:8px 10px!important;gap:6px!important}
+.n9be-side-panel header h2{font-size:15px!important;margin:1px 0 0!important}
+.n9be-side-panel header button{width:36px!important;height:36px!important;min-width:36px!important;border-radius:9px!important}
+.n9be-side-content{padding:8px!important}
+.n9be-side-content h3{margin:9px 0 5px!important}
+.n9be-side-actions,.n9be-tool-list{gap:5px!important}
+.n9be-side-actions>a,.n9be-side-actions>button,.n9be-tool-list>a,.n9be-tool-list>button{gap:6px!important;padding:7px 8px!important;min-height:40px!important;border-radius:8px!important;font-size:11px!important}
+.n9be-toolbar-extra{margin-top:9px!important;padding:7px!important;border-radius:9px!important}
+.n9be-toolbar-extra .n9be-tool-list{margin-top:6px!important}
+.n9be-search-form{gap:5px!important}
+.n9be-search-form .n9be-search-fields{gap:5px!important}
+.n9be-side-panel input[type=search],.n9be-side-panel select{height:40px!important;min-height:40px!important;padding:5px 8px!important}
+.n9be-search-fields button{min-width:55px!important;padding:6px 9px!important}
+.n9be-clear-cache-button{min-height:40px!important;margin-bottom:4px!important;padding:6px 8px!important;border-radius:8px!important}
+.n9be-cache-result{margin:3px 0 5px!important}
+
+/* 7. Mobile: retain legible labels and usable targets without padded emptiness. */
+@media(max-width:782px){
+ body.wp-admin.osch-workspace-home .osch-workspace{padding:7px 7px 45px!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-hero{padding:11px 12px!important;border-radius:12px!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-hero-body{margin-top:9px!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-hero-body h1{font-size:clamp(23px,5.3vw,31px)!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-hero-body p{font-size:11px!important}
+ body.wp-admin.osch-workspace-home .osch-hero-kicker{font-size:8px!important}
+ body.wp-admin.osch-workspace-home .osch-latest-grid{grid-template-columns:minmax(0,1fr)!important}
+ body.wp-admin.osch-workspace-home .osch-latest-panel{padding:9px 10px!important}
+ body.wp-admin.osch-workspace-home .osch-latest,body.wp-admin.osch-workspace-home .osch-apps{margin-top:11px!important}
+ body.wp-admin.osch-workspace-home .osch-latest-heading,body.wp-admin.osch-workspace-home .osch-apps-heading{gap:4px!important;margin-bottom:6px!important}
+ body.wp-admin.osch-workspace-home .osch-app-search{width:100%!important}
+ body.wp-admin.osch-workspace-home .osch-app-search input{width:100%!important}
+ body.wp-admin.osch-workspace-home .osch-app-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+ body.wp-admin.osch-workspace-home .osch-app-tile{padding:8px!important;gap:5px!important;border-radius:10px!important}
+ body.wp-admin.osch-workspace-home .osch-app-card-head .osch-app-symbol{width:35px!important;height:35px!important;border-radius:9px!important}
+ body.wp-admin.osch-workspace-home .osch-app-symbol .osch-app-svg{width:20px!important;height:20px!important}
+ body.wp-admin.osch-workspace-home .osch-app-card-head .osch-app-type{font-size:8px!important;max-width:calc(100% - 40px)!important}
+ body.wp-admin.osch-workspace-home .osch-app-title h3{font-size:12px!important}
+ body.wp-admin.osch-workspace-home .osch-app-desc{font-size:10.5px!important;line-height:1.35!important}
+ body.wp-admin.ncu-admin-skin.osch-modal-navigation-ready #wpcontent{padding-left:6px!important;padding-right:6px!important}
+ body.wp-admin.ncu-admin-skin #wpbody-content>.wrap{padding:5px 1px 45px!important}
+ body.wp-admin.ncu-admin-skin .ncu-admin__hero{padding:9px!important}
+ body.wp-admin.ncu-admin-skin .ncu-panel>summary{padding:8px 9px!important}
+ body.wp-admin.ncu-admin-skin .ncu-grid,body.wp-admin.ncu-admin-skin .ncu-dashboard-grid{gap:7px!important}
+ #n9be-admin-launcher{gap:3px!important;right:max(5px,env(safe-area-inset-right))!important}
+ #n9be-admin-launcher .n9be-rail-button{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
+ .n9be-quick-drawer .n9be-quick-drawer__panel{inset:auto 49px max(7px,env(safe-area-inset-bottom)) auto!important;transform:none!important;width:min(320px,calc(100vw - 62px))!important;max-height:75dvh!important}
+ .n9be-quick-drawer .n9be-quick-item{min-height:42px!important}
+ #osch-nav-dialog .osch-nav-popup{width:min(300px,calc(100vw - 60px))!important;max-height:67dvh!important}
+ .n9be-side-panel{width:min(295px,calc(100vw - 61px))!important;right:max(49px,calc(45px + env(safe-area-inset-right)))!important;max-height:72dvh!important}
+}
+@media(max-width:360px){body.wp-admin.osch-workspace-home .osch-app-grid{grid-template-columns:minmax(0,1fr)!important}}
+@media(prefers-reduced-motion:reduce){body.wp-admin.osch-workspace-home .osch-app-tile:hover{transform:none!important}}
+/* Large screens: use the right side of the hero for actions instead of an empty void. */
+@media(min-width:900px){
+ body.wp-admin.osch-workspace-home .osch-workspace-hero{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;column-gap:15px!important;row-gap:9px!important;align-items:end!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-hero-top{grid-column:1/-1!important;grid-row:1!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-hero-body{grid-column:1!important;grid-row:2!important;margin-top:0!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-actions{grid-column:2!important;grid-row:2!important;align-self:end!important;justify-content:flex-end!important;flex-wrap:wrap!important;max-width:310px!important;margin:0!important}
+ body.wp-admin.osch-workspace-home .osch-workspace-hero-body h1{font-size:clamp(26px,2.5vw,35px)!important}
+}
+/* Narrow devices: show every application filter, without a sideways-scrolling strip. */
+@media(max-width:782px){
+ body.wp-admin.osch-workspace-home .osch-app-filters{flex-wrap:wrap!important;overflow-x:visible!important;max-width:100%!important;padding-bottom:0!important}
+ body.wp-admin.osch-workspace-home .osch-app-filters button{flex:0 1 auto!important;white-space:normal!important;padding:5px 8px!important}
+}
+
+/* v20.2.5: 90%-height navigation anchored 10% from screen top.
+   Scrolling stays inside the menu host; selection remains visible. */
+#osch-nav-dialog .osch-nav-popup{
+ top:10dvh!important;
+ bottom:0!important;
+ box-sizing:border-box!important;
+ height:90dvh!important;
+ max-height:90dvh!important;
+ border-radius:13px 13px 0 0!important;
+}
+#osch-nav-dialog .osch-nav-menuhost{
+ flex:1 1 auto!important;
+ min-height:0!important;
+ overflow-y:auto!important;
+ overscroll-behavior:contain!important;
+ scroll-behavior:auto!important;
+}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-nav-current-page{
+ background:#d9efdf!important;
+ color:#103d28!important;
+ font-weight:800!important;
+ box-shadow:inset 3px 0 #14532d!important;
+}
+@media(max-width:782px){
+ #osch-nav-dialog .osch-nav-popup{top:10dvh!important;bottom:0!important;height:90dvh!important;max-height:90dvh!important}
+}
+
+/* OS-STD-001 / institution visual-management rule (20.2.6):
+ * ANY actual border or outline means no corner radius, including third-party admin
+ * controls added after the page opens. Borderless surfaces may remain rounded.
+ * The companion lightweight JS applies this class from computed border styles.
+ */
+body.wp-admin .osch-sharp-lined,
+body.login .osch-sharp-lined,
+body .osch-sharp-lined {border-radius:0!important}
+/* Decorative outlined accent around hero is a CSS pseudo-element, not a DOM element. */
+body.wp-admin .osch-workspace-hero:after {border-radius:0!important}
