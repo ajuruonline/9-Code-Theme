@@ -25,3 +25,9 @@ Verification: docs/ULTRON-RABBIT-2.0.0.md.
 
 Not yet done: a full form-style redesign of the block canvas itself, and a branded version of Gutenberg's
 own ⋮ options panel (it opens from the menu, but keeps Gutenberg's styling).
+
+## 2.0.2 — Compact editor on phones
+
+- Less spacing in the editor header, title and meta boxes on phones. Move-up and move-down arrows are hidden on phones.
+- Meta box headers are filled green with white text. Each section has its own colour (five tones) so sections are easy to tell apart.
+- The one-line explanation sits under each section title.

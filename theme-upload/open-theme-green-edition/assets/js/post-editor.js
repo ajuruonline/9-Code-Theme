@@ -17,7 +17,7 @@
 		formatdiv: 'Format: how the content is laid out, such as standard or gallery.'
 	};
 	var DEFAULT_HELP = 'Extra settings for this item. Open only if you need them.';
-	var menu = null, toggle = null, list = null, observer = null, scheduled = 0;
+	var menu = null, toggle = null, list = null, observer = null, scheduled = 0, toneIndex = 0, TONES = 5;
 
 	function clean(text) { return String(text || '').replace(/\s+/g, ' ').trim(); }
 	function labelOf(el) { return clean(el.getAttribute('aria-label') || el.getAttribute('title') || el.textContent); }
@@ -112,11 +112,14 @@
 			if (!head) { return; }
 			box.setAttribute('data-ot-acc', '1');
 			box.classList.add('closed', 'ot-acc');
+			box.setAttribute('data-ot-tone', String(toneIndex % TONES));
+			toneIndex++;
 			var id = (box.id || '').replace(/^(?:edit-)?/, '');
 			var help = document.createElement('p');
 			help.className = 'ot-acc-help';
 			help.textContent = HELP[id] || DEFAULT_HELP;
-			head.parentNode.insertBefore(help, head.nextSibling);
+			var title = head.querySelector('.hndle, h2, h3') || head;
+			title.parentNode.insertBefore(help, title.nextSibling);
 			head.setAttribute('role', 'button');
 			head.setAttribute('tabindex', '0');
 			head.setAttribute('aria-expanded', 'false');
