@@ -27,11 +27,11 @@ try {
       assert.ok(await card.count(), width + 'px real WordPress-rendered post card must exist');
       const cardStyle = await card.evaluate(el => {
         const s = getComputedStyle(el);
-        return { width: s.borderTopWidth, style: s.borderTopStyle, radius: s.borderTopLeftRadius };
+        return { width: s.borderTopWidth, style: s.borderTopStyle, corners: [s.borderTopLeftRadius, s.borderTopRightRadius, s.borderBottomLeftRadius, s.borderBottomRightRadius] };
       });
       assert.notEqual(cardStyle.style, 'none', width + 'px card border must remain visible');
       assert.notEqual(cardStyle.width, '0px', width + 'px card border width must remain visible');
-      assert.equal(cardStyle.radius, '0px', width + 'px actual WordPress-rendered card must be square');
+      assert.deepEqual(cardStyle.corners, ['0px', '0px', '0px', '0px'], width + 'px actual WordPress-rendered card must have four square corners');
 
       // The lean Open Theme deliberately delegates its public header to plugins;
       // its icon/quick-grid/widget CSS contracts are checked on elements injected
