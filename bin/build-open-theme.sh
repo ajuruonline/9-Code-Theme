@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Draft-only Open Theme installer. Intentionally separate from the existing
-# 9 Code Alpha build; never overwrite or relabel that historical package.
+# Draft-only deterministic Open Theme installer. Intentionally separate from
+# the existing 9 Code Alpha build; never overwrite or relabel that package.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 source_dir="theme-upload/open-theme-green-edition"
@@ -18,11 +18,40 @@ fi
 mkdir -p dist
 archive="open-theme-$version.zip"
 rm -f "dist/$archive" "dist/SHA256SUMS-open-theme.txt"
-(
-  cd theme-upload
-  zip -qr "../dist/$archive" open-theme-green-edition \
-    -x '*.DS_Store' '*/.git/*' '*/.github/*' '*/.env' '*/.env.*' '*/node_modules/*'
-)
+# zip(1) copies checkout mtimes and produces different SHA-256 digests for
+# identical source across independent Actions runs. Normalize entry ordering,
+# DOS timestamps, permissions, extras and compression in Python stdlib.
+python3 - "$source_dir" "dist/$archive" <<'PY'
+from pathlib import Path
+from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED, ZIP_STORED
+import sys
+
+source = Path(sys.argv[1])
+target = Path(sys.argv[2])
+paths = sorted([source, *source.rglob('*')],
+               key=lambda p: p.relative_to(source.parent).as_posix())
+with ZipFile(target, 'w', compression=ZIP_DEFLATED, compresslevel=9) as z:
+    for item in paths:
+        if item.is_symlink():
+            raise SystemExit('Refusing to package theme symlinks')
+        parts = item.relative_to(source.parent).parts
+        if any(part in {'.git', '.github', 'node_modules', '.DS_Store'}
+               or part == '.env' or part.startswith('.env.') for part in parts):
+            continue
+        is_dir = item.is_dir()
+        name = item.relative_to(source.parent).as_posix() + ('/' if is_dir else '')
+        info = ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+        info.create_system = 3
+        info.external_attr = ((0o40755 if is_dir else 0o100644) << 16)
+        if is_dir:
+            info.external_attr |= 0x10
+            info.compress_type = ZIP_STORED
+            z.writestr(info, b'')
+        else:
+            info.compress_type = ZIP_DEFLATED
+            z.writestr(info, item.read_bytes(), compress_type=ZIP_DEFLATED,
+                       compresslevel=9)
+PY
 (
   cd dist
   unzip -tqq "$archive"
