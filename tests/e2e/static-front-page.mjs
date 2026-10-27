@@ -57,6 +57,6 @@ t.ok(wp('option', 'get', 'show_on_front') === originalMode,
 t.ok(wp('option', 'get', 'page_on_front') === originalFront,
   'cleanup restored the original static homepage ID');
 const remainingPages = wp('post', 'list', '--post_type=page', '--post_status=any', '--format=ids');
-t.ok(!remainingPages.split(/\\s+/).includes(fixtureId),
+t.ok(!remainingPages.split(/\s+/).includes(fixtureId),
   'cleanup permanently removed the disposable homepage page');
 t.done();
