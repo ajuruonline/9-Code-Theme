@@ -32,6 +32,8 @@ jobs:
         run: bin/setup-test-site.sh && bin/serve-test-site.sh
       - name: Public site
         run: node tests/e2e/public.mjs
+      - name: Static front-page mode (320/390/1280px)
+        run: node tests/e2e/static-front-page.mjs
       - name: Admin crawl
         run: node tests/e2e/crawl.mjs
       - name: Post editor acceptance
