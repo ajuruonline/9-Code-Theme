@@ -14,6 +14,8 @@
     }
     function inspect(element) {
         if (!element || element.nodeType !== 1 || element.namespaceURI !== 'http://www.w3.org/1999/xhtml') return;
+        // Surfaces marked data-keep-radius (the Open Scholar menu sheet) keep their rounded corners.
+        if (element.closest && element.closest('[data-keep-radius]')) return;
         var s = getComputedStyle(element), outlined = hasLine(s);
         if (element.classList.contains('osch-sharp-lined') !== outlined) element.classList.toggle('osch-sharp-lined', outlined);
         if (outlined && !previousInline.has(element)) {
@@ -26,8 +28,20 @@
             previousInline.delete(element);
         }
     }
-    function queue(element) {
+    /* Initial scan runs in idle time, a few elements at a time, so the first paint is not held up. */
+    function scanInIdle(root) {
+        var list = [root].concat(Array.prototype.slice.call(root.querySelectorAll('*')));
+        var index = 0;
+        var later = window.requestIdleCallback ? function (fn) { window.requestIdleCallback(fn, {timeout: 400}); } : function (fn) { window.setTimeout(fn, 16); };
+        (function step() {
+            var end = performance.now() + 8;
+            while (index < list.length && performance.now() < end) { inspect(list[index++]); }
+            if (index < list.length) later(step);
+        })();
+    }
+    function queue(element, shallow) {
         if (!element || element.nodeType !== 1) return;
+        if (shallow) { inspect(element); return; }
         pending.add(element);
         if (!frame) frame = requestAnimationFrame(function () {
             frame = 0;
@@ -42,10 +56,10 @@
     function start() {
         if (watched || !document.body) return;
         watched = true;
-        queue(document.body);
-        // Borders/outline can appear on hover or keyboard focus without a DOM mutation.
+        scanInIdle(document.body);
+        // Borders/outline can appear on hover or keyboard focus without a DOM mutation. Only the hovered element changes.
         ['focusin','focusout','pointerover','pointerout'].forEach(function (type) {
-            document.addEventListener(type, function (event) { queue(event.target); }, true);
+            document.addEventListener(type, function (event) { queue(event.target, true); }, true);
         });
         new MutationObserver(function (changes) {
             changes.forEach(function (mutation) {

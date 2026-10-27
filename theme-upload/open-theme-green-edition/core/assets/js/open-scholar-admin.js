@@ -144,6 +144,7 @@
 
         var root = document.createElement('div');
         root.id = 'osch-nav-dialog';
+        root.setAttribute('data-keep-radius', '');
         root.hidden = true;
         root.innerHTML = '<button type="button" class="osch-nav-backdrop" data-osch-close tabindex="-1" aria-label="Close menu"></button>' +
           '<section class="osch-nav-popup" role="dialog" aria-modal="true" aria-label="Open Scholar navigation">' +

@@ -172,3 +172,10 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Profile: Open Scholar fields and core personal details stay visible; other plugins' profile sections move into Advanced.
 - Side rail: the redundant menu button is removed (it stays only as the restore button for a minimised rail).
 - Menu on phones opens as a bottom sheet from the launcher.
+
+## 5.3.0 — Post filters, rounded menu sheet, lighter page start
+
+- Posts list: a green filter bar at the top with white controls to filter by category, tag and author. It sends the same parameters WordPress already uses, so results are unchanged.
+- Menu sheet on phones: a rounded card floating above the launcher. The square-corner rule for bordered boxes still applies everywhere else; the menu is marked to keep its radius.
+- Speed: the square-corner script now starts its first scan in idle time, a few elements per frame, so it no longer holds up the first paint. Hover and focus only check the element under the pointer.
+- Measured script time per screen: public front page about 30 ms; posts list about 60 ms; dashboard about 90 ms. The block editor's own script (about 570 ms) is WordPress core and is unchanged.
