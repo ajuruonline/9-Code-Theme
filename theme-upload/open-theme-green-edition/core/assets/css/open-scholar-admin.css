@@ -461,3 +461,35 @@ body.profile-php .form-table td .description,body.user-edit-php .form-table td .
 .osch-profile-advanced[open]>summary::after{content:"\2212"}
 .osch-profile-advanced>summary small{font-weight:400;font-style:italic;color:#4b5f53;font-size:12.5px}
 .osch-profile-advanced>.form-table,.osch-profile-advanced>#application-passwords-section{margin:0 12px 12px}
+
+/* ---- Phone lists: posts, pages, media and comments read like an app's list of cards. ---- */
+@media (max-width:782px){
+  body.wp-admin.edit-php #screen-meta-links,body.wp-admin.upload-php #screen-meta-links,body.wp-admin.edit-comments-php #screen-meta-links,
+  body.wp-admin.edit-php #screen-meta,body.wp-admin.upload-php #screen-meta,body.wp-admin.edit-comments-php #screen-meta{display:none!important}
+  body.wp-admin.edit-php .wrap h1.wp-heading-inline,body.wp-admin.upload-php .wrap h1.wp-heading-inline,body.wp-admin.edit-comments-php .wrap h1{font-size:24px;font-weight:800;color:#14532d;margin:6px 0 8px}
+  /* Add New becomes a floating action button. */
+  body.wp-admin.edit-php .page-title-action,body.wp-admin.upload-php .page-title-action{position:fixed!important;top:auto!important;right:16px!important;bottom:24px!important;left:auto!important;z-index:60;display:inline-flex!important;align-items:center;width:auto!important;height:auto!important;min-height:0!important;line-height:1.2;white-space:nowrap;margin:0!important;padding:12px 20px!important;border:0!important;border-radius:999px!important;background:#14532d!important;color:#fff!important;font-weight:700!important;box-shadow:0 8px 22px rgba(8,42,27,.28)}
+  /* Status filters become pills. */
+  body.wp-admin.edit-php .subsubsub,body.wp-admin.upload-php .subsubsub,body.wp-admin.edit-comments-php .subsubsub{display:flex;flex-wrap:wrap;gap:6px;float:none;margin:8px 0 10px}
+  body.wp-admin.edit-php .subsubsub li,body.wp-admin.upload-php .subsubsub li,body.wp-admin.edit-comments-php .subsubsub li{margin:0;padding:0}
+  body.wp-admin.edit-php .subsubsub li a,body.wp-admin.upload-php .subsubsub li a,body.wp-admin.edit-comments-php .subsubsub li a{display:inline-block;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid #cfe0d5;color:#14532d;font-weight:600}
+  body.wp-admin.edit-php .subsubsub li a.current,body.wp-admin.upload-php .subsubsub li a.current,body.wp-admin.edit-comments-php .subsubsub li a.current{background:#14532d;color:#fff;border-color:#14532d}
+  body.wp-admin.edit-php .subsubsub li .count,body.wp-admin.upload-php .subsubsub li .count{color:inherit;opacity:.85}
+  body.wp-admin.edit-php .subsubsub li .count{color:inherit}
+  /* Each row is a card. */
+  body.wp-admin.edit-php .wp-list-table tbody tr,body.wp-admin.edit-comments-php .wp-list-table tbody tr{display:block;margin:0 0 10px;padding:12px 14px;background:#fff;border:1px solid #dfe9e2;border-radius:16px;box-shadow:0 1px 3px rgba(8,42,27,.06)}
+  body.wp-admin.edit-php .wp-list-table tbody tr td,body.wp-admin.edit-comments-php .wp-list-table tbody tr td{display:block;padding:2px 0;border:0}
+  body.wp-admin.edit-php .wp-list-table tbody tr td.check-column,body.wp-admin.edit-comments-php .wp-list-table tbody tr td.check-column{display:inline-block;width:auto;vertical-align:top}
+  body.wp-admin.edit-php .wp-list-table td.title strong a,body.wp-admin.edit-comments-php .wp-list-table td.comment .author strong{font-size:16px;font-weight:700;color:#14532d}
+  body.wp-admin.edit-php .wp-list-table .row-actions,body.wp-admin.edit-comments-php .wp-list-table .row-actions{position:static;opacity:1!important;left:auto;padding:6px 0 0;font-size:13px;line-height:2.2}
+  body.wp-admin.edit-php .wp-list-table .row-actions span,body.wp-admin.edit-comments-php .wp-list-table .row-actions span{display:inline-block;margin:0 4px 4px 0;padding:3px 10px;border-radius:999px;background:#f1f7f3;border:1px solid #d7e6dc}
+  body.wp-admin.edit-php .wp-list-table .row-actions span a,body.wp-admin.edit-comments-php .wp-list-table .row-actions span a{color:#14532d;font-weight:600}
+  body.wp-admin.edit-php .wp-list-table .row-actions .trash a,body.wp-admin.edit-comments-php .wp-list-table .row-actions .trash a{color:#9f1d1d}
+  /* Header of the table is not needed as a row on phones. */
+  body.wp-admin.edit-php .wp-list-table thead,body.wp-admin.edit-php .wp-list-table tfoot,body.wp-admin.edit-comments-php .wp-list-table thead,body.wp-admin.edit-comments-php .wp-list-table tfoot{display:none}
+  body.wp-admin.edit-php .wp-list-table,body.wp-admin.edit-comments-php .wp-list-table{border:0;background:transparent}
+  body.wp-admin.edit-php .tablenav,body.wp-admin.edit-comments-php .tablenav{height:auto}
+  /* Search: full width, rounded. */
+  body.wp-admin.edit-php .search-box input[type=search],body.wp-admin.edit-comments-php .search-box input[type=search]{width:100%;max-width:100%;border-radius:999px;padding:6px 14px}
+  body.wp-admin.edit-php .search-box,body.wp-admin.edit-comments-php .search-box{display:flex;gap:8px;flex-wrap:wrap}
+}

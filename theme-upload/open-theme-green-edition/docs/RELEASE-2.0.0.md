@@ -155,3 +155,11 @@ A custom order saved on Dashboard & Menus still wins. An order of 500 (the untou
 Not changed, and why:
 - The block editor's canvas is WordPress's own editor. Restyling it further is possible but needs a full custom editor.
 - Paths like /wp-admin/ cannot be renamed without breaking plugins.
+
+## 5.1.0 — Phone lists and the editor's settings icon
+
+- Meta box headers in the editor show a settings (sliders) icon instead of the site icon.
+- Posts, pages, media and comments on phones: each item is a card; status filters are pills; the row actions are pills; the search field is full width.
+- Add New is a floating button at the bottom right on the posts and media screens. Screen Options and Help are hidden on phones.
+- Function is unchanged: the same actions, bulk tools and links are there.
+Checked: 20 admin and public loads with no JavaScript errors; editor regression tests pass.

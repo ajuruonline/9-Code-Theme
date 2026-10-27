@@ -84,3 +84,6 @@
 	.editor-styles-wrapper{padding-inline:14px!important}
 	.edit-post-visual-editor__post-title-wrapper{padding-inline:4px}
 }
+/* Meta box header mark: a settings (sliders) icon, not the site icon. */
+.ot-acc-icon{display:inline-grid;place-items:center;flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff}
+.ot-acc-icon svg{width:16px!important;height:16px!important}
