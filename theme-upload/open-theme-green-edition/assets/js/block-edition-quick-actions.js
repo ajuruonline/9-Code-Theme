@@ -37,3 +37,26 @@ function icons(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',icons,{once:true});else icons();
 }());
+(function(){
+function rail(){return document.getElementById('n9be-admin-launcher');}
+function setState(state){
+ var r=rail();
+ if(!r){return;}
+ r.classList.remove('is-minimised','is-sheet');
+ if(state){r.classList.add(state);}
+ try{sessionStorage.setItem('n9beRail',state||'');}catch(e){}
+}
+document.addEventListener('click',function(event){
+ var target=event.target.closest?event.target.closest('[data-n9be-rail-min],[data-n9be-rail-handle],[data-n9be-rail-max]'):null;
+ if(!target){return;}
+ event.preventDefault();
+ event.stopPropagation();
+ if(target.hasAttribute('data-n9be-rail-min')){setState('is-minimised');}
+ else if(target.hasAttribute('data-n9be-rail-handle')){setState('is-sheet');}
+ else{setState('');}
+},true);
+document.addEventListener('DOMContentLoaded',function(){
+ var r=rail();
+ try{var saved=sessionStorage.getItem('n9beRail');if(r&&saved){r.classList.add(saved);}}catch(e){}
+});
+}());

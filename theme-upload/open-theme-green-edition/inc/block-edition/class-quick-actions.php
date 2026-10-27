@@ -176,6 +176,7 @@ final class N9BE_Quick_Actions {
 
     private static function enqueue_assets( $context ) {
         wp_enqueue_style( 'dashicons' );
+        wp_enqueue_style( 'open-theme-font-awesome', NCU_THEME_URI . '/assets/vendor/fontawesome/css/all.min.css', array(), '6.5.2' );
         wp_enqueue_style( 'n9be-quick-actions', NCU_THEME_URI . '/assets/css/block-edition-quick-actions.css', array(), NCU_THEME_VERSION );
         wp_enqueue_style( 'n9be-topbar-popup', NCU_THEME_URI . '/assets/css/open-scholar-topbar.css', array( 'n9be-quick-actions' ), NCU_THEME_VERSION );
         if ( 'frontend' === $context ) {
@@ -265,6 +266,9 @@ final class N9BE_Quick_Actions {
             $items[ $id ] = $action;
         }
         echo '<div id="n9be-admin-launcher" data-n9be-context="' . esc_attr( $context ) . '" data-n9be-site-url="' . esc_attr( home_url( '/' ) ) . '">';
+        echo '<button type="button" class="n9be-rail-button n9be-rail-min" data-n9be-rail-min aria-label="Minimise" title="Minimise"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>';
+        echo '<button type="button" class="n9be-rail-button n9be-rail-handle" data-n9be-rail-handle aria-label="Open menu" title="Open menu"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>';
+        echo '<button type="button" class="n9be-rail-button n9be-rail-max" data-n9be-rail-max aria-label="Maximise" title="Maximise"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>';
         // Primary navigation: Dashboard always leads the rail on every surface.
         echo '<a class="n9be-rail-button n9be-dashboard-launch" data-n9be-dashboard-launch href="' . esc_url( admin_url( 'index.php' ) ) . '" title="Dashboard — all applications"><span class="dashicons dashicons-dashboard"></span><span class="screen-reader-text">Dashboard</span></a>';
         if ( $frontend ) {

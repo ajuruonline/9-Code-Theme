@@ -31,3 +31,11 @@ own ⋮ options panel (it opens from the menu, but keeps Gutenberg's styling).
 - Less spacing in the editor header, title and meta boxes on phones. Move-up and move-down arrows are hidden on phones.
 - Meta box headers are filled green with white text. Each section has its own colour (five tones) so sections are easy to tell apart.
 - The one-line explanation sits under each section title.
+
+## 2.0.3 — Side rail minimise and sheet
+
+- The side rail has a minimise button. Minimised, it becomes one button at the lower right. Tapping it opens a half-screen sheet with every rail action, labelled, which scrolls. The maximise button returns to the side rail.
+- The rail's icons and the minimise, maximise and menu buttons use Font Awesome (bundled in `assets/vendor/fontawesome`, licence in `LICENSE.txt` there).
+- Tested at 390px: expanded, minimised and sheet states, with no JavaScript errors. The sheet is opaque and its labels are visible.
+
+Not yet done: form-field outlines, numbered sections, double-underlined section headings, a "where you are" header on settings screens, Scholar profile quick access, and the post list design.
