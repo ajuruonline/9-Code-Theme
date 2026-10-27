@@ -503,3 +503,39 @@ body.profile-php .form-table td .description,body.user-edit-php .form-table td .
 .osch-list-bar button{min-height:40px;padding:8px 18px;border:0;border-radius:999px;background:#fff;color:#14532d;font-weight:800;cursor:pointer}
 .osch-list-bar a{color:#fff;font-weight:700;text-decoration:underline}
 .osch-list-bar button:focus-visible,.osch-list-bar select:focus-visible,.osch-list-bar a:focus-visible{outline:2px solid #bbf7d0;outline-offset:2px}
+
+/* ---- Compact phone pass: less space on every list, form and panel. ---- */
+.osch-list-bar{display:block!important;margin:8px 0 10px!important;padding:0!important;border-radius:14px!important;background:#14532d!important;box-shadow:0 3px 10px rgba(8,42,27,.15)!important;color:#fff}
+.osch-list-bar-summary{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;cursor:pointer;list-style:none;color:#fff;font-weight:800;font-size:14px}
+.osch-list-bar-summary::-webkit-details-marker{display:none}
+.osch-list-bar-summary small{font-weight:600;opacity:.85;font-size:12px}
+.osch-list-bar-summary::after{content:"+";font-size:18px;line-height:1;margin-left:4px}
+.osch-list-bar[open] .osch-list-bar-summary::after{content:"\2212"}
+.osch-list-bar-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 14px 12px}
+.osch-list-bar-form label{min-width:0;flex:none;font-size:11px;gap:3px}
+.osch-list-bar-form label:first-child{grid-column:1 / -1}
+.osch-list-bar select{min-height:34px;padding:4px 10px;font-size:13px}
+.osch-list-bar-actions{grid-column:1 / -1;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.osch-list-bar button{min-height:34px;padding:6px 14px;font-size:13px}
+.osch-list-bar a{font-size:13px}
+/* Launcher: the logo alone, no green box around it. */
+#osch-nav-launcher{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+#osch-nav-launcher:focus-visible{outline:2px solid #14532d!important;outline-offset:3px}
+@media (max-width:782px){
+  body.wp-admin.edit-php .wp-list-table tbody tr,body.wp-admin.edit-comments-php .wp-list-table tbody tr{margin:0 0 6px!important;padding:8px 10px!important;border-radius:12px!important}
+  body.wp-admin.edit-php .wp-list-table tbody tr td,body.wp-admin.edit-comments-php .wp-list-table tbody tr td{padding:0!important}
+  body.wp-admin.edit-php .wp-list-table tbody tr td.check-column{padding:0 8px 0 0!important;vertical-align:middle}
+  body.wp-admin.edit-php .wp-list-table tbody tr td.check-column input{margin:0!important;width:16px!important;height:16px!important}
+  body.wp-admin.edit-php .wp-list-table td.title strong a{font-size:15px!important;line-height:1.25}
+  body.wp-admin.edit-php .wp-list-table .row-actions{padding:2px 0 0!important;line-height:1.5!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions span{padding:1px 8px!important;margin:0 3px 3px 0!important;font-size:12px!important}
+  body.wp-admin.edit-php .wp-list-table .column-date,body.wp-admin.edit-php .wp-list-table .column-author,body.wp-admin.edit-php .wp-list-table .column-categories,body.wp-admin.edit-php .wp-list-table .column-tags{font-size:12px;line-height:1.4;color:#4b5f53}
+  /* Add Post: text only, centred clear of the menu handle. */
+  body.wp-admin.edit-php .page-title-action,body.wp-admin.upload-php .page-title-action{left:50%!important;right:auto!important;transform:translateX(-50%);bottom:18px!important;padding:10px 22px!important;font-size:15px!important;box-shadow:0 6px 16px rgba(8,42,27,.25)!important}
+  body.wp-admin.edit-php .page-title-action::before,body.wp-admin.edit-php .page-title-action::after,body.wp-admin.upload-php .page-title-action::before,body.wp-admin.upload-php .page-title-action::after{content:none!important;display:none!important}
+  body.wp-admin .postbox .inside{padding:8px 10px!important}
+  body.wp-admin .form-table th,body.wp-admin .form-table td{padding:6px 0!important}
+  body.wp-admin .osch-settings-panel{padding:10px 12px!important;margin:8px 0!important}
+  body.wp-admin .osch-app-tile{padding:10px!important}
+  body.wp-admin .tablenav{margin:4px 0!important}
+}

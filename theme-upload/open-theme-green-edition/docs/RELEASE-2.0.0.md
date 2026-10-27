@@ -183,3 +183,11 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 ## 5.4.0 — Back and forward in the menu
 
 - The menu header has back and forward chevrons beside the close button. They step through the pages you have visited, using the browser's history.
+
+## 5.5.0 — Compact phone lists
+
+- Posts list: a single green "Filter posts" bar that opens on tap, with Format, Category, Tag and Author. Format covers every WordPress post format. Filters that are on open the bar automatically.
+- Posts cards on phones: less padding and smaller row actions, so more posts fit on screen.
+- Add Post is a centred text button, with no icon, clear of the menu handle.
+- The launcher is the logo alone, with no green box.
+- Phone spacing is reduced for panels, settings forms, app tiles and the table toolbar.
