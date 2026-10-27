@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'NCU_THEME_VERSION', '2.0.6' );
+define( 'NCU_THEME_VERSION', '3.0.0' );
 define( 'NCU_THEME_RELEASE_SHOT', 'Lean plugin host' );
 define( 'OPEN_SCHOLAR_THEME_VERSION', NCU_THEME_VERSION );
 define( 'NCU_THEME_API_VERSION', 14 );

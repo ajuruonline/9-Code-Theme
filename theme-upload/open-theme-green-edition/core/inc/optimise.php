@@ -25,6 +25,7 @@ function ncu_osch_optimise_fields() {
         'front_heartbeat' => array( 'type' => 'bool', 'label' => 'Turn off the heartbeat on public pages', 'help' => 'The heartbeat polls the server every few seconds. Public pages do not need it.' ),
         'oembed_links'    => array( 'type' => 'bool', 'label' => 'Remove oEmbed discovery links', 'help' => 'Other sites can still embed your posts by pasting the link.' ),
         'rest_link'       => array( 'type' => 'bool', 'label' => 'Remove the REST API link from the page head', 'help' => 'The API keeps working; only the advertisement in the head goes.' ),
+        'command_palette' => array( 'type' => 'bool', 'label' => 'Keep the Ctrl+K command palette on admin screens', 'help' => 'WordPress loads its search palette on every admin screen. Off saves about 2 MB of script per page.' ),
         'self_pingbacks'  => array( 'type' => 'bool', 'label' => 'Stop pinging your own site', 'help' => 'Linking to your own post no longer creates a pingback comment.' ),
         'revisions'       => array( 'type' => 'int', 'min' => 0, 'max' => 100, 'label' => 'Revisions kept per item', 'help' => 'Only affects new saves; existing revisions are never deleted. 0 leaves the WordPress default.' ),
         'autosave'        => array( 'type' => 'int', 'min' => 60, 'max' => 600, 'label' => 'Autosave every (seconds)', 'help' => 'WordPress default is 60.' ),
@@ -33,7 +34,7 @@ function ncu_osch_optimise_fields() {
 }
 
 function ncu_osch_optimise_levels() {
-    $base = array( 'emoji' => true, 'head_cleanup' => true, 'embed_script' => true, 'dashicons_guest' => true, 'self_pingbacks' => true );
+    $base = array( 'emoji' => true, 'head_cleanup' => true, 'embed_script' => true, 'dashicons_guest' => true, 'self_pingbacks' => true, 'command_palette' => false );
     return array(
         'auto'     => array(
             'label'    => 'Automatic',
@@ -134,11 +135,39 @@ function ncu_osch_optimise_head() {
     if ( ncu_osch_optimise_setting( 'rest_link' ) ) { remove_action( 'wp_head', 'rest_output_link_wp_head' ); }
 }
 
+/* The admin command palette is WordPress core's Ctrl+K search. Off means it is not loaded on admin screens. */
+add_action( 'after_setup_theme', 'ncu_osch_optimise_admin_palette', 20 );
+function ncu_osch_optimise_admin_palette() {
+    if ( ncu_osch_optimise_setting( 'command_palette' ) ) { return; }
+    remove_action( 'admin_enqueue_scripts', 'wp_enqueue_command_palette_assets' );
+    /* Add-ons that extend the palette only make sense while it is loaded. */
+    add_action( 'admin_print_scripts', 'ncu_osch_optimise_dequeue_palette_addons', 999 );
+}
+
+function ncu_osch_optimise_dequeue_palette_addons() {
+    foreach ( array( 'wp-core-commands', 'wp-commands', 'scf-commands-admin' ) as $handle ) { wp_dequeue_script( $handle ); }
+}
+
 add_action( 'wp_enqueue_scripts', 'ncu_osch_optimise_front_assets', 100 );
 function ncu_osch_optimise_front_assets() {
     if ( ncu_osch_optimise_setting( 'embed_script' ) ) { wp_dequeue_script( 'wp-embed' ); }
-    if ( ncu_osch_optimise_setting( 'dashicons_guest' ) && ! is_user_logged_in() ) { wp_dequeue_style( 'dashicons' ); }
+    if ( ncu_osch_optimise_setting( 'dashicons_guest' ) && ! is_user_logged_in() && ! ncu_osch_optimise_style_needed( 'dashicons' ) ) { wp_dequeue_style( 'dashicons' ); }
     if ( ncu_osch_optimise_setting( 'front_heartbeat' ) ) { wp_deregister_script( 'heartbeat' ); }
+}
+
+/**
+ * True when a queued stylesheet still needs $handle, either directly or as a dependency.
+ * WordPress re-adds dependencies when printing, so dequeuing alone does not remove them.
+ */
+function ncu_osch_optimise_style_needed( $handle ) {
+    global $wp_styles;
+    if ( ! $wp_styles instanceof WP_Styles ) { return true; }
+    foreach ( (array) $wp_styles->queue as $queued ) {
+        if ( $queued === $handle ) { return true; }
+        $deps = isset( $wp_styles->registered[ $queued ]->deps ) ? (array) $wp_styles->registered[ $queued ]->deps : array();
+        if ( in_array( $handle, $deps, true ) ) { return true; }
+    }
+    return false;
 }
 
 add_filter( 'wp_revisions_to_keep', 'ncu_osch_optimise_revisions', 10, 2 );

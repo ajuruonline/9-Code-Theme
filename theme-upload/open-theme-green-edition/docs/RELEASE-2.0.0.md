@@ -75,3 +75,25 @@ Not yet done: form-field outlines, numbered sections, double-underlined section 
 - Font Awesome (254 KB) replaced by a 2 KB icon sheet with the five icons the theme uses.
 - Admin styles and scripts are versioned with the theme version, so browsers pick up changes after an update (2.0.5's phone sizing was cached on some sites).
 - Phones: page content keeps clear of the open side rail; the "Who sees what" table says it scrolls sideways and keeps its first column in view.
+
+## 3.0.0 — Speed and error fixes
+
+Speed only: no new features, no content or setting is deleted.
+
+**Speed (measured on the test site, median of three loads, before → after)**
+- Dashboard: DOM ready 426 → 228 ms; page weight 4.8 MB → 1.5 MB.
+- Quick Actions: DOM ready 623 → 346 ms.
+- Dashboard & Menus: DOM ready 626 → 494 ms.
+- Posts list: DOM ready 334 → 210 ms.
+- Post editor is unchanged (~1.1 s): most of that is WordPress's own block editor.
+- Public front page: DOM ready about the same. Its weight is mostly the archive and 9Stagram plugin stylesheets, which are needed there.
+
+**What changed**
+- The Ctrl+K command palette (WordPress core search) is no longer loaded on admin screens, with its Secure Custom Fields add-on. This is the largest saving, about 2.4 MB per admin page. It is a setting under Optimise Site › Advanced ("Keep the Ctrl+K command palette on admin screens"); turn it back on there if you use it.
+- Dashicons are removed for visitors only when no stylesheet on the page needs them. Plugins that use dashicon icons keep them.
+
+**Error checks**
+- 20 admin and public page loads at phone and desktop widths: no JavaScript errors.
+- Ten key pages: no broken resources (no 4xx or 5xx responses).
+- The PHP log shows no errors from theme code during these checks. Remaining log entries come from WordPress.org update checks, which the sandbox cannot reach, and from a third-party Secure Custom Fields notice.
+- The public suite (`tests/e2e/public.mjs`) was written for the older Nine Code theme's markup. Three of its checks (header, footer and mobile menu toggle classes) don't apply to Open Theme; the suite needs updating for this theme.
