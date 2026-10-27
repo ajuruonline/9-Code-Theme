@@ -52,7 +52,9 @@ try {
         $request = new WP_REST_Request('GET', $route);
         $response = rest_do_request($request);
         $data = $response->get_data();
-        $checks['CF7_REST_GUEST_MANAGEMENT_DENIED'] = $response->get_status() === 403
+        // Anonymous requests return 401; authenticated insufficient roles return 403.
+        // CF7 v6.2.3 delegates this to rest_authorization_required_code().
+        $checks['CF7_REST_GUEST_MANAGEMENT_DENIED'] = $response->get_status() === 401
             && is_array($data) && ($data['code'] ?? '') === 'wpcf7_forbidden';
     } else {
         $payload = [
