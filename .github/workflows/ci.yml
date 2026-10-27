@@ -32,6 +32,8 @@ jobs:
         run: bin/audit.sh
       - name: Start test site
         run: bin/setup-test-site.sh && bin/serve-test-site.sh
+      - name: Header shortcode trust boundary (observational, NOT security clearance)
+        run: php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp eval-file tests/e2e/header-shortcode-boundary.php
       - name: Public site
         run: node tests/e2e/public.mjs
       - name: Static front-page mode (320/390/1280px)
