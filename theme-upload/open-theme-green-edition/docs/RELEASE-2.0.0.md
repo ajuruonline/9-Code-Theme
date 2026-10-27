@@ -103,3 +103,20 @@ Speed only: no new features, no content or setting is deleted.
 - Fixed: icons showed as plain dots. Version 3.0.0 replaced Font Awesome with a small sheet of five icons, so any other Font Awesome icon drew as a filled square. Font Awesome 6.5.2 is back in full.
 - Icons no longer hold up the page. The stylesheet loads without blocking the first paint, and the icon font downloads only when an icon is drawn.
 - Checked on the test site: every Font Awesome icon on the home page, a post, the dashboard, Dashboard & Menus, Export & Import, the post editor and Optimise Site has a glyph, with no JavaScript errors.
+
+## 4.0.0 — Speed, without changing how the theme works
+
+Nothing is removed and no screen changes. Speed comes from not loading code a screen never uses.
+
+- Dashboard & Menus: page weight 3.2 MB → 1.7 MB (the custom-field stylesheet and scripts, and the command palette, are no longer loaded there).
+- Dashboard: 4.8 MB → 1.5 MB, the same reductions plus the editor components the dashboard doesn't need.
+- Secure Custom Fields' global styles and scripts are skipped on Open Theme's own screens. They still load on post, page and field-group screens. Setting: Optimise Site › Advanced › "Skip custom-field styles on Open Theme screens".
+- Command palette (Ctrl+K) off by default, as in 3.0.0 (Advanced › "Keep the Ctrl+K command palette on admin screens").
+- Font Awesome restored in full (3.0.1), loaded without blocking the page.
+
+Checked: 20 admin and public page loads with no JavaScript errors; every Font Awesome icon on the key screens draws its glyph; no broken resources.
+
+Not changed, on purpose:
+- The public home page's archive and 9Stagram stylesheets (about 330 KB) are needed on that page.
+- The post editor's own WordPress block editor is most of its cost and cannot be trimmed safely.
+- Font Awesome is not subset, because that would bring back the missing icons from 3.0.0.

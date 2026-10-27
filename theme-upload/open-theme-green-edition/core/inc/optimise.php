@@ -25,6 +25,7 @@ function ncu_osch_optimise_fields() {
         'front_heartbeat' => array( 'type' => 'bool', 'label' => 'Turn off the heartbeat on public pages', 'help' => 'The heartbeat polls the server every few seconds. Public pages do not need it.' ),
         'oembed_links'    => array( 'type' => 'bool', 'label' => 'Remove oEmbed discovery links', 'help' => 'Other sites can still embed your posts by pasting the link.' ),
         'rest_link'       => array( 'type' => 'bool', 'label' => 'Remove the REST API link from the page head', 'help' => 'The API keeps working; only the advertisement in the head goes.' ),
+        'quiet_screens'   => array( 'type' => 'bool', 'label' => 'Skip custom-field styles on Open Theme screens', 'help' => 'Dashboard, Dashboard & Menus, Quick Actions, Export & Import, Backup and Optimise Site do not show custom fields, so their field styles and scripts are not loaded there.' ),
         'command_palette' => array( 'type' => 'bool', 'label' => 'Keep the Ctrl+K command palette on admin screens', 'help' => 'WordPress loads its search palette on every admin screen. Off saves about 2 MB of script per page.' ),
         'self_pingbacks'  => array( 'type' => 'bool', 'label' => 'Stop pinging your own site', 'help' => 'Linking to your own post no longer creates a pingback comment.' ),
         'revisions'       => array( 'type' => 'int', 'min' => 0, 'max' => 100, 'label' => 'Revisions kept per item', 'help' => 'Only affects new saves; existing revisions are never deleted. 0 leaves the WordPress default.' ),
@@ -34,7 +35,7 @@ function ncu_osch_optimise_fields() {
 }
 
 function ncu_osch_optimise_levels() {
-    $base = array( 'emoji' => true, 'head_cleanup' => true, 'embed_script' => true, 'dashicons_guest' => true, 'self_pingbacks' => true, 'command_palette' => false );
+    $base = array( 'emoji' => true, 'head_cleanup' => true, 'embed_script' => true, 'dashicons_guest' => true, 'self_pingbacks' => true, 'command_palette' => false, 'quiet_screens' => true );
     return array(
         'auto'     => array(
             'label'    => 'Automatic',
@@ -133,6 +134,18 @@ function ncu_osch_optimise_head() {
     }
     if ( ncu_osch_optimise_setting( 'oembed_links' ) ) { remove_action( 'wp_head', 'wp_oembed_add_discovery_links' ); }
     if ( ncu_osch_optimise_setting( 'rest_link' ) ) { remove_action( 'wp_head', 'rest_output_link_wp_head' ); }
+}
+
+/* Open Theme's own screens never show custom fields, so Secure Custom Fields' global styles and scripts are skipped there. */
+add_action( 'admin_enqueue_scripts', 'ncu_osch_optimise_quiet_screens', 9999 );
+function ncu_osch_optimise_quiet_screens() {
+    if ( ! ncu_osch_optimise_setting( 'quiet_screens' ) ) { return; }
+    $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- routing only.
+    $own  = array( 'open-scholar-workspace', 'ninecode-quick-actions', 'osch-export-import', 'osch-backup-restore', 'nine-backup-manager', 'open-scholar-optimise', 'nine-code-ultra' );
+    $home = isset( $GLOBALS['pagenow'] ) && 'index.php' === $GLOBALS['pagenow'];
+    if ( ! $home && ! in_array( $page, $own, true ) ) { return; }
+    foreach ( array( 'acf-global' ) as $handle ) { wp_dequeue_style( $handle ); }
+    foreach ( array( 'acf-escaped-html-notice', 'acf', 'scf-commands-admin' ) as $handle ) { wp_dequeue_script( $handle ); }
 }
 
 /* The admin command palette is WordPress core's Ctrl+K search. Off means it is not loaded on admin screens. */
