@@ -2,8 +2,8 @@
  * Browser execution oracle for the real Alpha header shortcode renderer.
  * Runs against disposable WP-CLI output, never against production.
  */
-const { execFileSync } = require('node:child_process');
-const { chromium } = require('playwright');
+import { execFileSync } from 'node:child_process';
+import { chromium } from 'playwright';
 
 (async () => {
   const html = execFileSync('php', [
