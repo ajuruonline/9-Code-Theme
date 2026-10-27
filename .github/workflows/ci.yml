@@ -24,7 +24,9 @@ jobs:
         run: bin/lint.sh
       - name: Build zips
         run: bin/build.sh
-      - name: Open Theme installer identity/integrity (failing-first)
+      - name: Build separate Open Theme installer (draft only)
+        run: bash bin/build-open-theme.sh
+      - name: Open Theme installer identity/integrity
         run: node tests/unit/open-theme-installer.test.mjs
       - name: Static audit (PHP compatibility, deprecated APIs)
         run: bin/audit.sh
@@ -58,6 +60,20 @@ jobs:
           php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp theme activate open-theme-green-edition
           php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp option update show_on_front posts
           php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp post create --post_type=post --post_status=publish --post_name=open-theme-qa-card --post_title='Open Theme QA Card' --porcelain
+          node tests/e2e/open-theme-installed-wordpress.mjs
+      - name: Packaged Open Theme ZIP install and real WordPress acceptance (320/390/1280px)
+        run: |
+          set -euo pipefail
+          theme_path="$PWD/.wp-test/wp/wp-content/themes/open-theme-green-edition"
+          test -L "$theme_path" || { echo "Expected disposable source symlink; refusing to remove a real directory"; exit 2; }
+          rm "$theme_path"
+          zip_path="$(find "$PWD/dist" -maxdepth 1 -type f -name 'open-theme-*.zip' -print -quit)"
+          test -n "$zip_path"
+          php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp theme install "$zip_path"
+          php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp theme activate open-theme-green-edition
+          test "$(php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp option get stylesheet)" = open-theme-green-edition
+          cmp theme-upload/open-theme-green-edition/style.css "$theme_path/style.css"
+          cmp theme-upload/open-theme-green-edition/assets/css/main.css "$theme_path/assets/css/main.css"
           node tests/e2e/open-theme-installed-wordpress.mjs
       - uses: actions/upload-artifact@v4
         with:
