@@ -38,6 +38,8 @@ jobs:
         run: node tests/e2e/header-shortcode-browser.mjs
       - name: Header settings role, capability and nonce security gate
         run: node tests/e2e/header-settings-auth.mjs
+      - name: Pinned real Contact Form 7 header HTML compatibility (disposable only)
+        run: bash bin/test-cf7-header.sh
       - name: Public site
         run: node tests/e2e/public.mjs
       - name: Static front-page mode (320/390/1280px)
