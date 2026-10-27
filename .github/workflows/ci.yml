@@ -24,6 +24,8 @@ jobs:
         run: bin/lint.sh
       - name: Build zips
         run: bin/build.sh
+      - name: Open Theme installer identity/integrity (failing-first)
+        run: node tests/unit/open-theme-installer.test.mjs
       - name: Static audit (PHP compatibility, deprecated APIs)
         run: bin/audit.sh
       - name: Start test site
