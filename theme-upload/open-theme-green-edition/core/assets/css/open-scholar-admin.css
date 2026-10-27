@@ -416,3 +416,7 @@ body.wp-admin .osch-settings-children>summary{font-weight:700;cursor:pointer;pad
 body.wp-admin .osch-settings-subrow{display:grid;grid-template-columns:105px minmax(0,1fr);align-items:center;gap:8px;margin:5px 0}
 body.wp-admin .osch-settings-subrow input[type=text]{width:100%;min-width:0}
 @media(max-width:600px){body.wp-admin .osch-workspace-settings{margin:8px 5px 0 0}body.wp-admin .osch-settings-toolbar{padding:7px}body.wp-admin .osch-settings-app>summary{flex-wrap:wrap}body.wp-admin .osch-settings-app>summary small{width:100%;padding-left:29px}body.wp-admin .osch-settings-subrow{grid-template-columns:75px minmax(0,1fr)}}
+.osch-opt-levels{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.osch-opt-level{display:grid;gap:6px;justify-items:start;padding:12px;border:1px solid #cfe0d5;border-radius:10px;background:#fff}
+.osch-opt-level.is-current{border-color:#14532d;box-shadow:0 0 0 1px #14532d}
+.osch-opt-level .button{margin-top:4px}

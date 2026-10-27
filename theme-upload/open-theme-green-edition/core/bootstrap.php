@@ -32,6 +32,7 @@ require_once NCU_CORE_DIR . 'inc/notices.php';
 require_once NCU_CORE_DIR . 'inc/integration-contracts.php';
 require_once NCU_CORE_DIR . 'inc/jetpack-hygiene.php';
 require_once NCU_CORE_DIR . 'inc/seo.php';
+require_once NCU_CORE_DIR . 'inc/optimise.php';
 require_once NCU_CORE_DIR . 'inc/ultra-backup.php';
 
 /** Seed host defaults without claiming or altering plugin-owned data. */
