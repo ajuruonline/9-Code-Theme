@@ -211,7 +211,8 @@ class Nine_Backup_Manager {
             'site_settings'=> array('Export Site Settings', 'Portable site and theme settings, without secrets by default.'),
         );
         ?>
-        <h2>Export &amp; Import — your records, portable</h2>
+        <?php if ( class_exists( 'Nine_Backup_Records' ) ) { Nine_Backup_Records::render(); } ?>
+        <h2>Whole-site packages</h2>
         <p><strong>Export</strong> downloads a portable ZIP to your device; it is not an ongoing backup. <strong>Import</strong> uploads a compatible ZIP, verifies its contents and previews conflicts before importing. These operations are independent of the server/Google Drive recovery backups.</p>
         <div class="nine-transfer-grid">
         <?php foreach ($choices as $kind=>$item) : ?>

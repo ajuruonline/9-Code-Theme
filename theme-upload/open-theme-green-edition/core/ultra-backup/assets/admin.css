@@ -35,3 +35,28 @@
 .nine-backup-wrap .nine-import-callout form{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 @media(max-width:600px){.nine-backup-wrap .nine-transfer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.nine-backup-wrap .nine-transfer-card{padding:8px!important}.nine-backup-wrap .nine-transfer-card p{min-height:0;font-size:11px}.nine-backup-wrap .nine-transfer-card h3{font-size:12px}.nine-backup-wrap .nine-transfer-card button{font-size:11px}}
 @media(max-width:355px){.nine-backup-wrap .nine-transfer-grid{grid-template-columns:minmax(0,1fr)}}
+/* Records export and import */
+.osch-records{margin:0 0 18px;padding:14px 16px}
+.osch-records h2{margin:0 0 4px}
+.osch-records h3{margin:16px 0 8px;font-size:15px;color:#14532d}
+.osch-records fieldset{margin:0 0 12px;padding:0;border:0}
+.osch-records legend{margin:0 0 6px;font-weight:700;color:#14532d}
+.osch-records-pick{margin:0 0 6px;font-size:13px}
+.osch-records-types{display:grid;gap:5px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.osch-records-types label{display:flex;gap:6px;align-items:center;padding:4px 7px;font-size:13px;line-height:1.25;border:1px solid #d7e6dc;border-radius:8px;background:#fff;font-weight:600;color:#14532d}
+.osch-records-types small{font-weight:400;color:#4b5f53}
+.osch-records-formats{display:grid;gap:6px}
+.osch-records-formats label{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;align-items:start;padding:7px 9px;border:1px solid #d7e6dc;border-radius:8px;background:#fff}
+.osch-records-formats label input{grid-row:span 2;margin-top:3px}
+.osch-records-formats b{color:#14532d}
+.osch-records-formats i,.osch-records-file i{font-size:12.5px;color:#4b5f53}
+.osch-records-file,.osch-records-mode{display:grid;gap:4px;margin:0 0 10px}
+.osch-records-file b,.osch-records-mode b{color:#14532d}
+.osch-records-mode select{max-width:100%}
+.osch-records-preview form{display:inline-block;margin:8px 8px 0 0;vertical-align:bottom}
+.osch-records-report{margin:8px 0;max-width:640px}
+.osch-records-report th,.osch-records-report td{padding:6px 8px}
+.osch-records-messages{margin:8px 0}
+.osch-records-messages ul{margin:6px 0 0 18px;list-style:disc;font-size:13px}
+@media(max-width:600px){.osch-records-report th,.osch-records-report td{padding:5px 4px;font-size:12px}}
+.osch-records-types input[type=checkbox]{flex:0 0 auto;width:18px!important;height:18px!important;min-height:0!important;margin:0!important}

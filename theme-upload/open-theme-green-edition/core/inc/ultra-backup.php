@@ -29,9 +29,11 @@ if ( ! $ncu_osch_backup_external ) {
     require_once NINE_BACKUP_DIR . 'includes/class-nine-backup-exporter.php';
     require_once NINE_BACKUP_DIR . 'includes/class-nine-backup-importer.php';
     require_once NINE_BACKUP_DIR . 'includes/class-nine-backup-manager.php';
+    require_once NINE_BACKUP_DIR . 'includes/class-nine-backup-records.php';
 
     Nine_Backup_Health::register_shutdown_monitor();
     Nine_Backup_Manager::instance();
+    Nine_Backup_Records::init();
 
     add_action( 'after_switch_theme', array( 'Nine_Backup_Manager', 'activate' ) );
     add_action( 'admin_init', 'ncu_osch_backup_maybe_activate', 6 );
