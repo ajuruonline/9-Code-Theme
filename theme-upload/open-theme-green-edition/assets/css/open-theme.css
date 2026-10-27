@@ -75,3 +75,7 @@ body.ncu-admin-skin .nine-box:hover,body.ncu-admin-skin .nine-card:hover{box-sha
 .osch-vis-table th:first-child,.osch-vis-table tbody th{text-align:left;font-weight:600}
 .osch-vis-table thead th{background:#14532d;color:#fff;font-weight:700}
 .osch-vis-cell input{width:18px;height:18px;accent-color:#14532d;cursor:pointer}
+.osch-vis-scroll{position:relative}
+@media (max-width:782px){.osch-vis-scroll::before{content:"Swipe sideways to see every role \2192";display:block;margin:0 0 4px;font-size:12px;font-style:italic;color:#4b5f53}}
+.osch-vis-table th:first-child,.osch-vis-table td:first-child{position:sticky;left:0;z-index:1;background:#fff}
+.osch-vis-table thead th:first-child{background:#14532d}

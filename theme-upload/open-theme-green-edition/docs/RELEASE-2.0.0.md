@@ -46,3 +46,32 @@ Not yet done: form-field outlines, numbered sections, double-underlined section 
 - Post editor: the watcher ignores changes inside the block canvas and waits 300 ms before rebuilding the menu and accordions.
 - Phones: text fields are 36px tall and buttons size to their text (34px), instead of 44px full-size controls. Paragraph fields keep their full height.
 - **Optimise Site** (Open Scholar menu). "Optimise whole site" applies Balanced and removes expired cache entries. Safe, Balanced and Full are available by hand, and "Restore WordPress defaults" turns everything off. Each level sets revisions, autosave, heartbeat, oEmbed discovery and REST head link, and always removes unused emoji scripts and the generator, RSD and shortlink head tags. Nothing is deleted except expired transients, which WordPress rebuilds on demand.
+
+## 2.0.6 — Records, automatic optimisation, editor and menu fixes
+
+**Records export and import** (Export & Import, top of the page)
+- Choose any post type, Users & profiles, Categories & tags and Comments, then download Excel (.xlsx, one sheet each), CSV (one file each, zipped when there are several), JSON, or the Open Scholar package (.zip, full copy with relationships).
+- Import any of those files back. A preview shows what will be added, updated or skipped before anything changes. Modes: update and add, only add new, only update existing.
+- Before writing, a JSON safety copy of the affected records is saved and offered for download.
+- Matching: posts and terms by slug, users by login or email, comments by post, date and author. An id is used only when it points at the same record, so files move safely between sites.
+- Spreadsheet-friendly: files re-saved by Excel, LibreOffice or Google Sheets import correctly; phone numbers, leading zeros and decimals such as 2.10 stay as typed; a file with only some columns changes only those columns.
+- Never exported or imported: passwords, sessions, capabilities and secret-looking keys. Importing never changes your own role.
+- Tested by `tests/open-theme/records-roundtrip.php` (160 checks across Excel, CSV, JSON and Excel-style workbooks).
+
+**Optimise Site is automatic**
+- Sites that never chose a level run Automatic: the Balanced settings plus daily maintenance (expired cache entries removed). Nothing to set up.
+- Advanced controls set each item yourself: emoji, head tidy, embed script, admin icons for visitors, public heartbeat, oEmbed and REST links, self-pingbacks, revisions kept, autosave and editor heartbeat intervals, daily maintenance and an optional weekly database tidy.
+- Site health lists always-loaded settings size, expired cache, revisions, object cache, page cache, PHP version and active plugins, with plain advice. Maintenance history shows the last 10 runs.
+- Revisions are never deleted; only the number kept for new saves is limited.
+
+**Pop-up menu**
+- Tapping a row opens its submenu (+ / −). A link button at the right opens the page itself. Both buttons respond on phones, where WordPress previously swallowed the tap.
+
+**Post editor meta boxes**
+- Tapping the title opens the box (it used to open and close in the same tap). The site icon sits in each header and titles are double-underlined.
+- Compact fields, bold dark-green labels, italic descriptions, double-underlined section headings inside boxes.
+
+**Speed and layout**
+- Font Awesome (254 KB) replaced by a 2 KB icon sheet with the five icons the theme uses.
+- Admin styles and scripts are versioned with the theme version, so browsers pick up changes after an update (2.0.5's phone sizing was cached on some sites).
+- Phones: page content keeps clear of the open side rail; the "Who sees what" table says it scrolls sideways and keeps its first column in view.

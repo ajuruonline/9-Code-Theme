@@ -65,3 +65,8 @@ body:not(.wp-admin) #n9be-admin-launcher[data-n9be-context="frontend"] .n9be-rai
 #n9be-admin-launcher.is-minimised .n9be-rail-handle{display:grid!important;width:52px!important;height:52px!important;border-radius:14px!important;box-shadow:0 6px 18px rgba(8,42,27,.28)!important}
 #n9be-admin-launcher .n9be-rail-button{text-decoration:none!important}
 #n9be-admin-launcher.is-minimised{opacity:1!important}
+/* Phones: while the side rail is open, keep page content clear of it so no field sits underneath. Minimising gives the width back. */
+@media (max-width:782px){
+  body.wp-admin:has(#n9be-admin-launcher:not(.is-minimised)) #wpbody-content{padding-right:58px!important;box-sizing:border-box}
+  body.wp-admin:has(#n9be-admin-launcher:not(.is-minimised)) .interface-interface-skeleton__content{padding-right:58px!important;box-sizing:border-box}
+}
