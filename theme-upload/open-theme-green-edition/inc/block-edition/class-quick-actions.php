@@ -263,12 +263,12 @@ final class N9BE_Quick_Actions {
             $action = $catalog[ $id ];
             if ( ! empty( $action['cap'] ) && ! current_user_can( $action['cap'] ) ) { continue; }
             if ( 'add_plugin' === $id && ! self::can_install_replace_plugins() ) { continue; }
+            if ( function_exists( 'ncu_visibility_allows' ) && ! ncu_visibility_allows( 'qa', $id ) ) { continue; }
             $items[ $id ] = $action;
         }
         echo '<div id="n9be-admin-launcher" data-n9be-context="' . esc_attr( $context ) . '" data-n9be-site-url="' . esc_attr( home_url( '/' ) ) . '">';
         echo '<button type="button" class="n9be-rail-button n9be-rail-min" data-n9be-rail-min aria-label="Minimise" title="Minimise"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>';
         echo '<button type="button" class="n9be-rail-button n9be-rail-handle" data-n9be-rail-handle aria-label="Open menu" title="Open menu"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>';
-        echo '<button type="button" class="n9be-rail-button n9be-rail-max" data-n9be-rail-max aria-label="Maximise" title="Maximise"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>';
         // Primary navigation: Dashboard always leads the rail on every surface.
         echo '<a class="n9be-rail-button n9be-dashboard-launch" data-n9be-dashboard-launch href="' . esc_url( admin_url( 'index.php' ) ) . '" title="Dashboard — all applications"><span class="dashicons dashicons-dashboard"></span><span class="screen-reader-text">Dashboard</span></a>';
         if ( $frontend ) {
@@ -353,6 +353,18 @@ final class N9BE_Quick_Actions {
                 update_user_meta( get_current_user_id(), self::OPTION, array_slice( array_values( array_unique( $ids ) ), 0, self::MAX_ACTIONS ) );
             }
         }
+        if ( current_user_can( 'manage_options' ) && isset( $_POST['visibility']['qa'] ) ) {
+            $roles_all = array_keys( wp_roles()->get_names() );
+            $vis = get_option( 'ncu_role_visibility', array() );
+            $vis['qa'] = array();
+            foreach ( (array) wp_unslash( $_POST['visibility']['qa'] ) as $action_id => $picked ) {
+                $action_id = sanitize_key( $action_id );
+                if ( ! isset( $catalog[ $action_id ] ) ) { continue; }
+                $picked = array_values( array_intersect( array_map( 'sanitize_key', (array) $picked ), $roles_all ) );
+                if ( $picked && count( $picked ) < count( $roles_all ) ) { $vis['qa'][ $action_id ] = $picked; }
+            }
+            update_option( 'ncu_role_visibility', $vis, false );
+        }
         wp_safe_redirect( add_query_arg( array( 'page'=>'ninecode-quick-actions', 'n9be_saved'=>1 ), admin_url( 'admin.php' ) ) );
         exit;
     }
@@ -403,6 +415,21 @@ final class N9BE_Quick_Actions {
         echo '</div>';
         if ( current_user_can( 'manage_options' ) ) {
             echo '<div class="n9be-panel"><h2>Add a custom admin action</h2><p class="description">This adds a safe WordPress admin destination to the action catalogue. Example: <code>edit.php?post_type=workshop</code> or <code>admin.php?page=my-plugin</code>. Future plugins can register richer action functions programmatically.</p><div class="n9be-field-grid"><label>Label<input name="custom_label" placeholder="Workshops"></label><label>Admin route<input name="custom_route" placeholder="edit.php?post_type=workshop"></label><label>Dashicon<input name="custom_icon" value="admin-generic" placeholder="admin-generic"></label></div></div>';
+        }
+        if ( current_user_can( 'manage_options' ) ) {
+            echo '<div class="n9be-panel"><h2>Who sees what</h2><p class="description">Untick a role to hide that action from it. Administrators always see every action.</p><div class="osch-vis-scroll"><table class="osch-vis-table"><thead><tr><th scope="col">Action</th>';
+            foreach ( wp_roles()->get_names() as $rl ) { echo '<th scope="col">' . esc_html( translate_user_role( $rl ) ) . '</th>'; }
+            echo '</tr></thead><tbody>';
+            foreach ( $configured as $id ) {
+                if ( empty( $catalog[ $id ] ) || in_array( $id, array( 'save', 'menu', 'theme_menu', 'search' ), true ) ) { continue; }
+                $allowed = function_exists( 'ncu_visibility_roles' ) ? ncu_visibility_roles( 'qa', $id ) : null;
+                echo '<tr><th scope="row">' . esc_html( $catalog[ $id ]['label'] ) . '</th>';
+                foreach ( wp_roles()->get_names() as $rk => $rl ) {
+                    echo '<td><label class="osch-vis-cell"><input type="checkbox" name="visibility[qa][' . esc_attr( $id ) . '][]" value="' . esc_attr( $rk ) . '"' . checked( null === $allowed || in_array( $rk, $allowed, true ), true, false ) . '><span class="screen-reader-text">' . esc_html( $catalog[ $id ]['label'] . ' — ' . translate_user_role( $rl ) ) . '</span></label></td>';
+                }
+                echo '</tr>';
+            }
+            echo '</tbody></table></div></div>';
         }
         echo '<div class="n9be-sticky-save"><button class="button button-primary button-hero">Save Quick Actions</button><span>Up to ' . self::MAX_ACTIONS . ' configured actions · Theme actions plus 9 Data Manager actions</span></div></form></div>';
     }

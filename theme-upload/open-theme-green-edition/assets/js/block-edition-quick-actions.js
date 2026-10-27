@@ -42,17 +42,16 @@ function rail(){return document.getElementById('n9be-admin-launcher');}
 function setState(state){
  var r=rail();
  if(!r){return;}
- r.classList.remove('is-minimised','is-sheet');
+ r.classList.remove('is-minimised');
  if(state){r.classList.add(state);}
  try{sessionStorage.setItem('n9beRail',state||'');}catch(e){}
 }
 document.addEventListener('click',function(event){
- var target=event.target.closest?event.target.closest('[data-n9be-rail-min],[data-n9be-rail-handle],[data-n9be-rail-max]'):null;
+ var target=event.target.closest?event.target.closest('[data-n9be-rail-min],[data-n9be-rail-handle]'):null;
  if(!target){return;}
  event.preventDefault();
  event.stopPropagation();
  if(target.hasAttribute('data-n9be-rail-min')){setState('is-minimised');}
- else if(target.hasAttribute('data-n9be-rail-handle')){setState('is-sheet');}
  else{setState('');}
 },true);
 document.addEventListener('DOMContentLoaded',function(){

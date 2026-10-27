@@ -59,16 +59,9 @@ body:not(.wp-admin) #n9be-admin-launcher[data-n9be-context="frontend"] .n9be-rai
 @media(max-width:782px){.n9be-quick-drawer__panel .n9be-quick-item{min-height:98px!important}}
 
 /* Rail states: expanded (default), minimised to a lower-right handle, or a half-screen sheet. */
-#n9be-admin-launcher .n9be-rail-handle,#n9be-admin-launcher .n9be-rail-max{display:none}
 #n9be-admin-launcher .n9be-rail-button .fa-solid{font-size:16px;line-height:1}
 #n9be-admin-launcher.is-minimised{top:auto!important;bottom:max(12px,env(safe-area-inset-bottom))!important;right:max(12px,env(safe-area-inset-right))!important;transform:none!important;background:none!important;border:0!important;padding:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;display:block!important}
 #n9be-admin-launcher.is-minimised>.n9be-rail-button:not(.n9be-rail-handle){display:none!important}
 #n9be-admin-launcher.is-minimised .n9be-rail-handle{display:grid!important;width:52px!important;height:52px!important;border-radius:14px!important;box-shadow:0 6px 18px rgba(8,42,27,.28)!important}
-#n9be-admin-launcher.is-sheet{top:auto!important;bottom:0!important;left:0!important;right:0!important;transform:none!important;height:50vh!important;max-height:50vh;overflow:auto;display:grid!important;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));align-content:start;gap:8px!important;padding:10px 10px calc(10px + env(safe-area-inset-bottom))!important;background:#fff!important;border:0!important;border-top:1px solid #cadfd1!important;border-radius:0!important;box-shadow:0 -12px 30px rgba(8,42,27,.18)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;z-index:99995}
-#n9be-admin-launcher.is-sheet .n9be-rail-button{width:100%!important;height:58px!important;margin:0!important}
-#n9be-admin-launcher.is-sheet .n9be-rail-max{display:grid!important}
-#n9be-admin-launcher.is-sheet .n9be-rail-handle{display:none!important}
-#n9be-admin-launcher.is-sheet,#n9be-admin-launcher.is-minimised{opacity:1!important}
-#n9be-admin-launcher.is-sheet .n9be-rail-button{flex-direction:column;justify-content:center;gap:3px;color:#eafff2!important}
-#n9be-admin-launcher.is-sheet .n9be-rail-button::after{content:attr(title);display:block;max-width:100%;font-size:11px;line-height:1.15;color:#dff5e6;text-align:center;white-space:normal;overflow:hidden}
 #n9be-admin-launcher .n9be-rail-button{text-decoration:none!important}
+#n9be-admin-launcher.is-minimised{opacity:1!important}

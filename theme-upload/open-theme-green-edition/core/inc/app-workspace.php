@@ -268,6 +268,7 @@ function ncu_osch_workspace_collect_apps() {
     ncu_osch_workspace_assign_visuals( $apps );
     $GLOBALS['ncu_osch_workspace_catalog'] = $apps;
     ncu_osch_workspace_apply_preferences( $apps );
+    $apps = array_filter( $apps, function ( $slug ) { return ncu_visibility_allows( 'apps', $slug ); }, ARRAY_FILTER_USE_KEY );
     $GLOBALS['ncu_osch_workspace_apps'] = $apps;
 }
 
@@ -294,6 +295,12 @@ function ncu_osch_workspace_home() {
         <div class="osch-workspace-hero-body"><span class="osch-hero-kicker">INSTITUTIONAL DIGITAL WORKSPACE <span aria-hidden="true">/ 01</span></span><h1>Welcome to your<br><em>digital campus.</em></h1><p>Welcome, <?php echo esc_html( $name ); ?>. Your academic applications, essential tools and latest site activity—connected in one place.</p></div>
         <div class="osch-workspace-actions"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><span class="dashicons dashicons-admin-site-alt3" aria-hidden="true"></span> View your site <span aria-hidden="true">↗</span></a><?php if ( current_user_can( 'manage_options' ) ) : ?><a href="<?php echo esc_url( admin_url( 'admin.php?page=open-scholar-workspace' ) ); ?>"><span class="dashicons dashicons-admin-settings" aria-hidden="true"></span> Dashboard &amp; Menus</a><?php endif; ?><?php if ( current_user_can( 'install_plugins' ) ) : ?><a href="<?php echo esc_url( self_admin_url( 'plugin-install.php?tab=upload' ) ); ?>"><span class="dashicons dashicons-plus-alt2" aria-hidden="true"></span> Install app <span aria-hidden="true">↗</span></a><?php endif; ?></div>
       </header>
+      <?php $pinned_home = function_exists( 'ncu_osch_workspace_pinned_posts' ) ? ncu_osch_workspace_pinned_posts() : array(); if ( $pinned_home ) : ?>
+      <section class="osch-pinned" aria-labelledby="osch-pinned-home"><h2 id="osch-pinned-home">Pinned</h2>
+        <ul class="osch-pinned-cards"><?php foreach ( $pinned_home as $pp ) : $ptype = get_post_type_object( $pp->post_type ); ?>
+          <li><a href="<?php echo esc_url( get_edit_post_link( $pp->ID ) ); ?>"><?php echo esc_html( get_the_title( $pp ) ); ?></a><small><?php echo esc_html( $ptype ? $ptype->labels->singular_name : '' ); ?> · <?php echo esc_html( get_post_status( $pp ) ); ?></small></li>
+        <?php endforeach; ?></ul></section>
+      <?php endif; ?>
       <section class="osch-latest" aria-labelledby="osch-latest-title"><div class="osch-latest-heading"><div><span class="osch-eyebrow">LIVE FROM YOUR SITE</span><h2 id="osch-latest-title">Latest information</h2></div><span class="osch-live-stamp">Updated on page load</span></div>
         <div class="osch-latest-grid"><div class="osch-latest-panel"><h3><span class="dashicons dashicons-admin-post" aria-hidden="true"></span> Recent activity</h3>
           <?php if ( $recent ) : ?><ul><?php foreach ( $recent as $post ) : ?><li><a href="<?php echo esc_url( current_user_can( 'edit_post', $post->ID ) ? get_edit_post_link( $post->ID ) : get_permalink( $post->ID ) ); ?>"><?php echo esc_html( get_the_title( $post ) ); ?></a><time datetime="<?php echo esc_attr( get_the_date( 'c', $post ) ); ?>"><?php echo esc_html( get_the_date( get_option( 'date_format' ), $post ) ); ?></time></li><?php endforeach; ?></ul><?php else : ?><p>No recent published posts are available to display.</p><?php endif; ?>
