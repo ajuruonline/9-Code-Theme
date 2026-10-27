@@ -26,6 +26,8 @@ jobs:
         run: bin/build.sh
       - name: Build separate Open Theme installer (draft only)
         run: bash bin/build-open-theme.sh
+      - name: Open Theme ZIP reproducibility (failing-first)
+        run: node tests/unit/open-theme-reproducibility.test.mjs
       - name: Open Theme installer identity/integrity
         run: node tests/unit/open-theme-installer.test.mjs
       - name: Static audit (PHP compatibility, deprecated APIs)
