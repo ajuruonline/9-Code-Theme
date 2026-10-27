@@ -74,8 +74,8 @@ class Nine_Backup_Manager {
 
     public function enqueue( $hook ) {
         if ( false === strpos( $hook, 'nine-backup-manager' ) && false === strpos( $hook, 'osch-export-import' ) && false === strpos( $hook, 'osch-backup-restore' ) ) { return; }
-        wp_enqueue_style( 'nine-backup-admin', NINE_BACKUP_URL . 'assets/admin.css', array(), NINE_BACKUP_VERSION );
-        wp_enqueue_script( 'nine-backup-admin', NINE_BACKUP_URL . 'assets/admin.js', array( 'jquery' ), NINE_BACKUP_VERSION, true );
+        wp_enqueue_style( 'nine-backup-admin', NINE_BACKUP_URL . 'assets/admin.css', array(), NINE_BACKUP_VERSION . ( defined( 'NCU_THEME_VERSION' ) ? '-' . NCU_THEME_VERSION : '' ) );
+        wp_enqueue_script( 'nine-backup-admin', NINE_BACKUP_URL . 'assets/admin.js', array( 'jquery' ), NINE_BACKUP_VERSION . ( defined( 'NCU_THEME_VERSION' ) ? '-' . NCU_THEME_VERSION : '' ), true );
         wp_localize_script( 'nine-backup-admin', 'NineBackup', array(
             'ajaxUrl' => admin_url( 'admin-ajax.php' ),
             'nonce' => wp_create_nonce( 'nine_backup_search' ),

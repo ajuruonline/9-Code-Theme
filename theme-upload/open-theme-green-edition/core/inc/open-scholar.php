@@ -49,15 +49,15 @@ function ncu_open_theme_post_editor_assets( $hook ) {
     ) );
 }
 function ncu_open_scholar_admin_assets() {
-    wp_enqueue_style( 'ncu-admin-skin', NCU_CORE_URL . 'assets/css/admin-skin.css', array(), NCU_CORE_VERSION );
-    wp_enqueue_style( 'ncu-admin-menu', NCU_CORE_URL . 'assets/css/admin-menu.css', array( 'ncu-admin-skin' ), NCU_CORE_VERSION );
-    wp_enqueue_style( 'open-scholar-admin', NCU_CORE_URL . 'assets/css/open-scholar-admin.css', array(), NCU_CORE_VERSION );
-    wp_enqueue_style( 'open-scholar-popup', NCU_CORE_URL . 'assets/css/open-scholar-popup.css', array( 'open-scholar-admin' ), NCU_CORE_VERSION );
+    wp_enqueue_style( 'ncu-admin-skin', NCU_CORE_URL . 'assets/css/admin-skin.css', array(), NCU_THEME_VERSION );
+    wp_enqueue_style( 'ncu-admin-menu', NCU_CORE_URL . 'assets/css/admin-menu.css', array( 'ncu-admin-skin' ), NCU_THEME_VERSION );
+    wp_enqueue_style( 'open-scholar-admin', NCU_CORE_URL . 'assets/css/open-scholar-admin.css', array(), NCU_THEME_VERSION );
+    wp_enqueue_style( 'open-scholar-popup', NCU_CORE_URL . 'assets/css/open-scholar-popup.css', array( 'open-scholar-admin' ), NCU_THEME_VERSION );
     // Final density layer: retain green brand while removing wasted margins throughout wp-admin.
     wp_enqueue_style( 'osch-compact-admin', NCU_THEME_URI . '/assets/css/open-scholar-compact.css', array( 'open-scholar-popup' ), NCU_THEME_VERSION );
     // Open Theme visual layer loads last so it can refine every surface above.
     wp_enqueue_style( 'open-theme-visual', NCU_THEME_URI . '/assets/css/open-theme.css', array( 'osch-compact-admin' ), NCU_THEME_VERSION );
-    wp_enqueue_script( 'open-scholar-admin', NCU_CORE_URL . 'assets/js/open-scholar-admin.js', array(), NCU_CORE_VERSION, true );
+    wp_enqueue_script( 'open-scholar-admin', NCU_CORE_URL . 'assets/js/open-scholar-admin.js', array(), NCU_THEME_VERSION, true );
     wp_enqueue_script( 'osch-sharp-borders', NCU_THEME_URI . '/assets/js/open-scholar-sharp-borders.js', array(), NCU_THEME_VERSION, true );
     // Prefer WordPress Site Icon; the Open Scholar academic cap is the fallback.
     $site_icon = get_site_icon_url( 96 );
@@ -71,7 +71,7 @@ add_filter( 'admin_body_class', function ( $classes ) {
 
 add_action( 'login_enqueue_scripts', 'ncu_open_scholar_login_assets', PHP_INT_MAX );
 function ncu_open_scholar_login_assets() {
-    wp_enqueue_style( 'open-scholar-login', NCU_CORE_URL . 'assets/css/open-scholar-admin.css', array(), NCU_CORE_VERSION );
+    wp_enqueue_style( 'open-scholar-login', NCU_CORE_URL . 'assets/css/open-scholar-admin.css', array(), NCU_THEME_VERSION );
     wp_enqueue_style( 'osch-compact-login', NCU_THEME_URI . '/assets/css/open-scholar-compact.css', array( 'open-scholar-login' ), NCU_THEME_VERSION );
     wp_enqueue_script( 'osch-sharp-borders', NCU_THEME_URI . '/assets/js/open-scholar-sharp-borders.js', array(), NCU_THEME_VERSION, true );
 }

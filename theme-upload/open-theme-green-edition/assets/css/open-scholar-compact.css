@@ -249,3 +249,5 @@ body.login .osch-sharp-lined,
 body .osch-sharp-lined {border-radius:0!important}
 /* Decorative outlined accent around hero is a CSS pseudo-element, not a DOM element. */
 body.wp-admin .osch-workspace-hero:after {border-radius:0!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go{width:31px!important;height:30px!important;top:5px!important;right:39px!important;border-radius:8px!important}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top:has(>.osch-menu-go)>a.menu-top{padding-right:76px!important}

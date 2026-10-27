@@ -140,28 +140,51 @@
         document.body.appendChild(launcher);
         var previousFocus = null;
 
+        var LINK_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+        function setSubmenu(item, open) {
+            item.classList.toggle('osch-submenu-open', open);
+            var toggle = item.querySelector(':scope > .osch-submenu-toggle');
+            if (!toggle) return;
+            var name = item.querySelector('.wp-menu-name') ? item.querySelector('.wp-menu-name').textContent.trim() : 'item';
+            toggle.textContent = open ? '\u2212' : '+';
+            toggle.setAttribute('aria-expanded', String(open));
+            toggle.setAttribute('aria-label', (open ? 'Hide' : 'Show') + ' submenu for ' + name);
+        }
         menu.querySelectorAll(':scope > li.menu-top').forEach(function (item) {
             var submenu = item.querySelector(':scope > .wp-submenu');
-            if (!submenu) return;
+            var top = item.querySelector(':scope > a.menu-top');
+            if (!submenu || !top) return;
+            var name = item.querySelector('.wp-menu-name') ? item.querySelector('.wp-menu-name').textContent.trim() : 'item';
+            // The link button opens the item's own page; the rest of the row opens its submenu.
+            var go = document.createElement('a');
+            go.className = 'osch-menu-go';
+            go.href = top.href;
+            go.setAttribute('aria-label', 'Open ' + name);
+            go.title = 'Open ' + name;
+            go.innerHTML = LINK_ICON;
+            item.appendChild(go);
             var button = document.createElement('button');
             button.type = 'button';
             button.className = 'osch-submenu-toggle';
-            button.textContent = '+';
-            button.setAttribute('aria-label', 'Show submenu for ' + (item.querySelector('.wp-menu-name') ? item.querySelector('.wp-menu-name').textContent.trim() : 'item'));
-            button.setAttribute('aria-expanded', 'false');
             item.appendChild(button);
-            if (item.classList.contains('wp-has-current-submenu') || item.classList.contains('wp-menu-open')) {
-                item.classList.add('osch-submenu-open');
-                button.textContent = '−';
-                button.setAttribute('aria-expanded', 'true');
-            }
+            setSubmenu(item, item.classList.contains('wp-has-current-submenu') || item.classList.contains('wp-menu-open'));
             button.addEventListener('click', function (event) {
                 event.preventDefault();
-                var open = item.classList.toggle('osch-submenu-open');
-                button.textContent = open ? '−' : '+';
-                button.setAttribute('aria-expanded', String(open));
+                setSubmenu(item, !item.classList.contains('osch-submenu-open'));
             });
         });
+        // Capture phase, so WordPress's responsive menu script never swallows the tap.
+        menu.addEventListener('click', function (event) {
+            // The link button navigates normally; only keep WordPress from cancelling it.
+            if (event.target.closest('.osch-menu-go')) { event.stopPropagation(); return; }
+            var top = event.target.closest('li.menu-top > a.menu-top');
+            if (!top || !menu.contains(top)) return;
+            var item = top.parentNode;
+            if (!item.querySelector(':scope > .wp-submenu')) return;
+            event.preventDefault();
+            event.stopPropagation();
+            setSubmenu(item, !item.classList.contains('osch-submenu-open'));
+        }, true);
         function scrollNavigationToCurrent() {
             var host = root.querySelector('.osch-nav-menuhost');
             if (!host) return;
@@ -186,15 +209,7 @@
             }
             if (!selected) return;
             var parent = selected.closest('li.menu-top');
-            if (parent && parent.querySelector(':scope > .wp-submenu')) {
-                parent.classList.add('osch-submenu-open');
-                var toggle = parent.querySelector(':scope > .osch-submenu-toggle');
-                if (toggle) {
-                    toggle.textContent = '−';
-                    toggle.setAttribute('aria-expanded', 'true');
-                    toggle.setAttribute('aria-label', 'Hide submenu for ' + (parent.querySelector('.wp-menu-name') || parent).textContent.trim());
-                }
-            }
+            if (parent && parent.querySelector(':scope > .wp-submenu')) setSubmenu(parent, true);
             menu.querySelectorAll('.osch-nav-current-page').forEach(function (old) { old.classList.remove('osch-nav-current-page'); });
             selected.classList.add('osch-nav-current-page');
             selected.setAttribute('aria-current', 'page');

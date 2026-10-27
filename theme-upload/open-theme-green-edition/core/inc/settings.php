@@ -60,9 +60,9 @@ function ncu_core_admin_assets( $hook ) {
     if ( ! $is_ncu && 'appearance_page_nine-code-ultra-appearance' !== $hook ) {
         return;
     }
-    wp_enqueue_style( 'ncu-core-admin', NCU_CORE_URL . 'assets/css/admin.css', array(), NCU_CORE_VERSION );
+    wp_enqueue_style( 'ncu-core-admin', NCU_CORE_URL . 'assets/css/admin.css', array(), NCU_THEME_VERSION );
     wp_enqueue_media();
-    wp_enqueue_script( 'ncu-core-admin', NCU_CORE_URL . 'assets/js/admin.js', array( 'jquery' ), NCU_CORE_VERSION, true );
+    wp_enqueue_script( 'ncu-core-admin', NCU_CORE_URL . 'assets/js/admin.js', array( 'jquery' ), NCU_THEME_VERSION, true );
 }
 
 function ncu_scalar( $value, $fallback = '' ) {
@@ -333,7 +333,7 @@ function ncu_admin_header( $title, $description = '' ) {
         <div class="ncu-admin__brandline">
             <div><h1><?php echo esc_html( $title ); ?></h1><?php if ( $description ) : ?><p><?php echo esc_html( $description ); ?></p><?php endif; ?></div>
         </div>
-        <span class="ncu-badge">v<?php echo esc_html( NCU_CORE_VERSION ); ?></span>
+        <span class="ncu-badge">v<?php echo esc_html( NCU_THEME_VERSION ); ?></span>
     </div>
     <?php
 }

@@ -90,3 +90,12 @@ body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu:before,
 body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu:after{display:none!important;content:none!important;border:0!important}
 body.wp-admin #osch-nav-dialog #adminmenu > li.menu-top.osch-navigation-hidden,
 body.wp-admin #osch-nav-dialog #adminmenu .wp-submenu li[hidden]{display:none!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go{position:absolute;right:48px;top:10px;z-index:2;display:grid;place-items:center;width:35px;height:34px;box-sizing:border-box;border:1px solid #d8e6db;border-radius:9px;background:#fff;color:#164e32;text-decoration:none}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go:hover{background:#14532d;border-color:#14532d;color:#fff}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go:focus-visible{outline:2px solid #14532d;outline-offset:1px}
+body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top:has(>.osch-menu-go)>a.menu-top{padding-right:90px!important}
+/* WordPress lifts a hovered or focused row to z-index 10000; keep both row buttons above it. */
+body.wp-admin #osch-nav-dialog #adminmenu .osch-submenu-toggle,body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go{z-index:10002!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go{color:#14532d!important;background:#fff!important;border-color:#b9d2c2!important;opacity:1!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go svg{opacity:1!important;stroke:currentColor!important}
+body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go:hover,body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go:focus-visible{color:#fff!important;background:#14532d!important;border-color:#14532d!important}

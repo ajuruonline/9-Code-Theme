@@ -97,7 +97,7 @@ add_filter( 'update_footer', 'ncu_admin_version_footer', 999 );
 function ncu_admin_version_footer( $text ) {
     $s = ncu_get_settings();
     if ( empty( $s['white_label_enabled'] ) ) { return $text; }
-    return 'Open Scholar ' . esc_html( NCU_CORE_VERSION );
+    return 'Open Scholar ' . esc_html( NCU_THEME_VERSION );
 }
 
 add_filter( 'admin_title', 'ncu_white_label_admin_title', 999 );
