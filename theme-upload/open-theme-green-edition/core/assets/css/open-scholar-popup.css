@@ -115,3 +115,8 @@ body.wp-admin #osch-nav-dialog #adminmenu .osch-nav-advanced-count{min-width:24p
   body.wp-admin #osch-nav-dialog .osch-nav-popup{left:8px!important;right:8px!important;bottom:8px!important;width:auto!important;border-radius:22px!important;overflow:hidden!important;box-shadow:0 12px 34px rgba(8,42,27,.3)!important}
   body.wp-admin #osch-nav-dialog .osch-nav-header{border-radius:0!important}
 }
+/* Back and forward chevrons beside the menu's close button. */
+body.wp-admin #osch-nav-dialog .osch-nav-steps{display:flex;gap:6px;margin-right:6px}
+body.wp-admin #osch-nav-dialog .osch-nav-step{display:grid;place-items:center;width:36px;height:36px;border:1px solid #b8f5cf;border-radius:50%;background:transparent;color:#eafff2;font-size:15px;cursor:pointer}
+body.wp-admin #osch-nav-dialog .osch-nav-step:hover{background:#eafff2;color:#14532d}
+body.wp-admin #osch-nav-dialog .osch-nav-step:focus-visible{outline:2px solid #86efac;outline-offset:2px}

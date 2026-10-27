@@ -148,7 +148,7 @@
         root.hidden = true;
         root.innerHTML = '<button type="button" class="osch-nav-backdrop" data-osch-close tabindex="-1" aria-label="Close menu"></button>' +
           '<section class="osch-nav-popup" role="dialog" aria-modal="true" aria-label="Open Scholar navigation">' +
-          '<header class="osch-nav-header"><div class="osch-nav-brand"><span class="osch-nav-brand-mark"><img class="osch-nav-brand-img" alt="Open Scholar site icon"></span><div><strong>OPEN SCHOLAR</strong><small>Applications · Tools</small></div></div><button type="button" class="osch-nav-close" data-osch-close aria-label="Close menu">×</button></header>' +
+          '<header class="osch-nav-header"><div class="osch-nav-brand"><span class="osch-nav-brand-mark"><img class="osch-nav-brand-img" alt="Open Scholar site icon"></span><div><strong>OPEN SCHOLAR</strong><small>Applications · Tools</small></div></div><div class="osch-nav-steps"><button type="button" class="osch-nav-step" data-osch-back aria-label="Back"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><button type="button" class="osch-nav-step" data-osch-forward aria-label="Forward"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div><button type="button" class="osch-nav-close" data-osch-close aria-label="Close menu">×</button></header>' +
           '<div class="osch-nav-menuhost"></div>' +
           '<footer class="osch-nav-footer"><span>Powered by OpenScholar.ng</span><a href="' + (document.querySelector('#wp-admin-bar-site-name a') ? document.querySelector('#wp-admin-bar-site-name a').href : '/') + '">View site</a></footer></section>';
 
@@ -261,6 +261,8 @@
             }
         }
         launcher.addEventListener('click', function () { setOpen(root.hidden); });
+        root.querySelector('[data-osch-back]').addEventListener('click', function () { window.history.back(); });
+        root.querySelector('[data-osch-forward]').addEventListener('click', function () { window.history.forward(); });
         root.querySelectorAll('[data-osch-close]').forEach(function (node) {
             node.addEventListener('click', function () { setOpen(false); });
         });
