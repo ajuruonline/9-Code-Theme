@@ -8,7 +8,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 function ncu_open_scholar_logo_url() {
-    return NCU_CORE_URL . 'assets/images/open-scholar-mark.svg';
+    return NCU_CORE_URL . 'assets/images/open-scholar-cap.jpg';
 }
 
 add_action( 'admin_bar_menu', 'ncu_open_scholar_account_label', PHP_INT_MAX );
@@ -59,8 +59,8 @@ function ncu_open_scholar_admin_assets() {
     wp_enqueue_style( 'open-theme-visual', NCU_THEME_URI . '/assets/css/open-theme.css', array( 'osch-compact-admin' ), NCU_THEME_VERSION );
     wp_enqueue_script( 'open-scholar-admin', NCU_CORE_URL . 'assets/js/open-scholar-admin.js', array(), NCU_THEME_VERSION, true );
     wp_enqueue_script( 'osch-sharp-borders', NCU_THEME_URI . '/assets/js/open-scholar-sharp-borders.js', array(), NCU_THEME_VERSION, true );
-    // Prefer WordPress Site Icon; the Open Scholar academic cap is the fallback.
-    $site_icon = get_site_icon_url( 96 );
+    // The Open Scholar graduation cap is the logo everywhere; the site icon is not used as a brand mark.
+    $site_icon = '';
     wp_localize_script( 'open-scholar-admin', 'oschWorkspaceMenuConfig', ncu_osch_workspace_menu_configuration( isset( $GLOBALS['ncu_osch_workspace_catalog'] ) ? $GLOBALS['ncu_osch_workspace_catalog'] : array() ) );
     wp_localize_script( 'open-scholar-admin', 'oschNavBrand', array( 'icon' => esc_url_raw( $site_icon ? $site_icon : ncu_open_scholar_logo_url() ), 'cap' => esc_url_raw( ncu_open_scholar_logo_url() ), 'name' => 'Open Scholar' ) );
 }

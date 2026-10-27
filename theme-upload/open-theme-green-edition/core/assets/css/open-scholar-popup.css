@@ -106,3 +106,7 @@ body.wp-admin #osch-nav-dialog #adminmenu li.osch-nav-advanced-head{list-style:n
 body.wp-admin #osch-nav-dialog #adminmenu .osch-nav-advanced-toggle{display:flex;width:100%;align-items:center;justify-content:space-between;gap:8px;min-height:40px;padding:8px 12px;border:1px dashed #9fc0ab;border-radius:10px;background:#f4faf6;color:#14532d;font:700 13px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;cursor:pointer}
 body.wp-admin #osch-nav-dialog #adminmenu .osch-nav-advanced-toggle:focus-visible{outline:2px solid #14532d;outline-offset:2px}
 body.wp-admin #osch-nav-dialog #adminmenu .osch-nav-advanced-count{min-width:24px;padding:2px 7px;border-radius:999px;background:#14532d;color:#fff;font-size:12px;text-align:center}
+/* Phones: the menu rises from the bottom as a sheet, next to the launcher. */
+@media (max-width:782px){
+  body.wp-admin #osch-nav-dialog .osch-nav-popup{left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;min-width:0!important;height:auto!important;max-height:74dvh!important;border-radius:18px 18px 0 0!important;box-shadow:0 -10px 30px rgba(8,42,27,.22)!important}
+}

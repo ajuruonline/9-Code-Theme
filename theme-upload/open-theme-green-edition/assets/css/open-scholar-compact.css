@@ -251,3 +251,9 @@ body .osch-sharp-lined {border-radius:0!important}
 body.wp-admin .osch-workspace-hero:after {border-radius:0!important}
 body.wp-admin #osch-nav-dialog #adminmenu .osch-menu-go{width:31px!important;height:30px!important;top:5px!important;right:39px!important;border-radius:8px!important}
 body.wp-admin #osch-nav-dialog #adminmenu>li.menu-top:has(>.osch-menu-go)>a.menu-top{padding-right:76px!important}
+/* The rail's menu button is just the icon and its tap area: no box, border or shadow. */
+#n9be-admin-launcher .n9be-rail-button.n9be-rail-handle,#n9be-admin-launcher.is-minimised .n9be-rail-button.n9be-rail-handle{background:transparent!important;border:0!important;box-shadow:none!important;color:#fff!important}
+#n9be-admin-launcher.is-minimised{background:transparent!important;box-shadow:none!important;border:0!important}
+#n9be-admin-launcher.is-minimised .n9be-rail-handle:focus-visible{outline:2px solid #86efac!important;outline-offset:2px}
+/* The rail's menu button only restores a minimised rail; the menu itself opens from the launcher. */
+#n9be-admin-launcher:not(.is-minimised) .n9be-rail-button.n9be-rail-handle{display:none!important}

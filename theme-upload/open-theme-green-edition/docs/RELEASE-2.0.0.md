@@ -163,3 +163,12 @@ Not changed, and why:
 - Add New is a floating button at the bottom right on the posts and media screens. Screen Options and Help are hidden on phones.
 - Function is unchanged: the same actions, bulk tools and links are there.
 Checked: 20 admin and public loads with no JavaScript errors; editor regression tests pass.
+
+## 5.2.0 — Logo, scholar links, Advanced dashboard tools
+
+- Logo: the Open Scholar graduation cap is used in the dashboard header, the menu header and the editor menu.
+- Dashboard: "Welcome to your digital office." Quick links: View your site, View my scholar profile, View scholars (for people who can edit users).
+- Dashboard apps: Dashboard, then Open Scholar apps and content, then core tools, then other installed apps. Export & Import, Backup & Restore, and any app named Export, Import, Backup, Restore, Navigator or Exhibit are in a collapsed Advanced section.
+- Profile: Open Scholar fields and core personal details stay visible; other plugins' profile sections move into Advanced.
+- Side rail: the redundant menu button is removed (it stays only as the restore button for a minimised rail).
+- Menu on phones opens as a bottom sheet from the launcher.

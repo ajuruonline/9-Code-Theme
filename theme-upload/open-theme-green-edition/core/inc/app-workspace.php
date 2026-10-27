@@ -224,6 +224,11 @@ function ncu_osch_workspace_description( $label, $slug, $children = array() ) {
 
 /** Collect only apps WordPress has exposed to this user, including submenu rights. */
 add_action( 'admin_menu', 'ncu_osch_workspace_collect_apps', PHP_INT_MAX );
+/** Tools that people rarely need on the dashboard: export, import, backup, exhibition and navigator. */
+function ncu_osch_workspace_is_advanced_app( $slug, $label ) {
+    return (bool) preg_match( '~export|import|backup|restore|navigator|exhibit~i', (string) $slug . ' ' . (string) $label );
+}
+
 function ncu_osch_workspace_collect_apps() {
     global $menu, $submenu;
     $apps = array();
@@ -290,8 +295,8 @@ function ncu_osch_workspace_home() {
     <main class="osch-workspace" aria-label="Open Scholar dashboard">
       <header class="osch-workspace-hero">
         <div class="osch-workspace-hero-top"><div class="osch-workspace-identity"><img src="<?php echo esc_url( ncu_open_scholar_logo_url() ); ?>" alt="" width="48" height="48"><span>OPEN SCHOLAR <small>THE FUTURE OF EDUCATION</small></span></div><span class="osch-workspace-status"><i aria-hidden="true"></i> Your workspace</span></div>
-        <div class="osch-workspace-hero-body"><span class="osch-hero-kicker">INSTITUTIONAL DIGITAL WORKSPACE <span aria-hidden="true">/ 01</span></span><h1>Welcome to your<br><em>digital campus.</em></h1><p>Welcome, <?php echo esc_html( $name ); ?>. Your academic applications, essential tools and latest site activity—connected in one place.</p></div>
-        <div class="osch-workspace-actions"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><span class="dashicons dashicons-admin-site-alt3" aria-hidden="true"></span> View your site <span aria-hidden="true">↗</span></a><?php if ( current_user_can( 'manage_options' ) ) : ?><a href="<?php echo esc_url( admin_url( 'admin.php?page=open-scholar-workspace' ) ); ?>"><span class="dashicons dashicons-admin-settings" aria-hidden="true"></span> Dashboard &amp; Menus</a><?php endif; ?><?php if ( current_user_can( 'install_plugins' ) ) : ?><a href="<?php echo esc_url( self_admin_url( 'plugin-install.php?tab=upload' ) ); ?>"><span class="dashicons dashicons-plus-alt2" aria-hidden="true"></span> Install app <span aria-hidden="true">↗</span></a><?php endif; ?></div>
+        <div class="osch-workspace-hero-body"><span class="osch-hero-kicker">INSTITUTIONAL DIGITAL WORKSPACE <span aria-hidden="true">/ 01</span></span><h1>Welcome to your<br><em>digital office.</em></h1><p>Welcome, <?php echo esc_html( $name ); ?>. Your academic applications, essential tools and latest site activity—connected in one place.</p></div>
+        <div class="osch-workspace-actions"><a href="<?php echo esc_url( home_url( '/' ) ); ?>"><span class="dashicons dashicons-admin-site-alt3" aria-hidden="true"></span> View your site <span aria-hidden="true">↗</span></a><a href="<?php echo esc_url( get_author_posts_url( get_current_user_id() ) ); ?>"><span class="dashicons dashicons-id" aria-hidden="true"></span> View my scholar profile</a><?php if ( current_user_can( 'edit_users' ) ) : ?><a href="<?php echo esc_url( admin_url( 'admin.php?page=open-scholar' ) ); ?>"><span class="dashicons dashicons-groups" aria-hidden="true"></span> View scholars</a><?php endif; ?><?php if ( current_user_can( 'manage_options' ) ) : ?><a href="<?php echo esc_url( admin_url( 'admin.php?page=open-scholar-workspace' ) ); ?>"><span class="dashicons dashicons-admin-settings" aria-hidden="true"></span> Dashboard &amp; Menus</a><?php endif; ?><?php if ( current_user_can( 'install_plugins' ) ) : ?><a href="<?php echo esc_url( self_admin_url( 'plugin-install.php?tab=upload' ) ); ?>"><span class="dashicons dashicons-plus-alt2" aria-hidden="true"></span> Install app <span aria-hidden="true">↗</span></a><?php endif; ?></div>
       </header>
       <?php $pinned_home = function_exists( 'ncu_osch_workspace_pinned_posts' ) ? ncu_osch_workspace_pinned_posts() : array(); if ( $pinned_home ) : ?>
       <section class="osch-pinned" aria-labelledby="osch-pinned-home"><h2 id="osch-pinned-home">Pinned</h2>
@@ -307,14 +312,26 @@ function ncu_osch_workspace_home() {
       </section>
       <section class="osch-apps" aria-labelledby="osch-apps-title"><div class="osch-apps-heading"><div><span class="osch-eyebrow">YOUR CONNECTED APPLICATIONS</span><h2 id="osch-apps-title">App directory <small><?php echo esc_html( (string) count( $apps ) ); ?> available</small></h2><p>Browse applications and expand a card to access its submenus.</p></div><label class="osch-app-search"><span class="screen-reader-text">Search applications and their tools</span><span class="dashicons dashicons-search" aria-hidden="true"></span><input type="search" id="osch-app-search" placeholder="Search apps and tools…" autocomplete="off"></label></div>
         <div class="osch-app-filters" role="group" aria-label="Filter applications"><button type="button" class="is-active" data-osch-group="all" aria-pressed="true">All apps</button><button type="button" data-osch-group="scholar" aria-pressed="false">Open Scholar</button><button type="button" data-osch-group="extensions" aria-pressed="false">Other apps</button><button type="button" data-osch-group="wordpress" aria-pressed="false">WordPress</button></div>
-        <div class="osch-app-grid"><?php foreach ( $apps as $slug => $app ) : ?>
+        <?php
+        // Main grid: Dashboard, then Open Scholar apps and content, then core tools, then other installed apps.
+        // Export, import, backup, exhibition and navigator tools sit in Advanced below.
+        $ordered = array_filter( $apps, function ( $app, $slug ) { return ! ncu_osch_workspace_is_advanced_app( $slug, $app['label'] ); }, ARRAY_FILTER_USE_BOTH );
+        uasort( $ordered, function ( $a, $b ) { return $a['tier'] <=> $b['tier']; } );
+        $advanced_apps = array();
+        foreach ( $apps as $slug => $app ) { if ( ncu_osch_workspace_is_advanced_app( $slug, $app['label'] ) ) { $advanced_apps[ $slug ] = $app; } }
+        $opened_advanced = false;
+        ?>
+        <div class="osch-app-grid"><?php foreach ( $ordered + $advanced_apps as $slug => $app ) : ?>
+          <?php if ( ! $opened_advanced && isset( $advanced_apps[ $slug ] ) ) : $opened_advanced = true; ?></div>
+          <details class="osch-advanced-apps"><summary><span>Advanced</span><small><?php echo esc_html( (string) count( $advanced_apps ) ); ?> tools</small></summary>
+          <div class="osch-app-grid"><?php endif; ?>
           <article class="osch-app-tile" style="--osch-app-ink:<?php echo esc_attr( $app['tone'][0] ); ?>;--osch-app-bg:<?php echo esc_attr( $app['tone'][1] ); ?>;--osch-app-edge:<?php echo esc_attr( $app['tone'][2] ); ?>" data-osch-group="<?php echo esc_attr( $app['group'] ); ?>" data-osch-app="<?php echo esc_attr( strtolower( $app['label'] . ' ' . $app['description'] . ' ' . implode( ' ', array_column( $app['children'], 'label' ) ) ) ); ?>">
             <div class="osch-app-card-head"><span class="osch-app-symbol" aria-hidden="true"><?php if ( $app['image'] ) : ?><img src="<?php echo esc_url( $app['image'] ); ?>" alt="" loading="lazy"><?php else : ?><?php echo ncu_osch_workspace_svg_icon( $app['icon_key'] ); ?><?php endif; ?><span class="osch-app-monogram"><?php echo esc_html( ncu_osch_workspace_initials( $app['label'] ) ); ?></span></span><span class="osch-app-type"><?php echo esc_html( $group_labels[ $app['group'] ] ); ?></span></div>
             <a class="osch-app-title" href="<?php echo esc_url( $app['url'] ); ?>"><h3><?php echo esc_html( $app['label'] ); ?></h3><span class="dashicons dashicons-arrow-up-alt2" aria-hidden="true"></span></a>
             <p class="osch-app-desc"><?php echo esc_html( $app['description'] ); ?></p>
             <?php if ( $app['children'] ) : ?><details class="osch-app-submenus"><summary>Browse <?php echo esc_html( (string) count( $app['children'] ) ); ?> tools <span class="dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span></summary><ul><?php foreach ( $app['children'] as $child ) : ?><li><a href="<?php echo esc_url( $child['url'] ); ?>"><?php echo esc_html( $child['label'] ); ?><span aria-hidden="true">↗</span></a></li><?php endforeach; ?></ul></details><?php else : ?><span class="osch-app-no-submenu">Open application to get started</span><?php endif; ?>
           </article>
-        <?php endforeach; ?></div><p id="osch-app-empty" role="status" hidden>No matching apps or tools. Try another search or filter.</p></section>
+        <?php endforeach; ?></div><?php if ( $opened_advanced ) : ?></details><?php endif; ?><p id="osch-app-empty" role="status" hidden>No matching apps or tools. Try another search or filter.</p></section>
       <footer class="osch-workspace-footer">OPEN SCHOLAR <span>Future-ready education, thoughtfully connected.</span></footer>
     </main>
     <?php

@@ -147,7 +147,7 @@
         root.hidden = true;
         root.innerHTML = '<button type="button" class="osch-nav-backdrop" data-osch-close tabindex="-1" aria-label="Close menu"></button>' +
           '<section class="osch-nav-popup" role="dialog" aria-modal="true" aria-label="Open Scholar navigation">' +
-          '<header class="osch-nav-header"><div class="osch-nav-brand"><span class="osch-nav-brand-mark"><img class="osch-nav-brand-img" alt="Open Scholar site icon"></span><div><strong>OPEN SCHOLAR</strong><small>WordPress · Applications · Tools</small></div></div><button type="button" class="osch-nav-close" data-osch-close aria-label="Close menu">×</button></header>' +
+          '<header class="osch-nav-header"><div class="osch-nav-brand"><span class="osch-nav-brand-mark"><img class="osch-nav-brand-img" alt="Open Scholar site icon"></span><div><strong>OPEN SCHOLAR</strong><small>Applications · Tools</small></div></div><button type="button" class="osch-nav-close" data-osch-close aria-label="Close menu">×</button></header>' +
           '<div class="osch-nav-menuhost"></div>' +
           '<footer class="osch-nav-footer"><span>Powered by OpenScholar.ng</span><a href="' + (document.querySelector('#wp-admin-bar-site-name a') ? document.querySelector('#wp-admin-bar-site-name a').href : '/') + '">View site</a></footer></section>';
 
@@ -302,6 +302,20 @@
             details.appendChild(table);
         }
         if (apps) details.appendChild(apps);
+        // Sections that are not about Open Scholar (for example another plugin's notes) move into Advanced too.
+        var keep = /^(name|contact info|about yourself|account management|personal options|open scholar|.*scholar.*|9stagram|live lecture.*|.*conference.*|.*lecture.*|.*teaching.*|.*showglass.*|offers|orders|.*workshop.*|.*publication.*|.*talk.*)$/i;
+        var core = /^(name|contact info|about yourself|account management|personal options)$/i;
+        Array.prototype.slice.call(form.querySelectorAll(':scope > h2')).forEach(function (heading) {
+            var title = heading.textContent.replace(/\s+/g, ' ').trim();
+            if (core.test(title) || keep.test(title) || heading.closest('.osch-profile-advanced')) { return; }
+            var moved = [heading];
+            var node = heading.nextElementSibling;
+            while (node && node.tagName !== 'H2' && !node.classList.contains('submit')) {
+                moved.push(node);
+                node = node.nextElementSibling;
+            }
+            moved.forEach(function (el) { details.appendChild(el); });
+        });
         form.insertBefore(details, form.querySelector('p.submit') || null);
         form.querySelectorAll('table.form-table').forEach(function (table) {
             if (!table.querySelector('tr')) table.remove();
