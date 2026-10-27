@@ -39,3 +39,9 @@ own ⋮ options panel (it opens from the menu, but keeps Gutenberg's styling).
 - Tested at 390px: expanded, minimised and sheet states, with no JavaScript errors. The sheet is opaque and its labels are visible.
 
 Not yet done: form-field outlines, numbered sections, double-underlined section headings, a "where you are" header on settings screens, Scholar profile quick access, and the post list design.
+
+## 2.0.5 — Performance and compact phone controls
+
+- Side rail: the quick-action sync runs every 4 seconds and only while the tab is visible (was every 1.2 seconds). The rail background is solid, without a blur filter, which is costly on phones.
+- Post editor: the watcher ignores changes inside the block canvas and waits 300 ms before rebuilding the menu and accordions.
+- Phones: text fields are 36px tall and buttons size to their text (34px), instead of 44px full-size controls. Paragraph fields keep their full height.

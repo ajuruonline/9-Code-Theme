@@ -36,7 +36,7 @@ body.ncu-admin-skin .nine-box,body.ncu-admin-skin .nine-card{border-radius:0!imp
 body.ncu-admin-skin .nine-box:hover,body.ncu-admin-skin .nine-card:hover{box-shadow:var(--oge-glow)}
 
 /* Side rail: glass column with square, glowing controls; slimmer on phones so it covers less text. */
-#n9be-admin-launcher{gap:6px!important;padding:6px;background:rgba(4,20,13,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--oge-line);border-radius:0}
+#n9be-admin-launcher{gap:6px!important;padding:6px;background:#04140d;border:1px solid var(--oge-line);border-radius:0}
 #n9be-admin-launcher .n9be-rail-button{border-radius:0!important;background:rgba(8,42,27,.9)!important;border:1px solid rgba(184,245,207,.28)!important;color:#eafff2!important;box-shadow:none!important;transition:box-shadow .15s ease,background .15s ease,color .15s ease}
 #n9be-admin-launcher .n9be-rail-button:hover,#n9be-admin-launcher .n9be-rail-button:focus-visible{background:var(--oge-mint)!important;color:var(--oge-deep)!important;outline:none!important;box-shadow:var(--oge-glow)!important}
 #n9be-admin-launcher .n9be-edit-launch{border-color:var(--oge-neon)!important;color:var(--oge-mint)!important}

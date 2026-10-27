@@ -223,7 +223,9 @@ body.login .button-primary{background:var(--osch-accent)!important;border-color:
 body.login #nav a,body.login #backtoblog a{color:var(--osch-dark)!important}
 .osch-seo-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.osch-seo-fields>p{grid-column:1/-1}.osch-seo-fields label{display:grid;align-content:start;gap:6px}.osch-seo-fields textarea,.osch-seo-fields input[type=text],.osch-seo-fields input[type=number]{width:100%;max-width:none}.osch-seo-fields small{color:var(--osch-muted)}
 @media(max-width:782px){
-  body.wp-admin input:not([type=checkbox]):not([type=radio]),body.wp-admin select,body.wp-admin textarea,body.wp-admin button,body.wp-admin .button{max-width:100%;min-height:44px}
+  body.wp-admin input:not([type=checkbox]):not([type=radio]),body.wp-admin select{max-width:100%;height:auto;min-height:36px;padding-block:5px;font-size:15px;line-height:1.3}
+  body.wp-admin textarea{max-width:100%}
+  body.wp-admin button,body.wp-admin .button{max-width:100%;width:auto;min-height:34px;padding:4px 12px;font-size:14px;line-height:1.3;white-space:normal}
   body.wp-admin .form-table,body.wp-admin .form-table tbody,body.wp-admin .form-table tr,body.wp-admin .form-table th,body.wp-admin .form-table td{display:block;width:100%;box-sizing:border-box}
   .osch-seo-fields{grid-template-columns:1fr}.osch-seo-fields>p{grid-column:auto}
   body.wp-admin .interface-interface-skeleton__content{overflow-x:hidden}

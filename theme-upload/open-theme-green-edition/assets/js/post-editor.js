@@ -135,11 +135,20 @@
 	function init() {
 		setupAccordions();
 		rebuild();
+		var pending = 0;
 		observer = new MutationObserver(function (records) {
-			var outside = records.some(function (r) { return !(r.target.closest && r.target.closest('.ot-menu')); });
-			if (!outside) { return; }
-			scheduleRebuild();
-			setupAccordions();
+			var relevant = records.some(function (r) {
+				var t = r.target;
+				if (!t.closest) { return true; }
+				if (t.closest('.ot-menu')) { return false; }
+				return !t.closest('.block-editor-writing-flow, .block-editor-block-list__layout, .editor-styles-wrapper');
+			});
+			if (!relevant || pending) { return; }
+			pending = window.setTimeout(function () {
+				pending = 0;
+				scheduleRebuild();
+				setupAccordions();
+			}, 300);
 		});
 		observer.observe(document.body, { childList: true, subtree: true });
 		document.addEventListener('keydown', function (event) { if (event.key === 'Escape') { closeMenu(); } });
