@@ -191,3 +191,9 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Add Post is a centred text button, with no icon, clear of the menu handle.
 - The launcher is the logo alone, with no green box.
 - Phone spacing is reduced for panels, settings forms, app tiles and the table toolbar.
+
+## 5.6.0 — Tighter phone posts list
+
+- Each post is one card: checkbox, title and actions on one block, with no empty rows between them.
+- Edit, Quick Edit, Trash and View are plain links instead of boxes, with no separators.
+- Search sits directly under the status links; the page heading and table spacing are reduced.

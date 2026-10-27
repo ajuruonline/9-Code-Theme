@@ -539,3 +539,32 @@ body.profile-php .form-table td .description,body.user-edit-php .form-table td .
   body.wp-admin .osch-app-tile{padding:10px!important}
   body.wp-admin .tablenav{margin:4px 0!important}
 }
+
+/* ---- Posts list, phone: remove the empty space between the search, the table and each card. ---- */
+@media (max-width:782px){
+  body.wp-admin.edit-php .search-box,body.wp-admin.edit-comments-php .search-box{flex-direction:row!important;flex-wrap:nowrap!important;align-items:center;gap:6px!important;margin:0 0 8px!important}
+  body.wp-admin.edit-php .search-box input[type=search]{flex:1 1 auto;min-height:36px!important;height:36px!important;padding:4px 12px!important}
+  body.wp-admin.edit-php .search-box input[type=submit],body.wp-admin.edit-comments-php .search-box input[type=submit]{flex:0 0 auto;min-height:36px!important;height:36px!important;padding:0 12px!important}
+  body.wp-admin.edit-php .subsubsub,body.wp-admin.edit-comments-php .subsubsub{margin:0 0 6px!important}
+  body.wp-admin.edit-php .tablenav.top,body.wp-admin.edit-comments-php .tablenav.top{margin:0 0 4px!important;min-height:0!important}
+  body.wp-admin.edit-php .wp-list-table,body.wp-admin.edit-comments-php .wp-list-table{margin-top:0!important}
+  body.wp-admin.edit-php .wp-list-table tbody tr td.column-primary .toggle-row,body.wp-admin.edit-php .wp-list-table .toggle-row{width:28px!important;height:28px!important;min-height:0!important;padding:0!important;margin:-2px -4px 0 0!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions{font-size:0!important;display:flex!important;flex-wrap:wrap!important;gap:4px!important;line-height:1.2!important;padding:4px 0 0!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions span{font-size:12px!important;padding:3px 9px!important;margin:0!important;line-height:1.2!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions span a{font-size:12px!important}
+}
+
+/* ---- Posts list, phone, second pass: no boxes, separators or stacked gaps. ---- */
+@media (max-width:782px){
+  body.wp-admin.edit-php .wp-header-end,body.wp-admin.edit-comments-php .wp-header-end{margin:0!important;height:0!important}
+  body.wp-admin.edit-php .wp-heading-inline,body.wp-admin.edit-php .wrap h1{margin:0 0 4px!important;padding:0!important}
+  body.wp-admin.edit-php .wp-list-table tbody tr{display:flex!important;flex-wrap:wrap!important;align-items:flex-start!important;column-gap:8px!important;margin:0 0 6px!important;padding:8px 10px!important}
+  body.wp-admin.edit-php .wp-list-table tbody tr td.check-column{flex:0 0 auto!important;width:auto!important;padding:2px 0 0!important}
+  body.wp-admin.edit-php .wp-list-table tbody tr td.title{flex:1 1 0!important;min-width:0!important;width:auto!important}
+  body.wp-admin.edit-php .wp-list-table tbody tr td:not(.check-column):not(.title){display:none!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions{font-size:0!important;padding:2px 0 0!important;gap:0!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions span{font-size:0!important;background:none!important;border:0!important;padding:0!important;margin:0!important;display:inline-block!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions span a{font-size:13px!important;padding:4px 10px 4px 0!important;display:inline-block!important;border:0!important;background:none!important}
+  body.wp-admin.edit-php .wp-list-table .row-actions span.trash a{color:#9f1d1d!important}
+  body.wp-admin.edit-php .wp-list-table td.title strong a{line-height:1.2!important}
+}
