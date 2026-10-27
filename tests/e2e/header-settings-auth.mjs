@@ -92,7 +92,9 @@ add_action('wp_ajax_n9eh_header_auth_nonce', function () {
   const guest = await launch();
   browsers.push(guest.browser);
   const guestResult = await save(guest.context, 'invalid', 'GUEST_UNAUTHORIZED');
-  check(guestResult.status() !== 302, 'guest settings write rejected');
+  const guestLocation = guestResult.headers()['location'] || '';
+  check(guestResult.status() === 403 || (guestResult.status() === 302 && /wp-login\\.php/.test(guestLocation)),
+    'guest settings write rejected by HTTP authorization or login redirect');
   unchanged(original, 'guest did not modify header option');
 
   for (const role of ['editor', 'subscriber']) {
