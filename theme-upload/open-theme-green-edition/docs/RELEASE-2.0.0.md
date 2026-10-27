@@ -97,3 +97,9 @@ Speed only: no new features, no content or setting is deleted.
 - Ten key pages: no broken resources (no 4xx or 5xx responses).
 - The PHP log shows no errors from theme code during these checks. Remaining log entries come from WordPress.org update checks, which the sandbox cannot reach, and from a third-party Secure Custom Fields notice.
 - The public suite (`tests/e2e/public.mjs`) was written for the older Nine Code theme's markup. Three of its checks (header, footer and mobile menu toggle classes) don't apply to Open Theme; the suite needs updating for this theme.
+
+## 3.0.1 — Icons restored
+
+- Fixed: icons showed as plain dots. Version 3.0.0 replaced Font Awesome with a small sheet of five icons, so any other Font Awesome icon drew as a filled square. Font Awesome 6.5.2 is back in full.
+- Icons no longer hold up the page. The stylesheet loads without blocking the first paint, and the icon font downloads only when an icon is drawn.
+- Checked on the test site: every Font Awesome icon on the home page, a post, the dashboard, Dashboard & Menus, Export & Import, the post editor and Optimise Site has a glyph, with no JavaScript errors.

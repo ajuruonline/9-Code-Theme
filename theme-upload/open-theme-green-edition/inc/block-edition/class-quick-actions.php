@@ -15,6 +15,7 @@ final class N9BE_Quick_Actions {
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ), 1001 );
         add_action( 'admin_footer', array( __CLASS__, 'markup' ), 1001 );
         add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_frontend' ), 1001 );
+        add_filter( 'style_loader_tag', array( __CLASS__, 'defer_icon_font' ), 10, 2 );
         add_action( 'wp_footer', array( __CLASS__, 'markup_frontend' ), 1001 );
         add_action( 'wp_ajax_n9be_quick_plugin_install', array( __CLASS__, 'ajax_plugin_install' ) );
         add_action( 'admin_menu', array( __CLASS__, 'register_settings_page' ), 80 );
@@ -176,7 +177,7 @@ final class N9BE_Quick_Actions {
 
     private static function enqueue_assets( $context ) {
         wp_enqueue_style( 'dashicons' );
-        wp_enqueue_style( 'open-theme-icons', NCU_THEME_URI . '/assets/css/icons.css', array(), NCU_THEME_VERSION );
+        wp_enqueue_style( 'open-theme-font-awesome', NCU_THEME_URI . '/assets/vendor/fontawesome/css/all.min.css', array(), '6.5.2' );
         wp_enqueue_style( 'n9be-quick-actions', NCU_THEME_URI . '/assets/css/block-edition-quick-actions.css', array(), NCU_THEME_VERSION );
         wp_enqueue_style( 'n9be-topbar-popup', NCU_THEME_URI . '/assets/css/open-scholar-topbar.css', array( 'n9be-quick-actions' ), NCU_THEME_VERSION );
         if ( 'frontend' === $context ) {
@@ -201,6 +202,18 @@ final class N9BE_Quick_Actions {
     public static function enqueue() {
         if ( ! self::allowed() ) { return; }
         self::enqueue_assets( 'admin' );
+    }
+
+    /**
+     * Icons must not hold up the first paint. The stylesheet loads without blocking,
+     * and the icon font itself is only downloaded when an icon is drawn.
+     */
+    public static function defer_icon_font( $tag, $handle ) {
+        if ( 'open-theme-font-awesome' !== $handle ) { return $tag; }
+        $href = preg_match( "/href='([^']+)'/", $tag, $m ) ? $m[1] : '';
+        if ( '' === $href ) { return $tag; }
+        return "<link rel='stylesheet' id='open-theme-font-awesome-css' href='" . esc_url( $href ) . "' media='print' onload=\"this.media='all'\" />\n"
+            . "<noscript><link rel='stylesheet' href='" . esc_url( $href ) . "' /></noscript>\n";
     }
 
     public static function enqueue_frontend() {
