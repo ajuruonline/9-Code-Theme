@@ -19,7 +19,6 @@ jobs:
           node-version: 22
       - run: npm ci || npm install
       - run: composer install --no-interaction
-      - run: npx playwright install --with-deps chromium
       - name: Lint
         run: bin/lint.sh
       - name: Build zips
@@ -30,6 +29,7 @@ jobs:
         run: node tests/unit/open-theme-reproducibility.test.mjs
       - name: Open Theme installer identity/integrity
         run: node tests/unit/open-theme-installer.test.mjs
+      - run: npx playwright install --with-deps chromium
       - name: Static audit (PHP compatibility, deprecated APIs)
         run: bin/audit.sh
       - name: Start test site
