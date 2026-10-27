@@ -18,6 +18,10 @@ trap cleanup EXIT
 curl -fsSL --retry 2 --connect-timeout 15 \
   -o "$TMP/contact-form-7.6.2.3.zip" \
   https://downloads.wordpress.org/plugin/contact-form-7.6.2.3.zip
+# Pin actual bytes, not merely the version string or ZIP container validity.
+# SHA-256 independently observed in both 27 Oct 2026 CI workflows.
+CF7_EXPECTED_SHA256="4766cbc9b433128e43a8af9af8d97b3a7106273e743a19cd645bff5ed2141261"
+bash "$ROOT/bin/verify-archive-sha256.sh" "$TMP/contact-form-7.6.2.3.zip" "$CF7_EXPECTED_SHA256"
 unzip -tqq "$TMP/contact-form-7.6.2.3.zip"
 echo "CF7_ARCHIVE_SHA256=$(sha256sum "$TMP/contact-form-7.6.2.3.zip" | awk '{print $1}')"
 unzip -q -o "$TMP/contact-form-7.6.2.3.zip" -d "$DIR/wp/wp-content/plugins/"
