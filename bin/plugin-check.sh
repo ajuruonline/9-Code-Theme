@@ -18,7 +18,7 @@ raw = open(sys.argv[1]).read()
 blocked = 0
 documented = 0
 for block in re.split(r'^FILE: ', raw, flags=re.M)[1:]:
-    _, _, rest = block.partition('\\n')
+    _, _, rest = block.partition('\n')
     for finding in json.loads(rest.strip() or '[]'):
         if finding.get('type') != 'ERROR':
             continue
