@@ -416,7 +416,35 @@ body.wp-admin .osch-settings-children>summary{font-weight:700;cursor:pointer;pad
 body.wp-admin .osch-settings-subrow{display:grid;grid-template-columns:105px minmax(0,1fr);align-items:center;gap:8px;margin:5px 0}
 body.wp-admin .osch-settings-subrow input[type=text]{width:100%;min-width:0}
 @media(max-width:600px){body.wp-admin .osch-workspace-settings{margin:8px 5px 0 0}body.wp-admin .osch-settings-toolbar{padding:7px}body.wp-admin .osch-settings-app>summary{flex-wrap:wrap}body.wp-admin .osch-settings-app>summary small{width:100%;padding-left:29px}body.wp-admin .osch-settings-subrow{grid-template-columns:75px minmax(0,1fr)}}
-.osch-opt-levels{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-.osch-opt-level{display:grid;gap:6px;justify-items:start;padding:12px;border:1px solid #cfe0d5;border-radius:10px;background:#fff}
-.osch-opt-level.is-current{border-color:#14532d;box-shadow:0 0 0 1px #14532d}
-.osch-opt-level .button{margin-top:4px}
+/* Optimise Site */
+.osch-step{display:inline-block;margin-right:6px;padding:1px 6px;border-radius:5px;background:#14532d;color:#fff;font-size:11px;font-weight:700;letter-spacing:.04em;vertical-align:2px;text-decoration:none}
+.osch-opt-actions{display:flex;flex-wrap:wrap;gap:8px}.osch-opt-actions form{margin:0}
+.osch-opt-status.is-off{border-left:4px solid #b45309}
+.osch-opt-levels{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.osch-opt-level{display:grid;gap:5px;align-content:start;justify-items:start;padding:10px 12px;border:1px solid #cfe0d5;border-radius:10px;background:#fff}
+.osch-opt-level form{margin:2px 0 0}
+.osch-opt-level.is-current{border-color:#14532d;box-shadow:0 0 0 1px #14532d;background:#f3faf5}
+.osch-opt-level em{font-weight:600;color:#15803d}
+.osch-opt-advanced>summary{cursor:pointer;list-style:none;padding:4px 0}
+.osch-opt-advanced>summary::-webkit-details-marker{display:none}
+.osch-opt-advanced>summary h2{display:inline-block;margin:0}
+.osch-opt-advanced>summary::after{content:"+";float:right;font-size:20px;font-weight:700;color:#14532d}
+.osch-opt-advanced[open]>summary::after{content:"\2212"}
+.osch-opt-fields{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:8px 0 12px}
+.osch-opt-check{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid #e0ebe3;border-radius:8px}
+.osch-opt-check input{margin-top:2px}
+.osch-opt-check span,.osch-opt-number{display:grid;gap:2px}
+.osch-opt-number{padding:8px 10px;border:1px solid #e0ebe3;border-radius:8px}
+.osch-opt-number input{width:110px}
+.osch-opt-fields b{color:#14532d}
+.osch-opt-fields i,.osch-opt-health i{font-size:12.5px;color:#4b5f53}
+.osch-opt-health,.osch-opt-history{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.osch-opt-health li{display:flex;gap:9px;align-items:flex-start;padding:8px 10px;border:1px solid #e0ebe3;border-radius:8px}
+.osch-opt-health li span:last-child{display:grid;gap:2px}
+.osch-opt-dot{flex:0 0 10px;height:10px;margin-top:4px;border-radius:50%;background:#16a34a}
+.osch-opt-health li.is-warn .osch-opt-dot{background:#d97706}
+.osch-opt-history li{padding:6px 0;border-bottom:1px solid #eef3ef;font-size:13px}
+.osch-opt-history+form{margin-top:12px}
+/* Fields across theme and settings screens: bold dark-green labels, italic help. */
+body.wp-admin .ncu-admin label>b,body.wp-admin .wrap .form-table th,body.wp-admin .ncu-admin .form-table th{font-weight:700;color:#14532d}
+body.wp-admin .wrap p.description,body.wp-admin .wrap span.description,body.wp-admin .ncu-admin .description{font-style:italic}
