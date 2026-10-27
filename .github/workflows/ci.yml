@@ -19,6 +19,8 @@ jobs:
           node-version: 22
       - run: npm ci || npm install
       - run: composer install --no-interaction
+      - name: PHPCS advisory evidence regression (failing-first)
+        run: python3 -m unittest discover -s tests/unit -p 'test_audit_reporting.py' -v
       - run: npx playwright install --with-deps chromium
       - name: Lint
         run: bin/lint.sh
