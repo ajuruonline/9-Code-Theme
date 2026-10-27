@@ -120,6 +120,10 @@
 			help.textContent = HELP[id] || DEFAULT_HELP;
 			var title = head.querySelector('.hndle, h2, h3') || head;
 			title.parentNode.insertBefore(help, title.nextSibling);
+			var mark = document.createElement('span');
+			mark.className = 'ot-acc-icon';
+			mark.innerHTML = icon();
+			title.insertBefore(mark, title.firstChild);
 			head.setAttribute('role', 'button');
 			head.setAttribute('tabindex', '0');
 			head.setAttribute('aria-expanded', 'false');
@@ -127,7 +131,15 @@
 				var open = box.classList.toggle('closed') === false;
 				head.setAttribute('aria-expanded', open ? 'true' : 'false');
 			};
-			head.addEventListener('click', function (event) { if (!event.target.closest('a,button,input,select,textarea')) { toggleBox(); } });
+			// Capture phase: the whole header, title and arrow included, toggles once. WordPress's own
+			// postbox handler would toggle the title a second time and cancel the tap, so it is stopped here.
+			head.addEventListener('click', function (event) {
+				var control = event.target.closest('a,button,input,select,textarea');
+				if (control && !control.classList.contains('handlediv')) { return; }
+				event.preventDefault();
+				event.stopPropagation();
+				toggleBox();
+			}, true);
 			head.addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleBox(); } });
 		});
 	}

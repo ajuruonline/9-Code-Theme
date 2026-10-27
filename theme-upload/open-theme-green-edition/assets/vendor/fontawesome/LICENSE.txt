@@ -1,7 +1,0 @@
-Font Awesome Free 6.5.2 (bundled for Open Theme)
-
-Icons: CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
-Fonts: SIL OFL 1.1 License (https://scripts.sil.org/OFL)
-CSS:   MIT License (https://opensource.org/licenses/MIT)
-
-Source: https://fontawesome.com (https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/)

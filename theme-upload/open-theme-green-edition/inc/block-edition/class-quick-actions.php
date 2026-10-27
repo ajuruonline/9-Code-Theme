@@ -176,7 +176,7 @@ final class N9BE_Quick_Actions {
 
     private static function enqueue_assets( $context ) {
         wp_enqueue_style( 'dashicons' );
-        wp_enqueue_style( 'open-theme-font-awesome', NCU_THEME_URI . '/assets/vendor/fontawesome/css/all.min.css', array(), '6.5.2' );
+        wp_enqueue_style( 'open-theme-icons', NCU_THEME_URI . '/assets/css/icons.css', array(), NCU_THEME_VERSION );
         wp_enqueue_style( 'n9be-quick-actions', NCU_THEME_URI . '/assets/css/block-edition-quick-actions.css', array(), NCU_THEME_VERSION );
         wp_enqueue_style( 'n9be-topbar-popup', NCU_THEME_URI . '/assets/css/open-scholar-topbar.css', array( 'n9be-quick-actions' ), NCU_THEME_VERSION );
         if ( 'frontend' === $context ) {
