@@ -51,4 +51,12 @@ try {
   wp('option', 'update', 'page_on_front', originalFront);
   if (fixtureId) wp('post', 'delete', fixtureId, '--force');
 }
+// Independently assert fixture cleanup; a finally block alone is not evidence.
+t.ok(wp('option', 'get', 'show_on_front') === originalMode,
+  'cleanup restored the original homepage mode');
+t.ok(wp('option', 'get', 'page_on_front') === originalFront,
+  'cleanup restored the original static homepage ID');
+const remainingPages = wp('post', 'list', '--post_type=page', '--post_status=any', '--format=ids');
+t.ok(!remainingPages.split(/\\s+/).includes(fixtureId),
+  'cleanup permanently removed the disposable homepage page');
 t.done();
