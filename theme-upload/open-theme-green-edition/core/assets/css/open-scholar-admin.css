@@ -448,3 +448,16 @@ body.wp-admin .osch-settings-subrow input[type=text]{width:100%;min-width:0}
 /* Fields across theme and settings screens: bold dark-green labels, italic help. */
 body.wp-admin .ncu-admin label>b,body.wp-admin .wrap .form-table th,body.wp-admin .ncu-admin .form-table th{font-weight:700;color:#14532d}
 body.wp-admin .wrap p.description,body.wp-admin .wrap span.description,body.wp-admin .ncu-admin .description{font-style:italic}
+
+/* Profile and user forms: app-style sections, double-underlined headings, one Advanced section. */
+body.profile-php #your-profile h2,body.user-edit-php #your-profile h2{margin:18px 0 8px;padding:0 0 4px;font-size:16px;font-weight:800;color:#14532d;border-bottom:3px double #14532d}
+body.profile-php #your-profile .form-table,body.user-edit-php #your-profile .form-table{margin:0 0 6px;padding:4px 12px;background:#fff;border:1px solid #dfe9e2;border-radius:14px;box-shadow:0 1px 2px rgba(8,42,27,.05)}
+body.profile-php .form-table th,body.user-edit-php .form-table th{font-weight:700;color:#14532d}
+body.profile-php .form-table td .description,body.user-edit-php .form-table td .description{font-style:italic;color:#4b5f53}
+.osch-profile-advanced{position:relative;margin:14px 0;border:1px solid #cfe0d5;border-radius:14px;background:#fff;box-shadow:0 1px 2px rgba(8,42,27,.05)}
+.osch-profile-advanced>summary{display:flex;flex-direction:column;gap:2px;padding:12px 16px;cursor:pointer;list-style:none;color:#14532d;font-weight:800;font-size:15px}
+.osch-profile-advanced>summary::-webkit-details-marker{display:none}
+.osch-profile-advanced>summary::after{content:"+";position:absolute;right:16px;top:10px;font-size:20px;line-height:1}
+.osch-profile-advanced[open]>summary::after{content:"\2212"}
+.osch-profile-advanced>summary small{font-weight:400;font-style:italic;color:#4b5f53;font-size:12.5px}
+.osch-profile-advanced>.form-table,.osch-profile-advanced>#application-passwords-section{margin:0 12px 12px}

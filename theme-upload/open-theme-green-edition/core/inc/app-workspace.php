@@ -255,16 +255,14 @@ function ncu_osch_workspace_collect_apps() {
             'url' => ncu_osch_workspace_menu_url( $slug ),
             'description' => ncu_osch_workspace_description( $label, $slug, $children ),
             'group' => $group,
+            'tier' => ncu_osch_workspace_tier( $slug, $group ),
             'icon' => $icon,
             'image' => $image,
             'children' => $children,
         );
     }
     // Move scholarship apps to the beginning without removing WordPress/native apps.
-    uasort( $apps, function ( $a, $b ) {
-        $order = array( 'scholar' => 0, 'extensions' => 1, 'wordpress' => 2 );
-        return ( $order[ $a['group'] ] <=> $order[ $b['group'] ] );
-    } );
+    uasort( $apps, function ( $a, $b ) { return $a['tier'] <=> $b['tier']; } );
     ncu_osch_workspace_assign_visuals( $apps );
     $GLOBALS['ncu_osch_workspace_catalog'] = $apps;
     ncu_osch_workspace_apply_preferences( $apps );

@@ -144,8 +144,20 @@
 		});
 	}
 
+	/* Rename WordPress jargon in the editor's own labels. */
+	function relabel() {
+		document.querySelectorAll('.interface-interface-skeleton__footer, .edit-post-meta-boxes-main, .edit-post-layout__metaboxes').forEach(function (root) {
+			var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+			var node;
+			while ((node = walker.nextNode())) {
+				if (node.nodeValue && node.nodeValue.trim() === 'Meta Boxes') { node.nodeValue = node.nodeValue.replace('Meta Boxes', 'Details'); }
+			}
+		});
+	}
+
 	function init() {
 		setupAccordions();
+		relabel();
 		rebuild();
 		var pending = 0;
 		observer = new MutationObserver(function (records) {
@@ -160,6 +172,7 @@
 				pending = 0;
 				scheduleRebuild();
 				setupAccordions();
+				relabel();
 			}, 300);
 		});
 		observer.observe(document.body, { childList: true, subtree: true });

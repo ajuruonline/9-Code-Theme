@@ -79,8 +79,15 @@
             var main = item.querySelector(':scope > a.menu-top');
             if (!main) return;
             var record = config.find(function (row) { return matchLinks(main.href, row.url); });
-            if (!record) return;
-            positions.push({item: item, order: Number.isFinite(record.order) ? record.order : 500, index: index});
+            if (!record) {
+                // WordPress's own items (no catalogue row) still follow the tiers: core settings before other plugins.
+                var file = (main.getAttribute('href') || '').split('?')[0].split('/').pop();
+                var coreTier = /^(index|themes|plugins|users|profile|tools|options-[a-z-]+|nav-menus)\.php$/.test(file);
+                var tier = file === 'index.php' ? 0 : (coreTier ? 2 : 3);
+                positions.push({item: item, order: tier * 100 + 900, index: index, tier: tier});
+                return;
+            }
+            positions.push({item: item, order: Number.isFinite(record.order) ? record.order : 500, index: index, tier: record.tier || 2});
             if (record.menu === false) { item.hidden = true; item.classList.add('osch-navigation-hidden'); }
             if (record.title) {
                 var name = main.querySelector('.wp-menu-name');
@@ -98,6 +105,19 @@
         // Reorder visible app rows only; preserve IDs, native WordPress links and event handlers.
         positions.sort(function (a, b) { return a.order - b.order || a.index - b.index; });
         positions.forEach(function (entry) { menu.appendChild(entry.item); });
+        // Other plugins (tier 3) sit together at the end, under a collapsed Advanced heading.
+        var advanced = positions.filter(function (entry) { return entry.tier === 3 && !entry.item.hidden; });
+        if (advanced.length) {
+            var head = document.createElement('li');
+            head.className = 'osch-nav-advanced-head';
+            head.innerHTML = '<button type="button" class="osch-nav-advanced-toggle" aria-expanded="false"><span>Advanced</span><span class="osch-nav-advanced-count">' + advanced.length + '</span></button>';
+            menu.insertBefore(head, advanced[0].item);
+            advanced.forEach(function (entry) { entry.item.classList.add('osch-nav-advanced'); });
+            head.querySelector('button').addEventListener('click', function () {
+                var open = menu.classList.toggle('osch-nav-advanced-open');
+                this.setAttribute('aria-expanded', String(open));
+            });
+        }
     }
 
     /** Original permission-filtered WordPress menu becomes a centered app popup.
@@ -263,8 +283,34 @@
         document.body.classList.add('osch-modal-navigation-ready');
     }
 
+    /** Profile and user forms: settings about the software move into one collapsed Advanced section. */
+    function prepareProfileForm() {
+        var form = document.getElementById('your-profile');
+        if (!form) return;
+        var rows = Array.prototype.slice.call(form.querySelectorAll('.user-syntax-highlighting-wrap, .user-admin-color-wrap, .user-comment-shortcuts-wrap, .user-admin-bar-front-wrap, .user-infinite-scrolling-wrap, .user-language-wrap, .user-sessions-wrap'));
+        var apps = document.getElementById('application-passwords-section');
+        if (!rows.length && !apps) return;
+        var details = document.createElement('details');
+        details.className = 'osch-profile-advanced';
+        details.innerHTML = '<summary><span>Advanced settings</span><small>Editor, colours, language, sessions and application passwords</small></summary>';
+        if (rows.length) {
+            var table = document.createElement('table');
+            table.className = 'form-table';
+            var body = document.createElement('tbody');
+            table.appendChild(body);
+            rows.forEach(function (row) { body.appendChild(row); });
+            details.appendChild(table);
+        }
+        if (apps) details.appendChild(apps);
+        form.insertBefore(details, form.querySelector('p.submit') || null);
+        form.querySelectorAll('table.form-table').forEach(function (table) {
+            if (!table.querySelector('tr')) table.remove();
+        });
+    }
+
     function init() {
         installNavigationShell();
+        prepareProfileForm();
         // Named, semantically distinct icons. Never replace unknown plugin icons
         // with unrelated generic line art (and never use a default lightbulb).
         document.querySelectorAll('#adminmenu > li.menu-top').forEach(function (row) {

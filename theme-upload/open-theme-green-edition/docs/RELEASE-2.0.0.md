@@ -120,3 +120,38 @@ Not changed, on purpose:
 - The public home page's archive and 9Stagram stylesheets (about 330 KB) are needed on that page.
 - The post editor's own WordPress block editor is most of its cost and cannot be trimmed safely.
 - Font Awesome is not subset, because that would bring back the missing icons from 3.0.0.
+
+## 5.0.0 — Feels like an app, not WordPress
+
+**Menu order** (popup and sidebar)
+1. Dashboard
+2. Content: Posts, Pages, Media, Comments, then the Open Scholar apps
+3. Core: Appearance, Plugins, Users, Tools, Settings, Open Scholar host pages, Export & Import, Backup & Restore
+4. Other plugins, under a collapsed **Advanced** heading at the bottom
+A custom order saved on Dashboard & Menus still wins. An order of 500 (the untouched default) follows the tiers.
+
+**People who cannot manage the site** (authors, contributors, editors)
+- See Dashboard, Posts, Pages, Media, Comments, their Profile, and any app that has content screens.
+- Plugins, Themes, Settings, Users (except their own profile), Tools and the Open Scholar host pages are hidden, and opening them by address goes back to the Dashboard. Permissions are not changed.
+
+**Wording**
+- The word "WordPress" is now "Advanced" in admin and login text (text only, so links keep working), and "Howdy" is now "Hello".
+- Removed: the WordPress logo, version and "thank you" footer, the generator tag, and the core update notice. The login page shows the site's name.
+- The editor's "Meta Boxes" bar is now "Details".
+- The address still contains wp-admin and wp-content, because plugins depend on those paths.
+
+**Profile and user forms**
+- Settings about the software (syntax highlighting, colour scheme, keyboard shortcuts, toolbar, infinite scrolling, language, browser sessions and application passwords) are in one collapsed **Advanced settings** section.
+- Sections use double-underlined headings and rounded cards. Name, contact, biography, password and plugin profile fields stay where they were.
+
+**Post editor**
+- Top bar with a soft shadow, pill-shaped Save and Publish, a round editor menu button, and "Details" for the meta boxes.
+
+**Checks**
+- Admin account: all menus in the new order. Author account: 403 on Plugins, Themes, Settings, Users and the host page; Tools redirects; profile and content screens open.
+- 20 admin and public loads with no JavaScript errors. Editor regression tests pass.
+- Admin time to first byte rose by about 20–30 ms, from the wording pass. The fast path skips pages with none of the words.
+
+Not changed, and why:
+- The block editor's canvas is WordPress's own editor. Restyling it further is possible but needs a full custom editor.
+- Paths like /wp-admin/ cannot be renamed without breaking plugins.

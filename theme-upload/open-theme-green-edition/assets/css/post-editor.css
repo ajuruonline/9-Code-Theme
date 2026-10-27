@@ -75,3 +75,12 @@
 .ot-acc .inside p{margin:6px 0!important}
 .ot-acc .inside :is(input,select,textarea){font-weight:400!important;color:#132c20!important}
 .ot-acc>.postbox-header .hndle{justify-content:flex-start!important;text-align:left!important;flex:1 1 auto}
+
+/* App-style editor: a clear top bar, pill buttons, round menu button, and a calmer canvas. */
+.editor-header,.edit-post-header{box-shadow:0 1px 6px rgba(8,42,27,.07);border-bottom:1px solid #e3ece6}
+.editor-post-publish-button,.editor-post-publish-button__button,.editor-post-save-draft,.editor-post-publish-panel__toggle{border-radius:999px!important;font-weight:700!important}
+.ot-menu-toggle{border-radius:50%!important}
+@media (max-width:782px){
+	.editor-styles-wrapper{padding-inline:14px!important}
+	.edit-post-visual-editor__post-title-wrapper{padding-inline:4px}
+}

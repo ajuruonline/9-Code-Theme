@@ -93,9 +93,32 @@ function ncu_osch_workspace_apply_preferences( &$apps ) {
         return ( $a['workspace_order'] <=> $b['workspace_order'] );
     } );
 }
+/** Inside the content tier: Posts first, then Pages, Media, Comments, then the apps in catalogue order. */
+function ncu_osch_workspace_sub_order( $slug, $position ) {
+    $first = array( 'edit.php' => 1, 'edit.php?post_type=page' => 2, 'upload.php' => 3, 'edit-comments.php' => 4 );
+    return isset( $first[ $slug ] ) ? $first[ $slug ] : 10 + $position;
+}
+
+/**
+ * Menu tiers. 0 = Dashboard; 1 = content (posts, media, comments, Open Scholar apps);
+ * 2 = core settings, tools and host pages; 3 = other plugins, collapsed under Advanced.
+ */
+function ncu_osch_workspace_tier( $slug, $group ) {
+    $slug = (string) $slug;
+    if ( 'index.php' === $slug ) { return 0; }
+    $core = array( 'nine-code-ultra', 'open-scholar-workspace', 'osch-export-import', 'osch-backup-restore', 'nine-backup-manager', 'ninecode-quick-actions', 'open-scholar-optimise', 'open-scholar-jetpack', 'open-scholar-seo', 'nine-code-ultra-branding', 'nine-code-ultra-health', 'nine-code-ultra-appearance' );
+    if ( in_array( $slug, $core, true ) || preg_match( '~^(?:themes|plugins|users|tools|options-[a-z-]+|nav-menus|profile)\.php~', $slug ) ) { return 2; }
+    if ( preg_match( '~post_type=(?:acf-|elementor)~', $slug ) ) { return 3; }
+    if ( 0 === strpos( $slug, 'edit.php' ) || in_array( $slug, array( 'upload.php', 'edit-comments.php' ), true ) || 'scholar' === $group ) { return 1; }
+    return 'extensions' === $group ? 3 : 2;
+}
+
 function ncu_osch_workspace_menu_configuration( $catalog ) {
     $result = array();
+    $position = 0;
     foreach ( (array) $catalog as $slug => $app ) {
+        $position++;
+        $tier = ncu_osch_workspace_tier( $slug, isset( $app['group'] ) ? $app['group'] : '' );
         $pref = ncu_osch_workspace_preference( $slug );
         $submenus = array();
         foreach ( isset( $app['children'] ) ? (array) $app['children'] : array() as $child ) {
@@ -110,7 +133,9 @@ function ncu_osch_workspace_menu_configuration( $catalog ) {
         $result[] = array(
             'url' => $app['url'],
             'menu' => ncu_osch_workspace_required_menu( $slug ) || ! isset( $pref['menu'] ) || (bool) $pref['menu'],
-            'order' => isset( $pref['order'] ) ? (int) $pref['order'] : 500,
+            // An order someone set on Dashboard & Menus wins. 500 is the untouched default, so tier order applies.
+            'order' => isset( $pref['order'] ) && 500 !== (int) $pref['order'] ? (int) $pref['order'] : $tier * 100 + ncu_osch_workspace_sub_order( $slug, $position ),
+            'tier' => $tier,
             'title' => isset( $pref['title'] ) ? $pref['title'] : '',
             'submenus' => $submenus,
         );
@@ -283,4 +308,39 @@ function ncu_osch_workspace_settings_page() {
     }());
     </script>
     <?php
+}
+
+/**
+ * People who cannot manage the site (authors, contributors, editors) see only what they use to make content:
+ * Dashboard, posts and pages, media, comments, their profile, and any app that has content screens.
+ * Plugins, themes, settings, tools and host pages are removed for them. Capabilities are not changed.
+ */
+add_action( 'admin_menu', 'ncu_osch_restrict_menus_for_content_roles', 999 );
+function ncu_osch_restrict_menus_for_content_roles() {
+    if ( current_user_can( 'manage_options' ) ) { return; }
+    global $menu;
+    foreach ( (array) $menu as $item ) {
+        $slug = isset( $item[2] ) ? (string) $item[2] : '';
+        if ( '' === $slug || 0 === strpos( $slug, 'separator' ) ) { continue; }
+        if ( ncu_osch_is_content_menu( $slug ) ) { continue; }
+        remove_menu_page( $slug );
+    }
+}
+
+function ncu_osch_is_content_menu( $slug ) {
+    global $submenu;
+    if ( in_array( $slug, array( 'index.php', 'upload.php', 'edit-comments.php', 'profile.php', 'users.php' ), true ) || 0 === strpos( $slug, 'edit.php' ) ) { return true; }
+    foreach ( isset( $submenu[ $slug ] ) ? (array) $submenu[ $slug ] : array() as $child ) {
+        $target = isset( $child[2] ) ? (string) $child[2] : '';
+        if ( 0 === strpos( $target, 'edit.php' ) || 0 === strpos( $target, 'post-new.php' ) ) { return true; }
+    }
+    return false;
+}
+
+/* Direct links to hidden tools go back to the Dashboard, so the menu and the address agree. */
+add_action( 'admin_init', 'ncu_osch_block_tools_for_content_roles', 1 );
+function ncu_osch_block_tools_for_content_roles() {
+    if ( current_user_can( 'manage_options' ) || ! isset( $GLOBALS['pagenow'] ) || 'tools.php' !== $GLOBALS['pagenow'] ) { return; }
+    wp_safe_redirect( admin_url() );
+    exit;
 }
