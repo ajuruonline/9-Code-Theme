@@ -34,6 +34,9 @@ class Cf7RestDispatchContract(unittest.TestCase):
                       'CF7_REST_GUEST_MANAGEMENT_DENIED'):
             self.assertIn(token, src)
         self.assertIn('HTTP/browser/AJAX NOT_RUN', src)
+        # CF7 v6.2.3 uses rest_authorization_required_code(): anonymous = 401.
+        self.assertIn("$response->get_status() === 401", src)
+        self.assertNotIn("$response->get_status() === 403", src)
 
 
 if __name__ == '__main__':
