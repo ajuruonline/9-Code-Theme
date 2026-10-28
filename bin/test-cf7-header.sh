@@ -80,6 +80,15 @@ if (!defined('ABSPATH') || strpos(wp_normalize_path(ABSPATH), '/.wp-test/wp/') =
 add_filter('wpcf7_skip_mail', '__return_true', PHP_INT_MAX);
 add_filter('wpcf7_skip_spam_check', '__return_true', PHP_INT_MAX);
 add_filter('pre_wp_mail', static function ($preempt) { return true; }, PHP_INT_MAX);
+// Browser client accepts this syntactically valid address; the real CF7
+// server validator rejects it so HTTP validation is tested deterministically.
+add_filter('wpcf7_validate_email*', static function ($result, $tag) {
+    $value = isset($_POST['your-email']) ? sanitize_email(wp_unslash($_POST['your-email'])) : '';
+    if ($tag->name === 'your-email' && $value === 'reject@example.test') {
+        $result->invalidate($tag, 'Disposable server-side email rejection.');
+    }
+    return $result;
+}, 20, 2);
 PHP
 CF7_BROWSER_FORM_ID=$("${WP[@]}" post create --post_type=wpcf7_contact_form --post_status=publish \
   --post_title="Disposable 9EH CF7 browser form" --porcelain)
