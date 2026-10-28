@@ -14,6 +14,8 @@ TMP="$(mktemp -d)"
 CF7_BROWSER_FORM_ID=""
 CF7_BROWSER_PAGE_ID=""
 CF7_BROWSER_MAIL_GUARD="$DIR/wp/wp-content/mu-plugins/n9eh-cf7-browser-no-mail.php"
+CF7_BROWSER_SETTINGS_BACKUP="$TMP/n9lh-settings.json"
+export CF7_BROWSER_SETTINGS_BACKUP
 cleanup() {
   local previous_status=$?
   trap - EXIT
@@ -23,6 +25,9 @@ cleanup() {
   fi
   if [[ "$CF7_BROWSER_FORM_ID" =~ ^[0-9]+$ ]]; then
     "${WP[@]}" post delete "$CF7_BROWSER_FORM_ID" --force >/dev/null 2>&1 || cleanup_ok=0
+  fi
+  if [[ -f "$CF7_BROWSER_SETTINGS_BACKUP" ]]; then
+    "${WP[@]}" eval-file "$ROOT/tests/e2e/cf7-popup-restore.php" || cleanup_ok=0
   fi
   rm -f "$CF7_BROWSER_MAIL_GUARD" || cleanup_ok=0
   "${WP[@]}" plugin deactivate contact-form-7 >/dev/null 2>&1 || cleanup_ok=0
@@ -92,3 +97,6 @@ fi
 export CF7_BROWSER_FORM_ID CF7_BROWSER_PAGE_ID CF7_BROWSER_BASE_URL
 echo "CF7_BROWSER_MAIL_SUPPRESSION_GUARD=INSTALLED"
 node "$ROOT/tests/e2e/cf7-browser.mjs"
+# Exercise actual Alpha popup with temporary settings, restored in EXIT trap.
+"${WP[@]}" eval-file "$ROOT/tests/e2e/cf7-popup-config.php"
+node "$ROOT/tests/e2e/cf7-popup-browser.mjs"
