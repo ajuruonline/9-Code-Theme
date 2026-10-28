@@ -36,7 +36,19 @@ class Cf7RestDispatchContract(unittest.TestCase):
         self.assertIn('HTTP/browser/AJAX NOT_RUN', src)
         # CF7 v6.2.3 uses rest_authorization_required_code(): anonymous = 401.
         self.assertIn("$response->get_status() === 401", src)
-        self.assertNotIn("$response->get_status() === 403", src)
+
+    def test_authenticated_subscriber_management_denied_and_cleaned(self):
+        # Authenticated users lacking CF7 management capabilities must receive
+        # 403 (not the guest's 401). Disposable user must be removed afterwards.
+        src = (ROOT / 'tests/e2e/header-cf7-rest.php').read_text()
+        shell = (ROOT / 'bin/test-cf7-header.sh').read_text()
+        self.assertIn('subscriber_management', shell)
+        self.assertIn('subscriber_management', src)
+        self.assertIn("'role' => 'subscriber'", src)
+        self.assertIn("$response->get_status() === 403", src)
+        self.assertIn('CF7_REST_SUBSCRIBER_MANAGEMENT_DENIED', src)
+        self.assertIn('CF7_REST_TEMP_USER_REMOVED', src)
+        self.assertIn('wp_delete_user', src)
 
 
 if __name__ == '__main__':
