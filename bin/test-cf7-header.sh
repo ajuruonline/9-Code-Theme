@@ -106,6 +106,10 @@ fi
 export CF7_BROWSER_FORM_ID CF7_BROWSER_PAGE_ID CF7_BROWSER_BASE_URL
 echo "CF7_BROWSER_MAIL_SUPPRESSION_GUARD=INSTALLED"
 node "$ROOT/tests/e2e/cf7-browser.mjs"
+# Isolate popup integration from the native-page shortcode: never render the
+# same CF7 form twice on the page and mistake duplicate-instance behavior for
+# an Alpha popup regression. The disposable page is deleted in the EXIT trap.
+"${WP[@]}" post update "$CF7_BROWSER_PAGE_ID" --post_content="Disposable Alpha popup integration only" >/dev/null
 # Exercise actual Alpha popup with temporary settings, restored in EXIT trap.
 "${WP[@]}" eval-file "$ROOT/tests/e2e/cf7-popup-config.php"
 node "$ROOT/tests/e2e/cf7-popup-browser.mjs"
