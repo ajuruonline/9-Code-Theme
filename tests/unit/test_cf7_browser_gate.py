@@ -33,6 +33,17 @@ class Cf7BrowserGateContract(unittest.TestCase):
         self.assertIn("pre_wp_mail", sh)
         self.assertIn("mu-plugins", sh)
 
+    def test_browser_server_validation_is_not_blocked_by_client_email_syntax(self):
+        sh = (ROOT / "bin/test-cf7-header.sh").read_text()
+        native = (ROOT / "tests/e2e/cf7-browser.mjs").read_text()
+        popup = (ROOT / "tests/e2e/cf7-popup-browser.mjs").read_text()
+        self.assertIn("wpcf7_validate_email*", sh)
+        self.assertIn("reject@example.test", sh)
+        self.assertIn("reject@example.test", native)
+        self.assertIn("reject@example.test", popup)
+        self.assertIn("CF7_BROWSER_SERVER_VALIDATION_HTTP_REJECTED", native)
+        self.assertIn("CF7_POPUP_SERVER_VALIDATION_HTTP_REJECTED", popup)
+
     def test_disposable_cleanup_and_ci_wiring(self):
         sh = (ROOT / "bin/test-cf7-header.sh").read_text()
         workflow = (ROOT / ".github/workflows/ci.yml").read_text()
