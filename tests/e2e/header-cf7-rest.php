@@ -16,7 +16,7 @@ if (!class_exists('WPCF7_ContactForm') || !defined('WPCF7_VERSION')
     exit(2);
 }
 $case = getenv('CF7_REST_CASE');
-if (!in_array($case, ['valid', 'invalid', 'missing_unit', 'guest_management'], true)) {
+if (!in_array($case, ['valid', 'invalid', 'missing_unit', 'guest_management', 'subscriber_management'], true)) {
     fwrite(STDERR, "CF7_REST_REFUSED: unknown case.\n");
     exit(2);
 }
@@ -31,6 +31,7 @@ if (is_wp_error($id) || !$id) {
 }
 $old_post = $_POST;
 $old_user = get_current_user_id();
+$temp_user_id = 0;
 $mail_calls = 0;
 $skip_mail = static function () { return true; };
 $skip_spam = static function () { return true; }; // No claim about spam filters.
@@ -48,7 +49,25 @@ try {
     add_filter('pre_wp_mail', $intercept_mail, 999);
     rest_get_server(); // Register actual Contact Form 7 REST routes.
     $route = '/contact-form-7/v1/contact-forms/' . (int) $id;
-    if ($case === 'guest_management') {
+    if ($case === 'subscriber_management') {
+        // Real logged-in low-privilege user, not a simulated capability filter.
+        // The temporary user is deleted in finally, even if assertions fail.
+        $temp_user_id = wp_insert_user([
+            'user_login' => 'cf7_ci_' . strtolower(wp_generate_password(12, false, false)),
+            'user_pass' => wp_generate_password(24, true, true),
+            'user_email' => 'cf7-ci-' . strtolower(wp_generate_password(12, false, false)) . '@example.test',
+            'role' => 'subscriber',
+        ]);
+        if (is_wp_error($temp_user_id) || !$temp_user_id) {
+            throw new RuntimeException('CF7_REST_FAILED: temporary subscriber creation failed.');
+        }
+        wp_set_current_user($temp_user_id);
+        $request = new WP_REST_Request('GET', $route);
+        $response = rest_do_request($request);
+        $data = $response->get_data();
+        $checks['CF7_REST_SUBSCRIBER_MANAGEMENT_DENIED'] = $response->get_status() === 403
+            && is_array($data) && ($data['code'] ?? '') === 'wpcf7_forbidden';
+    } elseif ($case === 'guest_management') {
         $request = new WP_REST_Request('GET', $route);
         $response = rest_do_request($request);
         $data = $response->get_data();
@@ -98,6 +117,13 @@ try {
 } finally {
     $_POST = $old_post;
     wp_set_current_user($old_user);
+    if (is_int($temp_user_id) && $temp_user_id > 0) {
+        if (!function_exists('wp_delete_user')) {
+            require_once ABSPATH . 'wp-admin/includes/user.php';
+        }
+        wp_delete_user($temp_user_id);
+        $checks['CF7_REST_TEMP_USER_REMOVED'] = get_user_by('id', $temp_user_id) === false;
+    }
     remove_filter('wpcf7_skip_mail', $skip_mail, 999);
     remove_filter('wpcf7_skip_spam_check', $skip_spam, 999);
     remove_filter('pre_wp_mail', $intercept_mail, 999);
@@ -107,7 +133,7 @@ try {
 foreach ($checks as $name => $pass) {
     echo $name . '=' . ($pass ? 'YES' : 'NO') . "\n";
 }
-if (in_array(false, $checks, true) || count($checks) !== 3) {
+if (in_array(false, $checks, true) || count($checks) !== ($case === 'subscriber_management' ? 4 : 3)) {
     fwrite(STDERR, "CF7_REST_DISPATCH_FAILED: case=" . $case . "; no HTTP/browser claim.\n");
     exit(1);
 }
