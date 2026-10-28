@@ -88,10 +88,24 @@ try {
   page.on('pageerror', error => console.log('CF7_POPUP_PAGE_ERROR=' + String(error).slice(0, 180)));
   let { form } = await openFreshPopup();
   await form.locator('[name="your-email"]').fill('reject@example.test');
-  const [bad] = await Promise.all([
+  const submitButton = form.locator('[type="submit"]').first();
+  const buttonState = await submitButton.evaluate(el => ({
+    disabled: el.disabled, type: el.type, linkedToForm: el.form === el.closest('form'),
+    outer: el.outerHTML.slice(0, 200)
+  }));
+  console.log('CF7_POPUP_BUTTON_STATE=' + JSON.stringify(buttonState));
+  const [badResult, clickResult] = await Promise.allSettled([
     page.waitForResponse(responseMatch, { timeout: 25000 }),
-    form.locator('[type="submit"]').click()
+    submitButton.click({ timeout: 8000 })
   ]);
+  if (clickResult.status === 'rejected') {
+    throw new Error('CF7_POPUP_CLICK_FAILED: ' + String(clickResult.reason).slice(0, 500));
+  }
+  if (badResult.status === 'rejected') {
+    throw new Error('CF7_POPUP_NO_HTTP_RESPONSE_AFTER_CLICK: ' +
+      String(badResult.reason).slice(0, 250));
+  }
+  const bad = badResult.value;
   const badBody = await bad.json();
   if (bad.status() !== 200 || badBody.status !== 'validation_failed' ||
       !badBody.invalid_fields?.some(f => f.field === 'your-email') ||
