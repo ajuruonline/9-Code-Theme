@@ -26,6 +26,8 @@ try {
     if (!response || response.status() !== 200) {
       throw new Error('CF7_POPUP_PAGE_HTTP_NOT_200');
     }
+    // DOMContentLoaded can precede deferred Alpha/CF7 listener installation.
+    await page.waitForLoadState('load');
     const trigger = page.locator('[data-n9lh-popup-open="form"]:visible').first();
     await trigger.waitFor({ state: 'visible', timeout: 15000 });
     await trigger.click();
@@ -37,11 +39,26 @@ try {
       throw new Error('CF7_POPUP_FORM_ID_MISMATCH');
     }
     await page.waitForFunction(() => typeof window.wpcf7 !== 'undefined', null, { timeout: 15000 });
+    const state = await form.evaluate(el => ({
+      readyState: document.readyState,
+      status: el.dataset.status || '',
+      cf7SubmitType: typeof window.wpcf7?.submit,
+      hasForm: !!el.closest('[data-n9lh-popup="form"]'),
+      action: el.action,
+      method: el.method
+    }));
+    console.log('CF7_POPUP_INIT_STATE=' + JSON.stringify(state));
     await form.locator('[name="your-name"]').fill('Disposable Alpha Popup Tester');
     await form.locator('[name="your-message"]').fill('Local-only test; no mail delivery.');
     await form.evaluate(el => { el.noValidate = true; });
     return { form, popup, trigger };
   }
+  page.on('request', req => {
+    if (req.method() === 'POST' && req.url().includes('contact-form-7')) {
+      console.log('CF7_POPUP_POST_OBSERVED=YES');
+    }
+  });
+  page.on('pageerror', error => console.log('CF7_POPUP_PAGE_ERROR=' + String(error).slice(0, 180)));
   let { form } = await openFreshPopup();
   await form.locator('[name="your-email"]').fill('invalid-email');
   const [bad] = await Promise.all([
