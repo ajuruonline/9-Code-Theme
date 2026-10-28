@@ -6,6 +6,9 @@ get_header();
 <?php while ( have_posts() ) : the_post(); ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'ncu-page ncu-page-native' ); ?>>
     <?php get_template_part( 'template-parts/entry-header' ); ?>
+    <?php if ( has_post_thumbnail() ) : ?>
+        <figure class="ncu-featured"><?php the_post_thumbnail( 'large', array( 'alt' => esc_attr( get_the_title() ), 'loading' => 'eager', 'decoding' => 'async' ) ); ?></figure>
+    <?php endif; ?>
     <div class="ncu-entry-content">
         <?php the_content(); wp_link_pages(); ?>
     </div>

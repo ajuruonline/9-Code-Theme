@@ -16,7 +16,7 @@ function ncu_osch_post_filter_bar() {
     $author = isset( $_GET['author'] ) ? absint( $_GET['author'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     $categories = get_terms( array( 'taxonomy' => 'category', 'hide_empty' => false ) );
     $tags       = get_terms( array( 'taxonomy' => 'post_tag', 'hide_empty' => false ) );
-    $authors    = get_users( array( 'who' => 'authors', 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name' ) ) );
+    $authors    = get_users( array( 'capability' => array( 'edit_posts' ), 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name' ) ) );
     $format     = isset( $_GET['post_format'] ) ? sanitize_key( wp_unslash( $_GET['post_format'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     $formats    = get_post_format_strings();
     $active     = ( $cat || '' !== $tag || $author || '' !== $format );

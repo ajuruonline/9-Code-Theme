@@ -204,3 +204,11 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Tiers: Dashboard; Posts, Pages, Media, Comments and Open Scholar apps; Settings and tools; then Advanced.
 - Advanced holds other plugins and Export & Import, Backup & Restore, and any app named Navigator or Exhibit. It is the same group in the sidebar and on the dashboard.
 - Order set on Dashboard & Menus only changes the order inside its tier, so it cannot move an app into another group.
+
+## 5.8.0 — Featured images, debug pass
+
+- Fixed: featured images were not shown on single posts or pages. They now appear above the content, at full width, with a 14px radius. Cards frame their image at 16:10 and crop instead of stretching.
+- Fixed: the post filter's author list used a deprecated query argument. It now lists accounts that can edit posts.
+- Debug pass: 20 admin and public loads with no JavaScript errors, no broken resources (4xx/5xx) on the key pages, and no new PHP notices or warnings from theme code.
+- Known sandbox-only messages, not site faults: WordPress.org update checks (the sandbox cannot reach it), a cdnjs certificate error in the sandbox browser, and a missing table from an earlier test run.
+- Not changed: the category archive grid is drawn by the 9Code Ultra Home Archive plugin, not by the theme's card template, so its layout is the plugin's.
