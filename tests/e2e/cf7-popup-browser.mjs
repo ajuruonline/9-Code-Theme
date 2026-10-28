@@ -94,6 +94,14 @@ try {
     outer: el.outerHTML.slice(0, 200)
   }));
   console.log('CF7_POPUP_BUTTON_STATE=' + JSON.stringify(buttonState));
+  const validityAfterFill = await form.evaluate(el => ({
+    noValidate: el.noValidate, valid: el.checkValidity(),
+    invalid: [...el.elements].filter(x => typeof x.checkValidity === 'function' && !x.checkValidity()).map(x => x.name || x.type)
+  }));
+  console.log('CF7_POPUP_VALIDITY_AFTER_FILL=' + JSON.stringify(validityAfterFill));
+  await submitButton.evaluate(el => el.addEventListener('click', () => {
+    console.log('CF7_TEST_BUTTON_CLICK_EVENT=YES');
+  }, { capture: true }));
   const [badResult, clickResult] = await Promise.allSettled([
     page.waitForResponse(responseMatch, { timeout: 25000 }),
     submitButton.click({ timeout: 8000 })
