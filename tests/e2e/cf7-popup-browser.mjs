@@ -33,6 +33,8 @@ try {
     await trigger.click();
     const popup = page.locator('[data-n9lh-popup="form"].is-open[aria-hidden="false"]').first();
     await popup.waitFor({ state: 'visible', timeout: 15000 });
+    const formCount = await page.locator('form.wpcf7-form').count();
+    if (formCount !== 1) throw new Error('CF7_POPUP_DUPLICATE_FORM_INSTANCE: ' + formCount);
     const form = popup.locator('form.wpcf7-form').first();
     await form.waitFor({ state: 'visible', timeout: 15000 });
     if (await form.locator('input[name="_wpcf7"]').inputValue() !== String(formId)) {
