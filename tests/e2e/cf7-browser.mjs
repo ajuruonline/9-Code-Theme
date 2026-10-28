@@ -53,7 +53,7 @@ try {
   console.log('CF7_BROWSER_INIT_STATE=' + JSON.stringify(initState));
   // Bypass browser-native email validity only to exercise CF7's own server validator.
   await form.evaluate(el => { el.noValidate = true; });
-  await form.locator('[name="your-email"]').fill('invalid-email');
+  await form.locator('[name="your-email"]').fill('reject@example.test');
   const [badResponse] = await Promise.all([
     page.waitForResponse(feedback, { timeout: 25000 }),
     form.locator('[type="submit"]').click()
@@ -69,7 +69,7 @@ try {
   if (!badContentType.includes('multipart/form-data')) {
     throw new Error('CF7_BROWSER_INVALID_HTTP_NOT_MULTIPART: ' + badContentType);
   }
-  console.log('CF7_BROWSER_INVALID_EMAIL_HTTP_REJECTED=YES');
+  console.log('CF7_BROWSER_SERVER_VALIDATION_HTTP_REJECTED=YES');
   // A network response arrives before CF7 finishes its DOM/status transition.
   // A second click while the form is still submitting can be ignored entirely.
   await page.waitForFunction(() => {
