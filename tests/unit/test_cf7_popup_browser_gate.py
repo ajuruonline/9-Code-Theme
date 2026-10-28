@@ -21,7 +21,7 @@ class Cf7PopupBrowserContract(unittest.TestCase):
     def test_disposable_header_configuration_is_bounded(self):
         php = (ROOT / "tests/e2e/cf7-popup-config.php").read_text()
         for token in ("/.wp-test/wp/", "localhost", "127.0.0.1",
-                      "CF7_BROWSER_FORM_ID", "n9lh8_settings",
+                      "CF7_BROWSER_FORM_ID", "ELHF_H_Settings::OPTION",
                       "show_form_popup", "form_shortcode", "header_actions"):
             self.assertIn(token, php)
 
