@@ -33,6 +33,11 @@ class Cf7PopupBrowserContract(unittest.TestCase):
             self.assertIn(token, sh)
         self.assertIn("CF7_POPUP_SETTINGS_RESTORED=YES", restore)
         self.assertIn("CF7_BROWSER_FIXTURE_CLEANUP", sh)
+        self.assertIn('post update "$CF7_BROWSER_PAGE_ID"', sh)
+        self.assertLess(sh.index("tests/e2e/cf7-browser.mjs"), sh.index('post update "$CF7_BROWSER_PAGE_ID"'))
+        self.assertLess(sh.index('post update "$CF7_BROWSER_PAGE_ID"'), sh.index("tests/e2e/cf7-popup-config.php"))
+        popup = (ROOT / "tests/e2e/cf7-popup-browser.mjs").read_text()
+        self.assertIn("CF7_POPUP_DUPLICATE_FORM_INSTANCE", popup)
 
     def test_ci_invokes_failing_first_contract(self):
         workflow = (ROOT / ".github/workflows/ci.yml").read_text()
