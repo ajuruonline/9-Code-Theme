@@ -169,9 +169,59 @@ class ELHF_H_Renderer {
     private function action_style($s,$p){if('yes'===($s['dark_mode']??''))return [$p['soft'],$p['softfg'],$p['border'],$p['surface'],$p['surfacefg']];$style=$s['closed_action_style']??'template';if('black_on_white'===$style)return ['#FFFFFF','#111111','#111111','#111111','#FFFFFF'];if('white_on_black'===$style)return ['#111111','#FFFFFF','#111111','#FFFFFF','#111111'];if('custom'===$style)return [$s['closed_icon_bg'],$s['closed_icon_fg'],$s['closed_icon_border'],$s['closed_icon_hover_bg'],$s['closed_icon_hover_fg']];return [$p['surface'],$p['surfacefg'],$p['border'],$p['text'],$p['textfg']];}
     private function render_header_actions($s,$d){$authorUid=$this->first_section_uid($s,'author');foreach((array)($s['header_actions']??[]) as $row){if('yes'!==($row['enabled']??''))continue;$kind=$row['kind']??'link';$label=trim((string)($row['label']??''))?:ucwords($kind);$ico=$this->icon_markup($row['icon']??'menu',$row['icon_url']??'');$target='new'===($row['target']??'')?' target="_blank" rel="noopener"':'';if('profile'===$kind&&!empty($d['profile'])){echo '<a class="n9lh-action author" href="'.esc_url($d['profile']).'" aria-label="'.esc_attr($label).'">'.$ico.'</a>';}elseif('menu'===$kind){echo '<button class="n9lh-menu" type="button" data-n9lh-toggle aria-expanded="false" aria-controls="n9lh-panel" aria-label="'.esc_attr($label).'">'.$ico.'</button>';}elseif('whatsapp'===$kind&&!empty($d['whatsapp']))echo '<a class="n9lh-action" href="'.esc_url($d['whatsapp']).'" target="_blank" rel="noopener" aria-label="'.esc_attr($label).'">'.$ico.'</a>';elseif('email'===$kind&&!empty($d['email']))echo '<a class="n9lh-action" href="mailto:'.esc_attr($d['email']).'" aria-label="'.esc_attr($label).'">'.$ico.'</a>';elseif('video'===$kind&&'yes'===($s['show_video_popup']??''))echo '<button class="n9lh-action" type="button" data-n9lh-popup-open="video" aria-label="'.esc_attr($label).'">'.$ico.'</button>';elseif('form'===$kind&&'yes'===($s['show_form_popup']??''))echo '<button class="n9lh-action" type="button" data-n9lh-popup-open="form" aria-label="'.esc_attr($label).'">'.$ico.'</button>';elseif('home'===$kind)echo '<a class="n9lh-action" href="'.esc_url(home_url('/')).'" aria-label="'.esc_attr($label).'">'.$ico.'</a>';elseif('login'===$kind){$url=is_user_logged_in()?admin_url('profile.php'):wp_login_url();echo '<a class="n9lh-action" href="'.esc_url($url).'" aria-label="'.esc_attr($label).'">'.$ico.'</a>';}elseif('top'===$kind)echo '<button class="n9lh-action" type="button" data-n9lh-top aria-label="'.esc_attr($label).'">'.$ico.'</button>';elseif('event'===$kind)echo '<button class="n9lh-action" type="button" data-n9lh-event="'.esc_attr($row['event_key']??'').'" aria-label="'.esc_attr($label).'">'.$ico.'</button>';elseif('link'===$kind&&!empty($row['url']))echo '<a class="n9lh-action" href="'.esc_url($row['url']).'"'.$target.' aria-label="'.esc_attr($label).'">'.$ico.'</a>';}}
 
+    /**
+     * Enforce an output boundary for third-party shortcode markup in public popups.
+     * This is deliberately narrower than unfiltered_html; approved video iframes
+     * and ordinary HTML forms survive, executable tags/handlers/protocols do not.
+     * Dynamic JS-dependent form integrations require separate compatibility tests.
+     */
+    private function sanitize_popup_shortcode_html($html,$kind){
+        $allowed=wp_kses_allowed_html('post');
+        unset($allowed['script'],$allowed['object'],$allowed['embed'],$allowed['iframe'],$allowed['svg']);
+        $allowed['iframe']=[
+            'src'=>true,'title'=>true,'width'=>true,'height'=>true,
+            'loading'=>true,'allow'=>true,'allowfullscreen'=>true,
+            'frameborder'=>true,'referrerpolicy'=>true,'class'=>true,'id'=>true,
+            'aria-label'=>true
+        ];
+        if('form'===$kind){
+            $allowed['form']=[
+                'action'=>true,'method'=>true,'enctype'=>true,'id'=>true,
+                'class'=>true,'role'=>true,'aria-label'=>true,'autocomplete'=>true,
+                'accept-charset'=>true,'novalidate'=>true,'target'=>true,'data-*'=>true
+            ];
+            $allowed['input']=[
+                'type'=>true,'name'=>true,'value'=>true,'id'=>true,'class'=>true,
+                'placeholder'=>true,'required'=>true,'checked'=>true,'disabled'=>true,
+                'readonly'=>true,'min'=>true,'max'=>true,'step'=>true,
+                'maxlength'=>true,'minlength'=>true,'pattern'=>true,'accept'=>true,
+                'multiple'=>true,'autocomplete'=>true,'aria-label'=>true,'aria-required'=>true,
+                'data-*'=>true
+            ];
+            $allowed['textarea']=[
+                'name'=>true,'id'=>true,'class'=>true,'rows'=>true,'cols'=>true,
+                'required'=>true,'placeholder'=>true,'maxlength'=>true,'aria-label'=>true,
+                'data-*'=>true
+            ];
+            $allowed['select']=[
+                'name'=>true,'id'=>true,'class'=>true,'required'=>true,
+                'multiple'=>true,'disabled'=>true,'aria-label'=>true,'data-*'=>true
+            ];
+            $allowed['option']=['value'=>true,'selected'=>true,'disabled'=>true];
+            $allowed['button']=[
+                'type'=>true,'name'=>true,'value'=>true,'id'=>true,'class'=>true,
+                'disabled'=>true,'aria-label'=>true,'data-*'=>true
+            ];
+            $allowed['label']=['for'=>true,'id'=>true,'class'=>true];
+            $allowed['fieldset']=['disabled'=>true,'id'=>true,'class'=>true];
+            $allowed['legend']=['id'=>true,'class'=>true];
+        }
+        return wp_kses((string)$html,$allowed,['http','https','mailto','tel']);
+    }
+
     private function render_popup($kind,$s,$d,$author){
-        if('video'===$kind){if('yes'!==($s['show_video_popup']??''))return;$content='';if('shortcode'===$s['video_source']&&!empty($s['video_shortcode']))$content=do_shortcode($s['video_shortcode']);elseif(!empty($s['video_url'])){$content=wp_oembed_get($s['video_url']);if(!$content)$content='<a class="n9lh-popup-fallback" href="'.esc_url($s['video_url']).'" target="_blank" rel="noopener">Open video</a>';}echo '<div class="n9lh-popup" data-n9lh-popup="video" aria-hidden="true"><button class="n9lh-popup-shade" type="button" data-n9lh-popup-close aria-label="Close video"></button><section class="n9lh-popup-box" role="dialog" aria-modal="true" aria-label="'.esc_attr($s['video_popup_title']).'"><header><strong>'.esc_html($s['video_popup_title']).'</strong><button type="button" data-n9lh-popup-close aria-label="Close">'.$this->icon($s['close_icon']).'</button></header><div class="n9lh-popup-content">'.($content?:'<p class="n9lh-empty">No video has been configured.</p>').'</div></section></div>';return;}
-        if('form'===$kind){if('yes'!==($s['show_form_popup']??''))return;echo '<div class="n9lh-popup" data-n9lh-popup="form" aria-hidden="true"><button class="n9lh-popup-shade" type="button" data-n9lh-popup-close aria-label="Close form"></button><section class="n9lh-popup-box" role="dialog" aria-modal="true" aria-label="'.esc_attr($s['form_popup_title']).'"><header><strong>'.esc_html($s['form_popup_title']).'</strong><button type="button" data-n9lh-popup-close aria-label="Close">'.$this->icon($s['close_icon']).'</button></header><div class="n9lh-popup-content">';if('shortcode'===$s['form_mode']&&!empty($s['form_shortcode']))echo do_shortcode($s['form_shortcode']);else $this->render_contact_form($d,$author,$s);echo '</div></section></div>';}
+        if('video'===$kind){if('yes'!==($s['show_video_popup']??''))return;$content='';if('shortcode'===$s['video_source']&&!empty($s['video_shortcode']))$content=do_shortcode($s['video_shortcode']);elseif(!empty($s['video_url'])){$content=wp_oembed_get($s['video_url']);if(!$content)$content='<a class="n9lh-popup-fallback" href="'.esc_url($s['video_url']).'" target="_blank" rel="noopener">Open video</a>';}$content=$this->sanitize_popup_shortcode_html($content,'video');echo '<div class="n9lh-popup" data-n9lh-popup="video" aria-hidden="true"><button class="n9lh-popup-shade" type="button" data-n9lh-popup-close aria-label="Close video"></button><section class="n9lh-popup-box" role="dialog" aria-modal="true" aria-label="'.esc_attr($s['video_popup_title']).'"><header><strong>'.esc_html($s['video_popup_title']).'</strong><button type="button" data-n9lh-popup-close aria-label="Close">'.$this->icon($s['close_icon']).'</button></header><div class="n9lh-popup-content">'.($content?:'<p class="n9lh-empty">No video has been configured.</p>').'</div></section></div>';return;}
+        if('form'===$kind){if('yes'!==($s['show_form_popup']??''))return;echo '<div class="n9lh-popup" data-n9lh-popup="form" aria-hidden="true"><button class="n9lh-popup-shade" type="button" data-n9lh-popup-close aria-label="Close form"></button><section class="n9lh-popup-box" role="dialog" aria-modal="true" aria-label="'.esc_attr($s['form_popup_title']).'"><header><strong>'.esc_html($s['form_popup_title']).'</strong><button type="button" data-n9lh-popup-close aria-label="Close">'.$this->icon($s['close_icon']).'</button></header><div class="n9lh-popup-content">';if('shortcode'===$s['form_mode']&&!empty($s['form_shortcode']))echo $this->sanitize_popup_shortcode_html(do_shortcode($s['form_shortcode']),'form');else $this->render_contact_form($d,$author,$s);echo '</div></section></div>';}
     }
 
     public function render(){if($this->rendered||is_admin()||(function_exists('ninecode_theme_surface_suppresses')&&ninecode_theme_surface_suppresses('header'))||! ELHF_H_Settings::is_enabled())return;$this->rendered=true;$this->output(false);}

@@ -4,7 +4,7 @@ on:
   pull_request:
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +19,20 @@ jobs:
           node-version: 22
       - run: npm ci || npm install
       - run: composer install --no-interaction
+      - name: PHPCS advisory evidence regression (failing-first)
+        run: python3 -m unittest discover -s tests/unit -p 'test_audit_reporting.py' -v
+      - name: Plugin Check exception evidence regression (failing-first)
+        run: python3 -m unittest discover -s tests/unit -p 'test_plugin_check_evidence.py' -v
+      - name: Pinned third-party plugin archive integrity regression
+        run: python3 -m unittest discover -s tests/unit -p 'test_cf7_archive_pin.py' -v
+      - name: CF7 form-ID evidence accuracy regression
+        run: python3 -m unittest discover -s tests/unit -p 'test_cf7_form_id_evidence.py' -v
+      - name: CF7 REST dispatch fixture wiring regression
+        run: python3 -m unittest discover -s tests/unit -p 'test_cf7_rest_dispatch_gate.py' -v
+      - name: CF7 browser/HTTP source-contract regression (failing-first)
+        run: python3 -m unittest discover -s tests/unit -p 'test_cf7_browser_gate.py' -v
+      - name: CF7 Alpha popup browser integration source contract (failing-first)
+        run: python3 -m unittest discover -s tests/unit -p 'test_cf7_popup_browser_gate.py' -v
       - run: npx playwright install --with-deps chromium
       - name: Lint
         run: bin/lint.sh
@@ -28,8 +42,18 @@ jobs:
         run: bin/audit.sh
       - name: Start test site
         run: bin/setup-test-site.sh && bin/serve-test-site.sh
+      - name: Header shortcode HTML output security gate (blocking assertions)
+        run: php .wp-test/wp-cli.phar --allow-root --path=.wp-test/wp eval-file tests/e2e/header-shortcode-boundary.php
+      - name: Header shortcode browser no-execution security gate
+        run: node tests/e2e/header-shortcode-browser.mjs
+      - name: Header settings role, capability and nonce security gate
+        run: node tests/e2e/header-settings-auth.mjs
+      - name: Pinned real Contact Form 7 header HTML compatibility (disposable only)
+        run: bash bin/test-cf7-header.sh
       - name: Public site
         run: node tests/e2e/public.mjs
+      - name: Static front-page mode (320/390/1280px)
+        run: node tests/e2e/static-front-page.mjs
       - name: Admin crawl
         run: node tests/e2e/crawl.mjs
       - name: Post editor acceptance

@@ -22,7 +22,11 @@ deliberate, requires `update_plugins`, honours `DISALLOW_FILE_MODS`, and only ma
 - Direct access guards, `readme.txt`, plugin-updater capability and file-mod checks.
 - Real bug fixes found by the new editor tests: stale block fields overwrote edited content; permanent "Unsaved" badge.
 
-## Reviewed by hand and left as is (static-analysis false positives)
+## Advisory findings: independently unresolved at current release gate
+
+The escaping/SQL scan is intentionally advisory, but **a successful CI step is not a clean security audit**. Earlier logs showed 61 PHPCS errors in seven files while the script truncated the report and printed `AUDIT OK`. The updated audit script emits full file/line/sniff diagnostics and distinguishes `AUDIT ADVISORY FINDINGS`, `AUDIT CLEAN`, and blocking scanner failures. All existing findings must be independently reconciled against the exact source revision before release; do not treat the historical false-positive explanation below as item-by-item verification.
+
+## Reviewed by hand and left as is (static-analysis false positives) (historical assessment; requires revalidation)
 - Theme `WordPress.Security.EscapeOutput` (61): helper methods and SVG builders that return already-escaped HTML, and
   admin-supplied custom HTML/embeds that are `wp_kses()`-filtered when saved (`class-n9f-settings.php`).
 - `NonceVerification` warnings on `personal_options_update` / settings handlers: WordPress verifies the nonce before
