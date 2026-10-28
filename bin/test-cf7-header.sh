@@ -29,6 +29,6 @@ unzip -q -o "$TMP/contact-form-7.6.2.3.zip" -d "$DIR/wp/wp-content/plugins/"
 "${WP[@]}" eval-file "$ROOT/tests/e2e/header-cf7-compat.php"
 # Each REST case is a separate PHP process: CF7 uses a submission singleton.
 # This is in-process REST dispatch, not a browser/HTTP/AJAX certification.
-for case in valid invalid missing_unit guest_management; do
+for case in valid invalid missing_unit guest_management subscriber_management; do
   CF7_REST_CASE="$case" "${WP[@]}" eval-file "$ROOT/tests/e2e/header-cf7-rest.php"
 done
