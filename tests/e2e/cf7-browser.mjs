@@ -63,7 +63,16 @@ try {
   }, null, { timeout: 12000 });
   await form.locator('[type="submit"]').waitFor({ state: 'visible' });
   console.log('CF7_BROWSER_INVALID_UI_SETTLED=YES');
+  // Use a fresh page for the positive case: CF7 retains per-form validation
+  // state after a rejected submission, which can block a rapid second submit.
+  await page.goto(target.toString(), { waitUntil: 'domcontentloaded' });
+  await form.waitFor({ state: 'visible', timeout: 15000 });
+  await page.waitForFunction(() => typeof window.wpcf7 !== 'undefined');
+  await form.locator('[name="your-name"]').fill('Disposable Browser Tester');
+  await form.locator('[name="your-message"]').fill('Local test only; do not deliver mail.');
   await form.locator('[name="your-email"]').fill('disposable@example.test');
+  await form.evaluate(el => { el.noValidate = true; });
+  console.log('CF7_BROWSER_VALID_FRESH_PAGE=YES');
   const [goodResponse] = await Promise.all([
     page.waitForResponse(feedback, { timeout: 25000 }),
     form.locator('[type="submit"]').click()
