@@ -225,7 +225,8 @@ function ncu_osch_workspace_description( $label, $slug, $children = array() ) {
 /** Collect only apps WordPress has exposed to this user, including submenu rights. */
 add_action( 'admin_menu', 'ncu_osch_workspace_collect_apps', PHP_INT_MAX );
 /** Tools that people rarely need on the dashboard: export, import, backup, exhibition and navigator. */
-function ncu_osch_workspace_is_advanced_app( $slug, $label ) {
+function ncu_osch_workspace_is_advanced_app( $slug, $label, $group = '' ) {
+    if ( 3 === ncu_osch_workspace_tier( $slug, $group ) ) { return true; }
     return (bool) preg_match( '~export|import|backup|restore|navigator|exhibit~i', (string) $slug . ' ' . (string) $label );
 }
 
@@ -261,13 +262,15 @@ function ncu_osch_workspace_collect_apps() {
             'description' => ncu_osch_workspace_description( $label, $slug, $children ),
             'group' => $group,
             'tier' => ncu_osch_workspace_tier( $slug, $group ),
+            'position' => count( $apps ) + 1,
+            'order' => ncu_osch_workspace_order_key( $slug, $group, count( $apps ) + 1 ),
             'icon' => $icon,
             'image' => $image,
             'children' => $children,
         );
     }
     // Move scholarship apps to the beginning without removing WordPress/native apps.
-    uasort( $apps, function ( $a, $b ) { return $a['tier'] <=> $b['tier']; } );
+    uasort( $apps, function ( $a, $b ) { return $a['order'] <=> $b['order']; } );
     ncu_osch_workspace_assign_visuals( $apps );
     $GLOBALS['ncu_osch_workspace_catalog'] = $apps;
     ncu_osch_workspace_apply_preferences( $apps );
@@ -315,10 +318,10 @@ function ncu_osch_workspace_home() {
         <?php
         // Main grid: Dashboard, then Open Scholar apps and content, then core tools, then other installed apps.
         // Export, import, backup, exhibition and navigator tools sit in Advanced below.
-        $ordered = array_filter( $apps, function ( $app, $slug ) { return ! ncu_osch_workspace_is_advanced_app( $slug, $app['label'] ); }, ARRAY_FILTER_USE_BOTH );
-        uasort( $ordered, function ( $a, $b ) { return $a['tier'] <=> $b['tier']; } );
+        $ordered = array_filter( $apps, function ( $app, $slug ) { return ! ncu_osch_workspace_is_advanced_app( $slug, $app['label'], $app['group'] ); }, ARRAY_FILTER_USE_BOTH );
+        uasort( $ordered, function ( $a, $b ) { return $a['order'] <=> $b['order']; } );
         $advanced_apps = array();
-        foreach ( $apps as $slug => $app ) { if ( ncu_osch_workspace_is_advanced_app( $slug, $app['label'] ) ) { $advanced_apps[ $slug ] = $app; } }
+        foreach ( $apps as $slug => $app ) { if ( ncu_osch_workspace_is_advanced_app( $slug, $app['label'], $app['group'] ) ) { $advanced_apps[ $slug ] = $app; } }
         $opened_advanced = false;
         ?>
         <div class="osch-app-grid"><?php foreach ( $ordered + $advanced_apps as $slug => $app ) : ?>

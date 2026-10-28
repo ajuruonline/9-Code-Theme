@@ -197,3 +197,10 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Each post is one card: checkbox, title and actions on one block, with no empty rows between them.
 - Edit, Quick Edit, Trash and View are plain links instead of boxes, with no separators.
 - Search sits directly under the status links; the page heading and table spacing are reduced.
+
+## 5.7.0 — One menu order everywhere
+
+- The sidebar, the popup menu and the dashboard grid use the same order, from one sort key: tier first, then the order inside the tier.
+- Tiers: Dashboard; Posts, Pages, Media, Comments and Open Scholar apps; Settings and tools; then Advanced.
+- Advanced holds other plugins and Export & Import, Backup & Restore, and any app named Navigator or Exhibit. It is the same group in the sidebar and on the dashboard.
+- Order set on Dashboard & Menus only changes the order inside its tier, so it cannot move an app into another group.

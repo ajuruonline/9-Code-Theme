@@ -95,8 +95,26 @@ function ncu_osch_workspace_apply_preferences( &$apps ) {
 }
 /** Inside the content tier: Posts first, then Pages, Media, Comments, then the apps in catalogue order. */
 function ncu_osch_workspace_sub_order( $slug, $position ) {
-    $first = array( 'edit.php' => 1, 'edit.php?post_type=page' => 2, 'upload.php' => 3, 'edit-comments.php' => 4 );
-    return isset( $first[ $slug ] ) ? $first[ $slug ] : 10 + $position;
+    $fixed = array(
+        // Content (tier 1): Posts, Pages, Media, Comments.
+        'edit.php' => 1, 'edit.php?post_type=page' => 2, 'upload.php' => 3, 'edit-comments.php' => 4,
+        // Core (tier 2): Open Scholar host, Export & Import, Backup, Appearance, Plugins, Users, Tools, Settings.
+        'admin.php?page=nine-code-ultra' => 1, 'admin.php?page=osch-export-import' => 2, 'admin.php?page=osch-backup-restore' => 3,
+        'themes.php' => 4, 'plugins.php' => 5, 'users.php' => 6, 'tools.php' => 7, 'options-general.php' => 8,
+    );
+    return isset( $fixed[ $slug ] ) ? $fixed[ $slug ] : 10 + min( 900, (int) $position );
+}
+
+/**
+ * The one sort key for every menu surface (sidebar, popup, dashboard grid).
+ * tier * 1000 + order inside the tier. A value someone set on Dashboard & Menus
+ * replaces the order inside its tier only; the tier itself always comes first.
+ */
+function ncu_osch_workspace_order_key( $slug, $group, $position ) {
+    $tier = ncu_osch_workspace_tier( $slug, $group );
+    $pref = ncu_osch_workspace_preference( $slug );
+    $sub  = ( isset( $pref['order'] ) && 500 !== (int) $pref['order'] ) ? min( 999, (int) $pref['order'] ) : ncu_osch_workspace_sub_order( $slug, $position );
+    return $tier * 1000 + $sub;
 }
 
 /**
@@ -117,7 +135,7 @@ function ncu_osch_workspace_menu_configuration( $catalog ) {
     $result = array();
     $position = 0;
     foreach ( (array) $catalog as $slug => $app ) {
-        $position++;
+        $position = isset( $app['position'] ) ? (int) $app['position'] : $position + 1;
         $tier = ncu_osch_workspace_tier( $slug, isset( $app['group'] ) ? $app['group'] : '' );
         $pref = ncu_osch_workspace_preference( $slug );
         $submenus = array();
@@ -134,8 +152,9 @@ function ncu_osch_workspace_menu_configuration( $catalog ) {
             'url' => $app['url'],
             'menu' => ncu_osch_workspace_required_menu( $slug ) || ! isset( $pref['menu'] ) || (bool) $pref['menu'],
             // An order someone set on Dashboard & Menus wins. 500 is the untouched default, so tier order applies.
-            'order' => isset( $pref['order'] ) && 500 !== (int) $pref['order'] ? (int) $pref['order'] : $tier * 100 + ncu_osch_workspace_sub_order( $slug, $position ),
+            'order' => isset( $app['order'] ) ? (int) $app['order'] : ncu_osch_workspace_order_key( $slug, isset( $app['group'] ) ? $app['group'] : '', $position ),
             'tier' => $tier,
+            'advanced' => function_exists( 'ncu_osch_workspace_is_advanced_app' ) ? ncu_osch_workspace_is_advanced_app( $slug, $app['label'], isset( $app['group'] ) ? $app['group'] : '' ) : 3 === $tier,
             'title' => isset( $pref['title'] ) ? $pref['title'] : '',
             'submenus' => $submenus,
         );

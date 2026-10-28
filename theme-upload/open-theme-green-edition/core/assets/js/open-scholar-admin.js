@@ -84,10 +84,10 @@
                 var file = (main.getAttribute('href') || '').split('?')[0].split('/').pop();
                 var coreTier = /^(index|themes|plugins|users|profile|tools|options-[a-z-]+|nav-menus)\.php$/.test(file);
                 var tier = file === 'index.php' ? 0 : (coreTier ? 2 : 3);
-                positions.push({item: item, order: tier * 100 + 900, index: index, tier: tier});
+                positions.push({item: item, order: tier * 1000 + 900, index: index, tier: tier, advanced: tier === 3});
                 return;
             }
-            positions.push({item: item, order: Number.isFinite(record.order) ? record.order : 500, index: index, tier: record.tier || 2});
+            positions.push({item: item, order: Number.isFinite(record.order) ? record.order : 500, index: index, tier: record.tier || 2, advanced: !!record.advanced});
             if (record.menu === false) { item.hidden = true; item.classList.add('osch-navigation-hidden'); }
             if (record.title) {
                 var name = main.querySelector('.wp-menu-name');
@@ -103,10 +103,11 @@
             });
         });
         // Reorder visible app rows only; preserve IDs, native WordPress links and event handlers.
-        positions.sort(function (a, b) { return a.order - b.order || a.index - b.index; });
+        // Advanced items always go last, in their own order; everything else follows the shared order.
+        positions.sort(function (a, b) { return (a.advanced - b.advanced) || (a.order - b.order) || (a.index - b.index); });
         positions.forEach(function (entry) { menu.appendChild(entry.item); });
         // Other plugins (tier 3) sit together at the end, under a collapsed Advanced heading.
-        var advanced = positions.filter(function (entry) { return entry.tier === 3 && !entry.item.hidden; });
+        var advanced = positions.filter(function (entry) { return entry.advanced && !entry.item.hidden; });
         if (advanced.length) {
             var head = document.createElement('li');
             head.className = 'osch-nav-advanced-head';
