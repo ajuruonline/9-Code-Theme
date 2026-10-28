@@ -31,6 +31,8 @@ jobs:
         run: python3 -m unittest discover -s tests/unit -p 'test_cf7_rest_dispatch_gate.py' -v
       - name: CF7 browser/HTTP source-contract regression (failing-first)
         run: python3 -m unittest discover -s tests/unit -p 'test_cf7_browser_gate.py' -v
+      - name: CF7 Alpha popup browser integration source contract (failing-first)
+        run: python3 -m unittest discover -s tests/unit -p 'test_cf7_popup_browser_gate.py' -v
       - run: npx playwright install --with-deps chromium
       - name: Lint
         run: bin/lint.sh
