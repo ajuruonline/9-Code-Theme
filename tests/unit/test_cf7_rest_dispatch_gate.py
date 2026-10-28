@@ -14,9 +14,9 @@ class Cf7RestDispatchContract(unittest.TestCase):
         self.assertIn("'/.wp-test/wp/'", src)
         self.assertIn("WPCF7_VERSION !== '6.2.3'", src)
 
-    def test_four_cases_run_as_separate_cli_processes(self):
+    def test_five_cases_run_as_separate_cli_processes(self):
         shell = (ROOT / 'bin/test-cf7-header.sh').read_text()
-        self.assertIn('for case in valid invalid missing_unit guest_management; do', shell)
+        self.assertIn('for case in valid invalid missing_unit guest_management subscriber_management; do', shell)
         self.assertIn('CF7_REST_CASE="$case"', shell)
         self.assertIn('tests/e2e/header-cf7-rest.php', shell)
 
