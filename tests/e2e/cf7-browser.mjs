@@ -50,13 +50,29 @@ try {
     throw new Error('Real HTTP invalid-email validation did not reject the address: ' +
       JSON.stringify({ status: badResponse.status(), body: badBody }).slice(0, 400));
   }
+  const badContentType = badResponse.request().headers()['content-type'] || '';
+  if (!badContentType.includes('multipart/form-data')) {
+    throw new Error('CF7_BROWSER_INVALID_HTTP_NOT_MULTIPART: ' + badContentType);
+  }
   console.log('CF7_BROWSER_INVALID_EMAIL_HTTP_REJECTED=YES');
+  // A network response arrives before CF7 finishes its DOM/status transition.
+  // A second click while the form is still submitting can be ignored entirely.
+  await page.waitForFunction(() => {
+    const active = document.querySelector('form.wpcf7-form');
+    return active && active.dataset.status === 'invalid';
+  }, null, { timeout: 12000 });
+  await form.locator('[type="submit"]').waitFor({ state: 'visible' });
+  console.log('CF7_BROWSER_INVALID_UI_SETTLED=YES');
   await form.locator('[name="your-email"]').fill('disposable@example.test');
   const [goodResponse] = await Promise.all([
     page.waitForResponse(feedback, { timeout: 25000 }),
     form.locator('[type="submit"]').click()
   ]);
   const goodBody = await goodResponse.json();
+  const goodContentType = goodResponse.request().headers()['content-type'] || '';
+  if (!goodContentType.includes('multipart/form-data')) {
+    throw new Error('CF7_BROWSER_VALID_HTTP_NOT_MULTIPART: ' + goodContentType);
+  }
   if (goodResponse.status() !== 200 || goodBody.status !== 'mail_sent') {
     throw new Error('Real HTTP valid submission failed: ' +
       JSON.stringify({ status: goodResponse.status(), body: goodBody }).slice(0, 400));
