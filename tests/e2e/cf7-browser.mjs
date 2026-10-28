@@ -29,6 +29,14 @@ try {
   if (actualFormId !== String(formId)) {
     throw new Error('Rendered form ID does not match the disposable form');
   }
+  // A DOMContentLoaded response can precede deferred plugin initialization.
+  await page.waitForLoadState('load');
+  page.on('request', req => {
+    if (req.method() === 'POST' && req.url().includes('contact-form-7')) {
+      console.log('CF7_BROWSER_POST_OBSERVED=YES');
+    }
+  });
+  page.on('pageerror', error => console.log('CF7_BROWSER_PAGE_ERROR=' + String(error).slice(0, 180)));
   // Confirm real plugin JavaScript initializes rather than synthesizing submit.
   await page.waitForFunction(() => typeof window.wpcf7 !== 'undefined', { timeout: 15000 });
   await form.locator('[name="your-name"]').fill('Disposable Browser Tester');
@@ -36,6 +44,13 @@ try {
   const feedback = r => r.request().method() === 'POST' &&
     r.url().includes('/contact-form-7/v1/contact-forms/') &&
     r.url().includes('/feedback');
+  const initState = await page.evaluate(() => ({
+    readyState: document.readyState,
+    formStatus: document.querySelector('form.wpcf7-form')?.dataset.status || '',
+    cf7SubmitType: typeof window.wpcf7?.submit,
+    hasForm: !!document.querySelector('form.wpcf7-form')
+  }));
+  console.log('CF7_BROWSER_INIT_STATE=' + JSON.stringify(initState));
   // Bypass browser-native email validity only to exercise CF7's own server validator.
   await form.evaluate(el => { el.noValidate = true; });
   await form.locator('[name="your-email"]').fill('invalid-email');
