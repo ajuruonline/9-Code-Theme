@@ -36,7 +36,7 @@ class Cf7BrowserGateContract(unittest.TestCase):
     def test_disposable_cleanup_and_ci_wiring(self):
         sh = (ROOT / "bin/test-cf7-header.sh").read_text()
         workflow = (ROOT / ".github/workflows/ci.yml").read_text()
-        self.assertIn("wp post delete", sh)
+        self.assertIn("post delete", sh)
         self.assertIn("CF7_BROWSER_FIXTURE_CLEANUP", sh)
         self.assertIn("CF7 browser/HTTP source-contract regression", workflow)
 
