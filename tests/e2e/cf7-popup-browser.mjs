@@ -49,12 +49,37 @@ try {
       action: el.action,
       method: el.method
     }));
+    const structural = await form.evaluate(el => ({
+      wrapperClass: el.parentElement?.className || '',
+      cf7Wrapper: !!el.closest('.wpcf7'),
+      directChild: !!el.parentElement?.classList.contains('wpcf7'),
+      noValidate: el.noValidate,
+      valid: el.checkValidity(),
+      hiddenFields: [...el.querySelectorAll('input[type=hidden]')].map(i => i.name),
+      formsOnPage: document.querySelectorAll('form.wpcf7-form').length
+    }));
+    console.log('CF7_POPUP_DOM_STRUCTURE=' + JSON.stringify(structural));
+    await form.evaluate(el => el.addEventListener('submit', event => {
+      console.log('CF7_TEST_SUBMIT_EVENT=' + JSON.stringify({
+        defaultPrevented: event.defaultPrevented,
+        noValidate: el.noValidate,
+        valid: el.checkValidity()
+      }));
+    }, { capture: true }));
     console.log('CF7_POPUP_INIT_STATE=' + JSON.stringify(state));
     await form.locator('[name="your-name"]').fill('Disposable Alpha Popup Tester');
     await form.locator('[name="your-message"]').fill('Local-only test; no mail delivery.');
     await form.evaluate(el => { el.noValidate = true; });
     return { form, popup, trigger };
   }
+  page.on('console', msg => {
+    if (msg.text().startsWith('CF7_TEST_') || msg.type() === 'error') {
+      console.log('CF7_POPUP_BROWSER_CONSOLE=' + msg.text().slice(0, 250));
+    }
+  });
+  page.on('requestfailed', req => {
+    console.log('CF7_POPUP_REQUEST_FAILED=' + new URL(req.url()).pathname + ':' + (req.failure()?.errorText || 'unknown'));
+  });
   page.on('request', req => {
     if (req.method() === 'POST' && req.url().includes('contact-form-7')) {
       console.log('CF7_POPUP_POST_OBSERVED=YES');
