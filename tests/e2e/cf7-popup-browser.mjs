@@ -60,7 +60,7 @@ try {
   });
   page.on('pageerror', error => console.log('CF7_POPUP_PAGE_ERROR=' + String(error).slice(0, 180)));
   let { form } = await openFreshPopup();
-  await form.locator('[name="your-email"]').fill('invalid-email');
+  await form.locator('[name="your-email"]').fill('reject@example.test');
   const [bad] = await Promise.all([
     page.waitForResponse(responseMatch, { timeout: 25000 }),
     form.locator('[type="submit"]').click()
@@ -72,7 +72,7 @@ try {
     throw new Error('CF7_POPUP_INVALID_HTTP_REJECTION_FAILED: ' +
       JSON.stringify(badBody).slice(0, 350));
   }
-  console.log('CF7_POPUP_INVALID_EMAIL_HTTP_REJECTED=YES');
+  console.log('CF7_POPUP_SERVER_VALIDATION_HTTP_REJECTED=YES');
   // Fresh form instance avoids CF7's retained invalid-submission state.
   ({ form } = await openFreshPopup());
   await form.locator('[name="your-email"]').fill('disposable@example.test');
