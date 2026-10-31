@@ -2,6 +2,7 @@ name: Build Open Scholar Secure Player Windows EXE
 on:
   workflow_dispatch:
   push:
+    branches: ['claude/loving-maxwell-ny63r3']
     tags: ['open-scholar-secure-player-v*']
 jobs:
   windows-exe:
