@@ -436,7 +436,22 @@ document.addEventListener('keydown', event => {
   if ((event.ctrlKey || event.metaKey) && ['c', 's', 'p', 'u'].includes(event.key.toLowerCase())) { event.preventDefault(); showMessage('This action is unavailable in secure view.'); }
   if (event.key === 'F12') event.preventDefault();
 });
-document.addEventListener('visibilitychange', () => { if (document.hidden && active) video.pause(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && active) video.pause(); updateVeil(); });
+window.addEventListener('blur', updateVeil);
+window.addEventListener('focus', updateVeil);
+function updateVeil() {
+  const hidden = document.hidden || !document.hasFocus();
+  document.body.classList.toggle('veiled', !!(active?.protected && hidden));
+}
+window.addEventListener('beforeprint', () => { if (active?.protected) document.body.classList.add('no-print'); });
+window.addEventListener('afterprint', () => document.body.classList.remove('no-print'));
+document.addEventListener('keyup', async event => {
+  if (event.key !== 'PrintScreen' || !active?.protected) return;
+  document.body.classList.add('veiled');
+  try { await navigator.clipboard.writeText(''); } catch {}
+  setTimeout(updateVeil, 2500);
+  showMessage('Screenshots are blocked for protected files.', true);
+});
 
 async function prepareDesktopOffice() {
   try {
@@ -467,5 +482,48 @@ async function boot() {
     showMessage(error.message || 'Secure Scholar could not start.', true);
     document.querySelectorAll('form button').forEach(button => { button.disabled = true; });
   }
+}
+const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+function generateCode(length = 12) {
+  // Rejection sampling keeps every character equally likely.
+  const limit = 256 - (256 % CODE_ALPHABET.length);
+  let code = '';
+  while (code.length < length) {
+    const bytes = crypto.getRandomValues(new Uint8Array(length));
+    for (const byte of bytes) {
+      if (byte < limit && code.length < length) code += CODE_ALPHABET[byte % CODE_ALPHABET.length];
+    }
+  }
+  return code;
+}
+$('generate-pin').addEventListener('click', () => {
+  $('pin').value = generateCode(12);
+  $('pin').type = 'text';
+  $('copy-pin').hidden = false;
+  showMessage('A new code was created. Copy it and send it separately.');
+});
+$('copy-pin').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText($('pin').value); showMessage('Code copied.'); }
+  catch { showMessage('Select the code and copy it by hand.', true); }
+});
+
+let installPrompt = null;
+window.addEventListener('beforeinstallprompt', event => {
+  event.preventDefault();
+  installPrompt = event;
+  $('install-button').hidden = false;
+});
+window.addEventListener('appinstalled', () => { $('install-button').hidden = true; showMessage('Open Scholar Secure Player is installed.'); });
+$('install-button').addEventListener('click', async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  await installPrompt.userChoice;
+  installPrompt = null;
+  $('install-button').hidden = true;
+});
+if (/iPhone|iPad/.test(navigator.userAgent) && !window.navigator.standalone) $('install-ios').hidden = false;
+
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
 boot();

@@ -9,6 +9,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <style>/*__STYLE__*/</style>
 </head>
 <body>
@@ -99,6 +100,7 @@
             <label>Starts<input id="starts" type="datetime-local" aria-describedby="starts-help"><small id="starts-help" class="hint">Leave as it is to start now. Set a later time to start the file later.</small></label>
             <label>Exact expiry<input id="expires" type="datetime-local" aria-describedby="expires-help"><small id="expires-help" class="hint">Overrides “How long should it work?” if you pick a date.</small></label>
             <label>Optional PIN<input id="pin" type="password" inputmode="numeric" maxlength="64" placeholder="Leave empty for simplicity" aria-describedby="pin-help"><small id="pin-help" class="hint">Makes the reader type a code as well. Tell them the code by a different route, such as a phone call.</small></label>
+            <div class="generator"><button type="button" id="generate-pin" class="secondary">Generate a strong code</button><button type="button" id="copy-pin" class="secondary" hidden>Copy code</button><small class="hint">Creates a random 12-character code. Write it down and send it separately from the files.</small></div>
             <label>Lock to one device<input id="device" maxlength="32" pattern="[A-Fa-f0-9]{32}" placeholder="Optional" aria-describedby="device-help"><small id="device-help" class="hint">Paste the device code from Settings and privacy to make the file open on that device only.</small></label>
             <label class="check"><input id="disable-seek" type="checkbox" aria-describedby="seek-help"> Stop video skipping<small id="seek-help" class="hint">Viewers must watch in order.</small></label>
             <label class="check"><input id="offline-only" type="checkbox" aria-describedby="offline-help"> Require offline viewing<small id="offline-help" class="hint">Use this only when the reader will not be online.</small></label>
@@ -157,6 +159,7 @@
       <details open><summary>What stays on this device</summary><p>Files you open are read on this device and never uploaded. Your reading places and recent list are kept only in this browser.</p></details>
       <details><summary>Device code</summary><p>Only needed when a publisher asks you for it, so a protected file opens on this device alone.</p><button id="copy-device" class="code" aria-label="Copy device code">Loading…</button></details>
       <details><summary>Backup for publishers</summary><p>For people who protect files. Save a backup before clearing browser data, so you can still open and protect your files later. The backup is locked with a password you choose.</p><button id="backup-owner" class="secondary">Download publisher backup</button><label class="restore">Restore a publisher backup<input id="restore-owner" type="file" accept=".json"></label></details>
+      <div class="install-box"><strong>Use it like an app</strong><p class="hint">Install Open Scholar Secure Player on your phone or PC. It opens full screen and works without the internet after the first visit.</p><button id="install-button" class="primary" hidden><span>Install the app</span><b>↓</b></button><p id="install-ios" class="hint" hidden>On iPhone: tap the Share button, then “Add to Home Screen”.</p></div>
       <details><summary>Protection explained</summary><p>Protected files block copying, printing, ordinary downloads and right-click. They add a watermark, expiry, a limited number of openings and optional device locking.</p><p>No software can stop every camera or screen recording. Protection makes casual copying harder; it is not perfect.</p></details>
       <details><summary>Supported files</summary><p>Open here: PDF, MP4, WebM, PNG, JPG and saved web pages (.html). Protect: the same types, up to 100 MB. Word and PowerPoint: save them as PDF first.</p></details>
     </aside>
@@ -171,7 +174,7 @@
     </aside>
     <div id="panel-shade" class="panel-shade" hidden></div>
 
-    <footer><span>Powered by <strong>OpenScholar.ng</strong></span><span>Open Scholar Secure Player · Version 1.1</span></footer>
+    <footer><span>Powered by <strong>OpenScholar.ng</strong></span><span>Open Scholar Secure Player · Version 1.1 · Works offline</span></footer>
   </main>
   <script id="ss-integration">window.SECURE_SCHOLAR_INTEGRATION=null;</script>
   <script>/*__PDF_WORKER__*/</script>

@@ -50,7 +50,7 @@ def build():
     html = html.replace('/*__PDF_MODULE__*/', pdf.replace('</script', '<\\/script'))
     html = html.replace('/*__APPLICATION__*/', application.replace('</script', '<\\/script'))
     (output / 'index.html').write_text(html, encoding='utf-8')
-    for name in ('sw.js', 'manifest.webmanifest', 'icon.svg', 'favicon.ico'):
+    for name in ('sw.js', 'manifest.webmanifest', 'icon.svg', 'favicon.ico', 'icon-192.png', 'apple-touch-icon.png'):
         shutil.copyfile(source / name, output / name)
     shutil.copyfile(cap, output / 'icon-512.png')
     plugin_app = ROOT / 'wordpress' / 'secure-scholar' / 'app'

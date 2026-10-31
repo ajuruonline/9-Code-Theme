@@ -19,3 +19,12 @@
 #view-kind{color:var(--green)}
 @media (min-width:720px){.home-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:359px){.home-grid .action-card{padding:16px;grid-template-columns:40px 1fr auto}.action-card svg{width:32px;height:32px}}
+
+/* Password generator, install box and protection veil (1.1) */
+.generator{display:grid;gap:8px;justify-items:start}
+.generator button{min-height:44px}
+.install-box{border:1px solid var(--line);background:#fff;padding:16px;display:grid;gap:10px;margin:14px 0}
+.install-box button{justify-self:start}
+body.veiled #viewer,body.veiled .stage{filter:blur(28px);pointer-events:none}
+body.veiled::after{content:'Protected view paused. Return to this window to continue.';position:fixed;inset:0;display:grid;place-items:center;background:rgba(16,45,32,.86);color:#fff;font-weight:700;text-align:center;padding:24px;z-index:50}
+@media print{body.no-print>*{display:none!important}body.no-print::before{content:'Printing is not allowed for protected files in Open Scholar Secure Player.';display:block;padding:40px;font-size:20px}}

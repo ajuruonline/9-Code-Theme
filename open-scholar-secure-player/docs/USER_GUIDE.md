@@ -17,7 +17,7 @@ Nothing you open is uploaded anywhere. Files are read on your own device.
 |---|---|---|
 | **Open Scholar website** | The Secure Scholar page inside the site (`/secure-scholar/`) | A web browser. The site owner adds it with the plugin. |
 | **Phone** | The same Open Scholar shortcut you already use on your phone | Nothing new to install. Do not install a second app. |
-| **Windows PC** | `OpenScholarSecurePlayer.exe`, a window of its own (not Chrome or Edge) | Windows 10 or 11 with WebView2 (normally already installed). |
+| **PC or Mac** | The same web app in Chrome, Edge or Safari; install it to get its own window and icon | A modern browser. |
 
 ## 3. Installing (site owners)
 1. In WordPress go to **Plugins → Add New → Upload Plugin**.
@@ -27,11 +27,10 @@ Nothing you open is uploaded anywhere. Files are read on your own device.
 5. To place it on a page, add the shortcode `[secure_scholar size="medium"]` (sizes: `small`, `medium`, `big`).
 6. The protected publishing page `/secure-scholar/owner/` needs sign-in and an account that can edit posts. Keep it out of public page caches.
 
-## 4. Installing (Windows PC)
-1. Download `OpenScholarSecurePlayer.exe`.
-2. Check it: open PowerShell in the download folder and run `Get-FileHash OpenScholarSecurePlayer.exe -Algorithm SHA256`. Compare with the checksum in the `.sha256` file.
-3. Double-click it. A window opens. No installation is needed; keep the file wherever you like.
-4. Windows may show a warning because this build is **not code-signed yet** (see section 8). Choose "More info" → "Run anyway" only if the checksum matches.
+## 4. Installing as an app (PC, Mac, phone)
+1. Open the Open Scholar Secure Player address in Chrome or Edge (PC), or Safari (iPhone) or Chrome (Android).
+2. Press **Install the app** in Settings and privacy, or use the browser menu: Install app / Add to Home Screen.
+3. The app gets the OpenScholar cap icon, opens in its own window, and keeps working without the internet after the first visit.
 
 ## 5. Using it
 ### Open a file (everyone)
@@ -56,8 +55,8 @@ Advanced settings (optional): file name, recipient name, start and expiry dates,
 ## 6. Limits you should know
 - Protection makes casual copying harder. It cannot stop every camera or screen recording.
 - Opening counts are kept on the device. A determined person can reset the browser and start again. A server-based check is planned for a later version.
-- Maximum protected file size online: 100 MB. The Windows app allows larger files.
-- Word and PowerPoint files: save them as PDF first (the Windows app can convert them if LibreOffice is installed).
+- Maximum protected file size: 100 MB.
+- Word and PowerPoint files: save them as PDF first.
 - Video skipping can be blocked only for protected files.
 
 ## 7. Troubleshooting
@@ -67,23 +66,21 @@ Advanced settings (optional): file name, recipient name, start and expiry dates,
 | The file does not open after I import it | Check you imported both files: the `.scholar` file and its matching `.scholarpass` file. |
 | "Secure Scholar requires HTTPS" | Open the site through its secure (https) address. |
 | Video does not play on my phone | The phone may not support that video format. Try MP4 (H.264). |
-| The Windows app says files are missing | Download the complete app again and check the checksum. |
+| The app will not open offline | Open it once while online, so it can save itself for offline use. |
 
-## 8. Code signing and trust (plain explanation)
-**Code signing** means the software's publisher attaches a digital certificate to the program. Windows checks that
-certificate, and if the file was changed after signing, the signature breaks. A signed program shows the publisher's
-name and gets fewer security warnings.
-
-Our current Windows build is **not signed**. It was built automatically on GitHub and its checksum is published, so you
-can check it has not been changed. Before a public release it needs a code-signing certificate, which has a yearly cost
-and must be bought from a certificate authority.
+## 8. Security notes
+Protected files are encrypted, and the password file is checked before anything opens. In the browser, protected views
+are hidden when the tab loses focus, printing is blocked, and copy, save and screenshot shortcuts are blocked. A
+password generator creates strong codes. Browsers cannot stop a camera pointed at the screen; treat protection as a
+strong deterrent, not a guarantee.
 
 ## 9. What is working and what is not yet tested
-Working and tested in the development environment: protecting and opening files in a browser, ordinary opening of PDF,
-video, pictures and web pages at 320 to 1280 pixels wide, the WordPress plugin files, and the Windows app build.
+Working and tested in the development environment (automated browser tests): protecting and opening files; ordinary
+opening of PDF, video, pictures and web pages at 320 to 1280 pixels wide; installing and opening offline; the password
+generator; the screen protections for protected files; the WordPress plugin files.
 
-Not yet tested: the Windows app on a real Windows computer, the WordPress plugin on a live site with the current theme,
-phones (Android and iPhone), and the security review of protected files.
+Not yet tested: the WordPress plugin on a live site with the current theme; phones (Android and iPhone) with the
+installed app; the publisher's key backup and the security review of protected files.
 
 ## 10. Getting help
 Contact the Open Scholar team through OpenScholar.ng.
