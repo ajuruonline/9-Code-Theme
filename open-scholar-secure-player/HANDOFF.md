@@ -1,6 +1,6 @@
 # HANDOFF — Open Scholar Secure Player
 
-Read this first. It says what exists, what was verified, what was not, and exactly what to do next.
+Read this first. Then read `docs/PROGRESS.md` (task board and log) and `docs/RELEASE.md` (how to produce the outputs). It says what exists, what was verified, what was not, and exactly what to do next.
 Last updated: 31 October 2026 (end of the first working session).
 
 ## 1. What this project is

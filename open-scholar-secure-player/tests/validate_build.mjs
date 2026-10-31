@@ -34,7 +34,7 @@ test('WordPress and desktop use the exact same application build', () => {
 });
 
 test('WordPress package contains Open Scholar standard entry points', () => {
-  for (const value of ['Plugin Name: Secure Scholar Plugin', 'Version: 1.0.0', '/secure-scholar/', 'secure_scholar_owner', "add_shortcode('secure_scholar'", 'secure_scholar_tutorial_post', 'Powered by OpenScholar.ng.']) {
+  for (const value of ['Plugin Name: Open Scholar Secure Player', 'Version: 1.1.0', '/secure-scholar/', 'secure_scholar_owner', "add_shortcode('secure_scholar'", 'secure_scholar_tutorial_post', 'Powered by OpenScholar.ng.']) {
     assert.ok(pluginPhp.includes(value), `missing ${value}`);
   }
 });

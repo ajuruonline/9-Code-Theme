@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: Secure Scholar Plugin
+ * Plugin Name: Open Scholar Secure Player
  * Description: Secure and open protected videos, PDFs, slides, documents, images and saved web lessons through Open Scholar.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: OpenScholar.ng
  * License: MIT
  * Requires at least: 6.0
@@ -107,13 +107,13 @@ add_shortcode('secure_scholar_owner', 'ssv1_owner_shortcode');
 
 function ssv1_admin_menu() {
     $icon = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M3 8l9-5 9 5-9 5-9-5zm4 4v5l5 3 5-3v-5l-5 3-5-3z"/></svg>');
-    add_menu_page('Secure Scholar', 'Secure Scholar', 'edit_posts', 'secure-scholar', 'ssv1_admin_page', $icon, 58);
+    add_menu_page('Open Scholar Secure Player', 'Secure Scholar', 'edit_posts', 'secure-scholar', 'ssv1_admin_page', $icon, 58);
 }
 add_action('admin_menu', 'ssv1_admin_menu');
 
 function ssv1_admin_page() {
     if (!current_user_can('edit_posts')) { return; }
-    echo '<div class="wrap"><h1>Secure Scholar Plugin v1</h1><p><strong>Extreme simplicity in front. Advanced protection behind the interface.</strong></p>';
+    echo '<div class="wrap"><h1>Open Scholar Secure Player 1.1</h1><p><strong>Extreme simplicity in front. Advanced protection behind the interface.</strong></p>';
     echo '<p><a class="button button-primary" href="' . esc_url(ssv1_url(true)) . '">Secure a file</a> <a class="button" href="' . esc_url(ssv1_url(false)) . '">Open a secure file</a></p>';
     echo '<details><summary><strong>Placement shortcodes</strong></summary>';
     foreach (array('small', 'medium', 'big') as $size) {
