@@ -10,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import traceback
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -100,6 +101,45 @@ def request_capture_exclusion():
         user32.SetWindowDisplayAffinity(handle, 0x00000011)
     kernel32.SetLastError(0)
 
+WEBVIEW2_CLIENT = '{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}'
+WEBVIEW2_LINK = 'https://developer.microsoft.com/microsoft-edge/webview2/'
+
+def log_directory():
+    base = Path(os.environ.get('LOCALAPPDATA', Path.home()))
+    folder = base / 'OpenScholarSecurePlayer'
+    folder.mkdir(parents=True, exist_ok=True)
+    return folder
+
+def show_message(text):
+    """Windowed builds have no console, so errors must be shown in a dialog."""
+    if sys.platform == 'win32':
+        ctypes.windll.user32.MessageBoxW(0, text, APP_NAME, 0x10)
+
+def report_fatal(reason, error=None):
+    log = log_directory() / 'error.log'
+    details = traceback.format_exc() if error is not None else ''
+    with log.open('a', encoding='utf-8') as handle:
+        handle.write(f"[{__import__('datetime').datetime.now().isoformat()}] {reason}\n{details}\n")
+    show_message(f"{APP_NAME} could not start.\n\n{reason}\n\nDetails were saved to:\n{log}")
+
+def webview2_installed():
+    """The window uses Microsoft WebView2. Check the runtime is present before starting."""
+    if sys.platform != 'win32':
+        return True
+    import winreg
+    keys = [
+        (winreg.HKEY_LOCAL_MACHINE, rf'SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{WEBVIEW2_CLIENT}'),
+        (winreg.HKEY_LOCAL_MACHINE, rf'SOFTWARE\Microsoft\EdgeUpdate\Clients\{WEBVIEW2_CLIENT}'),
+        (winreg.HKEY_CURRENT_USER, rf'SOFTWARE\Microsoft\EdgeUpdate\Clients\{WEBVIEW2_CLIENT}'),
+    ]
+    for hive, path in keys:
+        try:
+            with winreg.OpenKey(hive, path):
+                return True
+        except OSError:
+            continue
+    return False
+
 def self_test():
     """Start the local server without a window and check the bundled app. Used by the release build."""
     from urllib.request import urlopen
@@ -148,4 +188,15 @@ def main():
     return 0
 
 if __name__ == '__main__':
-    raise SystemExit(main())
+    if '--self-test' in sys.argv:
+        raise SystemExit(main())
+    if not webview2_installed():
+        report_fatal(f'The Microsoft WebView2 Runtime is not installed. Install it from {WEBVIEW2_LINK} and open this app again.')
+        raise SystemExit(1)
+    try:
+        raise SystemExit(main())
+    except SystemExit:
+        raise
+    except BaseException as error:
+        report_fatal(f'Unexpected error: {error}', error)
+        raise SystemExit(1)
