@@ -41,7 +41,8 @@ def build():
     crypto = (source / 'crypto.mjs').read_text(encoding='utf-8').replace('export ', '')
     ledger = re.sub(r'^import .*$', '', (source / 'ledger.mjs').read_text(encoding='utf-8'), flags=re.M).replace('export ', '')
     app = re.sub(r'^import .*$', '', (source / 'app.js').read_text(encoding='utf-8'), flags=re.M)
-    application = crypto + '\n' + ledger + '\n' + app
+    plain = re.sub(r'^import .*$', '', (source / 'plain.mjs').read_text(encoding='utf-8'), flags=re.M).replace('export ', '')
+    application = crypto + '\n' + ledger + '\n' + plain + '\n' + app
     html = (source / 'index.html').read_text(encoding='utf-8')
     html = html.replace('/*__STYLE__*/', (source / 'style.css').read_text(encoding='utf-8'))
     html = html.replace('/*__CAP_IMAGE__*/', cap_data)

@@ -1,5 +1,6 @@
 import {ONLINE_MAX_FILE, DESKTOP_MAX_FILE, b64, unb64, canonical, randomSecret, seal, unseal, newPublisher, unlockPublisher, encryptFile, parsePackage, issuePass, verifyPass, contentKey, decryptBlob} from './crypto.mjs';
 import {openStore, readRecord, putRecord, createLedger, useLedger} from './ledger.mjs';
+import {plainKind, resumeKey, UNSUPPORTED_MESSAGE} from './plain.mjs';
 
 const $ = id => document.getElementById(id);
 const integration = window.SECURE_SCHOLAR_INTEGRATION || {};
@@ -14,6 +15,8 @@ let currentPage = 1;
 let pageCount = 0;
 let pdfWorkerURL = null;
 let watermarkPosition = 0;
+let activeKey = null;
+let lastSaved = 0;
 
 function showMessage(text, error = false) {
   $('message').textContent = text;
@@ -44,7 +47,7 @@ function saveFile(blob, name) {
 function safeName(name) { return name.replace(/\.[^.]+$/, '').replace(/[^a-zA-Z0-9_-]+/g, '_').slice(0, 70) || 'Secure_Scholar'; }
 function localDate(date) { return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16); }
 function screen(name) {
-  for (const id of ['home', 'secure-screen', 'open-screen']) $(id).hidden = id !== name;
+  for (const id of ['home', 'secure-screen', 'open-screen', 'reading-screen']) $(id).hidden = id !== name;
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 function closePanels() {
@@ -180,22 +183,24 @@ async function preparePdfWorker() {
   pdfWorkerURL = URL.createObjectURL(new Blob([bytes], {type: 'text/javascript'}));
   window.OSPDF.GlobalWorkerOptions.workerSrc = pdfWorkerURL;
 }
-function watermarkText() { return active ? `${active.body.recipient} | ${active.body.id.slice(0, 8)} | Secure Scholar` : ''; }
+function watermarkText() { return active?.protected ? `${active.body.recipient} | ${active.body.id.slice(0, 8)} | Secure Scholar` : ''; }
 function burnWatermark(context, width, height) {
+  if (!active?.protected) return;
   context.save();
   context.fillStyle = 'rgba(0,83,45,.23)';
   context.font = `${Math.max(12, Math.round(width / 55))}px system-ui`;
   for (let y = 45; y < height; y += Math.max(100, Math.round(height / 4))) context.fillText(watermarkText(), 15, y, width - 30);
   context.restore();
 }
-async function display(content, body, blob, remaining) {
+async function display(content, body, blob, remaining, plain = false) {
   await lock('', false);
-  active = {body, deadline: performance.now() + body.session_seconds * 1000, remaining};
+  active = {body, protected: !plain, plain, deadline: plain ? Infinity : performance.now() + body.session_seconds * 1000, remaining};
   $('unlock-panel').hidden = true;
   $('viewer').hidden = false;
   $('view-title').textContent = content.header.title;
-  $('view-status').textContent = `For ${body.recipient}`;
-  $('credits').textContent = `${remaining} opening credit${remaining === 1 ? '' : 's'} remaining`;
+  $('view-kind').textContent = plain ? 'OPENED FILE' : 'PROTECTED FILE';
+  $('view-status').textContent = plain ? 'Opened on this device' : `For ${body.recipient}`;
+  $('credits').textContent = plain ? 'Nothing is used up. Your place is saved on this device.' : `${remaining} opening credit${remaining === 1 ? '' : 's'} remaining`;
   $('watermark').textContent = watermarkText();
   $('video-wrap').hidden = true;
   $('pages-wrap').hidden = true;
@@ -207,6 +212,10 @@ async function display(content, body, blob, remaining) {
     $('video').src = objectURL;
     $('video-wrap').hidden = false;
     $('seek').disabled = !!body.disable_seek;
+    if (plain) {
+      const place = savedPlace();
+      if (place?.time) $('video').addEventListener('loadedmetadata', () => { $('video').currentTime = place.time; }, {once: true});
+    }
   } else if (content.header.kind === 'pdf') {
     await preparePdfWorker();
     pdf = await window.OSPDF.getDocument({data: new Uint8Array(await blob.arrayBuffer())}).promise;
@@ -215,7 +224,7 @@ async function display(content, body, blob, remaining) {
     for (let page = 1; page <= pageCount; page++) $('page-select').add(new Option(String(page), String(page)));
     $('pages-wrap').hidden = false;
     $('page-controls').hidden = false;
-    await showPage(1);
+    await showPage(plain ? savedPlace()?.page || 1 : 1);
   } else if (content.header.kind === 'image') {
     const image = await createImageBitmap(blob);
     const canvas = $('page-canvas');
@@ -229,7 +238,7 @@ async function display(content, body, blob, remaining) {
     $('pages-wrap').hidden = false;
   } else {
     const original = await blob.text();
-    const policy = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data: blob:; media-src data: blob:; style-src 'unsafe-inline'; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'"><style>html,body{user-select:none!important;-webkit-user-select:none!important}a,button,input,select,textarea{pointer-events:none!important}</style>`;
+    const policy = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data: blob:; media-src data: blob:; style-src 'unsafe-inline'; font-src data:; connect-src 'none'; frame-src 'none'; form-action 'none'">${plain ? '' : '<style>html,body{user-select:none!important;-webkit-user-select:none!important}a,button,input,select,textarea{pointer-events:none!important}</style>'}`;
     const protectedHtml = /<head[^>]*>/i.test(original) ? original.replace(/<head[^>]*>/i, match => match + policy) : policy + original;
     $('web-frame').srcdoc = protectedHtml.replace(/<base[^>]*>/gi, '');
     $('web-wrap').hidden = false;
@@ -254,10 +263,53 @@ async function showPage(number) {
   if (!active || requested !== currentPage) return;
   burnWatermark(canvas.getContext('2d'), canvas.width, canvas.height);
   $('page-select').value = String(requested);
+  if (active.plain && activeKey) savePlace({page: requested});
   $('previous').disabled = requested === 1;
   $('next').disabled = requested === pageCount;
 }
+function savePlace(data) {
+  if (!activeKey) return;
+  try { localStorage.setItem(activeKey, JSON.stringify({...data, at: Date.now()})); } catch {}
+}
+function savedPlace() {
+  try { return JSON.parse(localStorage.getItem(activeKey) || 'null'); } catch { return null; }
+}
+function readRecent() {
+  try { return JSON.parse(localStorage.getItem('ossp-recent') || '[]'); } catch { return []; }
+}
+function rememberRecent(file, kind) {
+  const key = resumeKey(file);
+  const list = readRecent().filter(item => item.key !== key);
+  list.unshift({key, name: file.name, kind, at: Date.now()});
+  try { localStorage.setItem('ossp-recent', JSON.stringify(list.slice(0, 20))); } catch {}
+}
+function renderRecent() {
+  const list = readRecent();
+  const items = $('recent-list');
+  items.replaceChildren();
+  for (const entry of list) {
+    const item = document.createElement('li');
+    const name = document.createElement('strong');
+    name.textContent = entry.name;
+    const detail = document.createElement('span');
+    detail.className = 'hint';
+    detail.textContent = `${entry.kind.toUpperCase()} · ${new Date(entry.at).toLocaleDateString()} · Open the file again to continue`;
+    item.append(name, detail);
+    items.append(item);
+  }
+  $('recent-empty').hidden = list.length > 0;
+  $('clear-recent').hidden = list.length === 0;
+}
+async function openPlain(file) {
+  const kind = plainKind(file.name);
+  if (!kind) throw Error(UNSUPPORTED_MESSAGE);
+  activeKey = resumeKey(file);
+  screen('open-screen');
+  await display({header: {kind, title: fileTitle(file)}}, {recipient: '', id: '', session_seconds: 0}, file, null, true);
+  rememberRecent(file, kind);
+}
 async function lock(reason = 'The secure file is closed.', notify = true) {
+  const wasPlain = !!active?.plain;
   active = null;
   $('video').pause();
   $('video').removeAttribute('src');
@@ -272,15 +324,17 @@ async function lock(reason = 'The secure file is closed.', notify = true) {
   $('viewer').hidden = true;
   $('unlock-panel').hidden = false;
   if (notify && reason) showMessage(reason);
+  if (wasPlain && notify) screen('home');
 }
 function updateClock() {
   if (!active) return;
+  if (active.plain) { $('session-clock').textContent = ''; return; }
   const seconds = Math.max(0, Math.min((active.deadline - performance.now()) / 1000, (active.body.expires - Date.now()) / 1000));
   $('session-clock').textContent = `${Math.ceil(seconds / 60)} minute(s) remaining`;
 }
 
 setInterval(async () => {
-  if (!active) return;
+  if (!active || active.plain) return;
   try {
     if (performance.now() >= active.deadline) throw Error('Viewing time finished.');
     await useLedger(db, active.body, false);
@@ -299,9 +353,10 @@ let lastAllowedTime = 0;
 $('play-button').addEventListener('click', async () => { try { if (video.paused) await video.play(); else video.pause(); } catch { showMessage('This video format is not supported on this device.', true); } });
 video.addEventListener('play', () => { $('play-button').textContent = 'Pause'; });
 video.addEventListener('pause', () => { $('play-button').textContent = 'Play'; });
-video.addEventListener('ended', () => lock('Playback finished.'));
+video.addEventListener('ended', () => { if (active?.protected) lock('Playback finished.'); });
 video.addEventListener('timeupdate', () => {
   if (!active) return;
+  if (active.plain && activeKey && video.currentTime - lastSaved >= 5) { lastSaved = video.currentTime; savePlace({time: Math.floor(video.currentTime)}); }
   if (!video.seeking) lastAllowedTime = video.currentTime;
   $('time').textContent = `${Math.floor(video.currentTime / 60)}:${String(Math.floor(video.currentTime % 60)).padStart(2, '0')}`;
   $('seek').value = String(Number.isFinite(video.duration) ? Math.round(video.currentTime / video.duration * 1000) : 0);
@@ -322,6 +377,19 @@ for (const element of document.querySelectorAll('[data-home]')) element.addEvent
 $('home-button').addEventListener('click', () => screen('home'));
 $('start-secure').addEventListener('click', () => screen('secure-screen'));
 $('start-open').addEventListener('click', () => screen('open-screen'));
+$('plain-file').addEventListener('change', async () => {
+  const file = $('plain-file').files[0];
+  $('plain-file').value = '';
+  if (!file) return;
+  try { await openPlain(file); }
+  catch (error) { showMessage(error.message || 'This file could not be opened.', true); }
+});
+$('start-reading').addEventListener('click', () => { renderRecent(); screen('reading-screen'); });
+$('clear-recent').addEventListener('click', () => {
+  for (const key of Object.keys(localStorage)) if (key.startsWith('ossp-place:') || key === 'ossp-recent') localStorage.removeItem(key);
+  renderRecent();
+  showMessage('Your reading list and saved places were forgotten on this device.');
+});
 $('settings-button').addEventListener('click', () => openPanel('settings-panel'));
 $('help-button').addEventListener('click', () => openPanel('help-panel'));
 $('close-settings').addEventListener('click', closePanels);
@@ -359,12 +427,12 @@ $('restore-owner').addEventListener('change', async () => {
   } catch (error) { showMessage(error.message, true); }
 });
 
-document.addEventListener('contextmenu', event => event.preventDefault());
-document.addEventListener('dragstart', event => event.preventDefault());
-document.addEventListener('copy', event => { if (active) event.preventDefault(); });
-document.addEventListener('cut', event => { if (active) event.preventDefault(); });
+document.addEventListener('contextmenu', event => { if (active?.protected) event.preventDefault(); });
+document.addEventListener('dragstart', event => { if (active?.protected) event.preventDefault(); });
+document.addEventListener('copy', event => { if (active?.protected) event.preventDefault(); });
+document.addEventListener('cut', event => { if (active?.protected) event.preventDefault(); });
 document.addEventListener('keydown', event => {
-  if (!active) return;
+  if (!active?.protected) return;
   if ((event.ctrlKey || event.metaKey) && ['c', 's', 'p', 'u'].includes(event.key.toLowerCase())) { event.preventDefault(); showMessage('This action is unavailable in secure view.'); }
   if (event.key === 'F12') event.preventDefault();
 });

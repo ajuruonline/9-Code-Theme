@@ -8,9 +8,10 @@ const pluginHtml = fs.readFileSync(new URL('../wordpress/secure-scholar/app/inde
 const pluginPhp = fs.readFileSync(new URL('../wordpress/secure-scholar/secure-scholar.php', import.meta.url), 'utf8');
 
 test('built application contains all required simple-flow controls', () => {
-  const required = ['start-secure','start-open','source','duration','opens','minutes','secure-button','download-file','download-pass','share-files','secure-file','pass-file','open-button','credits','settings-panel'];
+  const required = ['start-secure','start-open','source','duration','opens','minutes','secure-button','download-file','download-pass','share-files','secure-file','pass-file','open-button','credits','settings-panel','plain-file','start-reading','reading-screen','recent-list','clear-recent'];
   for (const id of required) assert.match(html, new RegExp(`id=["']${id}["']`), `missing #${id}`);
-  assert.match(html, /Secure Scholar Plugin v1/);
+  assert.match(html, /Open Scholar Secure Player/);
+  assert.doesNotMatch(html, /Secure Scholar Plugin v1/);
   assert.doesNotMatch(html, /GiliSoft|GEM format/i);
 });
 

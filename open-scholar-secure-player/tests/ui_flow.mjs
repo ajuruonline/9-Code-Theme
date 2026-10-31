@@ -11,8 +11,8 @@ const browser = await chromium.launch({headless: true, executablePath: process.e
 try {
   const page = await browser.newPage({viewport: {width: 390, height: 844}, acceptDownloads: true});
   await page.goto(base, {waitUntil: 'networkidle'});
-  assert.equal(await page.locator('#start-secure strong').textContent(), 'Secure my file');
-  assert.equal(await page.locator('#start-open strong').textContent(), 'Open a secure file');
+  assert.equal(await page.locator('#start-secure strong').textContent(), 'Protect a file');
+  assert.equal(await page.locator('#start-open strong').textContent(), 'Open a protected file');
   await page.locator('#start-secure').click();
   await page.locator('#source').setInputFiles(new URL('./sample_lesson.html', import.meta.url).pathname);
   await page.locator('#duration').selectOption('7');

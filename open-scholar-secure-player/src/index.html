@@ -4,21 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#00532d">
-  <meta name="description" content="Secure Scholar protects and opens learning files with extreme simplicity.">
-  <title>Secure Scholar</title>
+  <meta name="description" content="Open Scholar Secure Player opens lessons, PDFs and videos simply, and protects files when you need to control who sees them.">
+  <title>Open Scholar Secure Player</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg">
   <style>/*__STYLE__*/</style>
 </head>
 <body>
   <header>
-    <button id="home-button" class="brand-button" aria-label="Secure Scholar home">
+    <button id="home-button" class="brand-button" aria-label="Open Scholar Secure Player home">
       <svg viewBox="0 0 512 512" aria-hidden="true"><image width="512" height="512" href="/*__CAP_IMAGE__*/"></image></svg>
-      <span><strong>Secure Scholar</strong><small>AN OPEN SCHOLAR PRODUCT</small></span>
+      <span><strong>Open Scholar Secure Player</strong><small>POWERED BY OPENSCHOLAR.NG</small></span>
     </button>
     <div class="header-actions">
-      <button id="settings-button" class="icon-button" aria-label="Advanced settings" title="Advanced settings"><svg viewBox="0 0 24 24"><path d="M4 7h10m4 0h2M4 17h2m4 0h10M14 4v6M6 14v6"/></svg></button>
-      <button id="help-button" class="icon-button" aria-label="Help" title="Help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 1c0 2-3 2-3 4m0 3v1"/></svg></button>
+      <button id="settings-button" class="icon-button" aria-label="Settings and privacy" title="Settings and privacy"><svg viewBox="0 0 24 24"><path d="M4 7h10m4 0h2M4 17h2m4 0h10M14 4v6M6 14v6"/></svg></button>
+      <button id="help-button" class="icon-button" aria-label="How to use this app" title="How to use this app"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 1c0 2-3 2-3 4m0 3v1"/></svg></button>
     </div>
   </header>
 
@@ -27,61 +27,91 @@
 
     <section id="home" class="home-screen">
       <div class="hero-copy">
-        <p class="eyebrow">SECURE SCHOLAR</p>
-        <h1>Secure it. Send it.<br>Open it safely.</h1>
-        <p>Videos, PDFs, slides, documents, images and saved web lessons.</p>
+        <p class="eyebrow">START HERE</p>
+        <h1>Open your lessons.<br>Protect what you share.</h1>
+        <p>Read PDFs, watch videos and view pictures in one simple place. Your files stay on your device.</p>
       </div>
-      <div class="main-actions">
-        <button id="start-secure" class="action-card">
-          <svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5zM12 14v3"/></svg>
-          <span><strong>Secure my file</strong><small>Choose a file and prepare it for someone.</small></span><b>→</b>
-        </button>
+      <div class="home-grid">
+        <label class="action-card home-open" for="plain-file" tabindex="0">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h6l2 2h8v10H4zM12 12v5m-2-2 2 2 2-2"/></svg>
+          <span><strong>Open a file</strong><small>PDF, video, picture or saved web page. No password needed.</small></span><b aria-hidden="true">→</b>
+        </label>
         <button id="start-open" class="action-card light">
-          <svg viewBox="0 0 24 24"><path d="M4 7h6l2 2h8v10H4zM12 12v5m-2-2 2 2 2-2"/></svg>
-          <span><strong>Open a secure file</strong><small>Import the file and its password.</small></span><b>→</b>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5zM12 14v3"/></svg>
+          <span><strong>Open a protected file</strong><small>For a file ending in .scholar and its .scholarpass password file.</small></span><b aria-hidden="true">→</b>
+        </button>
+        <button id="start-secure" class="action-card">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5zM12 14v3"/></svg>
+          <span><strong>Protect a file</strong><small>Set who can open it, for how long and how many times.</small></span><b aria-hidden="true">→</b>
+        </button>
+        <button id="start-reading" class="action-card light">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H4zM20 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/></svg>
+          <span><strong>My reading</strong><small>Files you opened recently on this device, with your place saved.</small></span><b aria-hidden="true">→</b>
         </button>
       </div>
-      <div class="simple-flow" aria-label="Simple Secure Scholar workflow">
-        <span>1. See file</span><span>2. Import</span><span>3. Secure or open</span><span>4. Enjoy</span>
+      <input id="plain-file" class="visually-hidden" type="file" accept=".pdf,.mp4,.webm,.png,.jpg,.jpeg,.html,.htm" aria-label="Choose a file to open">
+      <details class="how-it-works" open>
+        <summary>How it works</summary>
+        <ol>
+          <li><strong>Open a file</strong> to read or watch it straight away. Your place is saved on this device, so you can carry on next time.</li>
+          <li><strong>Protect a file</strong> when you are sending a lesson to someone and want to limit it. You choose the rules; the people you send it to open it only in this app.</li>
+          <li><strong>Open a protected file</strong> when someone sends you a .scholar file. Import the .scholarpass password file too, then press Open.</li>
+        </ol>
+        <p class="hint">Nothing you open here is uploaded anywhere. Settings and privacy explain what stays on this device.</p>
+      </details>
+    </section>
+
+    <section id="reading-screen" hidden>
+      <button class="back" data-home>← Home</button>
+      <div class="screen-heading"><p class="eyebrow">MY READING</p><h1>Files you opened here</h1></div>
+      <div class="simple-card">
+        <p class="hint">Browsers cannot keep a file after you close it, so open the file again from the Home screen and it picks up where you stopped.</p>
+        <ul id="recent-list" class="recent-list"></ul>
+        <p id="recent-empty" class="hint" hidden>Nothing yet. Open a file and it will appear here.</p>
+        <button id="clear-recent" class="secondary wide" hidden>Forget this list</button>
       </div>
     </section>
 
     <section id="secure-screen" hidden>
       <button class="back" data-home>← Home</button>
-      <div class="screen-heading"><p class="eyebrow">SECURE MY FILE</p><h1>Choose it. Set access. Secure it.</h1></div>
+      <div class="screen-heading"><p class="eyebrow">PROTECT A FILE</p><h1>Choose the file. Set the rules. Protect it.</h1>
+        <p class="hint">Three quick steps: choose your file, answer the three questions below, then press Protect file. You will get two files to send.</p></div>
       <form id="secure-form" class="simple-card">
         <label class="file-drop">
-          <span class="step-number">1</span><strong id="source-label">See my file</strong><small>Video, PDF, image or saved web lesson</small>
+          <span class="step-number">1</span><strong id="source-label">Choose the file to protect</strong><small>Video, PDF, picture or saved web lesson</small>
           <input id="source" type="file" accept=".mp4,.webm,.pdf,.png,.jpg,.jpeg,.html,.htm">
         </label>
         <button type="button" id="desktop-office" class="secondary wide" hidden>Import Word or PowerPoint</button>
         <div class="basic-settings">
-          <label><span>How long should it work?</span><select id="duration"><option value="1">1 day</option><option value="7" selected>7 days</option><option value="30">30 days</option><option value="90">90 days</option><option value="365">1 year</option></select></label>
-          <label><span>How many openings?</span><input id="opens" type="number" value="3" min="1" max="100000" required></label>
-          <label><span>Minutes each time?</span><input id="minutes" type="number" value="60" min="1" max="1440" required></label>
+          <label><span>How long should it work?</span><select id="duration" aria-describedby="duration-help"><option value="1">1 day</option><option value="7" selected>7 days</option><option value="30">30 days</option><option value="90">90 days</option><option value="365">1 year</option></select>
+            <small id="duration-help" class="hint">After this time the file stops opening, even if it has openings left.</small></label>
+          <label><span>How many openings?</span><input id="opens" type="number" value="3" min="1" max="100000" required aria-describedby="opens-help">
+            <small id="opens-help" class="hint">Each time someone starts learning with the file uses one opening. Viewing again in the same session does not.</small></label>
+          <label><span>Minutes each time?</span><input id="minutes" type="number" value="60" min="1" max="1440" required aria-describedby="minutes-help">
+            <small id="minutes-help" class="hint">How long one session lasts before the file asks to be opened again.</small></label>
         </div>
         <details class="advanced-block">
-          <summary>Advanced settings</summary>
+          <summary>Advanced settings <span class="hint">(optional — the defaults are safe)</span></summary>
           <div class="advanced-grid">
-            <label>File name<input id="title" maxlength="200" placeholder="Automatically taken from your file"></label>
-            <label>Recipient name<input id="recipient" maxlength="200" value="Secure Scholar Viewer"></label>
-            <label>Starts<input id="starts" type="datetime-local"></label>
-            <label>Exact expiry<input id="expires" type="datetime-local"></label>
-            <label>Optional private PIN<input id="pin" type="password" inputmode="numeric" maxlength="64" placeholder="Leave empty for maximum simplicity"></label>
-            <label>Lock to installation code<input id="device" maxlength="32" pattern="[A-Fa-f0-9]{32}" placeholder="Optional"></label>
-            <label class="check"><input id="disable-seek" type="checkbox"> Stop video skipping</label>
-            <label class="check"><input id="offline-only" type="checkbox"> Require offline viewing</label>
+            <label>File name<input id="title" maxlength="200" placeholder="Taken from your file" aria-describedby="title-help"><small id="title-help" class="hint">The name people see at the top of the file.</small></label>
+            <label>Recipient name<input id="recipient" maxlength="200" value="Open Scholar Learner" aria-describedby="recipient-help"><small id="recipient-help" class="hint">Shown as a light watermark so the copy can be traced to its reader.</small></label>
+            <label>Starts<input id="starts" type="datetime-local" aria-describedby="starts-help"><small id="starts-help" class="hint">Leave as it is to start now. Set a later time to start the file later.</small></label>
+            <label>Exact expiry<input id="expires" type="datetime-local" aria-describedby="expires-help"><small id="expires-help" class="hint">Overrides “How long should it work?” if you pick a date.</small></label>
+            <label>Optional PIN<input id="pin" type="password" inputmode="numeric" maxlength="64" placeholder="Leave empty for simplicity" aria-describedby="pin-help"><small id="pin-help" class="hint">Makes the reader type a code as well. Tell them the code by a different route, such as a phone call.</small></label>
+            <label>Lock to one device<input id="device" maxlength="32" pattern="[A-Fa-f0-9]{32}" placeholder="Optional" aria-describedby="device-help"><small id="device-help" class="hint">Paste the device code from Settings and privacy to make the file open on that device only.</small></label>
+            <label class="check"><input id="disable-seek" type="checkbox" aria-describedby="seek-help"> Stop video skipping<small id="seek-help" class="hint">Viewers must watch in order.</small></label>
+            <label class="check"><input id="offline-only" type="checkbox" aria-describedby="offline-help"> Require offline viewing<small id="offline-help" class="hint">Use this only when the reader will not be online.</small></label>
           </div>
         </details>
-        <button id="secure-button" class="primary" type="submit"><span>Secure file</span><b>→</b></button>
+        <button id="secure-button" class="primary" type="submit"><span>Protect file</span><b>→</b></button>
       </form>
       <div id="progress-box" class="progress-box" hidden><progress id="progress" max="100" value="0"></progress><span id="progress-text">Preparing…</span></div>
       <section id="delivery" class="delivery" hidden>
-        <p class="eyebrow">READY TO SEND</p><h2>Your secure folder is ready.</h2>
-        <p>Send the secure file and password file together. The rules travel inside the password file.</p>
+        <p class="eyebrow">READY TO SEND</p><h2>Your protected file is ready.</h2>
+        <p>Send <strong>both</strong> files. The .scholar file is the lesson; the .scholarpass file is the password that opens it. Keep the password file away from the lesson file until the reader needs it.</p>
         <div class="delivery-actions">
-          <button id="download-file" class="primary"><span>Download file</span><b>↓</b></button>
-          <button id="download-pass" class="primary"><span>Download password</span><b>↓</b></button>
+          <button id="download-file" class="primary"><span>Download the lesson file</span><b>↓</b></button>
+          <button id="download-pass" class="primary"><span>Download the password file</span><b>↓</b></button>
           <button id="share-files" class="secondary wide">Share both files</button>
         </div>
       </section>
@@ -90,25 +120,26 @@
     <section id="open-screen" hidden>
       <button class="back" data-home>← Home</button>
       <div id="unlock-panel">
-        <div class="screen-heading"><p class="eyebrow">OPEN A SECURE FILE</p><h1>Import. Open. Enjoy.</h1></div>
+        <div class="screen-heading"><p class="eyebrow">OPEN A PROTECTED FILE</p><h1>Import both files. Open. Learn.</h1>
+          <p class="hint">You need the .scholar file and the .scholarpass password file that came with it. If someone sent you a PIN, enter it too.</p></div>
         <form id="open-form" class="simple-card">
-          <label class="file-drop"><span class="step-number">1</span><strong>Import file</strong><small>The file ending in .scholar</small><input id="secure-file" type="file" accept=".scholar" required></label>
-          <label class="file-drop"><span class="step-number">2</span><strong>Import password</strong><small>The file ending in .scholarpass</small><input id="pass-file" type="file" accept=".scholarpass,.json" required></label>
-          <label id="pin-row" hidden>Private PIN<input id="open-pin" type="password" maxlength="64" inputmode="numeric"></label>
+          <label class="file-drop"><span class="step-number">1</span><strong>Import the lesson file</strong><small>Ends in .scholar</small><input id="secure-file" type="file" accept=".scholar" required></label>
+          <label class="file-drop"><span class="step-number">2</span><strong>Import the password file</strong><small>Ends in .scholarpass</small><input id="pass-file" type="file" accept=".scholarpass,.json" required></label>
+          <label id="pin-row" hidden>Private PIN<input id="open-pin" type="password" maxlength="64" inputmode="numeric" aria-describedby="open-pin-help"><small id="open-pin-help" class="hint">The code the publisher gave you by a separate route.</small></label>
           <button id="open-button" class="primary" type="submit"><span>Open file</span><b>→</b></button>
         </form>
       </div>
 
       <article id="viewer" class="viewer" hidden>
         <div class="viewer-heading">
-          <div><p class="eyebrow">SECURE VIEW</p><h2 id="view-title"></h2><p id="view-status"></p></div>
-          <button id="lock-button" class="secondary">Close</button>
+          <div><p class="eyebrow" id="view-kind">VIEWING</p><h2 id="view-title"></h2><p id="view-status"></p></div>
+          <button id="lock-button" class="secondary">Close file</button>
         </div>
         <div id="stage" class="stage">
           <div id="video-wrap" hidden>
             <video id="video" preload="metadata" playsinline disablepictureinpicture disableremoteplayback controlslist="nodownload noremoteplayback noplaybackrate"></video>
             <div id="watermark" class="watermark"></div>
-            <div class="video-controls"><button id="play-button">Play</button><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Video position"><span id="time">0:00</span><button id="mute-button">Mute</button><button id="fullscreen-button">Full screen</button></div>
+            <div class="video-controls"><button id="play-button" aria-label="Play">Play</button><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Video position"><span id="time">0:00</span><button id="mute-button">Mute</button><button id="fullscreen-button">Full screen</button></div>
           </div>
           <div id="pages-wrap" hidden><canvas id="page-canvas"></canvas></div>
           <div id="web-wrap" hidden><iframe id="web-frame" sandbox="allow-same-origin" title="Protected web lesson"></iframe><div class="curtain" aria-hidden="true"></div></div>
@@ -119,23 +150,27 @@
       </article>
     </section>
 
-    <aside id="settings-panel" class="side-panel" hidden>
-      <div class="panel-heading"><h2>Advanced settings</h2><button id="close-settings" class="icon-button" aria-label="Close settings">×</button></div>
-      <details><summary>Installation lock</summary><p>Use this code only when you want one password file to work on one browser installation.</p><button id="copy-device" class="code">Loading…</button></details>
-      <details><summary>Owner backup</summary><p>The simple mode keeps the owner identity on this device. Download a backup before clearing browser data.</p><button id="backup-owner" class="secondary">Download owner backup</button><label class="restore">Restore owner backup<input id="restore-owner" type="file" accept=".json"></label></details>
-      <details><summary>Protection controls</summary><p>Secure Scholar blocks copying, printing, ordinary downloads, right-click, drag, viewer sharing and direct source controls. It adds recipient watermarks, expiry, opening credits, time limits, optional installation locking and tamper-checked local history.</p><p>The Windows application also requests operating-system capture exclusion. No software can stop an external camera or every administrator-level capture method.</p></details>
-      <details><summary>Supported content</summary><p>Online: MP4, WebM, PDF, PNG, JPEG and self-contained HTML up to 100 MB. Save Word and PowerPoint as PDF. Windows: the same secure formats, larger-file allowance and direct Office-to-PDF preparation when LibreOffice is installed.</p></details>
+    <aside id="settings-panel" class="side-panel" hidden aria-label="Settings and privacy">
+      <div class="panel-heading"><h2>Settings and privacy</h2><button id="close-settings" class="icon-button" aria-label="Close settings">×</button></div>
+      <p class="hint">Everything here is optional. Most people never need to open it.</p>
+      <details open><summary>What stays on this device</summary><p>Files you open are read on this device and never uploaded. Your reading places and recent list are kept only in this browser.</p></details>
+      <details><summary>Device code</summary><p>Only needed when a publisher asks you for it, so a protected file opens on this device alone.</p><button id="copy-device" class="code" aria-label="Copy device code">Loading…</button></details>
+      <details><summary>Backup for publishers</summary><p>For people who protect files. Save a backup before clearing browser data, so you can still open and protect your files later. The backup is locked with a password you choose.</p><button id="backup-owner" class="secondary">Download publisher backup</button><label class="restore">Restore a publisher backup<input id="restore-owner" type="file" accept=".json"></label></details>
+      <details><summary>Protection explained</summary><p>Protected files block copying, printing, ordinary downloads and right-click. They add a watermark, expiry, a limited number of openings and optional device locking.</p><p>No software can stop every camera or screen recording. Protection makes casual copying harder; it is not perfect.</p></details>
+      <details><summary>Supported files</summary><p>Open here: PDF, MP4, WebM, PNG, JPG and saved web pages (.html). Protect: the same types, up to 100 MB. Word and PowerPoint: save them as PDF first.</p></details>
     </aside>
 
-    <aside id="help-panel" class="side-panel" hidden>
-      <div class="panel-heading"><h2>Quick guide</h2><button id="close-help" class="icon-button" aria-label="Close help">×</button></div>
-      <h3>To secure something</h3><ol><li>Choose your file.</li><li>Choose how long, how many openings and viewing time.</li><li>Press Secure file.</li><li>Download or share the file and password.</li></ol>
-      <h3>To view something</h3><ol><li>Import the secure file.</li><li>Import its password file.</li><li>Press Open file.</li><li>View your remaining credits.</li></ol>
+    <aside id="help-panel" class="side-panel" hidden aria-label="How to use this app">
+      <div class="panel-heading"><h2>How to use this app</h2><button id="close-help" class="icon-button" aria-label="Close help">×</button></div>
+      <h3>Read or watch a file</h3><ol><li>Press <strong>Open a file</strong>.</li><li>Pick a PDF, video or picture.</li><li>Use Previous, Next and Enlarge to read, or Play to watch.</li><li>Your place is saved for next time.</li></ol>
+      <h3>Open a protected file</h3><ol><li>Press <strong>Open a protected file</strong>.</li><li>Import the .scholar file, then the .scholarpass file.</li><li>Enter the PIN if one was sent, then press Open file.</li></ol>
+      <h3>Protect a file</h3><ol><li>Press <strong>Protect a file</strong> and choose it.</li><li>Answer the three questions: how long, how many openings, minutes each time.</li><li>Press Protect file, then send both files.</li></ol>
+      <p class="hint">Each setting has a short explanation under it. Open “Advanced settings” only when you need one of the extra options.</p>
       <p>Powered by OpenScholar.ng.</p>
     </aside>
     <div id="panel-shade" class="panel-shade" hidden></div>
 
-    <footer><span>Powered by <strong>OpenScholar.ng</strong></span><span>Secure Scholar Plugin v1</span></footer>
+    <footer><span>Powered by <strong>OpenScholar.ng</strong></span><span>Open Scholar Secure Player · Version 1.1</span></footer>
   </main>
   <script id="ss-integration">window.SECURE_SCHOLAR_INTEGRATION=null;</script>
   <script>/*__PDF_WORKER__*/</script>
