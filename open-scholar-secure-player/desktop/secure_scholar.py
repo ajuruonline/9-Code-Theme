@@ -16,12 +16,12 @@ from urllib.parse import unquote, urlsplit
 
 import webview
 
-APP_NAME = 'Secure Scholar'
+APP_NAME = 'Open Scholar Secure Player'
 ROOT = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parents[1]))
 DIST = ROOT / 'dist'
 
 class StaticHandler(BaseHTTPRequestHandler):
-    allowed = {'index.html', 'sw.js', 'manifest.webmanifest', 'icon.svg', 'icon-512.png'}
+    allowed = {'index.html', 'sw.js', 'manifest.webmanifest', 'icon.svg', 'icon-512.png', 'favicon.ico'}
     def log_message(self, *_args):
         pass
     def do_GET(self):
@@ -100,9 +100,36 @@ def request_capture_exclusion():
         user32.SetWindowDisplayAffinity(handle, 0x00000011)
     kernel32.SetLastError(0)
 
+def self_test():
+    """Start the local server without a window and check the bundled app. Used by the release build."""
+    from urllib.request import urlopen
+    server = ThreadingHTTPServer(('127.0.0.1', 0), StaticHandler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        base = f'http://127.0.0.1:{server.server_port}/'
+        page = urlopen(base + 'index.html', timeout=10).read().decode('utf-8')
+        assert 'Open Scholar Secure Player' in page, 'product name missing from bundled app'
+        assert 'id="plain-file"' in page, 'ordinary file opening missing from bundled app'
+        icon = urlopen(base + 'favicon.ico', timeout=10).read()
+        assert icon[:4] == b'\x00\x00\x01\x00', 'favicon is not an ICO file'
+        for blocked in ('../secure_scholar.py', 'build.py'):
+            try:
+                urlopen(base + blocked, timeout=10)
+                raise AssertionError(f'{blocked} must not be served')
+            except Exception as error:
+                if isinstance(error, AssertionError):
+                    raise
+        print('self-test passed')
+        return 0
+    finally:
+        server.shutdown()
+        server.server_close()
+
 def main():
+    if '--self-test' in sys.argv:
+        return self_test()
     if not (DIST / 'index.html').is_file():
-        raise SystemExit('Secure Scholar application files are missing. Reinstall the complete package.')
+        raise SystemExit('Open Scholar Secure Player application files are missing. Reinstall the complete package.')
     server = ThreadingHTTPServer(('127.0.0.1', 0), StaticHandler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
