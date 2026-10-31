@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 $projectRoot = Split-Path $PSScriptRoot -Parent
-py -3 -m venv .build-venv
+py -3.12 -m venv .build-venv
 if ($LASTEXITCODE -ne 0) { throw 'Python environment creation failed.' }
 $taskPython = Join-Path $PSScriptRoot '.build-venv\Scripts\python.exe'
 & $taskPython -m pip install --upgrade pip
