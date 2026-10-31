@@ -1,0 +1,194 @@
+name: Build Secure Scholar Windows EXE
+on:
+  workflow_dispatch:
+  push:
+    tags: ['secure-scholar-v*']
+jobs:
+  windows-exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build browser application
+        run: python build.py
+      - name: Build Windows executable
+        shell: powershell
+        run: .\desktop\Build_Secure_Scholar_EXE.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SecureScholar-Windows-v1
+          path: desktop/dist/SecureScholar.exe
+*** Add File: /workspace/scratch/5fabcadbe1e6/openscholar-browser/secure-scholar-v1/README.md
+# Secure Scholar Plugin v1
+
+**Extreme simplicity in front. Advanced protection behind the interface.**
+
+Secure Scholar is an Open Scholar product for protecting and opening learning content. The online WordPress edition and offline Windows edition use the same `.scholar` content file and `.scholarpass` password/access file.
+
+## The complete basic workflow
+
+### Secure a file
+
+1. Open **Secure my file**.
+2. Choose the file.
+3. Choose how long it should work, how many openings and minutes per opening.
+4. Press **Secure file**.
+5. Download or share the secure file and password file.
+
+### Open a file
+
+1. Open **Open a secure file**.
+2. Import the `.scholar` file.
+3. Import the `.scholarpass` password file.
+4. Press **Open file**.
+5. View the content and remaining opening credits.
+
+No cryptographic terms, licence terminology or format grammar appears in the basic workflow. Optional PIN, exact dates, installation binding, seeking restrictions, offline-only access, backup and technical information remain under **Advanced Settings**.
+
+## Editions
+
+| Edition | Purpose | Main difference |
+| --- | --- | --- |
+| WordPress | Existing Open Scholar site and phone shortcut | 100 MB online limit; Word/PowerPoint should be saved as PDF |
+| Windows | Own Secure Scholar WebView2 window; offline use | larger allowance, direct Office preparation with LibreOffice, Windows capture-exclusion request |
+
+The Windows edition does not open Chrome or Edge as a normal browser. It uses the Windows WebView2 component inside the Secure Scholar application window.
+
+## Supported content
+
+- MP4 and WebM video
+- PDF documents and slides
+- PNG and JPEG images
+- self-contained HTML lessons or saved web pages
+- Word, PowerPoint, OpenDocument, RTF and text through desktop LibreOffice-to-PDF preparation
+
+Multi-file websites and live third-party embeds require a future signed course-bundle format. YouTube and other platform players must retain controls required by their platform rules; Secure Scholar does not obscure required third-party controls.
+
+## Deterrence layers
+
+- AES-256-GCM encrypted content with authenticated chunks
+- PBKDF2-SHA256 key protection
+- ECDSA-signed password/access rules
+- expiry, opening credits and session duration
+- optional PIN and installation binding
+- anti-copy, anti-print, anti-drag and blocked viewer shortcuts
+- no normal decrypted-file download or share control
+- recipient watermarking
+- protected local usage history and clock rollback checks
+- interaction curtain for static self-contained web lessons
+- Windows capture-exclusion request where supported
+
+These controls are designed to make casual copying and sharing difficult. An external camera or sufficiently privileged/modified system can still capture visible content.
+
+## WordPress installation
+
+Upload `Secure_Scholar_Plugin_v1.0.0.zip`, activate it, then add **Secure Scholar** to the existing Open Scholar dashboard or menu. Users keep the existing Open Scholar phone shortcut.
+
+## Windows executable
+
+Run `desktop/Build_Secure_Scholar_EXE.ps1` on Windows or run the included GitHub Actions workflow. Test on a clean Windows 10/11 computer and code-sign the final executable.
+
+Powered by OpenScholar.ng.
+*** Add File: /workspace/scratch/5fabcadbe1e6/openscholar-browser/secure-scholar-v1/OPEN_SCHOLAR_STANDARD.md
+# Open Scholar standard compliance
+
+## Brand and interface
+
+- Open Scholar deep-green palette retained.
+- Original Open Scholar cap used.
+- Dark headings on white or very light green.
+- Mobile-first layout with no horizontal scrolling.
+- SVG icons used in the header; no decorative icon clutter.
+- Bordered interface elements use square corners.
+- Advanced panels open from the right with a 10% top safe margin.
+- Footer reads `Powered by OpenScholar.ng.`
+- Product principle: extreme simplicity in front; complexity behind the interface.
+
+## OS-STD-001 controls
+
+- Tutorial post is created on first activation.
+- Small, Medium and Big placement shortcodes are included and copyable.
+- Public opening route and signed-in front-end owner route are separated.
+- Owner route requires sign-in and `edit_posts`; Subscribers cannot create secure files.
+- Import and export are the product's main workflow: source import, secure-file export, password-file export, recipient import.
+- Settings and technical information are collapsed by default.
+- SVG administration icon and front-end SVG controls are included.
+- Tutorial and shortcodes are available on first activation.
+
+## Existing phone shortcut
+
+The plugin does not install a second phone application. `/secure-scholar/` is opened through the existing Open Scholar site and shortcut. `/secure-scholar/owner/` is the signed-in online preparation route.
+*** Add File: /workspace/scratch/5fabcadbe1e6/openscholar-browser/secure-scholar-v1/FORMAT.md
+# Secure Scholar v1 compatibility format
+
+## `.scholar` content
+
+The first eight bytes are ASCII `SCHOLR1` followed by LF. A four-byte unsigned big-endian JSON length follows, then canonical UTF-8 JSON and consecutive AES-256-GCM encrypted chunks.
+
+Header: `format=SecureScholar`, `version=1`, UUID, title, kind, MIME type, plaintext size, 1 MiB chunk size and eight-byte random nonce prefix. Each chunk uses `nonce-prefix || chunk-index`; authenticated data is the SHA-256 header hash plus chunk index.
+
+## `.scholarpass` password/access file
+
+The JSON file contains `format=SecureScholarPasswordFile`, version 1, signed access body, ECDSA P-256 signature, public verification key and a random portable secret. The content key is PBKDF2-SHA256/AES-GCM wrapped under the portable secret plus optional private PIN.
+
+Signed access rules include content identity and header hash, recipient, start and expiry, maximum openings, session duration, optional installation code, seeking restriction, offline-only flag and PIN-required flag.
+
+## Compatibility rule
+
+WordPress and Windows v1 must use these exact files. An edition may impose a smaller source-size limit, but it must not silently change the file or password format.
+*** Add File: /workspace/scratch/5fabcadbe1e6/openscholar-browser/secure-scholar-v1/SECURITY.md
+# Security and deterrence boundaries
+
+Secure Scholar encrypts stored content and validates signed access rules before decrypting. Decrypted video or document pixels must exist during authorised viewing. Therefore the system provides layered access control and deterrence, not an unbreakable claim.
+
+Implemented controls include encryption, integrity checks, password-file possession, optional PIN, expiry, opening credits, viewing time, optional installation binding, local clock rollback checks, tamper-checked local usage state, custom viewer controls, watermarks, anti-copy/print/drag actions, static-web interaction curtain and Windows capture exclusion where supported.
+
+The product cannot guarantee prevention of external cameras, kernel/administrator-level tools, modified application code, memory inspection, operating-system compromise or deletion/reset of all local browser history. Global opening counts, immediate revocation and server-authoritative time require an optional online authority in a future release.
+
+The interaction curtain is for first-party/static web learning content. Do not obscure mandatory controls of YouTube or another third-party platform.
+*** Add File: /workspace/scratch/5fabcadbe1e6/openscholar-browser/secure-scholar-v1/DEVELOPMENT.md
+# Secure Scholar v1 development
+
+## Build
+
+```sh
+python3 build.py
+node --test tests/crypto.test.mjs tests/validate_build.mjs
+node --check src/crypto.mjs
+node --check src/ledger.mjs
+node --check src/app.js
+python3 -m py_compile desktop/secure_scholar.py
+```
+
+`build.py` embeds PDF.js, the Open Scholar cap, CSS and application code into one application file, then copies the same build into the WordPress plugin. This is the compatibility invariant.
+
+## Windows
+
+Build on a Windows 10/11 runner using `desktop/Build_Secure_Scholar_EXE.ps1`, or dispatch `.github/workflows/build-windows.yml`. Do not distribute an unsigned or untested executable as a production release.
+
+## Release priorities
+
+1. Real Android, iPhone, Windows and WordPress staging acceptance.
+2. Signed multi-resource course and offline-website bundles.
+3. Optional server authority for global credits, authoritative time, revocation and renewal.
+4. Windows code signing and installer packaging.
+5. Native Android/iOS editions only if system-level controls justify them; the existing phone route remains the default.
+6. Large-video range decryption to avoid whole-file browser memory use.
+7. Accessibility design for authorised selectable text and screen-reader access.
+*** Add File: /workspace/scratch/5fabcadbe1e6/openscholar-browser/secure-scholar-v1/CHANGELOG.md
+# Changelog
+
+## 1.0.0 - 31 October 2026
+
+- Introduced Secure Scholar product name and independent v1 format.
+- Replaced technical two-panel interface with two simple actions.
+- Added `.scholar` content and `.scholarpass` password files.
+- Added automatic local publisher identity and optional private PIN.
+- Added expiry, opening credits, session time, installation binding and seeking restriction.
+- Added PDF, video, image and self-contained HTML viewing.
+- Added recipient watermark, anti-copy/print/drag controls and static-web curtain.
+- Added WordPress plugin for the existing Open Scholar phone shortcut.
+- Added Windows WebView2 host, Office preparation and capture-exclusion request.
+- Added Windows EXE build script and GitHub Actions workflow.

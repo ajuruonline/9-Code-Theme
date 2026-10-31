@@ -1,0 +1,19 @@
+{
+  "pdfjs": {
+    "package": "pdfjs-dist",
+    "version": "5.6.205",
+    "source": "npm legacy/build (npm integrity sha512-tlUj+2IDa7G1SbvBNN74UHRLJybZDWYom+k6p5KIZl7huBvsA4APi6mKL+zCxd3tLjN5hOOEE9Tv7VdzO88pfg==)",
+    "license": "Apache-2.0",
+    "files": {
+      "vendor/pdf.mjs": "d4b840a3238bf6fbebe3dec7a7665757dad60fe014d657351a3f1f067a3df924",
+      "vendor/pdf.worker.mjs": "499da1f7f1c6c24be898b556638d2ffec999b2ad234c796508e3d7c7025c28cb"
+    }
+  },
+  "cap": {
+    "file": "assets/original-cap.png",
+    "source": "byte-identical copy of dist/icon-512.png from the v1.0.0 handoff build (embedded as data URL in dist/index.html)",
+    "files": {
+      "assets/original-cap.png": "d028a6dc0b467a7789e207b098408ca4bb1222ddc82d769647eb93e336d2ad8e"
+    }
+  }
+}
