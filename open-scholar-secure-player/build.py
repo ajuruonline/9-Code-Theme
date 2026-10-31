@@ -23,7 +23,7 @@ def verify(lock):
 
 def build():
     lock = json.loads((ROOT / 'vendor' / 'LOCK.json').read_text(encoding='utf-8'))
-    files = {**lock['pdfjs']['files'], **lock['cap']['files']}
+    files = {**lock['pdfjs']['files'], **lock['cap']['files'], **lock['favicon']['files']}
     verify(files)
 
     source = ROOT / 'src'
@@ -50,7 +50,7 @@ def build():
     html = html.replace('/*__PDF_MODULE__*/', pdf.replace('</script', '<\\/script'))
     html = html.replace('/*__APPLICATION__*/', application.replace('</script', '<\\/script'))
     (output / 'index.html').write_text(html, encoding='utf-8')
-    for name in ('sw.js', 'manifest.webmanifest', 'icon.svg'):
+    for name in ('sw.js', 'manifest.webmanifest', 'icon.svg', 'favicon.ico'):
         shutil.copyfile(source / name, output / name)
     shutil.copyfile(cap, output / 'icon-512.png')
     plugin_app = ROOT / 'wordpress' / 'secure-scholar' / 'app'

@@ -11,9 +11,15 @@
   },
   "cap": {
     "file": "assets/original-cap.png",
-    "source": "byte-identical copy of dist/icon-512.png from the v1.0.0 handoff build (embedded as data URL in dist/index.html)",
+    "source": "Official OpenScholar cap PNG (512x512) supplied by the owner on 2026-10-31; replaces the cap recovered from the v1.0.0 build.",
     "files": {
-      "assets/original-cap.png": "d028a6dc0b467a7789e207b098408ca4bb1222ddc82d769647eb93e336d2ad8e"
+      "assets/original-cap.png": "6bf4c5a872dd6a8639a5829a2f8f32d8bc59b6d0e9a9e5e8335399c1abc844bd"
+    }
+  },
+  "favicon": {
+    "source": "Official OpenScholar.ico supplied by the owner on 2026-10-31",
+    "files": {
+      "src/favicon.ico": "66a31d79f432e7d2457c3076966c6d96487adc5b080758ae4380b8834a8f7e00"
     }
   }
 }

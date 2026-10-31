@@ -2,6 +2,7 @@
 
 ## 1.1.0 — Open Scholar Secure Player (in progress)
 - Sprint 0: clean-room build. PDF.js 5.6.205 and the cap are vendored in-tree with SHA-256 locks; `build.py` reproduces the shipped `dist/index.html` byte-for-byte.
+- Official OpenScholar cap (512 px PNG) and OpenScholar.ico are now used as the header logo and browser favicon, replacing the cap recovered from the v1.0.0 build. Checksums are in vendor/LOCK.json.
 - Renamed the visible product to Open Scholar Secure Player (protected file formats and routes unchanged).
 - New home: Open a file (no password), Open a protected file, Protect a file, My reading, plus a "How it works" guide.
 - Normal file open for PDF, MP4/WebM, PNG/JPG and saved web pages, using the same viewer. No protections are applied to ordinary files, and nothing is uploaded.
