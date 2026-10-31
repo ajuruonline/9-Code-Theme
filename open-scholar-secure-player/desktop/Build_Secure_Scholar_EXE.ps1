@@ -9,6 +9,7 @@ $taskPython = Join-Path $PSScriptRoot '.build-venv\Scripts\python.exe'
 if ($LASTEXITCODE -ne 0) { throw 'Build dependencies could not be installed.' }
 & $taskPython -m PyInstaller --noconfirm --clean --onefile --windowed `
     --name OpenScholarSecurePlayer `
+    --icon "$projectRoot\assets\OpenScholar.ico" `
     --add-data "$projectRoot\dist;dist" `
     --collect-all webview `
     secure_scholar.py
