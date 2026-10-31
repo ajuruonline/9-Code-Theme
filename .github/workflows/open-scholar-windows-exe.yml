@@ -20,6 +20,15 @@ jobs:
       - name: Build Windows executable and run its self-test
         shell: powershell
         run: .\desktop\Build_Secure_Scholar_EXE.ps1
+      - name: Launch the real window and check it stays open
+        shell: powershell
+        working-directory: open-scholar-secure-player
+        run: |
+          $p = Start-Process -FilePath desktop\dist\OpenScholarSecurePlayer.exe -PassThru
+          Start-Sleep -Seconds 15
+          if ($p.HasExited) { throw "The app closed early with exit code $($p.ExitCode)" }
+          Write-Host "Window process $($p.Id) still running after 15 seconds"
+          Stop-Process -Id $p.Id -Force
       - name: Write SHA-256 checksum
         shell: powershell
         run: |
