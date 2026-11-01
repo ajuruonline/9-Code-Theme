@@ -15,7 +15,7 @@ define('SSV1_VERSION', '1.0.0');
 
 function ssv1_register_routes() {
     add_rewrite_rule('^secure-scholar/owner/?$', 'index.php?secure_scholar_route=owner', 'top');
-    add_rewrite_rule('^secure-scholar/(index\.html|sw\.js|manifest\.webmanifest|icon\.svg|icon-512\.png|icon-192\.png|apple-touch-icon\.png|favicon\.ico)$', 'index.php?secure_scholar_route=reader&secure_scholar_asset=$matches[1]', 'top');
+    add_rewrite_rule('^secure-scholar/(index\.html|maker\.html|sw\.js|manifest\.webmanifest|icon\.svg|icon-512\.png|icon-192\.png|apple-touch-icon\.png|favicon\.ico)$', 'index.php?secure_scholar_route=reader&secure_scholar_asset=$matches[1]', 'top');
     add_rewrite_rule('^secure-scholar/?$', 'index.php?secure_scholar_route=reader', 'top');
 }
 add_action('init', 'ssv1_register_routes');
@@ -33,9 +33,9 @@ function ssv1_serve_app() {
             wp_die(esc_html__('Your account cannot secure learning files.', 'secure-scholar'), '', array('response' => 403));
         }
     }
-    $asset = get_query_var('secure_scholar_asset') ?: 'index.html';
+    $asset = get_query_var('secure_scholar_asset') ?: ($owner ? 'maker.html' : 'index.html');
     $types = array(
-        'index.html' => 'text/html; charset=utf-8', 'sw.js' => 'text/javascript; charset=utf-8',
+        'index.html' => 'text/html; charset=utf-8', 'maker.html' => 'text/html; charset=utf-8', 'sw.js' => 'text/javascript; charset=utf-8',
         'manifest.webmanifest' => 'application/manifest+json', 'icon.svg' => 'image/svg+xml', 'icon-512.png' => 'image/png',
         'icon-192.png' => 'image/png', 'apple-touch-icon.png' => 'image/png', 'favicon.ico' => 'image/x-icon'
     );

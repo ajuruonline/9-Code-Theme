@@ -32,6 +32,12 @@ Read `HANDOFF.md` for the full picture; this file is the running record.
 | T16 | Fix the root Nine Code CI failing on every push | Open, unrelated to this app | `.github/workflows/ci.yml` |
 
 ## Log
+### 1 Nov 2026 — split into Player and Maker
+- Owner decision: the EXE is dropped. The product is two web apps: the **Player** (learners, offline, media-player look, lists the limits before a protected lesson starts) and the **Maker** (publishers, makes .scholar and .scholarpass files).
+- Counting: a protected opening is used only when the learner presses Start viewing, after the limits are shown.
+- Tests: `tests/maker_flow.mjs`, `tests/player_flow.mjs` (both browser), `tests/validate_build.mjs` (structure, separation of the two apps, plugin routes).
+- Replaced: `tests/ui_flow.mjs`, `tests/plain_flow.mjs`, `tests/web_app_flow.mjs`.
+
 ### 31 Oct 2026 — session 1 (this record)
 - Built Sprint 0 and the 1.1 slice (T0–T5 above). Commits on `claude/loving-maxwell-ny63r3` in `9-Code-Theme`, mirrored to branch `open-scholar-secure-player` in `ajuruonline/secure-scholar`.
 - Windows build fixes: LF line endings (checksum failed on CRLF); pinned Python 3.12 and pywebview 6.2.1 (runner default Python was too new for pywebview 5.4).

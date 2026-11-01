@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#00532d">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Open Scholar Secure File Maker creates protected lesson files and their password files. For publishers only.">
+  <title>Open Scholar Secure File Maker</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>/*__STYLE__*/</style>
+</head>
+<body class="maker-page">
+  <header class="maker-header">
+    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 512 512"><image width="512" height="512" href="/*__CAP_IMAGE__*/"></image></svg></span>
+    <span class="title-text"><strong>Open Scholar Secure File Maker</strong><small>FOR PUBLISHERS ONLY</small></span>
+  </header>
+
+  <main class="maker-main">
+    <div id="message" role="status" hidden></div>
+
+    <section class="maker-intro">
+      <p class="eyebrow">PROTECT A LESSON</p>
+      <h1>Choose the lesson. Set the limits. Make the two files.</h1>
+      <p class="hint">This tool makes two files for each lesson. The <strong>lesson file</strong> (.scholar) is the protected content. The <strong>password file</strong> (.scholarpass) is what opens it. Send both to the learner, and send the access code separately if you set one. Learners do not need this tool. They use the Open Scholar Secure Player.</p>
+    </section>
+
+    <form id="secure-form" class="simple-card">
+      <label class="file-drop">
+        <span class="step-number">1</span><strong id="source-label">Choose the lesson to protect</strong><small>Video (MP4, WebM), PDF, picture or saved web lesson (.html)</small>
+        <input id="source" type="file" accept=".mp4,.webm,.pdf,.png,.jpg,.jpeg,.html,.htm">
+      </label>
+      <div class="basic-settings">
+        <label><span>How long should it work?</span><select id="duration" aria-describedby="duration-help"><option value="1">1 day</option><option value="7" selected>7 days</option><option value="30">30 days</option><option value="90">90 days</option><option value="365">1 year</option></select>
+          <small id="duration-help" class="hint">After this time the lesson stops opening, even if it has openings left.</small></label>
+        <label><span>How many openings?</span><input id="opens" type="number" value="3" min="1" max="100000" required aria-describedby="opens-help">
+          <small id="opens-help" class="hint">Each time a learner presses Start viewing, one opening is used.</small></label>
+        <label><span>Minutes each time?</span><input id="minutes" type="number" value="60" min="1" max="1440" required aria-describedby="minutes-help">
+          <small id="minutes-help" class="hint">How long one viewing lasts before it closes.</small></label>
+      </div>
+      <details class="advanced-block">
+        <summary>Advanced settings <span class="hint">(optional, the defaults are safe)</span></summary>
+        <div class="advanced-grid">
+          <label>Lesson name<input id="title" maxlength="200" placeholder="Taken from your file" aria-describedby="title-help"><small id="title-help" class="hint">The name the learner sees at the top.</small></label>
+          <label>Learner name on the watermark<input id="recipient" maxlength="200" value="Open Scholar Learner" aria-describedby="recipient-help"><small id="recipient-help" class="hint">Shown faintly on what the learner sees.</small></label>
+          <label>Starts<input id="starts" type="datetime-local" aria-describedby="starts-help"><small id="starts-help" class="hint">Leave as it is to start now.</small></label>
+          <label>Exact expiry<input id="expires" type="datetime-local" aria-describedby="expires-help"><small id="expires-help" class="hint">Overrides “How long should it work?” when set.</small></label>
+          <label>Access code<input id="pin" type="password" inputmode="numeric" maxlength="64" placeholder="Leave empty for none" aria-describedby="pin-help"><small id="pin-help" class="hint">The learner must type this as well. Send it by a different route, such as a phone call.</small></label>
+          <div class="generator"><button type="button" id="generate-pin" class="secondary">Generate a strong code</button><button type="button" id="copy-pin" class="secondary" hidden>Copy code</button><small class="hint">Makes a random 12-character code with no look-alike characters. Write it down.</small></div>
+          <label>Lock to one device<input id="device" maxlength="32" pattern="[A-Fa-f0-9]{32}" placeholder="Optional" aria-describedby="device-help"><small id="device-help" class="hint">Paste the learner's device code (from their player's About panel) to open on that device only.</small></label>
+          <label class="check"><input id="disable-seek" type="checkbox" aria-describedby="seek-help"> Stop skipping in videos<small id="seek-help" class="hint">The learner must watch in order.</small></label>
+          <label class="check"><input id="offline-only" type="checkbox" aria-describedby="offline-help"> Offline only<small id="offline-help" class="hint">For learners who will not be online.</small></label>
+        </div>
+      </details>
+      <button id="secure-button" class="primary" type="submit"><span>Make the two files</span></button>
+    </form>
+
+    <div id="progress-box" class="progress-box" hidden><progress id="progress" max="100" value="0"></progress><span id="progress-text">Preparing…</span></div>
+
+    <section id="delivery" class="delivery simple-card" hidden>
+      <p class="eyebrow">READY TO SEND</p>
+      <h2>Both files are ready.</h2>
+      <p>Send the lesson file and the password file together. Tell the learner to open the Open Scholar Secure Player and choose <strong>Open a protected file</strong>.</p>
+      <div class="delivery-actions">
+        <button id="download-file" class="primary" type="button"><span>Download the lesson file (.scholar)</span></button>
+        <button id="download-pass" class="primary" type="button"><span>Download the password file (.scholarpass)</span></button>
+        <button id="share-files" class="secondary wide" type="button">Share both files</button>
+      </div>
+    </section>
+
+    <details class="simple-card publisher-settings">
+      <summary>Publisher settings and backup</summary>
+      <p class="hint">Keep the backup safe. Without it, you cannot make new password files for lessons you already protected after clearing this browser.</p>
+      <p><strong>This maker's device code</strong></p>
+      <button id="copy-device" class="code" type="button" aria-label="Copy this maker's device code">Loading…</button>
+      <button id="backup-owner" class="secondary wide" type="button">Download publisher backup</button>
+      <label class="restore">Restore a publisher backup<input id="restore-owner" type="file" accept=".json"></label>
+    </details>
+  </main>
+
+  <footer class="maker-footer"><span>Powered by <strong>OpenScholar.ng</strong></span><span>Open Scholar Secure File Maker · Version 1.1</span></footer>
+
+  <script id="ss-integration">window.SECURE_SCHOLAR_INTEGRATION=null;</script>
+  <script type="module">/*__APPLICATION__*/</script>
+</body>
+</html>

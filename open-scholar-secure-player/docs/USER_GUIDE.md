@@ -1,86 +1,65 @@
-# Open Scholar Secure Player — User Guide (version 1.1.0)
+# Open Scholar — User Guide (version 1.1)
 
 Powered by OpenScholar.ng
 
-## 1. What it is
-Open Scholar Secure Player lets you open lessons, PDFs, videos, pictures and saved web pages in one simple place.
-It can also protect a file so that only the people you choose can open it, for a set time and a set number of times.
+There are two web apps. Learners only ever need the first one.
 
-- **Open a file**: no password needed. Pick the file and read or watch it. Your place is saved on your device.
-- **Protect a file**: for teachers and publishers. You get two files: the lesson (`.scholar`) and its password (`.scholarpass`). Send both.
-- **Open a protected file**: import the `.scholar` file, then its `.scholarpass` file, then press Open.
-
-Nothing you open is uploaded anywhere. Files are read on your own device.
-
-## 2. Where it runs
-| Where | What you use | What you need |
+| App | Who uses it | What it does |
 |---|---|---|
-| **Open Scholar website** | The Secure Scholar page inside the site (`/secure-scholar/`) | A web browser. The site owner adds it with the plugin. |
-| **Phone** | The same Open Scholar shortcut you already use on your phone | Nothing new to install. Do not install a second app. |
-| **PC or Mac** | The same web app in Chrome, Edge or Safari; install it to get its own window and icon | A modern browser. |
+| **Open Scholar Secure Player** | Learners | Plays lessons, PDFs and videos. Opens protected lessons when you send both files. Works offline once installed. |
+| **Open Scholar Secure File Maker** | Publishers only | Makes the protected lesson file (.scholar) and its password file (.scholarpass). Learners never see it. |
 
-## 3. Installing (site owners)
-1. In WordPress go to **Plugins → Add New → Upload Plugin**.
-2. Upload `Open_Scholar_Secure_Player_Plugin_v1.1.0.zip`, then press **Install Now** and **Activate**.
-3. Open **Secure Scholar** in the dashboard. It shows the tutorial post and the shortcodes.
-4. Add a menu or dashboard item named **Secure Scholar** that points to `/secure-scholar/`.
-5. To place it on a page, add the shortcode `[secure_scholar size="medium"]` (sizes: `small`, `medium`, `big`).
-6. The protected publishing page `/secure-scholar/owner/` needs sign-in and an account that can edit posts. Keep it out of public page caches.
+The Player and the Maker are separate pages. The website shows the Player to everyone. The Maker is kept behind sign-in
+on the owner page of the site.
 
-## 4. Installing as an app (PC, Mac, phone)
-1. Open the Open Scholar Secure Player address in Chrome or Edge (PC), or Safari (iPhone) or Chrome (Android).
-2. Press **Install the app** in Settings and privacy, or use the browser menu: Install app / Add to Home Screen.
-3. The app gets the OpenScholar cap icon, opens in its own window, and keeps working without the internet after the first visit.
+## 1. For learners: the Player
+### Install it (recommended)
+1. Open the Open Scholar Secure Player link in Chrome, Edge or Safari.
+2. Press **Install the player** (in the **i** panel), or on iPhone tap Share, then **Add to Home Screen**.
+3. It now opens with its own window and the cap icon, and it keeps working without the internet.
 
-## 5. Using it
-### Open a file (everyone)
-1. Press **Open a file**.
+### Open a normal file
+1. Press **Open a file** (or **Open file** in the menu bar).
 2. Pick a PDF, MP4 or WebM video, PNG or JPG picture, or a saved web page (.html).
-3. Read with **Previous / Next**, use **Enlarge** for a bigger page, or press **Play** to watch.
-4. Press **Close file** to go back to Home. Your place is kept on this device.
-5. **My reading** lists files you opened recently. Open the file again to carry on.
+3. Read with **Prev / Next**, or press **Play** to watch. Your place is saved on this device.
 
-### Open a protected file (learners)
+### Open a protected lesson
 1. Press **Open a protected file**.
-2. Import the lesson file (`.scholar`), then the password file (`.scholarpass`).
-3. If you were given a PIN, type it.
-4. Press **Open file**. You will see how many openings you have left.
+2. Choose the lesson file (.scholar), then the password file (.scholarpass).
+3. If you were given an access code, type it.
+4. Press **Continue**. The player shows **Before you view**: the list of what you can and cannot do with this lesson.
+5. Tick **I have read these limits**, then press **Start viewing**. Only this press uses one of your openings.
 
-### Protect a file (teachers)
-1. Press **Protect a file** and choose the file.
-2. Answer the three questions: how long it should work, how many openings, and minutes each time.
-3. Press **Protect file**, then send **both** downloaded files together. Keep the password file separate until the learner needs it.
-Advanced settings (optional): file name, recipient name, start and expiry dates, PIN, device lock, no skipping in videos, offline only.
+The limits are deliberate. If the screen blurs or goes blank when you leave the window, that is the protection working,
+not a crash. Click back into the player to continue.
 
-## 6. Limits you should know
-- Protection makes casual copying harder. It cannot stop every camera or screen recording.
-- Opening counts are kept on the device. A determined person can reset the browser and start again. A server-based check is planned for a later version.
-- Maximum protected file size: 100 MB.
-- Word and PowerPoint files: save them as PDF first.
-- Video skipping can be blocked only for protected files.
+## 2. For publishers: the Maker
+1. Open the Maker from the owner page of the site, signed in with an account that can edit posts.
+2. Choose the lesson, set how long it works, how many openings, and minutes for each viewing.
+3. Optional: open **Advanced settings** to generate an access code, lock the lesson to one device, stop video skipping,
+   or make it offline-only.
+4. Press **Make the two files**, then send both files together. Send any access code separately.
+5. Keep the **publisher backup** safe (publisher settings). Without it you cannot make new password files after clearing
+   this browser.
 
-## 7. Troubleshooting
+## 3. Website (WordPress plugin)
+- `/secure-scholar/` shows the Player to visitors.
+- `/secure-scholar/owner/` shows the Maker to signed-in publishers only.
+- Add the shortcode `[secure_scholar size="medium"]` (sizes: small, medium, big) to place the player on a page.
+
+## 4. What is not possible, by design
+- Copying, saving, downloading or printing a protected lesson.
+- Right-click, drag and text selection on protected lessons.
+- Skipping forward in a video if the publisher turned that off.
+- Opening after the end date or after the openings are used up.
+
+No software can stop every camera or screen recording. Protection makes copying much harder, not impossible.
+
+## 5. Troubleshooting
 | Problem | What to do |
 |---|---|
-| "This file type cannot be opened here yet" | Save the file as PDF, MP4, WebM, PNG, JPG or a web page (.html). |
-| The file does not open after I import it | Check you imported both files: the `.scholar` file and its matching `.scholarpass` file. |
-| "Secure Scholar requires HTTPS" | Open the site through its secure (https) address. |
-| Video does not play on my phone | The phone may not support that video format. Try MP4 (H.264). |
-| The app will not open offline | Open it once while online, so it can save itself for offline use. |
-
-## 8. Security notes
-Protected files are encrypted, and the password file is checked before anything opens. In the browser, protected views
-are hidden when the tab loses focus, printing is blocked, and copy, save and screenshot shortcuts are blocked. A
-password generator creates strong codes. Browsers cannot stop a camera pointed at the screen; treat protection as a
-strong deterrent, not a guarantee.
-
-## 9. What is working and what is not yet tested
-Working and tested in the development environment (automated browser tests): protecting and opening files; ordinary
-opening of PDF, video, pictures and web pages at 320 to 1280 pixels wide; installing and opening offline; the password
-generator; the screen protections for protected files; the WordPress plugin files.
-
-Not yet tested: the WordPress plugin on a live site with the current theme; phones (Android and iPhone) with the
-installed app; the publisher's key backup and the security review of protected files.
-
-## 10. Getting help
-Contact the Open Scholar team through OpenScholar.ng.
+| "This file type cannot be opened here yet" | Save it as PDF, MP4, WebM, PNG, JPG or a web page (.html). |
+| The protected file does not open | Check you chose both files: the .scholar lesson and its matching .scholarpass password file. Enter the access code if one was sent. |
+| The screen goes blank when I switch windows | This is the protection working. Click back into the player. |
+| The player does not open offline | Open it once while online, so it can save itself for offline use. |
+| "Protected lessons are unavailable on this browser" | Use a current Chrome, Edge or Safari, and do not use a private window. |

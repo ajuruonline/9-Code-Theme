@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#00532d">
+  <meta name="description" content="Open Scholar Secure Player plays lessons, PDFs and videos. Protected files show their limits before you view them.">
+  <title>Open Scholar Secure Player</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <style>/*__STYLE__*/</style>
+</head>
+<body class="player-page">
+  <div class="player" id="player">
+    <header class="titlebar">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 512 512"><image width="512" height="512" href="/*__CAP_IMAGE__*/"></image></svg></span>
+      <span class="title-text"><strong>Open Scholar Secure Player</strong><small id="title-now">Ready</small></span>
+      <button id="help-button" class="titlebtn" aria-label="How this player protects files" title="How this player protects files">?</button>
+      <button id="about-button" class="titlebtn" aria-label="About and install" title="About and install">i</button>
+    </header>
+
+    <nav class="menubar" aria-label="Player menu">
+      <button id="menu-open" type="button">Open file</button>
+      <button id="menu-protected" type="button">Open protected file</button>
+      <button id="menu-library" type="button">Library</button>
+      <button id="menu-close" type="button">Close</button>
+      <button id="menu-help" type="button">Help</button>
+      <input id="plain-file" class="visually-hidden" type="file" tabindex="-1" aria-label="Choose a file to open" accept=".pdf,.mp4,.webm,.png,.jpg,.jpeg,.html,.htm">
+    </nav>
+
+    <div class="workspace">
+      <aside class="library" aria-label="Library">
+        <h2>Library</h2>
+        <p class="hint">Files you opened on this device. Open a file again to carry on where you stopped.</p>
+        <ul id="recent-list" class="recent-list"></ul>
+        <p id="recent-empty" class="hint" hidden>Nothing yet. Open a file and it will be listed here.</p>
+        <button id="clear-recent" class="secondary wide" type="button" hidden>Forget this list</button>
+      </aside>
+
+      <main class="now-playing">
+        <section id="welcome" class="welcome">
+          <span class="welcome-cap" aria-hidden="true"><svg viewBox="0 0 512 512"><image width="512" height="512" href="/*__CAP_IMAGE__*/"></image></svg></span>
+          <h1>Open Scholar Secure Player</h1>
+          <p>Play lessons, PDFs and videos. Some files are protected, and they open only with their password file.</p>
+          <div class="welcome-actions">
+            <button id="start-open-file" class="primary" type="button">Open a file</button>
+            <button id="start-protected" class="secondary" type="button">Open a protected file</button>
+          </div>
+          <p class="hint">A protected file lists what it allows and what it blocks before you start viewing.</p>
+        </section>
+
+        <section id="protected-form" class="card" hidden>
+          <p class="eyebrow">OPEN A PROTECTED FILE</p>
+          <h1>Choose both files</h1>
+          <form id="open-form" class="form-stack">
+            <label class="file-drop"><span class="step-number">1</span><strong>Lesson file</strong><small>Ends in .scholar</small><input id="secure-file" type="file" accept=".scholar" required></label>
+            <label class="file-drop"><span class="step-number">2</span><strong>Password file</strong><small>Ends in .scholarpass</small><input id="pass-file" type="file" accept=".scholarpass,.json" required></label>
+            <label id="pin-row" hidden>Access code<input id="open-pin" type="password" maxlength="64" inputmode="numeric" aria-describedby="open-pin-help"><small id="open-pin-help" class="hint">Send by the publisher separately, if one was given.</small></label>
+            <div class="row-actions">
+              <button id="open-button" class="primary" type="submit"><span>Continue</span></button>
+              <button id="protected-cancel" class="secondary" type="button">Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="notice" class="card notice" hidden aria-labelledby="notice-title">
+          <p class="eyebrow">BEFORE YOU VIEW</p>
+          <h1 id="notice-title">This file is protected</h1>
+          <p>These limits are set on purpose by the publisher to protect the content. They are not a fault, and your computer is not being damaged.</p>
+          <ul id="notice-list" class="notice-list"></ul>
+          <label class="check"><input id="notice-agree" type="checkbox"> I have read these limits</label>
+          <div class="row-actions">
+            <button id="notice-start" class="primary" type="button" disabled>Start viewing (uses one opening)</button>
+            <button id="notice-cancel" class="secondary" type="button">Cancel</button>
+          </div>
+        </section>
+
+        <article id="viewer" class="viewer" hidden>
+          <div class="stage">
+            <div id="video-wrap" hidden>
+              <video id="video" preload="metadata" playsinline disablepictureinpicture disableremoteplayback controlslist="nodownload noremoteplayback noplaybackrate"></video>
+              <div id="watermark" class="watermark"></div>
+            </div>
+            <div id="pages-wrap" hidden><canvas id="page-canvas"></canvas></div>
+            <div id="web-wrap" hidden><iframe id="web-frame" sandbox="allow-same-origin" title="Lesson"></iframe><div class="curtain" aria-hidden="true"></div></div>
+          </div>
+        </article>
+      </main>
+    </div>
+
+    <div id="transport" class="transport" role="toolbar" aria-label="Playback" hidden>
+      <button id="play-button" class="round" type="button" aria-label="Play" title="Play">Play</button>
+      <button id="stop-button" class="square" type="button" aria-label="Stop" title="Stop">Stop</button>
+      <button id="previous" class="square" type="button" aria-label="Previous page" title="Previous page" hidden>&larr; Prev</button>
+      <span id="page-indicator" class="page-indicator" hidden></span>
+      <button id="next" class="square" type="button" aria-label="Next page" title="Next page" hidden>Next &rarr;</button>
+      <select id="page-select" aria-label="Go to page" hidden></select>
+      <input id="seek" class="seek" type="range" min="0" max="1000" value="0" aria-label="Position" hidden>
+      <span id="time" class="time" hidden>0:00</span>
+      <button id="mute-button" class="square" type="button" aria-label="Mute" title="Mute" hidden>Mute</button>
+      <input id="volume" class="volume" type="range" min="0" max="100" value="100" aria-label="Volume" hidden>
+      <button id="zoom" class="square" type="button" hidden>Enlarge</button>
+      <button id="web-up" class="square" type="button" hidden>Up</button>
+      <button id="web-down" class="square" type="button" hidden>Down</button>
+      <button id="fullscreen-button" class="square" type="button" aria-label="Full screen" title="Full screen" hidden>Full screen</button>
+    </div>
+
+    <footer class="statusbar">
+      <span id="status-text">Ready</span>
+      <span class="status-right">Powered by <strong>OpenScholar.ng</strong></span>
+    </footer>
+  </div>
+
+  <div id="message" role="status" hidden></div>
+
+  <aside id="about-panel" class="side-panel" hidden aria-label="About and install">
+    <div class="panel-heading"><h2>About this player</h2><button id="close-about" class="icon-button" aria-label="Close">&times;</button></div>
+    <p><strong>Open Scholar Secure Player</strong><br>Version 1.1 &middot; Works offline after the first visit.</p>
+    <details open><summary>What stays on this device</summary><p>Files you open are read on this device and never uploaded. Your library and saved places are kept only in this browser.</p></details>
+    <div class="install-box">
+      <strong>Install the player</strong>
+      <p class="hint">Install it to get its own window and the cap icon. It opens without the browser bars and works without the internet.</p>
+      <button id="install-button" class="primary" type="button" hidden><span>Install the player</span></button>
+      <p id="install-ios" class="hint" hidden>On iPhone: tap Share, then &ldquo;Add to Home Screen&rdquo;.</p>
+    </div>
+  </aside>
+
+  <aside id="help-panel" class="side-panel" hidden aria-label="How this player protects files">
+    <div class="panel-heading"><h2>How protection works</h2><button id="close-help" class="icon-button" aria-label="Close">&times;</button></div>
+    <p>Protected files show their limits before you view them. Once you start, these limits apply on purpose:</p>
+    <ul class="notice-list">
+      <li>Copy, save, print and screenshot shortcuts are blocked.</li>
+      <li>Right-click, drag and text selection are turned off.</li>
+      <li>The view is hidden when you leave this window.</li>
+      <li>Your name and code appear as a watermark.</li>
+      <li>The file stops after its time or its number of openings.</li>
+    </ul>
+    <p class="hint">If the screen blurs or goes blank, that is the protection working. Click back into the player to continue.</p>
+  </aside>
+  <div id="panel-shade" class="panel-shade" hidden></div>
+
+  <script id="ss-integration">window.SECURE_SCHOLAR_INTEGRATION=null;</script>
+  <script>/*__PDF_WORKER__*/</script>
+  <script type="module">/*__PDF_MODULE__*/</script>
+  <script type="module">/*__APPLICATION__*/</script>
+</body>
+</html>
