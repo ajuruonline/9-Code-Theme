@@ -234,3 +234,12 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 
 - The chrome script checks only the elements added to the page, after one full pass at start, instead of the whole page on every change. The result is the same, with less work on busy pages.
 - Checked: 28 key pages at phone and desktop width, no JavaScript errors and no broken resources; the PHP log shows no notices or warnings from theme code; header and footer are hidden on public pages, and the 9Stagram header is kept.
+
+## 6.1.0 — Post settings panel replaces Quick Edit
+
+- "Quick Edit" on the posts and pages list is replaced by a "Post settings" link on every row. It opens a full panel (a bottom sheet on phones, a centred panel on wider screens) with every setting except content and custom fields: title, web address, status, date, author, parent and order (pages), comments and link notifications, password, format, sticky, categories and tags.
+- Save applies all changes at once and closes the panel; the row title updates in place. Close, the × button, or Escape closes without saving.
+- Only users who can edit the post can open or save it. Publishing needs the publish permission; authors cannot set other authors.
+- Fix found while testing: the link relabelling watched the whole page and could loop on the list, so it now watches only the list table and relabels each link once.
+- The side launcher is hidden while the panel is open so it cannot cover the fields.
+- Checked at 390 px: panel opens from a row, all fields load, Save updates the title and closes, Escape closes, the title is restored, no JavaScript errors.

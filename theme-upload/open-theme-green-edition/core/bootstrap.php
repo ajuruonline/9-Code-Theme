@@ -28,6 +28,7 @@ require_once NCU_CORE_DIR . 'inc/branding.php';
 require_once NCU_CORE_DIR . 'inc/open-scholar.php';
 require_once NCU_CORE_DIR . 'inc/brand-neutral.php';
 require_once NCU_CORE_DIR . 'inc/list-filters.php';
+require_once NCU_CORE_DIR . 'inc/post-settings.php';
 require_once NCU_CORE_DIR . 'inc/workspace-preferences.php';
 require_once NCU_CORE_DIR . 'inc/app-workspace.php';
 require_once NCU_CORE_DIR . 'inc/notices.php';
