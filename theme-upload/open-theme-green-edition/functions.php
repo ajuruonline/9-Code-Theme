@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'NCU_THEME_VERSION', '5.9.0' );
+define( 'NCU_THEME_VERSION', '6.0.0' );
 define( 'NCU_THEME_RELEASE_SHOT', 'Lean plugin host' );
 define( 'OPEN_SCHOLAR_THEME_VERSION', NCU_THEME_VERSION );
 define( 'NCU_THEME_API_VERSION', 14 );
@@ -30,3 +30,6 @@ require_once NCU_THEME_DIR . '/inc/frontend-safe.php';
 
 /* The host launcher includes plugin upload and site preview on mobile. */
 require_once NCU_THEME_DIR . '/inc/block-edition/bootstrap.php';
+
+/* Open Navigation owns site headers and footers exclusively. */
+require_once NCU_THEME_DIR . '/inc/exclusive-navigation.php';
