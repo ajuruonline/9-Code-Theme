@@ -29,10 +29,15 @@ def files_under(base):
             continue
         yield path, rel
 
+FIXED_TIME = (2026, 11, 1, 0, 0, 0)  # fixed file times keep the ZIP checksums reproducible
+
 def write_zip(target, pairs):
     with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as archive:
         for path, arcname in pairs:
-            archive.write(path, arcname.as_posix())
+            info = zipfile.ZipInfo(arcname.as_posix(), date_time=FIXED_TIME)
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.external_attr = 0o644 << 16
+            archive.writestr(info, path.read_bytes())
 
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
