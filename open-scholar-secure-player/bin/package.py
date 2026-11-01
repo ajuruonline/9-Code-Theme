@@ -15,7 +15,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '1.1.0'
+VERSION = '1.2.0'
 OUT = ROOT / 'release'
 EXCLUDE_DIRS = {'release', '.git', '__pycache__', '.build-venv', 'build', 'node_modules'}
 EXCLUDE_FILES = {'.DS_Store'}

@@ -1,4 +1,4 @@
-# Open Scholar — User Guide (version 1.1)
+# Open Scholar — User Guide (version 1.2)
 
 Powered by OpenScholar.ng
 

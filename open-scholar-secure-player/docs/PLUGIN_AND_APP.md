@@ -3,7 +3,7 @@
 ## The three pieces
 | Piece | What it is | Who uses it |
 |---|---|---|
-| **WordPress plugin** (`Open_Scholar_Secure_Player_Plugin_v1.1.0.zip`) | Installs inside the Open Scholar WordPress site. Adds routes, shortcodes, an admin menu and a tutorial post. | Site visitors (player), signed-in editors (maker) |
+| **WordPress plugin** (`Open_Scholar_Secure_Player_Plugin_v1.2.0.zip`) | Installs inside the Open Scholar WordPress site. Adds routes, shortcodes, an admin menu and a tutorial post. | Site visitors (player), signed-in editors (maker) |
 | **Open Scholar Secure Player** (`index.html`, the web app) | Stand-alone app that opens ordinary files, modules and protected lessons. Installs to a device with the cap icon and works offline. | Learners, on any device |
 | **Open Scholar Secure File Maker** (`maker.html`, the web app) | Stand-alone app that makes protected lesson files (.scholar) and password files (.scholarpass). | Publishers only |
 

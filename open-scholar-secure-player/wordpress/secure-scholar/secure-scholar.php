@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Open Scholar Secure Player
  * Description: Secure and open protected videos, PDFs, slides, documents, images and saved web lessons through Open Scholar.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: OpenScholar.ng
  * License: MIT
  * Requires at least: 6.0

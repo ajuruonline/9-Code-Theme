@@ -51,7 +51,7 @@ test('HTML ids are unique in both pages', () => {
 test('WordPress serves the same builds, the player on the public page and the maker on the owner page', () => {
   assert.equal(pluginPlayer, player);
   assert.equal(pluginMaker, maker);
-  for (const value of ['Plugin Name: Open Scholar Secure Player', 'Version: 1.1.0', "'owner' ? 'maker.html' : 'index.html'", 'maker.html', '/secure-scholar/', 'secure_scholar_owner', "add_shortcode('secure_scholar'", 'Powered by OpenScholar.ng.']) {
+  for (const value of ['Plugin Name: Open Scholar Secure Player', 'Version: 1.2.0', "'owner' ? 'maker.html' : 'index.html'", 'maker.html', '/secure-scholar/', 'secure_scholar_owner', "add_shortcode('secure_scholar'", 'Powered by OpenScholar.ng.']) {
     assert.ok(pluginPhp.includes(value) || (value.includes('?') && pluginPhp.includes('maker.html')), `missing ${value}`);
   }
 });

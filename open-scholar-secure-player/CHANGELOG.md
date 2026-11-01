@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.1.0 — Open Scholar Secure Player (in progress)
+## 1.2.0 — Open Scholar Secure Player
+- Player and Maker are separate web apps. Modules: group files with a description, arrange them, open each one as a launcher.
+- Share a module as one .osmodule file (not protected). Learners open it with Open a file.
+- Audio (MP3, M4A, WAV, OGG) and text (TXT, MD) files; Word and PowerPoint kept as copies.
+- Full screen button; installed app opens without browser tabs.
+- Usability fixes: phone layout, messages placed above the playback bar, readable status text.
+
+## 1.1.0 — Open Scholar Secure Player
 - Sprint 0: clean-room build. PDF.js 5.6.205 and the cap are vendored in-tree with SHA-256 locks; `build.py` reproduces the shipped `dist/index.html` byte-for-byte.
 - Windows host: window and product name are Open Scholar Secure Player; serves favicon.ico; `--self-test` checks the bundled app without a window. The release build runs it before publishing.
 - Official OpenScholar cap (512 px PNG) and OpenScholar.ico are now used as the header logo and browser favicon, replacing the cap recovered from the v1.0.0 build. Checksums are in vendor/LOCK.json.
