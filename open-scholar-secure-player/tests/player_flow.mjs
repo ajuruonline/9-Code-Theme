@@ -31,7 +31,7 @@ try {
   await player.locator('#plain-file').setInputFiles(fixture);
   await player.locator('#viewer').waitFor({state: 'visible', timeout: 30000});
   await player.waitForFunction(() => document.querySelector('#page-indicator').textContent === 'Page 1 of 2', null, {timeout: 30000});
-  assert.match(await player.locator('#status-text').textContent(), /nothing is used up/);
+  assert.match(await player.locator('#status-text').textContent(), /not protected/);
   await player.locator('#next').click();
   await player.waitForFunction(() => document.querySelector('#page-indicator').textContent === 'Page 2 of 2', null, {timeout: 15000});
   checks.push('ordinary PDF opens with no password and pages turn');
