@@ -47,20 +47,33 @@ function ncu_open_navigation_exclusive_fallback() {
     (function () {
       'use strict';
       var selectors = 'body > header:not(.ninestagram-scholar-head),body > footer:not(.ninestagram-site-footer),body > #page > header,body > #page > footer,body > .site > header,body > .site > footer,body > .site-header,body > .site-footer,#masthead,#colophon,#hfe-header,#hfe-footer,.elementor-location-header,.elementor-location-footer,.hfe-site-header,.hfe-site-footer,[data-elementor-type="header"],[data-elementor-type="footer"],.wp-block-template-part[data-area="header"],.wp-block-template-part[data-area="footer"]';
+      var keep = '.ninestagram-root,.ninestagram-scholar-head,.ninestagram-site-footer';
+      function remove(node) {
+        if (node.closest && node.closest(keep)) return;
+        node.remove();
+      }
+      /* Full pass once at start; afterwards only the elements that were added are checked. */
       function clean(root) {
         if (!root.querySelectorAll) return;
-        root.querySelectorAll(selectors).forEach(function (node) {
-          if (node.closest('.ninestagram-root,.ninestagram-scholar-head,.ninestagram-site-footer')) return;
-          node.remove();
-        });
+        root.querySelectorAll(selectors).forEach(remove);
       }
       function start() {
         clean(document);
-        var pending = false;
-        new MutationObserver(function () {
-          if (pending) return;
-          pending = true;
-          requestAnimationFrame(function () { pending = false; clean(document); });
+        var added = [], scheduled = false;
+        new MutationObserver(function (records) {
+          records.forEach(function (record) {
+            record.addedNodes.forEach(function (node) { if (node.nodeType === 1) added.push(node); });
+          });
+          if (scheduled || !added.length) return;
+          scheduled = true;
+          requestAnimationFrame(function () {
+            var nodes = added; added = []; scheduled = false;
+            nodes.forEach(function (node) {
+              if (!node.isConnected) return;
+              if (node.matches && node.matches(selectors)) remove(node);
+              else clean(node);
+            });
+          });
         }).observe(document.body, { childList: true, subtree: true });
       }
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);

@@ -223,3 +223,14 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
   - the plugin library (api.wordpress.org) can be reached. This is checked at most every 15 minutes.
 - The theme does not block plugin installs. On a test site with the same settings, uploading a plugin ZIP installed and activated correctly.
 - General debug: 28 key pages at phone and desktop width, with no JavaScript errors and no broken resources. The PHP log shows no notices or warnings from theme code. The remaining messages come from the plugin library and update checks being unreachable, which is the case on a host that blocks outgoing requests.
+
+## 6.0.0 — Open Navigation owns site header and footer (synced from the uploaded package)
+
+- Site header and footer are owned by Open Navigation. Elementor Theme Builder and Header & Footer Builder chrome is suppressed, without deleting the templates.
+- `inc/exclusive-navigation.php` adds the suppression rules and a script that removes stray site chrome that other plugins inject. The 9Stagram header and footer are kept.
+- README-OPEN-THEME-6.md gives installation and recovery steps.
+
+## 6.0.1 — Final debug of 6.0.0
+
+- The chrome script checks only the elements added to the page, after one full pass at start, instead of the whole page on every change. The result is the same, with less work on busy pages.
+- Checked: 28 key pages at phone and desktop width, no JavaScript errors and no broken resources; the PHP log shows no notices or warnings from theme code; header and footer are hidden on public pages, and the 9Stagram header is kept.
