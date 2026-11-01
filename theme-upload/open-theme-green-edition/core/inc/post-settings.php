@@ -22,6 +22,13 @@ function ncu_osch_post_settings_assets( $hook ) {
     ) );
 }
 
+/** The Open Scholar SEO fields show exactly when the SEO meta box would: no dedicated SEO plugin, and a type it supports. */
+function ncu_osch_post_settings_has_seo( $post ) {
+    if ( ! function_exists( 'ncu_osch_seo_has_provider' ) || ncu_osch_seo_has_provider() ) { return false; }
+    $types = apply_filters( 'open_scholar_seo_post_types', array( 'post', 'page' ) );
+    return in_array( $post->post_type, array_map( 'sanitize_key', (array) $types ), true );
+}
+
 /** The post a request is about, if the current user may edit it. */
 function ncu_osch_post_settings_target() {
     check_ajax_referer( 'osch_post_settings', 'nonce' );
@@ -114,6 +121,29 @@ function ncu_osch_post_settings_form() {
             <small>Separate with commas.</small></label>
     </div>
     <?php endif; ?>
+    <?php if ( ncu_osch_post_settings_has_seo( $post ) ) :
+        $seo_desc   = get_post_meta( $post->ID, '_osch_seo_description', true );
+        $social_t   = get_post_meta( $post->ID, '_osch_social_title', true );
+        $social_d   = get_post_meta( $post->ID, '_osch_social_description', true );
+        $social_img = absint( get_post_meta( $post->ID, '_osch_social_image_id', true ) );
+        $noindex    = (bool) get_post_meta( $post->ID, '_osch_noindex', true ); ?>
+    <fieldset class="osch-ps-group osch-ps-seo">
+        <legend>Open Scholar SEO &amp; sharing</legend>
+        <input type="hidden" name="osch_seo_fields" value="1">
+        <label class="osch-ps-field"><span>Search description</span>
+            <textarea name="ncu_osch_seo_description" rows="3" maxlength="320"><?php echo esc_textarea( $seo_desc ); ?></textarea>
+            <small>Approximately 120–160 characters. Blank uses the excerpt or content.</small></label>
+        <label class="osch-ps-field"><span>Social title</span>
+            <input type="text" name="ncu_osch_social_title" value="<?php echo esc_attr( $social_t ); ?>" maxlength="120">
+            <small>Optional title for link previews.</small></label>
+        <label class="osch-ps-field"><span>Social description</span>
+            <textarea name="ncu_osch_social_description" rows="3" maxlength="320"><?php echo esc_textarea( $social_d ); ?></textarea></label>
+        <label class="osch-ps-field"><span>Social image (attachment ID)</span>
+            <input type="number" min="0" name="ncu_osch_social_image_id" value="<?php echo esc_attr( $social_img ?: "" ); ?>">
+            <small>Blank uses the featured image, then the site default.</small></label>
+        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="ncu_osch_noindex" value="1" <?php checked( $noindex ); ?>> <span>Ask search engines not to index this</span></label>
+    </fieldset>
+    <?php endif; ?>
     <?php
     $html = ob_get_clean();
     wp_send_json_success( array( 'html' => $html, 'title' => get_the_title( $post ) ) );
@@ -148,6 +178,22 @@ function ncu_osch_post_settings_save() {
 
     $result = wp_update_post( $args, true );
     if ( is_wp_error( $result ) ) { wp_send_json_error( array( 'message' => $result->get_error_message() ), 400 ); }
+
+    if ( ! empty( $in['osch_seo_fields'] ) && ncu_osch_post_settings_has_seo( $post ) ) {
+        // The SEO fields are not part of wp_update_post; save them the way the SEO meta box does.
+        $text = array(
+            '_osch_seo_description'    => 'ncu_osch_seo_description',
+            '_osch_social_title'       => 'ncu_osch_social_title',
+            '_osch_social_description' => 'ncu_osch_social_description',
+        );
+        foreach ( $text as $meta => $field ) {
+            $value = isset( $in[ $field ] ) ? sanitize_textarea_field( $in[ $field ] ) : '';
+            if ( '' === $value ) { delete_post_meta( $id, $meta ); } else { update_post_meta( $id, $meta, $value ); }
+        }
+        $image = isset( $in['ncu_osch_social_image_id'] ) ? absint( $in['ncu_osch_social_image_id'] ) : 0;
+        if ( $image ) { update_post_meta( $id, '_osch_social_image_id', $image ); } else { delete_post_meta( $id, '_osch_social_image_id' ); }
+        if ( ! empty( $in['ncu_osch_noindex'] ) ) { update_post_meta( $id, '_osch_noindex', 1 ); } else { delete_post_meta( $id, '_osch_noindex' ); }
+    }
 
     if ( 'post' === $post->post_type ) {
         set_post_format( $id, ( isset( $in['post_format'] ) && 'standard' !== $in['post_format'] ) ? sanitize_key( $in['post_format'] ) : '' );

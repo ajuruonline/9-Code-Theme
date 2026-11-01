@@ -249,3 +249,11 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Major version: the post list's Quick Edit is replaced by the Post settings panel (see 6.1.0). Sites that used Quick Edit now edit status, dates, authors, categories, tags, format and sticky in one panel, saved in one step.
 - Debug pass before release: every PHP file lints clean and every script passes a syntax check. The 28 key pages were checked at phone and desktop width with no JavaScript errors and no broken theme resources. The PHP log shows no warnings or notices from theme code.
 - Known environment notices, not theme faults: on a server that cannot reach WordPress.org, core's update checks and the plugin library report a connection warning, and the update screen shows a notice. These clear when the server can reach WordPress.org.
+
+## 7.0.1 — Post settings drawer fixes
+
+- Post settings drawer: the Categories list is now fully reachable on phones. Before, it was cut off below Format and Sticky.
+- The drawer now includes the Open Scholar SEO & sharing fields (search description, social title and description, social image, noindex), shown under the same condition as the SEO box on the editor. They save from the drawer.
+- Tighter phone spacing in the drawer, with text kept at 14px so fields stay readable and do not zoom on iPhone.
+- Blank social image shows as blank rather than 0.
+- Checked at 390 px: categories and SEO fields load, save round-trip works, Escape and Close work, no JavaScript errors.
