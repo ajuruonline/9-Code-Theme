@@ -63,3 +63,12 @@ No software can stop every camera or screen recording. Protection makes copying 
 | The screen goes blank when I switch windows | This is the protection working. Click back into the player. |
 | The player does not open offline | Open it once while online, so it can save itself for offline use. |
 | "Protected lessons are unavailable on this browser" | Use a current Chrome, Edge or Safari, and do not use a private window. |
+
+## 6. Modules (groups of files)
+- **Make a module** (Player): press New module, give it a title and description, then Add files. Put videos, audio, PDFs,
+  pictures and text in one module. Press Arrange to change the order.
+- **Open it:** press the module in the library. You see its description, then its files in order. Press a file to open it,
+  and Back to module to return.
+- **Share it:** press Share module. This saves one `.osmodule` file. It is NOT protected: whoever has the file can open its
+  contents. Learners open it with Open a file.
+- **Word and PowerPoint files** cannot be shown in the browser. Save them as PDF first, then add the PDF.
