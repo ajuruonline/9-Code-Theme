@@ -257,3 +257,9 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Tighter phone spacing in the drawer, with text kept at 14px so fields stay readable and do not zoom on iPhone.
 - Blank social image shows as blank rather than 0.
 - Checked at 390 px: categories and SEO fields load, save round-trip works, Escape and Close work, no JavaScript errors.
+
+## 7.0.2 — Lectures and exhibitions in the main menu
+
+- Lectures and exhibitions are main-menu apps, no longer under Advanced in the menu pop-up. Lecture and exhibition apps from any plugin are grouped with the Open Scholar apps.
+- Export, import, backup and navigator tools stay under Advanced.
+- Checked: the menu classification for lecture and exhibition apps, and for the Advanced tools, on a WordPress install; PHP lint clean.

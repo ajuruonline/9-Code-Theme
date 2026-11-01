@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 /** Legacy integration contract: plugins may mark themselves first-party. */
 function ncu_osch_workspace_is_app( $slug, $label ) {
     $text = strtolower( wp_strip_all_tags( $label . ' ' . $slug ) );
-    $match = (bool) preg_match( '/open[ _-]?scholar|open[ _-]?index|9code|nine[ _-]?(?:code|user|data|backup|security)|^9|e[-_ ]?(library|module|book|pdf|lecture|step|class|viewer)|journal|publication|conference|student|academy|vault|hyperlesson|power[ _-]?lecture/', $text );
+    $match = (bool) preg_match( '/open[ _-]?scholar|open[ _-]?index|9code|nine[ _-]?(?:code|user|data|backup|security)|^9|e[-_ ]?(library|module|book|pdf|lecture|step|class|viewer)|journal|publication|conference|student|academy|vault|hyperlesson|power[ _-]?lecture|lectur|exhibit/', $text );
     return (bool) apply_filters( 'open_scholar_workspace_is_app', $match, $slug, $label );
 }
 
@@ -224,10 +224,12 @@ function ncu_osch_workspace_description( $label, $slug, $children = array() ) {
 
 /** Collect only apps WordPress has exposed to this user, including submenu rights. */
 add_action( 'admin_menu', 'ncu_osch_workspace_collect_apps', PHP_INT_MAX );
-/** Tools that people rarely need on the dashboard: export, import, backup, exhibition and navigator. */
+/** Tools that people rarely need on the dashboard: export, import, backup and navigator. Lectures and exhibitions stay in the main menu. */
 function ncu_osch_workspace_is_advanced_app( $slug, $label, $group = '' ) {
+    // Lectures and exhibitions are main-menu apps, never Advanced.
+    if ( preg_match( '~lectur|exhibit~i', (string) $slug . ' ' . (string) $label ) ) { return false; }
     if ( 3 === ncu_osch_workspace_tier( $slug, $group ) ) { return true; }
-    return (bool) preg_match( '~export|import|backup|restore|navigator|exhibit~i', (string) $slug . ' ' . (string) $label );
+    return (bool) preg_match( '~export|import|backup|restore|navigator~i', (string) $slug . ' ' . (string) $label );
 }
 
 function ncu_osch_workspace_collect_apps() {
