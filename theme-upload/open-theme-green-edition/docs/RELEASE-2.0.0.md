@@ -212,3 +212,14 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Debug pass: 20 admin and public loads with no JavaScript errors, no broken resources (4xx/5xx) on the key pages, and no new PHP notices or warnings from theme code.
 - Known sandbox-only messages, not site faults: WordPress.org update checks (the sandbox cannot reach it), a cdnjs certificate error in the sandbox browser, and a missing table from an earlier test run.
 - Not changed: the category archive grid is drawn by the 9Code Ultra Home Archive plugin, not by the theme's card template, so its layout is the plugin's.
+
+## 5.9.0 — Plugin install check and general debug
+
+- System Health has five new "Plugin install" rows that say, in plain words, why plugins may not install:
+  - your account has the install and upload permissions;
+  - the host has not set DISALLOW_FILE_MODS in wp-config.php;
+  - the plugins folder is writable by the server;
+  - the server writes files directly, rather than asking for FTP or SSH details;
+  - the plugin library (api.wordpress.org) can be reached. This is checked at most every 15 minutes.
+- The theme does not block plugin installs. On a test site with the same settings, uploading a plugin ZIP installed and activated correctly.
+- General debug: 28 key pages at phone and desktop width, with no JavaScript errors and no broken resources. The PHP log shows no notices or warnings from theme code. The remaining messages come from the plugin library and update checks being unreachable, which is the case on a host that blocks outgoing requests.

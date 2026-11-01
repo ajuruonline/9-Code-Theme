@@ -393,6 +393,45 @@ function ncu_core_backup_page() {
     <?php
 }
 
+/**
+ * Why plugins may not install, in plain words. Each row: [title, ok, what it means].
+ * Reads only; nothing is changed. The plugin library check is cached for 15 minutes.
+ */
+function ncu_osch_plugin_install_rows() {
+    $rows = array();
+    $can  = current_user_can( 'install_plugins' ) && current_user_can( 'upload_plugins' );
+    $rows[] = array( 'Plugin install: your account', $can, $can ? 'Your account may install and upload plugins.' : 'Your account is missing the install or upload permission. Ask a site administrator.' );
+
+    $file_mods_locked = defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS;
+    $rows[] = array( 'Plugin install: file changes', ! $file_mods_locked, $file_mods_locked ? 'DISALLOW_FILE_MODS is set in wp-config.php, so the host has turned plugin installs off. Ask the host to remove it.' : 'File changes are allowed.' );
+
+    $plugins_dir = defined( 'WP_PLUGIN_DIR' ) ? WP_PLUGIN_DIR : '';
+    $writable = $plugins_dir && is_writable( $plugins_dir );
+    $rows[] = array( 'Plugin install: plugins folder', $writable, $writable ? 'The plugins folder is writable.' : 'The plugins folder is not writable by the web server. Ask the host to fix its permissions.' );
+
+    $method = function_exists( 'get_filesystem_method' ) ? get_filesystem_method() : '';
+    $direct = 'direct' === $method;
+    $rows[] = array( 'Plugin install: write method', $direct, $direct ? 'The server writes files directly.' : 'The server asks for FTP or SSH details before it installs. Set FS_METHOD to direct in wp-config.php, or enter the details when asked.' );
+
+    $cache = get_transient( 'ncu_osch_wporg_reachable' );
+    if ( false === $cache ) {
+        if ( defined( 'WP_HTTP_BLOCK_EXTERNAL' ) && WP_HTTP_BLOCK_EXTERNAL ) {
+            $cache = array( 'ok' => false, 'why' => 'Outgoing requests are blocked by WP_HTTP_BLOCK_EXTERNAL in wp-config.php.' );
+        } else {
+            $response = wp_remote_get( 'https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&request[per_page]=1', array( 'timeout' => 6 ) );
+            if ( is_wp_error( $response ) ) {
+                $cache = array( 'ok' => false, 'why' => 'The server could not reach the plugin library (api.wordpress.org): ' . $response->get_error_message() . ' Ask the host to allow outgoing HTTPS to api.wordpress.org and downloads.wordpress.org.' );
+            } else {
+                $code = (int) wp_remote_retrieve_response_code( $response );
+                $cache = array( 'ok' => 200 === $code, 'why' => 200 === $code ? 'The plugin library answered.' : 'The plugin library (api.wordpress.org) answered with HTTP ' . $code . '. Try again later or ask the host.' );
+            }
+        }
+        set_transient( 'ncu_osch_wporg_reachable', $cache, 15 * MINUTE_IN_SECONDS );
+    }
+    $rows[] = array( 'Plugin install: plugin library', ! empty( $cache['ok'] ), $cache['why'] );
+    return $rows;
+}
+
 function ncu_core_health_page() {
     if ( ! current_user_can( 'manage_options' ) ) { return; }
     $theme = wp_get_theme();
@@ -413,6 +452,7 @@ function ncu_core_health_page() {
         array( 'Jetpack UI', true, 'Background services preserved; promotional/editor UI restrained' ),
         array( 'Debug Display', ! $debug_display, $debug_display ? 'Visible debug output is enabled' : 'Errors are not exposed to public visitors' ),
     );
+    $checks = array_merge( $checks, ncu_osch_plugin_install_rows() );
     ?>
     <div class="wrap ncu-admin"><?php ncu_admin_header( 'System Health', 'Pre-deployment checks for the Open Scholar application stack.' ); ?><div class="ncu-health-list">
     <?php foreach ( $checks as $check ) : ?><div class="ncu-health-row"><span class="ncu-health-dot <?php echo $check[1] ? 'is-good' : 'is-warn'; ?>"></span><strong><?php echo esc_html( $check[0] ); ?></strong><span><?php echo esc_html( $check[2] ); ?></span></div><?php endforeach; ?>
