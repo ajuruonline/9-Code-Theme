@@ -243,3 +243,9 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Fix found while testing: the link relabelling watched the whole page and could loop on the list, so it now watches only the list table and relabels each link once.
 - The side launcher is hidden while the panel is open so it cannot cover the fields.
 - Checked at 390 px: panel opens from a row, all fields load, Save updates the title and closes, Escape closes, the title is restored, no JavaScript errors.
+
+## 7.0.0 — Major release: post settings and final debug
+
+- Major version: the post list's Quick Edit is replaced by the Post settings panel (see 6.1.0). Sites that used Quick Edit now edit status, dates, authors, categories, tags, format and sticky in one panel, saved in one step.
+- Debug pass before release: every PHP file lints clean and every script passes a syntax check. The 28 key pages were checked at phone and desktop width with no JavaScript errors and no broken theme resources. The PHP log shows no warnings or notices from theme code.
+- Known environment notices, not theme faults: on a server that cannot reach WordPress.org, core's update checks and the plugin library report a connection warning, and the update screen shows a notice. These clear when the server can reach WordPress.org.
