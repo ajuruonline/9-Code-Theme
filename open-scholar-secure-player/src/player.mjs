@@ -27,6 +27,7 @@ const KIND_LABEL = {pdf: 'PDF', video: 'VIDEO', audio: 'AUDIO', image: 'PICTURE'
 function showSection(name) {
   for (const section of SECTIONS) $(section).hidden = section !== name;
   $('transport').hidden = name !== 'viewer';
+  document.body.classList.toggle('in-viewer', ['viewer', 'module-view', 'notice', 'protected-form', 'module-form'].includes(name));
 }
 function setStatus(text) { $('status-text').textContent = text; }
 function setTitle(text) { $('title-now').textContent = text; }
@@ -233,8 +234,56 @@ async function openItem(iid) {
     {recipient: '', id: '', session_seconds: 0}, item.blob, null, true);
 }
 
+// ---- share a module as one file (.osmodule). It is NOT protected: anyone with the file can open its contents. ----
+function bytesToBase64(bytes) {
+  let binary = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  return btoa(binary);
+}
+function base64ToBytes(text) {
+  const binary = atob(text);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+async function exportModule(mid) {
+  const module = await readRecord(db, 'module:' + mid);
+  if (!module) throw Error('That module is no longer here.');
+  const items = [];
+  for (const iid of module.items) {
+    const item = await readRecord(db, 'item:' + iid);
+    if (!item) continue;
+    items.push({name: item.name, kind: item.kind, type: item.type || '', data: bytesToBase64(new Uint8Array(await item.blob.arrayBuffer()))});
+  }
+  const bundle = {format: 'OpenScholarModule', version: 1, protected: false, title: module.title, description: module.description || '', created: Date.now(), items};
+  saveFile(new Blob([JSON.stringify(bundle)], {type: 'application/json'}), safeName(module.title) + '.osmodule');
+  return items.length;
+}
+async function importModule(file) {
+  const bundle = JSON.parse(await file.text());
+  if (bundle.format !== 'OpenScholarModule' || bundle.version !== 1) throw Error('This is not an Open Scholar module file.');
+  const mid = newId();
+  const module = {mid, title: String(bundle.title || 'Imported module').slice(0, 200), description: String(bundle.description || '').slice(0, 2000), items: [], created: Date.now()};
+  for (const entry of bundle.items || []) {
+    const iid = newId();
+    const blob = new Blob([base64ToBytes(entry.data)], {type: entry.type || ''});
+    await putRecord(db, {id: 'item:' + iid, iid, mid, name: String(entry.name || 'file'), kind: entry.kind || moduleKind(entry.name || ''), type: entry.type || '', size: blob.size, blob, added: Date.now()});
+    module.items.push(iid);
+  }
+  await saveModule(module);
+  await ensureIndex(mid, true);
+  return mid;
+}
+
 // ---- ordinary files: no password, no limits ----
 async function openPlain(file) {
+  if (file.name.toLowerCase().endsWith('.osmodule')) {
+    const mid = await importModule(file);
+    await openModule(mid);
+    showMessage('Module received. Its files are in your library.');
+    return;
+  }
   const kind = plainKind(file.name);
   if (!kind) throw Error(UNSUPPORTED_MESSAGE);
   openModuleId = null;
@@ -430,7 +479,7 @@ async function display(content, body, blob, remaining, plain) {
   $('download-item').disabled = !plain;
   updateClock();
   if (active.protected) setStatus(`Protected · ${remaining} opening${remaining === 1 ? '' : 's'} left after this one`);
-  else setStatus(openModuleId ? 'Opened from a module · nothing is used up' : 'Opened on this device · nothing is used up');
+  else setStatus(openModuleId ? 'From a module · not protected' : 'On this device · not protected');
 }
 
 async function showPage(number) {
@@ -600,6 +649,13 @@ $('module-files').addEventListener('change', async () => {
     showMessage(`${files.length} file${files.length === 1 ? '' : 's'} added in order.`);
     await showModuleById(openModuleId);
   } catch (error) { showMessage(error.message || 'The files could not be added.', true); }
+});
+$('module-export').addEventListener('click', async () => {
+  if (!openModuleId) return;
+  try {
+    const count = await exportModule(openModuleId);
+    showMessage(`Module saved as a file with ${count} item${count === 1 ? '' : 's'}. It is not protected.`);
+  } catch (error) { showMessage(error.message || 'The module could not be shared.', true); }
 });
 $('module-edit').addEventListener('click', async () => { editingModule = !editingModule; await showModuleById(openModuleId); });
 $('module-delete').addEventListener('click', async () => {

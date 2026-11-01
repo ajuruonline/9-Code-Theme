@@ -164,3 +164,16 @@ body.maker-page{margin:0;background:#f3f7f3;color:#102d20}
 .player .library .module-card{font-size:14px}
 body.player-page #message{color:#102d20;background:#e3f0e7;border-left:4px solid #00532d;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 body.player-page #message.error{background:#f7e4df;border-left-color:#8c321f;color:#4a1d12}
+
+/* ---- Usability fixes from the phone and PC walkthrough ---- */
+.library .hint{margin:0 0 12px}
+.library #new-module{margin-bottom:6px}
+@media (max-width:720px){
+  body.player-page.in-viewer .library{display:none}
+  body.player-page .titlebtn.wide-btn{font-size:12px;padding:0 6px}
+  body.player-page .statusbar #status-text{font-size:12px}
+}
+.maker-footer{flex-direction:column;align-items:flex-start;gap:4px}
+.maker-footer span{white-space:normal}
+body.player-page #message{top:auto;bottom:64px;left:12px;right:12px;max-width:560px;margin:0 auto}
+@media (max-width:720px){body.player-page #message{bottom:118px}}

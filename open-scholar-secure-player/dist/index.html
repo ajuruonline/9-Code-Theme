@@ -176,6 +176,19 @@ body.maker-page{margin:0;background:#f3f7f3;color:#102d20}
 .player .library .module-card{font-size:14px}
 body.player-page #message{color:#102d20;background:#e3f0e7;border-left:4px solid #00532d;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 body.player-page #message.error{background:#f7e4df;border-left-color:#8c321f;color:#4a1d12}
+
+/* ---- Usability fixes from the phone and PC walkthrough ---- */
+.library .hint{margin:0 0 12px}
+.library #new-module{margin-bottom:6px}
+@media (max-width:720px){
+  body.player-page.in-viewer .library{display:none}
+  body.player-page .titlebtn.wide-btn{font-size:12px;padding:0 6px}
+  body.player-page .statusbar #status-text{font-size:12px}
+}
+.maker-footer{flex-direction:column;align-items:flex-start;gap:4px}
+.maker-footer span{white-space:normal}
+body.player-page #message{top:auto;bottom:64px;left:12px;right:12px;max-width:560px;margin:0 auto}
+@media (max-width:720px){body.player-page #message{bottom:118px}}
 </style>
 </head>
 <body class="player-page">
@@ -194,7 +207,7 @@ body.player-page #message.error{background:#f7e4df;border-left-color:#8c321f;col
       <button id="menu-library" type="button">Library</button>
       <button id="menu-close" type="button">Close</button>
       <button id="menu-help" type="button">Help</button>
-      <input id="plain-file" class="visually-hidden" type="file" tabindex="-1" aria-label="Choose a file to open" accept=".pdf,.mp4,.webm,.png,.jpg,.jpeg,.html,.htm">
+      <input id="plain-file" class="visually-hidden" type="file" tabindex="-1" aria-label="Choose a file to open" accept=".pdf,.mp4,.webm,.mp3,.m4a,.wav,.ogg,.oga,.png,.jpg,.jpeg,.html,.htm,.txt,.md,.osmodule">
     </nav>
 
     <div class="workspace">
@@ -242,6 +255,7 @@ body.player-page #message.error{background:#f7e4df;border-left-color:#8c321f;col
             <button id="module-back" class="secondary" type="button">&larr; Library</button>
             <button id="module-add" class="secondary" type="button">Add files</button>
             <button id="module-edit" class="secondary" type="button">Arrange</button>
+            <button id="module-export" class="secondary" type="button">Share module</button>
             <button id="module-delete" class="secondary" type="button">Delete module</button>
             <input id="module-files" type="file" multiple class="visually-hidden" tabindex="-1" aria-label="Add files to this module">
           </div>
@@ -34391,6 +34405,7 @@ const KIND_LABEL = {pdf: 'PDF', video: 'VIDEO', audio: 'AUDIO', image: 'PICTURE'
 function showSection(name) {
   for (const section of SECTIONS) $(section).hidden = section !== name;
   $('transport').hidden = name !== 'viewer';
+  document.body.classList.toggle('in-viewer', ['viewer', 'module-view', 'notice', 'protected-form', 'module-form'].includes(name));
 }
 function setStatus(text) { $('status-text').textContent = text; }
 function setTitle(text) { $('title-now').textContent = text; }
@@ -34597,8 +34612,56 @@ async function openItem(iid) {
     {recipient: '', id: '', session_seconds: 0}, item.blob, null, true);
 }
 
+// ---- share a module as one file (.osmodule). It is NOT protected: anyone with the file can open its contents. ----
+function bytesToBase64(bytes) {
+  let binary = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+  return btoa(binary);
+}
+function base64ToBytes(text) {
+  const binary = atob(text);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+async function exportModule(mid) {
+  const module = await readRecord(db, 'module:' + mid);
+  if (!module) throw Error('That module is no longer here.');
+  const items = [];
+  for (const iid of module.items) {
+    const item = await readRecord(db, 'item:' + iid);
+    if (!item) continue;
+    items.push({name: item.name, kind: item.kind, type: item.type || '', data: bytesToBase64(new Uint8Array(await item.blob.arrayBuffer()))});
+  }
+  const bundle = {format: 'OpenScholarModule', version: 1, protected: false, title: module.title, description: module.description || '', created: Date.now(), items};
+  saveFile(new Blob([JSON.stringify(bundle)], {type: 'application/json'}), safeName(module.title) + '.osmodule');
+  return items.length;
+}
+async function importModule(file) {
+  const bundle = JSON.parse(await file.text());
+  if (bundle.format !== 'OpenScholarModule' || bundle.version !== 1) throw Error('This is not an Open Scholar module file.');
+  const mid = newId();
+  const module = {mid, title: String(bundle.title || 'Imported module').slice(0, 200), description: String(bundle.description || '').slice(0, 2000), items: [], created: Date.now()};
+  for (const entry of bundle.items || []) {
+    const iid = newId();
+    const blob = new Blob([base64ToBytes(entry.data)], {type: entry.type || ''});
+    await putRecord(db, {id: 'item:' + iid, iid, mid, name: String(entry.name || 'file'), kind: entry.kind || moduleKind(entry.name || ''), type: entry.type || '', size: blob.size, blob, added: Date.now()});
+    module.items.push(iid);
+  }
+  await saveModule(module);
+  await ensureIndex(mid, true);
+  return mid;
+}
+
 // ---- ordinary files: no password, no limits ----
 async function openPlain(file) {
+  if (file.name.toLowerCase().endsWith('.osmodule')) {
+    const mid = await importModule(file);
+    await openModule(mid);
+    showMessage('Module received. Its files are in your library.');
+    return;
+  }
   const kind = plainKind(file.name);
   if (!kind) throw Error(UNSUPPORTED_MESSAGE);
   openModuleId = null;
@@ -34794,7 +34857,7 @@ async function display(content, body, blob, remaining, plain) {
   $('download-item').disabled = !plain;
   updateClock();
   if (active.protected) setStatus(`Protected · ${remaining} opening${remaining === 1 ? '' : 's'} left after this one`);
-  else setStatus(openModuleId ? 'Opened from a module · nothing is used up' : 'Opened on this device · nothing is used up');
+  else setStatus(openModuleId ? 'From a module · not protected' : 'On this device · not protected');
 }
 
 async function showPage(number) {
@@ -34964,6 +35027,13 @@ $('module-files').addEventListener('change', async () => {
     showMessage(`${files.length} file${files.length === 1 ? '' : 's'} added in order.`);
     await showModuleById(openModuleId);
   } catch (error) { showMessage(error.message || 'The files could not be added.', true); }
+});
+$('module-export').addEventListener('click', async () => {
+  if (!openModuleId) return;
+  try {
+    const count = await exportModule(openModuleId);
+    showMessage(`Module saved as a file with ${count} item${count === 1 ? '' : 's'}. It is not protected.`);
+  } catch (error) { showMessage(error.message || 'The module could not be shared.', true); }
 });
 $('module-edit').addEventListener('click', async () => { editingModule = !editingModule; await showModuleById(openModuleId); });
 $('module-delete').addEventListener('click', async () => {
