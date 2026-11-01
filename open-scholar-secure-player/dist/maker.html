@@ -137,6 +137,44 @@ body.maker-page{margin:0;background:#f3f7f3;color:#102d20}
 .status-right{flex:0 0 auto}
 .statusbar .status-right{overflow:visible;text-overflow:clip;flex:0 0 auto}
 .statusbar strong{color:#fff}
+
+/* ---- Modules, audio, text and full screen (1.1) ---- */
+.titlebtn.wide-btn{width:auto;padding:0 10px;font-size:13px;white-space:nowrap}
+.module-list{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+.module-card{width:100%;display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:center;background:#f6faf7;border:1px solid #bfd3c5;padding:8px 10px;text-align:left;color:#102d20}
+.module-card svg{width:52px;height:52px;display:block}
+.module-card span{display:grid;gap:2px;min-width:0}
+.module-card strong{overflow-wrap:anywhere;font-size:14px}
+.module-card small{color:#4f6b5c}
+.module-card:hover,.module-card:focus-visible{background:#e3f0e7;outline:2px solid #c8a84e;outline-offset:1px}
+.module-view{width:100%;max-width:860px;display:grid;gap:14px;align-content:start;color:#102d20;background:#fff;padding:18px;border:1px solid #d5e2d8;justify-self:center}
+.module-toolbar{display:flex;flex-wrap:wrap;gap:8px}
+.module-toolbar button{min-height:40px}
+.post{border-left:4px solid #00532d;padding:4px 0 4px 14px}
+.post .eyebrow{margin:0;color:#00532d;font-weight:700;letter-spacing:.08em;font-size:12px}
+.post h1{font-size:24px;margin:4px 0 8px;color:#102d20}
+.post-description{white-space:pre-wrap;margin:0;line-height:1.6;color:#2a4a3b}
+.module-items{list-style:none;padding:0;margin:0;display:grid;gap:8px;counter-reset:none}
+.module-item{display:grid;gap:6px;border:1px solid #d5e2d8;background:#f6faf7;padding:8px}
+.launcher{display:grid;gap:2px;text-align:left;background:#fff;border:1px solid #7fa08c;color:#102d20;padding:10px 12px;min-height:48px}
+.launcher strong{overflow-wrap:anywhere;font-size:15px}
+.launcher small{color:#4f6b5c;font-size:12px;letter-spacing:.04em}
+.launcher:hover,.launcher:focus-visible{background:#e3f0e7;outline:2px solid #c8a84e;outline-offset:1px}
+.arrange{display:flex;flex-wrap:wrap;gap:6px}
+.small-btn{min-height:36px;padding:0 10px;font-size:13px}
+.viewer-bar{display:flex;gap:8px;flex-wrap:wrap;width:100%;padding:0 0 8px}
+.viewer-bar button{min-height:40px}
+.viewer-bar button[disabled]{opacity:.5}
+#video-wrap.audio-only #video{display:none}
+.audio-card{display:grid;justify-items:center;gap:8px;padding:28px;color:#fff;text-align:center}
+.audio-cap svg{width:120px;height:120px;display:block}
+.audio-card small{color:#cfe6d8;letter-spacing:.06em}
+#text-wrap{width:100%;max-width:860px}
+.text-view{white-space:pre-wrap;overflow-wrap:anywhere;background:#fff;color:#102d20;padding:20px;margin:0;max-height:calc(100dvh - 240px);overflow:auto;font:15px/1.6 system-ui,sans-serif;border:1px solid #d5e2d8;width:100%;box-sizing:border-box}
+#module-form textarea,.card textarea{width:100%;box-sizing:border-box;border:1px solid #7fa08c;padding:10px;font:inherit;min-height:110px;background:#fff;color:#102d20}
+.player .library .module-card{font-size:14px}
+body.player-page #message{color:#102d20;background:#e3f0e7;border-left:4px solid #00532d;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+body.player-page #message.error{background:#f7e4df;border-left-color:#8c321f;color:#4a1d12}
 </style>
 </head>
 <body class="maker-page">
@@ -498,6 +536,15 @@ async function useLedger(db, body = null, consume = false) {
     }
   }
   throw Error('Another Secure Scholar window is busy. Close it and try again.');
+}
+function deleteRecord(db, id) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, 'readwrite');
+    transaction.objectStore(storeName).delete(id);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error || Error('Unable to remove the file.'));
+  });
 }
 
 // Helpers shared by the player and the maker. Pure browser helpers, no encryption logic here.

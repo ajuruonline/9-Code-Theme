@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {plainKind, resumeKey, UNSUPPORTED_MESSAGE} from '../src/plain.mjs';
+import {plainKind, moduleKind, resumeKey, UNSUPPORTED_MESSAGE} from '../src/plain.mjs';
 
 test('ordinary files are recognised case-insensitively', () => {
   assert.equal(plainKind('Lecture 1.PDF'), 'pdf');
@@ -23,4 +23,17 @@ test('resume key changes when the file changes', () => {
   const b = {name: 'a.pdf', size: 11, lastModified: 1};
   assert.notEqual(resumeKey(a), resumeKey(b));
   assert.equal(resumeKey(a), resumeKey({...a}));
+});
+
+test('audio and text files are playable; Office files go into modules as copies', () => {
+  assert.equal(plainKind('song.MP3'), 'audio');
+  assert.equal(plainKind('voice.m4a'), 'audio');
+  assert.equal(plainKind('notes.txt'), 'text');
+  assert.equal(plainKind('readme.md'), 'text');
+  assert.equal(plainKind('slides.pptx'), null, 'Office files are not playable in the browser');
+  assert.equal(moduleKind('slides.pptx'), 'office');
+  assert.equal(moduleKind('essay.docx'), 'office');
+  assert.equal(moduleKind('archive.zip'), 'other');
+  assert.equal(moduleKind('clip.mp4'), 'video');
+  assert.match(UNSUPPORTED_MESSAGE, /audio/);
 });

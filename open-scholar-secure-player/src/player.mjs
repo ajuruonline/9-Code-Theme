@@ -1,4 +1,4 @@
-// Open Scholar Secure Player: the viewer only. It opens ordinary files and protected lesson files.
+// Open Scholar Secure Player: the viewer and the module organiser for ordinary files stored on this device.
 // It never creates protected files; that is done by the separate Open Scholar Secure File Maker.
 
 const integration = window.SECURE_SCHOLAR_INTEGRATION || {};
@@ -16,8 +16,14 @@ let activeKey = null;        // where to remember the place in an ordinary file
 let lastSaved = 0;
 let lastAllowedTime = 0;
 let installPrompt = null;
+let openModuleId = null;     // the module the viewer returns to, if a file was opened from a module
+let editingModule = false;
+let currentDownload = null;  // {blob, name} of an ordinary file, for "Save a copy"
 
-const SECTIONS = ['welcome', 'protected-form', 'notice', 'viewer'];
+const SECTIONS = ['welcome', 'protected-form', 'notice', 'viewer', 'module-form', 'module-view'];
+const PLAYABLE = ['pdf', 'video', 'audio', 'image', 'web', 'text'];
+const KIND_LABEL = {pdf: 'PDF', video: 'VIDEO', audio: 'AUDIO', image: 'PICTURE', web: 'WEB PAGE', text: 'TEXT', office: 'WORD / POWERPOINT', other: 'FILE'};
+
 function showSection(name) {
   for (const section of SECTIONS) $(section).hidden = section !== name;
   $('transport').hidden = name !== 'viewer';
@@ -36,7 +42,7 @@ function closePanels() {
   $('panel-shade').hidden = true;
 }
 
-// ---- library and resume (stored only in this browser) ----
+// ---- resume places and the recent list (stored only in this browser) ----
 function savePlace(data) {
   if (!activeKey) return;
   try { localStorage.setItem(activeKey, JSON.stringify({...data, at: Date.now()})); } catch {}
@@ -63,7 +69,7 @@ function renderRecent() {
     name.textContent = entry.name;
     const detail = document.createElement('span');
     detail.className = 'hint';
-    detail.textContent = `${entry.kind.toUpperCase()} · ${new Date(entry.at).toLocaleDateString()}`;
+    detail.textContent = `${(KIND_LABEL[entry.kind] || 'FILE')} · ${new Date(entry.at).toLocaleDateString()}`;
     item.append(name, detail);
     items.append(item);
   }
@@ -71,10 +77,167 @@ function renderRecent() {
   $('clear-recent').hidden = list.length === 0;
 }
 
+// ---- modules: groups of ordinary files with a description, kept in order on this device ----
+const CAP_HREF = document.querySelector('.brand-mark image')?.getAttribute('href') || '';
+function folderIcon() {
+  return `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M4 14h20l5 6h31v32H4z" fill="#cfe6d8" stroke="#00532d" stroke-width="2"/><path d="M4 24h56v22H4z" fill="#a9d3b8" stroke="#00532d" stroke-width="2"/><image x="18" y="10" width="28" height="28" href="${CAP_HREF}"/></svg>`;
+}
+const newId = () => crypto.randomUUID();
+async function readIndex() { return (await readRecord(db, 'module-index')) || {id: 'module-index', ids: []}; }
+async function ensureIndex(mid, add) {
+  const index = await readIndex();
+  const ids = index.ids.filter(id => id !== mid);
+  if (add) ids.push(mid);
+  await putRecord(db, {id: 'module-index', ids});
+}
+async function allModules() {
+  const index = await readIndex();
+  const modules = [];
+  for (const mid of index.ids) {
+    const module = await readRecord(db, 'module:' + mid);
+    if (module) modules.push(module);
+  }
+  return modules.sort((a, b) => a.created - b.created);
+}
+async function saveModule(module) {
+  module.updated = Date.now();
+  await putRecord(db, {...module, id: 'module:' + module.mid});
+}
+async function createModule(title, description) {
+  const mid = newId();
+  await saveModule({mid, title, description, items: [], created: Date.now()});
+  await ensureIndex(mid, true);
+  return mid;
+}
+async function addFilesToModule(mid, files) {
+  const module = await readRecord(db, 'module:' + mid);
+  if (!module) throw Error('That module is no longer here.');
+  for (const file of files) {
+    const iid = newId();
+    await putRecord(db, {id: 'item:' + iid, iid, mid, name: file.name, kind: moduleKind(file.name), type: file.type, size: file.size, blob: file, added: Date.now()});
+    module.items.push(iid);
+  }
+  await saveModule(module);
+}
+async function moveItem(mid, iid, delta) {
+  const module = await readRecord(db, 'module:' + mid);
+  const index = module.items.indexOf(iid);
+  const target = index + delta;
+  if (index < 0 || target < 0 || target >= module.items.length) return;
+  [module.items[index], module.items[target]] = [module.items[target], module.items[index]];
+  await saveModule(module);
+  await showModuleById(mid);
+}
+async function removeItem(mid, iid) {
+  const module = await readRecord(db, 'module:' + mid);
+  module.items = module.items.filter(id => id !== iid);
+  await saveModule(module);
+  await deleteRecord(db, 'item:' + iid);
+  await showModuleById(mid);
+}
+async function deleteModule(mid) {
+  const module = await readRecord(db, 'module:' + mid);
+  for (const iid of module?.items || []) await deleteRecord(db, 'item:' + iid);
+  await deleteRecord(db, 'module:' + mid);
+  await ensureIndex(mid, false);
+}
+
+async function renderLibrary() {
+  renderRecent();
+  const modules = await allModules();
+  const list = $('module-list');
+  list.replaceChildren();
+  for (const module of modules) {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'module-card';
+    button.innerHTML = folderIcon();
+    const text = document.createElement('span');
+    const strong = document.createElement('strong');
+    strong.textContent = module.title;
+    const small = document.createElement('small');
+    small.textContent = `${module.items.length} item${module.items.length === 1 ? '' : 's'}`;
+    text.append(strong, small);
+    button.append(text);
+    button.addEventListener('click', () => openModule(module.mid));
+    li.append(button);
+    list.append(li);
+  }
+  $('module-empty').hidden = modules.length > 0;
+}
+
+async function openModule(mid) {
+  openModuleId = mid;
+  editingModule = false;
+  await showModuleById(mid);
+}
+async function showModuleById(mid) {
+  renderLibrary().catch(() => {});
+  const module = await readRecord(db, 'module:' + mid);
+  if (!module) { openModuleId = null; showSection('welcome'); showMessage('That module is no longer here.', true); return; }
+  $('module-title-view').textContent = module.title;
+  $('module-description-view').textContent = module.description || 'No description yet.';
+  $('module-edit').textContent = editingModule ? 'Done arranging' : 'Arrange';
+  const list = $('module-items');
+  list.replaceChildren();
+  let position = 0;
+  for (const iid of module.items) {
+    const item = await readRecord(db, 'item:' + iid);
+    if (!item) continue;
+    position++;
+    const li = document.createElement('li');
+    li.className = 'module-item';
+    const launcher = document.createElement('button');
+    launcher.type = 'button';
+    launcher.className = 'launcher';
+    const label = document.createElement('strong');
+    label.textContent = `${position}. ${item.name}`;
+    const kind = document.createElement('small');
+    kind.textContent = KIND_LABEL[item.kind] + (item.kind === 'office' ? ' · save as PDF to view here' : '');
+    launcher.append(label, kind);
+    launcher.addEventListener('click', () => openItem(item.iid));
+    li.append(launcher);
+    if (editingModule) {
+      const controls = document.createElement('div');
+      controls.className = 'arrange';
+      controls.append(
+        arrangeButton('Move up', () => moveItem(mid, iid, -1)),
+        arrangeButton('Move down', () => moveItem(mid, iid, 1)),
+        arrangeButton('Remove', () => removeItem(mid, iid))
+      );
+      li.append(controls);
+    }
+    list.append(li);
+  }
+  $('module-items-empty').hidden = position > 0;
+  showSection('module-view');
+  setTitle(module.title);
+  setStatus(`${position} item${position === 1 ? '' : 's'} in this module`);
+}
+function arrangeButton(label, action) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'secondary small-btn';
+  button.textContent = label;
+  button.addEventListener('click', () => action().catch(error => showMessage(error.message, true)));
+  return button;
+}
+
+async function openItem(iid) {
+  const item = await readRecord(db, 'item:' + iid);
+  if (!item) { showMessage('That file is no longer in the module.', true); return; }
+  activeKey = 'ossp-place:item:' + iid;
+  const playable = PLAYABLE.includes(item.kind);
+  await display({header: {kind: playable ? item.kind : 'other', title: item.name, note: item.kind === 'office' ? 'Word and PowerPoint files cannot be shown in the browser. Save a copy and open it in its own app, or save it as PDF and add the PDF to this module.' : 'This file type cannot be shown here. Save a copy to open it in another app.'}},
+    {recipient: '', id: '', session_seconds: 0}, item.blob, null, true);
+}
+
 // ---- ordinary files: no password, no limits ----
 async function openPlain(file) {
   const kind = plainKind(file.name);
   if (!kind) throw Error(UNSUPPORTED_MESSAGE);
+  openModuleId = null;
   activeKey = resumeKey(file);
   await display({header: {kind, title: fileTitle(file)}}, {recipient: '', id: '', session_seconds: 0}, file, null, true);
   rememberRecent(file, kind);
@@ -114,6 +277,16 @@ function showNotice(content, body) {
   setTitle(content.header.title);
 }
 
+// Show the access-code box only when the password file asks for one.
+$('pass-file').addEventListener('change', async () => {
+  try {
+    const pass = JSON.parse(await $('pass-file').files[0].text());
+    const needed = !!pass.body?.pin_required;
+    $('pin-row').hidden = !needed;
+    $('open-pin').required = needed;
+  } catch { $('pin-row').hidden = true; $('open-pin').required = false; }
+});
+
 $('open-form').addEventListener('submit', async event => {
   event.preventDefault();
   const button = $('open-button');
@@ -128,6 +301,7 @@ $('open-form').addEventListener('submit', async event => {
     await useLedger(db, body, false);
     const key = await contentKey(pass, $('open-pin').value);
     pending = {content, body, key};
+    openModuleId = null;
     showNotice(content, body);
   } catch (error) {
     showMessage(error.message || 'The file could not be opened.', true);
@@ -161,16 +335,6 @@ $('notice-start').addEventListener('click', async () => {
   }
 });
 
-// Show the access-code box only when the password file asks for one.
-$('pass-file').addEventListener('change', async () => {
-  try {
-    const pass = JSON.parse(await $('pass-file').files[0].text());
-    const needed = !!pass.body?.pin_required;
-    $('pin-row').hidden = !needed;
-    $('open-pin').required = needed;
-  } catch { $('pin-row').hidden = true; $('open-pin').required = false; }
-});
-
 // ---- playing ----
 async function preparePdfWorker() {
   if (pdfWorkerURL) return;
@@ -191,15 +355,15 @@ function burnWatermark(context, width, height) {
   context.restore();
 }
 function showControls(kind) {
-  const video = kind === 'video';
+  const media = kind === 'video' || kind === 'audio';
   const pages = kind === 'pdf' || kind === 'image';
   const web = kind === 'web';
-  for (const id of ['play-button', 'seek', 'time', 'mute-button', 'volume', 'fullscreen-button']) $(id).hidden = !video;
+  for (const id of ['play-button', 'seek', 'time', 'mute-button', 'volume']) $(id).hidden = !media;
   for (const id of ['previous', 'next', 'page-indicator', 'zoom']) $(id).hidden = !pages;
   $('page-select').hidden = kind !== 'pdf';
   for (const id of ['web-up', 'web-down']) $(id).hidden = !web;
-  $('stop-button').hidden = false;
-  $('fullscreen-button').hidden = kind === 'image' || kind === 'web';
+  $('stop-button').hidden = !media && !pages;
+  $('fullscreen-button').hidden = kind !== 'video';
 }
 
 async function display(content, body, blob, remaining, plain) {
@@ -208,13 +372,21 @@ async function display(content, body, blob, remaining, plain) {
   showSection('viewer');
   setTitle(content.header.title);
   $('watermark').textContent = watermarkText();
-  for (const id of ['video-wrap', 'pages-wrap', 'web-wrap']) $(id).hidden = true;
+  for (const id of ['video-wrap', 'pages-wrap', 'web-wrap', 'text-wrap']) $(id).hidden = true;
+  $('audio-card').hidden = true;
+  $('video-wrap').classList.remove('audio-only');
+  $('download-item').hidden = true;
+  $('back-to-module').hidden = !(plain && openModuleId);
   const kind = content.header.kind;
   showControls(kind);
-  if (kind === 'video') {
+  currentDownload = plain ? {blob, name: content.header.title} : null;
+  if (kind === 'video' || kind === 'audio') {
     objectURL = URL.createObjectURL(blob);
     $('video').src = objectURL;
     $('video-wrap').hidden = false;
+    $('video-wrap').classList.toggle('audio-only', kind === 'audio');
+    $('audio-card').hidden = kind !== 'audio';
+    $('audio-title').textContent = content.header.title;
     $('seek').disabled = !!body.disable_seek;
     if (plain) {
       const place = savedPlace();
@@ -240,6 +412,13 @@ async function display(content, body, blob, remaining, plain) {
     burnWatermark(context, canvas.width, canvas.height);
     $('pages-wrap').hidden = false;
     $('page-indicator').textContent = 'Picture';
+  } else if (kind === 'text') {
+    $('text-view').textContent = (await blob.text()).slice(0, 2000000);
+    $('text-wrap').hidden = false;
+  } else if (kind === 'other' || kind === 'office') {
+    $('text-view').textContent = content.header.note || 'This file type cannot be shown here.';
+    $('text-wrap').hidden = false;
+    $('download-item').hidden = !plain;
   } else {
     const original = await blob.text();
     const lockdown = plain ? '' : '<style>html,body{user-select:none!important;-webkit-user-select:none!important}a,button,input,select,textarea{pointer-events:none!important}</style>';
@@ -248,9 +427,10 @@ async function display(content, body, blob, remaining, plain) {
     $('web-frame').srcdoc = protectedHtml.replace(/<base[^>]*>/gi, '');
     $('web-wrap').hidden = false;
   }
+  $('download-item').disabled = !plain;
   updateClock();
   if (active.protected) setStatus(`Protected · ${remaining} opening${remaining === 1 ? '' : 's'} left after this one`);
-  else setStatus('Opened on this device · nothing is used up');
+  else setStatus(openModuleId ? 'Opened from a module · nothing is used up' : 'Opened on this device · nothing is used up');
 }
 
 async function showPage(number) {
@@ -279,6 +459,7 @@ async function lock(reason = '', notify = true) {
   const wasOpen = !!active;
   active = null;
   pending = null;
+  currentDownload = null;
   $('video').pause();
   $('video').removeAttribute('src');
   $('video').load();
@@ -289,12 +470,16 @@ async function lock(reason = '', notify = true) {
   const canvas = $('page-canvas');
   canvas.width = 1;
   canvas.height = 1;
-  showSection('welcome');
-  setTitle('Ready');
-  setStatus('Ready');
-  renderRecent();
+  if (notify && openModuleId) {
+    await showModuleById(openModuleId);
+  } else {
+    showSection('welcome');
+    setTitle('Ready');
+    setStatus('Ready');
+  }
+  renderLibrary().catch(() => {});
   if (notify && reason) showMessage(reason);
-  if (wasOpen && notify) setStatus('Closed');
+  if (wasOpen && notify && !openModuleId) setStatus('Closed');
 }
 
 function updateClock() {
@@ -355,8 +540,10 @@ $('page-select').addEventListener('change', () => showPage(Number($('page-select
 $('zoom').addEventListener('click', () => { $('pages-wrap').classList.toggle('enlarged'); $('zoom').textContent = $('pages-wrap').classList.contains('enlarged') ? 'Fit page' : 'Enlarge'; });
 $('web-up').addEventListener('click', () => $('web-frame').contentWindow?.scrollBy({top: -400, behavior: 'smooth'}));
 $('web-down').addEventListener('click', () => $('web-frame').contentWindow?.scrollBy({top: 400, behavior: 'smooth'}));
+$('back-to-module').addEventListener('click', () => lock('', true));
+$('download-item').addEventListener('click', () => { if (currentDownload) saveFile(currentDownload.blob, currentDownload.name); });
 
-// ---- menus and library ----
+// ---- menus, library and modules ----
 $('plain-file').addEventListener('change', async () => {
   const file = $('plain-file').files[0];
   $('plain-file').value = '';
@@ -369,7 +556,7 @@ $('menu-open').addEventListener('click', () => $('plain-file').click());
 $('start-protected').addEventListener('click', () => { showSection('protected-form'); setStatus('Choose both files'); });
 $('menu-protected').addEventListener('click', () => { showSection('protected-form'); setStatus('Choose both files'); });
 $('protected-cancel').addEventListener('click', () => { showSection('welcome'); setStatus('Ready'); });
-$('menu-library').addEventListener('click', () => { renderRecent(); $('recent-list').scrollIntoView({behavior: 'smooth', block: 'nearest'}); });
+$('menu-library').addEventListener('click', () => { renderLibrary(); showSection('welcome'); setStatus('Library'); });
 $('menu-close').addEventListener('click', () => lock());
 $('menu-help').addEventListener('click', () => openPanel('help-panel'));
 $('help-button').addEventListener('click', () => openPanel('help-panel'));
@@ -380,7 +567,57 @@ $('panel-shade').addEventListener('click', closePanels);
 $('clear-recent').addEventListener('click', () => {
   for (const key of Object.keys(localStorage)) if (key.startsWith('ossp-place:') || key === 'ossp-recent') localStorage.removeItem(key);
   renderRecent();
-  showMessage('Your library and saved places were forgotten on this device.');
+  showMessage('Your recent list and saved places were forgotten on this device.');
+});
+
+$('start-module').addEventListener('click', () => newModuleForm());
+$('new-module').addEventListener('click', () => newModuleForm());
+function newModuleForm() {
+  $('module-title').value = '';
+  $('module-description').value = '';
+  showSection('module-form');
+  setStatus('Name your module');
+  setTitle('New module');
+}
+$('module-create-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  try {
+    const mid = await createModule($('module-title').value.trim(), $('module-description').value.trim());
+    await openModule(mid);
+    showMessage('Module created. Press Add files to put your files in it.');
+  } catch (error) { showMessage(error.message || 'The module could not be created.', true); }
+});
+$('module-cancel').addEventListener('click', () => { showSection('welcome'); setStatus('Ready'); });
+$('module-back').addEventListener('click', () => { openModuleId = null; editingModule = false; showSection('welcome'); setStatus('Ready'); setTitle('Ready'); renderLibrary(); });
+$('module-add').addEventListener('click', () => $('module-files').click());
+$('module-files').addEventListener('change', async () => {
+  const files = [...$('module-files').files];
+  $('module-files').value = '';
+  if (!files.length || !openModuleId) return;
+  setStatus(`Adding ${files.length} file${files.length === 1 ? '' : 's'}…`);
+  try {
+    await addFilesToModule(openModuleId, files);
+    showMessage(`${files.length} file${files.length === 1 ? '' : 's'} added in order.`);
+    await showModuleById(openModuleId);
+  } catch (error) { showMessage(error.message || 'The files could not be added.', true); }
+});
+$('module-edit').addEventListener('click', async () => { editingModule = !editingModule; await showModuleById(openModuleId); });
+$('module-delete').addEventListener('click', async () => {
+  if (!openModuleId || !confirm('Delete this module and every file in it from this device?')) return;
+  await deleteModule(openModuleId);
+  openModuleId = null;
+  editingModule = false;
+  showMessage('The module was deleted from this device.');
+  showSection('welcome');
+  setStatus('Ready');
+  setTitle('Ready');
+  renderLibrary();
+});
+
+// ---- full screen for the whole player ----
+$('fullscreen-app').addEventListener('click', async () => {
+  try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }
+  catch { showMessage('Full screen is blocked by this browser. Install the player to open it without browser tabs.', true); }
 });
 
 // ---- protections for protected lessons only ----
@@ -413,7 +650,7 @@ window.addEventListener('focus', updateVeil);
 window.addEventListener('beforeprint', () => { if (active?.protected) document.body.classList.add('no-print'); });
 window.addEventListener('afterprint', () => document.body.classList.remove('no-print'));
 
-// ---- install as an app ----
+// ---- install as an app (opens in its own window, without browser tabs) ----
 window.addEventListener('beforeinstallprompt', event => {
   event.preventDefault();
   installPrompt = event;
@@ -440,9 +677,10 @@ async function boot() {
     await useLedger(db);
   } catch (error) {
     // Ordinary files still open without the protected-file store.
-    showMessage('Protected lessons are unavailable on this browser. Ordinary files still open.', true);
+    showMessage('Protected lessons and modules are unavailable on this browser. Ordinary files still open.', true);
   }
   renderRecent();
+  renderLibrary().catch(() => {});
   setStatus('Ready');
 }
 boot();

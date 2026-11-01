@@ -17,6 +17,7 @@
     <header class="titlebar">
       <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 512 512"><image width="512" height="512" href="/*__CAP_IMAGE__*/"></image></svg></span>
       <span class="title-text"><strong>Open Scholar Secure Player</strong><small id="title-now">Ready</small></span>
+      <button id="fullscreen-app" class="titlebtn wide-btn" type="button" aria-label="Full screen" title="Full screen">Full screen</button>
       <button id="help-button" class="titlebtn" aria-label="How this player protects files" title="How this player protects files">?</button>
       <button id="about-button" class="titlebtn" aria-label="About and install" title="About and install">i</button>
     </header>
@@ -32,7 +33,12 @@
 
     <div class="workspace">
       <aside class="library" aria-label="Library">
-        <h2>Library</h2>
+        <h2>Modules</h2>
+        <p class="hint">Groups of your files, in order: videos, audio, PDFs, pictures and text, each with its own description.</p>
+        <button id="new-module" class="primary wide" type="button">New module</button>
+        <ul id="module-list" class="module-list"></ul>
+        <p id="module-empty" class="hint" hidden>No modules yet.</p>
+        <h2>Recent files</h2>
         <p class="hint">Files you opened on this device. Open a file again to carry on where you stopped.</p>
         <ul id="recent-list" class="recent-list"></ul>
         <p id="recent-empty" class="hint" hidden>Nothing yet. Open a file and it will be listed here.</p>
@@ -47,8 +53,39 @@
           <div class="welcome-actions">
             <button id="start-open-file" class="primary" type="button">Open a file</button>
             <button id="start-protected" class="secondary" type="button">Open a protected file</button>
+            <button id="start-module" class="secondary" type="button">New module</button>
           </div>
           <p class="hint">A protected file lists what it allows and what it blocks before you start viewing.</p>
+        </section>
+
+        <section id="module-form" class="card" hidden>
+          <p class="eyebrow">NEW MODULE</p>
+          <h1>Name your module</h1>
+          <form id="module-create-form" class="form-stack">
+            <label>Module title<input id="module-title" maxlength="200" required placeholder="For example: Week 1 - Introduction"></label>
+            <label>Description<textarea id="module-description" rows="5" maxlength="2000" placeholder="What this module is about, what to do first, and what to expect."></textarea></label>
+            <div class="row-actions">
+              <button class="primary" type="submit">Create module</button>
+              <button id="module-cancel" class="secondary" type="button">Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <section id="module-view" class="module-view" hidden aria-labelledby="module-title-view">
+          <div class="module-toolbar">
+            <button id="module-back" class="secondary" type="button">&larr; Library</button>
+            <button id="module-add" class="secondary" type="button">Add files</button>
+            <button id="module-edit" class="secondary" type="button">Arrange</button>
+            <button id="module-delete" class="secondary" type="button">Delete module</button>
+            <input id="module-files" type="file" multiple class="visually-hidden" tabindex="-1" aria-label="Add files to this module">
+          </div>
+          <article class="post">
+            <p class="eyebrow">MODULE</p>
+            <h1 id="module-title-view"></h1>
+            <p id="module-description-view" class="post-description"></p>
+          </article>
+          <ol id="module-items" class="module-items"></ol>
+          <p id="module-items-empty" class="hint" hidden>No files yet. Press Add files to put videos, audio, PDFs, pictures and text in order.</p>
         </section>
 
         <section id="protected-form" class="card" hidden>
@@ -78,12 +115,15 @@
         </section>
 
         <article id="viewer" class="viewer" hidden>
+          <div class="viewer-bar"><button id="back-to-module" class="secondary" type="button" hidden>&larr; Back to module</button><button id="download-item" class="secondary" type="button" hidden>Save a copy</button></div>
           <div class="stage">
             <div id="video-wrap" hidden>
               <video id="video" preload="metadata" playsinline disablepictureinpicture disableremoteplayback controlslist="nodownload noremoteplayback noplaybackrate"></video>
               <div id="watermark" class="watermark"></div>
+              <div id="audio-card" class="audio-card" hidden><span class="audio-cap" aria-hidden="true"><svg viewBox="0 0 512 512"><image width="512" height="512" href="/*__CAP_IMAGE__*/"></image></svg></span><strong id="audio-title"></strong><small>Audio</small></div>
             </div>
             <div id="pages-wrap" hidden><canvas id="page-canvas"></canvas></div>
+            <div id="text-wrap" hidden><pre id="text-view" class="text-view"></pre></div>
             <div id="web-wrap" hidden><iframe id="web-frame" sandbox="allow-same-origin" title="Lesson"></iframe><div class="curtain" aria-hidden="true"></div></div>
           </div>
         </article>

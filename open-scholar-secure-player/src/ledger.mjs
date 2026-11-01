@@ -95,3 +95,12 @@ export async function useLedger(db, body = null, consume = false) {
   }
   throw Error('Another Secure Scholar window is busy. Close it and try again.');
 }
+export function deleteRecord(db, id) {
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(storeName, 'readwrite');
+    transaction.objectStore(storeName).delete(id);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error || Error('Unable to remove the file.'));
+  });
+}
