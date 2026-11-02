@@ -53,7 +53,9 @@ function ncu_osch_workspace_sanitize_submitted( $input, $catalog ) {
                 'title' => substr( sanitize_text_field( isset( $sub['title'] ) && is_scalar( $sub['title'] ) ? $sub['title'] : '' ), 0, 80 ),
             );
         }
+        $where = isset( $row['advanced'] ) && in_array( $row['advanced'], array( 'main', 'advanced' ), true ) ? $row['advanced'] : '';
         $clean[ $slug ] = array(
+            'advanced' => $required ? '' : $where,
             'dashboard' => $required || ! empty( $row['dashboard'] ) ? 1 : 0,
             'menu' => $required || ! empty( $row['menu'] ) ? 1 : 0,
             'title' => substr( sanitize_text_field( isset( $row['title'] ) && is_scalar( $row['title'] ) ? $row['title'] : '' ), 0, 80 ),
@@ -111,10 +113,11 @@ function ncu_osch_workspace_sub_order( $slug, $position ) {
  * replaces the order inside its tier only; the tier itself always comes first.
  */
 function ncu_osch_workspace_order_key( $slug, $group, $position ) {
-    $tier = ncu_osch_workspace_tier( $slug, $group );
+    if ( 'index.php' === $slug ) { return 0; }
     $pref = ncu_osch_workspace_preference( $slug );
-    $sub  = ( isset( $pref['order'] ) && 500 !== (int) $pref['order'] ) ? min( 999, (int) $pref['order'] ) : ncu_osch_workspace_sub_order( $slug, $position );
-    return $tier * 1000 + $sub;
+    // Once someone has saved the menu, the saved position is the only order (it can cross tiers).
+    if ( isset( $pref['order'] ) && is_numeric( $pref['order'] ) ) { return (int) $pref['order']; }
+    return ncu_osch_workspace_tier( $slug, $group ) * 1000 + ncu_osch_workspace_sub_order( $slug, $position );
 }
 
 /**
@@ -164,7 +167,7 @@ function ncu_osch_workspace_menu_configuration( $catalog ) {
 
 add_action( 'admin_menu', 'ncu_osch_workspace_settings_menu', 25 );
 function ncu_osch_workspace_settings_menu() {
-    add_submenu_page( 'nine-code-ultra', 'Dashboard & Menus', 'Dashboard & Menus', 'manage_options', 'open-scholar-workspace', 'ncu_osch_workspace_settings_page' );
+    add_submenu_page( 'nine-code-ultra', 'Menu & Dashboard', 'Menu & Dashboard', 'manage_options', 'open-scholar-workspace', 'ncu_osch_workspace_settings_page' );
 }
 add_action( 'admin_post_ncu_osch_workspace_save', 'ncu_osch_workspace_save' );
 /** Roles that may see an app card ('apps') or quick action ('qa'). No entry = unchanged default. */
@@ -230,98 +233,131 @@ function ncu_osch_workspace_settings_page() {
     $catalog = isset( $GLOBALS['ncu_osch_workspace_catalog'] ) ? $GLOBALS['ncu_osch_workspace_catalog'] : array();
     if ( $catalog ) { set_transient( 'ncu_osch_workspace_catalog_' . get_current_user_id(), $catalog, 30 * MINUTE_IN_SECONDS ); }
     $catalog = (array) $catalog;
-    uasort( $catalog, function ( $a, $b ) use ( $catalog ) {
-        $oa = ncu_osch_workspace_preference( array_search( $a, $catalog, true ) );
-        $ob = ncu_osch_workspace_preference( array_search( $b, $catalog, true ) );
-        return ( isset( $oa['order'] ) ? (int) $oa['order'] : 500 ) <=> ( isset( $ob['order'] ) ? (int) $ob['order'] : 500 );
-    } );
+    // One order for every section: the order shown here is the order used in the menu and on the Dashboard.
+    $keys = array();
+    $pos = 0;
+    foreach ( $catalog as $slug => $app ) {
+        $pos++;
+        $keys[ $slug ] = ncu_osch_workspace_order_key( $slug, isset( $app['group'] ) ? $app['group'] : '', $pos );
+    }
+    uksort( $catalog, function ( $x, $y ) use ( $keys ) { return $keys[ $x ] <=> $keys[ $y ]; } );
     $pinned_posts = ncu_osch_workspace_pinned_posts();
     $pinned_ids = wp_list_pluck( $pinned_posts, 'ID' );
     $pin_choices = get_posts( array( 'post_type' => 'any', 'post_status' => 'publish', 'posts_per_page' => 100, 'post__not_in' => $pinned_ids ?: array( 0 ), 'orderby' => 'date', 'order' => 'DESC' ) );
     ?>
     <div class="wrap osch-workspace-settings">
-      <h1>Dashboard &amp; Menus</h1>
-      <p>Configure which applications appear on this university's Dashboard and Open Scholar menu. Rename cards, descriptions and submenu labels. These controls do not change user permissions or uninstall apps.</p>
-      <?php if ( isset( $_GET['workspace_saved'] ) ) : ?><div class="notice notice-success is-dismissible"><p>Workspace settings saved.</p></div><?php endif; ?>
+      <h1>Menu &amp; Dashboard</h1>
+      <p class="osch-settings-hint">This page sets the list on the left (the menu) and the boxes on your home screen (the Dashboard).</p>
+      <ol class="osch-settings-steps">
+        <li>Move a section up or down with the arrows.</li>
+        <li>Untick a box to hide a section.</li>
+        <li>Press <strong>Save</strong>.</li>
+      </ol>
+      <?php if ( isset( $_GET['workspace_saved'] ) ) : ?><div class="notice notice-success is-dismissible"><p>Saved. Your menu and Dashboard now show these changes.</p></div><?php endif; ?>
       <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
         <input type="hidden" name="action" value="ncu_osch_workspace_save">
         <?php wp_nonce_field( 'ncu_osch_workspace_save' ); ?>
-        <div class="osch-settings-toolbar"><strong><?php echo esc_html( count( $catalog ) ); ?> registered applications</strong><button type="submit" class="button button-primary">Save dashboard &amp; menus</button><a class="button" href="<?php echo esc_url( admin_url( 'index.php' ) ); ?>">View Dashboard</a></div>
+        <div class="osch-settings-toolbar"><button type="submit" class="button button-primary">Save</button><a class="button" href="<?php echo esc_url( admin_url( 'index.php' ) ); ?>">See the Dashboard</a></div>
+
+        <section class="osch-settings-panel" aria-labelledby="osch-sections-title">
+          <h2 id="osch-sections-title">Sections, in order</h2>
+          <ol class="osch-menu-list" data-osch-reorder>
+          <?php foreach ( $catalog as $slug => $app ) :
+              $fid = ncu_osch_workspace_form_id( $slug );
+              $pref = ncu_osch_workspace_preference( $slug );
+              $required = ncu_osch_workspace_required_menu( $slug );
+              $base = 'apps[' . $fid . ']';
+              $show_dash = $required || ! isset( $pref['dashboard'] ) || (bool) $pref['dashboard'];
+              $show_menu = $required || ! isset( $pref['menu'] ) || (bool) $pref['menu'];
+              $where = isset( $pref['advanced'] ) ? $pref['advanced'] : '';
+              $label = $app['label'];
+          ?>
+            <li class="osch-menu-row" data-osch-row="<?php echo esc_attr( $fid ); ?>">
+              <input type="hidden" name="<?php echo esc_attr( $base ); ?>[order]" value="" class="osch-order-input">
+              <div class="osch-menu-row-top">
+                <span class="dashicons <?php echo esc_attr( isset( $app['icon'] ) ? $app['icon'] : 'dashicons-admin-plugins' ); ?>" aria-hidden="true"></span>
+                <span class="osch-menu-name"><?php echo esc_html( $label ); ?></span>
+                <span class="osch-menu-arrows">
+                  <button type="button" data-osch-move="-1" aria-label="Move <?php echo esc_attr( $label ); ?> up"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button>
+                  <button type="button" data-osch-move="1" aria-label="Move <?php echo esc_attr( $label ); ?> down"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+                </span>
+              </div>
+              <div class="osch-menu-row-checks">
+                <label><input type="checkbox" name="<?php echo esc_attr( $base ); ?>[menu]" value="1" <?php checked( $show_menu ); ?> <?php disabled( $required ); ?>> Show in the menu</label>
+                <label><input type="checkbox" name="<?php echo esc_attr( $base ); ?>[dashboard]" value="1" <?php checked( $show_dash ); ?> <?php disabled( $required ); ?>> Show on the Dashboard</label>
+                <?php if ( $required ) : ?><input type="hidden" name="<?php echo esc_attr( $base ); ?>[menu]" value="1"><input type="hidden" name="<?php echo esc_attr( $base ); ?>[dashboard]" value="1"><small>Always shown</small><?php endif; ?>
+              </div>
+              <?php if ( ! $required ) : ?><label class="osch-menu-where">Where it appears
+                <select name="<?php echo esc_attr( $base ); ?>[advanced]">
+                  <option value="" <?php selected( $where, '' ); ?>>Automatic</option>
+                  <option value="main" <?php selected( $where, 'main' ); ?>>Main menu</option>
+                  <option value="advanced" <?php selected( $where, 'advanced' ); ?>>Advanced (hidden until opened)</option>
+                </select></label><?php endif; ?>
+              <details class="osch-menu-more">
+                <summary>Change name, icon and sub-items</summary>
+                <label>Name shown <input type="text" name="<?php echo esc_attr( $base ); ?>[title]" value="<?php echo esc_attr( isset( $pref['title'] ) ? $pref['title'] : '' ); ?>" maxlength="80" placeholder="<?php echo esc_attr( $label ); ?>"></label>
+                <label>Short description <input type="text" name="<?php echo esc_attr( $base ); ?>[description]" value="<?php echo esc_attr( isset( $pref['description'] ) ? $pref['description'] : '' ); ?>" maxlength="240" placeholder="<?php echo esc_attr( $app['description'] ); ?>"></label>
+                <label>Icon <select name="<?php echo esc_attr( $base ); ?>[icon]"><option value="">Automatic</option><?php foreach ( ncu_osch_workspace_icons() as $icon ) : if ( 'auto' === $icon ) { continue; } ?><option value="<?php echo esc_attr( $icon ); ?>" <?php selected( isset( $pref['icon'] ) ? $pref['icon'] : '', $icon ); ?>><?php echo esc_html( ucwords( str_replace( '-', ' ', $icon ) ) ); ?></option><?php endforeach; ?></select></label>
+                <?php if ( ! empty( $app['children'] ) ) : ?>
+                  <p class="osch-settings-hint">Sub-items inside this section. Untick to hide one.</p>
+                  <?php foreach ( $app['children'] as $sub ) :
+                      $ss = $sub['slug']; $sp = isset( $pref['submenu'][ $ss ] ) ? $pref['submenu'][ $ss ] : array();
+                      $must = in_array( $ss, array( 'open-scholar-workspace', 'nine-code-ultra' ), true ); ?>
+                  <div class="osch-settings-subrow">
+                    <label><input type="checkbox" name="<?php echo esc_attr( $base ); ?>[submenu][<?php echo esc_attr( ncu_osch_workspace_form_id( $ss ) ); ?>][visible]" value="1" <?php checked( $must || ! isset( $sp['visible'] ) || (bool) $sp['visible'] ); ?> <?php disabled( $must ); ?>> Show</label>
+                    <label>Name shown <input type="text" maxlength="80" placeholder="<?php echo esc_attr( $sub['label'] ); ?>" value="<?php echo esc_attr( isset( $sp['title'] ) ? $sp['title'] : '' ); ?>" name="<?php echo esc_attr( $base ); ?>[submenu][<?php echo esc_attr( ncu_osch_workspace_form_id( $ss ) ); ?>][title]"></label>
+                  </div>
+                  <?php endforeach; ?>
+                <?php endif; ?>
+              </details>
+            </li>
+          <?php endforeach; ?>
+          </ol>
+        </section>
+
         <section class="osch-settings-panel" aria-labelledby="osch-visibility-title">
-          <h2 id="osch-visibility-title">Who sees what</h2>
-          <p class="osch-settings-hint">Untick a role to hide a card from it. Administrators always see every card.</p>
-          <div class="osch-vis-scroll"><table class="osch-vis-table"><thead><tr><th scope="col">Card</th><?php foreach ( wp_roles()->get_names() as $rk => $rl ) : ?><th scope="col"><?php echo esc_html( translate_user_role( $rl ) ); ?></th><?php endforeach; ?></tr></thead><tbody>
+          <h2 id="osch-visibility-title">Who can see each section</h2>
+          <p class="osch-settings-hint">Untick a box to hide a section from that kind of user. Administrators can always see everything.</p>
+          <div class="osch-vis-scroll"><table class="osch-vis-table"><thead><tr><th scope="col">Section</th><?php foreach ( wp_roles()->get_names() as $rk => $rl ) : ?><th scope="col"><?php echo esc_html( translate_user_role( $rl ) ); ?></th><?php endforeach; ?></tr></thead><tbody>
           <?php foreach ( $catalog as $slug => $app ) : $allowed = ncu_visibility_roles( 'apps', $slug ); ?>
             <tr><th scope="row"><?php echo esc_html( $app['label'] ); ?></th><?php foreach ( wp_roles()->get_names() as $rk => $rl ) : ?><td><label class="osch-vis-cell"><span class="screen-reader-text"><?php echo esc_html( $app['label'] . ' — ' . translate_user_role( $rl ) ); ?></span><input type="checkbox" name="visibility[apps][<?php echo esc_attr( $slug ); ?>][]" value="<?php echo esc_attr( $rk ); ?>" <?php checked( null === $allowed || in_array( $rk, $allowed, true ) ); ?>></label></td><?php endforeach; ?></tr>
           <?php endforeach; ?>
           </tbody></table></div>
         </section>
-        <section class="osch-settings-panel" aria-labelledby="osch-reorder-title">
-          <h2 id="osch-reorder-title">Reorder dashboard</h2>
-          <p class="osch-settings-hint">Use the arrows to move a card up or down, then save.</p>
-          <ol class="osch-reorder-list" data-osch-reorder>
-          <?php foreach ( $catalog as $slug => $app ) : $fid = ncu_osch_workspace_form_id( $slug ); ?>
-            <li data-osch-reorder-item="<?php echo esc_attr( $fid ); ?>"><span class="dashicons <?php echo esc_attr( isset( $app['icon'] ) ? $app['icon'] : 'dashicons-admin-plugins' ); ?>" aria-hidden="true"></span><span class="osch-reorder-name"><?php echo esc_html( $app['label'] ); ?></span><button type="button" data-osch-move="-1" aria-label="Move up"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button><button type="button" data-osch-move="1" aria-label="Move down"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button></li>
-          <?php endforeach; ?>
-          </ol>
-        </section>
+
         <section class="osch-settings-panel" aria-labelledby="osch-pinned-title">
-          <h2 id="osch-pinned-title">Pinned posts</h2>
-          <p class="osch-settings-hint">Pinned posts appear at the top of the dashboard, in this order.</p>
+          <h2 id="osch-pinned-title">Pinned posts on the Dashboard</h2>
+          <p class="osch-settings-hint">Pinned posts show at the top of the Dashboard, in this order.</p>
           <ol class="osch-pinned-list" data-osch-pinned>
           <?php foreach ( $pinned_posts as $pp ) : ?>
-            <li data-osch-pin="<?php echo esc_attr( (string) $pp->ID ); ?>"><input type="hidden" name="pinned[]" value="<?php echo esc_attr( (string) $pp->ID ); ?>"><span class="osch-pin-name"><?php echo esc_html( get_the_title( $pp ) ); ?></span><button type="button" data-osch-pin-move="-1" aria-label="Move up"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button><button type="button" data-osch-pin-move="1" aria-label="Move down"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button><button type="button" data-osch-pin-remove aria-label="Unpin"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></li>
+            <li data-osch-pin="<?php echo esc_attr( (string) $pp->ID ); ?>"><input type="hidden" name="pinned[]" value="<?php echo esc_attr( (string) $pp->ID ); ?>"><span class="osch-pin-name"><?php echo esc_html( get_the_title( $pp ) ); ?></span><button type="button" data-osch-pin-move="-1" aria-label="Move up"><i class="fa-solid fa-chevron-up" aria-hidden="true"></i></button><button type="button" data-osch-pin-move="1" aria-label="Move down"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button><button type="button" data-osch-pin-remove aria-label="Remove"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></li>
           <?php endforeach; ?>
           </ol>
-          <div class="osch-pin-add"><select data-osch-pin-select aria-label="Choose a post to pin"><option value="">Choose a post…</option><?php foreach ( $pin_choices as $pc ) : ?><option value="<?php echo esc_attr( (string) $pc->ID ); ?>"><?php echo esc_html( get_the_title( $pc ) . ' · ' . get_post_type_object( $pc->post_type )->labels->singular_name ); ?></option><?php endforeach; ?></select><button type="button" class="button" data-osch-pin-add>Pin post</button></div>
+          <div class="osch-pin-add"><select data-osch-pin-select aria-label="Choose a post to pin"><option value="">Choose a post…</option><?php foreach ( $pin_choices as $pc ) : ?><option value="<?php echo esc_attr( (string) $pc->ID ); ?>"><?php echo esc_html( get_the_title( $pc ) . ' · ' . get_post_type_object( $pc->post_type )->labels->singular_name ); ?></option><?php endforeach; ?></select><button type="button" class="button" data-osch-pin-add>Add to Dashboard</button></div>
         </section>
-        <div class="osch-settings-rows">
-        <?php foreach ( $catalog as $slug => $app ) :
-            $pref = ncu_osch_workspace_preference( $slug ); $required = ncu_osch_workspace_required_menu( $slug );
-            $base = 'apps[' . ncu_osch_workspace_form_id( $slug ) . ']';
-            $show_dash = $required || ! isset($pref['dashboard']) || (bool)$pref['dashboard'];
-            $show_menu = $required || ! isset($pref['menu']) || (bool)$pref['menu'];
-        ?>
-        <details class="osch-settings-app" data-osch-app="<?php echo esc_attr( ncu_osch_workspace_form_id( $slug ) ); ?>">
-          <input type="hidden" name="<?php echo esc_attr( $base ); ?>[order]" value="<?php echo esc_attr( (string) ( ( array_search( $slug, array_keys( $catalog ), true ) + 1 ) * 10 ) ); ?>" class="osch-order-input">
-          <summary><span class="dashicons <?php echo esc_attr( isset($app['icon']) ? $app['icon'] : 'dashicons-admin-plugins' ); ?>" aria-hidden="true"></span><strong><?php echo esc_html( $app['label'] ); ?></strong><small><?php echo esc_html( $slug ); ?></small><span class="osch-settings-expand">Configure</span></summary>
-          <div class="osch-settings-fields">
-            <div class="osch-settings-display"><label><input type="checkbox" name="<?php echo esc_attr($base); ?>[dashboard]" value="1" <?php checked($show_dash); ?> <?php disabled($required); ?>> Dashboard card</label><label><input type="checkbox" name="<?php echo esc_attr($base); ?>[menu]" value="1" <?php checked($show_menu); ?> <?php disabled($required); ?>> Side menu</label><?php if ($required): ?><span class="description">Always available</span><input type="hidden" name="<?php echo esc_attr($base); ?>[dashboard]" value="1"><input type="hidden" name="<?php echo esc_attr($base); ?>[menu]" value="1"><?php endif; ?></div>
-            <label>Display title <input type="text" name="<?php echo esc_attr($base); ?>[title]" value="<?php echo esc_attr(isset($pref['title']) ? $pref['title'] : ''); ?>" maxlength="80" placeholder="<?php echo esc_attr($app['label']); ?>"></label>
-            <label>Description <input type="text" name="<?php echo esc_attr($base); ?>[description]" value="<?php echo esc_attr(isset($pref['description']) ? $pref['description'] : ''); ?>" maxlength="240" placeholder="<?php echo esc_attr($app['description']); ?>"></label>
-            <div class="osch-settings-display"><label>Icon <select name="<?php echo esc_attr($base); ?>[icon]"><option value="">Automatic</option><?php foreach(ncu_osch_workspace_icons() as $icon): if('auto'===$icon) continue; ?><option value="<?php echo esc_attr($icon); ?>" <?php selected(isset($pref['icon'])?$pref['icon']:'',$icon); ?>><?php echo esc_html(ucwords(str_replace('-',' ',$icon))); ?></option><?php endforeach; ?></select></label><label>Dashboard position <input type="number" min="0" max="999" name="<?php echo esc_attr($base); ?>[order]" value="<?php echo esc_attr(isset($pref['order'])?$pref['order']:500); ?>" style="width:78px"></label></div>
-            <?php if (!empty($app['children'])): ?><details class="osch-settings-children"><summary>Submenus (<?php echo esc_html(count($app['children'])); ?>)</summary>
-              <?php foreach($app['children'] as $sub): $ss=$sub['slug']; $sp=isset($pref['submenu'][$ss])?$pref['submenu'][$ss]:array(); $must=in_array($ss,array('open-scholar-workspace','nine-code-ultra'),true); ?>
-              <div class="osch-settings-subrow"><label><input type="checkbox" name="<?php echo esc_attr($base); ?>[submenu][<?php echo esc_attr(ncu_osch_workspace_form_id($ss)); ?>][visible]" value="1" <?php checked($must||!isset($sp['visible'])||(bool)$sp['visible']); ?> <?php disabled($must); ?>> Show</label><label><span class="screen-reader-text">Rename <?php echo esc_html($sub['label']); ?></span><input type="text" maxlength="80" placeholder="<?php echo esc_attr($sub['label']); ?>" value="<?php echo esc_attr(isset($sp['title'])?$sp['title']:''); ?>" name="<?php echo esc_attr($base); ?>[submenu][<?php echo esc_attr(ncu_osch_workspace_form_id($ss)); ?>][title]"></label></div>
-              <?php endforeach; ?></details><?php endif; ?>
-          </div>
-        </details>
-        <?php endforeach; ?>
-        </div>
-        <div class="osch-settings-toolbar"><button type="submit" class="button button-primary">Save dashboard &amp; menus</button><button type="submit" name="reset" value="1" class="button" onclick="return confirm('Restore automatic display, names and sorting?');">Restore defaults</button></div>
+
+        <div class="osch-settings-toolbar"><button type="submit" class="button button-primary">Save</button><button type="submit" name="reset" value="1" class="button" onclick="return confirm('Go back to the normal menu and Dashboard? Your choices on this page will be removed.');">Go back to normal</button></div>
       </form>
     </div>
     <script>
     (function(){
       var root=document.querySelector('.osch-workspace-settings'); if(!root){return;}
+      var list=root.querySelector('[data-osch-reorder]');
       function renumber(){
-        var rows=root.querySelector('.osch-settings-rows'); var list=root.querySelector('[data-osch-reorder]');
-        if(!rows||!list){return;}
-        Array.prototype.forEach.call(list.querySelectorAll('[data-osch-reorder-item]'),function(li,i){
-          var id=li.getAttribute('data-osch-reorder-item');
-          var app=rows.querySelector('[data-osch-app="'+id+'"]');
-          if(app){var inp=app.querySelector('.osch-order-input'); if(inp){inp.value=String((i+1)*10);} rows.appendChild(app);}
+        if(!list){return;}
+        Array.prototype.forEach.call(list.querySelectorAll('[data-osch-row]'),function(li,i){
+          var inp=li.querySelector('.osch-order-input'); if(inp){inp.value=String((i+1)*10);}
         });
       }
       root.addEventListener('click',function(e){
         var mv=e.target.closest('[data-osch-move]');
-        if(mv){var li=mv.closest('li'); var dir=parseInt(mv.getAttribute('data-osch-move'),10); var sib=dir<0?li.previousElementSibling:li.nextElementSibling; if(sib){dir<0?li.parentNode.insertBefore(li,sib):li.parentNode.insertBefore(sib,li); renumber();} return;}
+        if(mv&&list){var li=mv.closest('[data-osch-row]'); var dir=parseInt(mv.getAttribute('data-osch-move'),10); var sib=dir<0?li.previousElementSibling:li.nextElementSibling; if(sib){dir<0?li.parentNode.insertBefore(li,sib):li.parentNode.insertBefore(sib,li); renumber(); mv.focus();} return;}
         var pm=e.target.closest('[data-osch-pin-move]');
         if(pm){var pl=pm.closest('li'); var pd=parseInt(pm.getAttribute('data-osch-pin-move'),10); var ps=pd<0?pl.previousElementSibling:pl.nextElementSibling; if(ps){pd<0?pl.parentNode.insertBefore(pl,ps):pl.parentNode.insertBefore(ps,pl);} return;}
         var pr=e.target.closest('[data-osch-pin-remove]');
         if(pr){pr.closest('li').remove(); return;}
         var pa=e.target.closest('[data-osch-pin-add]');
-        if(pa){var sel=root.querySelector('[data-osch-pin-select]'); if(!sel||!sel.value){return;} var opt=sel.options[sel.selectedIndex]; var li=document.createElement('li'); li.setAttribute('data-osch-pin',sel.value); var hid=document.createElement('input'); hid.type='hidden'; hid.name='pinned[]'; hid.value=sel.value; var nm=document.createElement('span'); nm.className='osch-pin-name'; nm.textContent=opt.textContent; li.appendChild(hid); li.appendChild(nm); var mk=function(t,label,icon){var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',label); b.innerHTML=icon; return b;}; var up=mk('u','Move up','<i class="fa-solid fa-chevron-up" aria-hidden="true"></i>'); up.setAttribute('data-osch-pin-move','-1'); var dn=mk('d','Move down','<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>'); dn.setAttribute('data-osch-pin-move','1'); var rm=mk('x','Unpin','<i class="fa-solid fa-xmark" aria-hidden="true"></i>'); rm.setAttribute('data-osch-pin-remove',''); li.appendChild(up); li.appendChild(dn); li.appendChild(rm); root.querySelector('[data-osch-pinned]').appendChild(li); opt.remove(); sel.value=''; }
+        if(pa){var sel=root.querySelector('[data-osch-pin-select]'); if(!sel||!sel.value){return;} var opt=sel.options[sel.selectedIndex]; var li=document.createElement('li'); li.setAttribute('data-osch-pin',sel.value); var hid=document.createElement('input'); hid.type='hidden'; hid.name='pinned[]'; hid.value=sel.value; var nm=document.createElement('span'); nm.className='osch-pin-name'; nm.textContent=opt.textContent; li.appendChild(hid); li.appendChild(nm); var mk=function(label,icon){var b=document.createElement('button'); b.type='button'; b.setAttribute('aria-label',label); b.innerHTML=icon; return b;}; var up=mk('Move up','<i class="fa-solid fa-chevron-up" aria-hidden="true"></i>'); up.setAttribute('data-osch-pin-move','-1'); var dn=mk('Move down','<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>'); dn.setAttribute('data-osch-pin-move','1'); var rm=mk('Remove','<i class="fa-solid fa-xmark" aria-hidden="true"></i>'); rm.setAttribute('data-osch-pin-remove',''); li.appendChild(up); li.appendChild(dn); li.appendChild(rm); root.querySelector('[data-osch-pinned]').appendChild(li); opt.remove(); sel.value=''; }
       });
       renumber();
     }());

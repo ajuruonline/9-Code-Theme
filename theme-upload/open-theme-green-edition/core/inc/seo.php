@@ -55,7 +55,7 @@ function ncu_osch_seo_media_field( $label, $key, $value, $description ) {
     <label data-ninecode-settings-field><span><?php echo esc_html( $label ); ?></span>
         <input type="number" min="0" name="ncu_osch_seo[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( $value ); ?>">
         <?php if ( $image ) : ?><img src="<?php echo esc_url( $image ); ?>" alt="" width="64" height="64"><?php endif; ?>
-        <small><?php echo esc_html( $description ); ?> Use the attachment ID from Media.</small>
+        <small><?php echo esc_html( $description ); ?> Type the number of the picture in Media.</small>
     </label>
     <?php
 }
@@ -65,29 +65,29 @@ function ncu_osch_seo_settings_page() {
     $s = ncu_osch_seo_settings();
     ?>
     <div class="wrap ncu-admin" data-ninecode-settings-root>
-        <?php ncu_admin_header( 'SEO & Sharing', 'Best-practice search and social metadata for sites without a dedicated SEO plugin. Open Scholar automatically yields when one is detected.' ); ?>
-        <?php if ( isset( $_GET['updated'] ) ) : ?><div class="notice notice-success is-dismissible"><p>SEO settings saved.</p></div><?php endif; // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
+        <?php ncu_admin_header( 'Search & Sharing', 'Controls how your pages look in Google and when people share them. If you already use an SEO plugin, this page steps aside.' ); ?>
+        <?php if ( isset( $_GET['updated'] ) ) : ?><div class="notice notice-success is-dismissible"><p>Saved.</p></div><?php endif; // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
         <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
             <input type="hidden" name="action" value="ncu_osch_save_seo"><?php wp_nonce_field( 'ncu_osch_save_seo' ); ?>
             <details class="ncu-panel ncu-panel--padded" data-ninecode-settings-section>
-                <summary>Search metadata</summary><div class="ninecode-settings-body ncu-grid">
-                    <label data-ninecode-settings-field><input type="hidden" name="ncu_osch_seo[enabled]" value="0"><input type="checkbox" name="ncu_osch_seo[enabled]" value="1" <?php checked( $s['enabled'] ); ?>> <span>Enable the Open Scholar SEO fallback</span><small>Automatically stops output when Yoast, Rank Math, All in One SEO, SEOPress or another declared provider is active.</small></label>
-                    <label data-ninecode-settings-field><span>Default site description</span><textarea name="ncu_osch_seo[site_description]" rows="3" maxlength="320"><?php echo esc_textarea( $s['site_description'] ); ?></textarea><small>Used on the home page when no more specific description exists. Aim for roughly 120–160 characters.</small></label>
+                <summary>How Google shows your pages</summary><div class="ninecode-settings-body ncu-grid">
+                    <label data-ninecode-settings-field><input type="hidden" name="ncu_osch_seo[enabled]" value="0"><input type="checkbox" name="ncu_osch_seo[enabled]" value="1" <?php checked( $s['enabled'] ); ?>> <span>Turn on these search settings</span><small>Turns itself off when an SEO plugin such as Yoast or Rank Math is running.</small></label>
+                    <label data-ninecode-settings-field><span>Short summary of the whole site</span><textarea name="ncu_osch_seo[site_description]" rows="3" maxlength="320"><?php echo esc_textarea( $s['site_description'] ); ?></textarea><small>Shown on the home page. One or two sentences is enough.</small></label>
                 </div>
             </details>
             <details class="ncu-panel ncu-panel--padded" data-ninecode-settings-section>
-                <summary>Organisation identity</summary><div class="ninecode-settings-body ncu-grid">
-                    <label data-ninecode-settings-field><span>Organisation name</span><input type="text" name="ncu_osch_seo[organisation_name]" value="<?php echo esc_attr( $s['organisation_name'] ); ?>"><small>Used in structured data. Blank uses the site title.</small></label>
-                    <?php ncu_osch_seo_media_field( 'Organisation logo', 'organisation_logo_id', $s['organisation_logo_id'], 'A square or wide institutional logo for structured data.' ); ?>
+                <summary>Your organisation</summary><div class="ninecode-settings-body ncu-grid">
+                    <label data-ninecode-settings-field><span>Name of your organisation</span><input type="text" name="ncu_osch_seo[organisation_name]" value="<?php echo esc_attr( $s['organisation_name'] ); ?>"><small>Google uses this. Leave empty to use the site title.</small></label>
+                    <?php ncu_osch_seo_media_field( 'Logo', 'organisation_logo_id', $s['organisation_logo_id'], 'Your logo, square or wide.' ); ?>
                 </div>
             </details>
             <details class="ncu-panel ncu-panel--padded" data-ninecode-settings-section>
-                <summary>Social sharing</summary><div class="ninecode-settings-body ncu-grid">
-                    <?php ncu_osch_seo_media_field( 'Default sharing image', 'default_social_image_id', $s['default_social_image_id'], 'Used when a post has no dedicated social or featured image.' ); ?>
-                    <label data-ninecode-settings-field><span>X/Twitter account</span><input type="text" name="ncu_osch_seo[twitter_site]" value="<?php echo esc_attr( $s['twitter_site'] ); ?>" placeholder="institution"><small>Enter the account name without @. This adds the twitter:site attribution.</small></label>
+                <summary>When people share your pages</summary><div class="ninecode-settings-body ncu-grid">
+                    <?php ncu_osch_seo_media_field( 'Picture when nothing else is set', 'default_social_image_id', $s['default_social_image_id'], 'Used when a page has no picture of its own.' ); ?>
+                    <label data-ninecode-settings-field><span>X (Twitter) account name</span><input type="text" name="ncu_osch_seo[twitter_site]" value="<?php echo esc_attr( $s['twitter_site'] ); ?>" placeholder="institution"><small>Type the name only, without the @ sign.</small></label>
                 </div>
             </details>
-            <p class="submit"><button class="button button-primary button-hero">Save SEO settings</button></p>
+            <p class="submit"><button class="button button-primary button-hero">Save</button></p>
         </form>
     </div>
     <?php

@@ -226,6 +226,10 @@ function ncu_osch_workspace_description( $label, $slug, $children = array() ) {
 add_action( 'admin_menu', 'ncu_osch_workspace_collect_apps', PHP_INT_MAX );
 /** Tools that people rarely need on the dashboard: export, import, backup and navigator. Lectures and exhibitions stay in the main menu. */
 function ncu_osch_workspace_is_advanced_app( $slug, $label, $group = '' ) {
+    // A choice made on Menu & Dashboard always wins.
+    $choice = ncu_osch_workspace_preference( $slug );
+    if ( isset( $choice['advanced'] ) && 'advanced' === $choice['advanced'] ) { return true; }
+    if ( isset( $choice['advanced'] ) && 'main' === $choice['advanced'] ) { return false; }
     // Lectures and exhibitions are main-menu apps, never Advanced.
     if ( preg_match( '~lectur|exhibit~i', (string) $slug . ' ' . (string) $label ) ) { return false; }
     if ( 3 === ncu_osch_workspace_tier( $slug, $group ) ) { return true; }

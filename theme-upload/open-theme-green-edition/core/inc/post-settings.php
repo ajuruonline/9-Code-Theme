@@ -54,20 +54,20 @@ function ncu_osch_post_settings_form() {
     <div class="osch-ps-group">
         <label class="osch-ps-field"><span>Title</span>
             <input type="text" name="post_title" value="<?php echo esc_attr( $post->post_title ); ?>" maxlength="255"></label>
-        <label class="osch-ps-field"><span>Web address (slug)</span>
+        <label class="osch-ps-field"><span>Web address</span>
             <input type="text" name="post_name" value="<?php echo esc_attr( $post->post_name ); ?>" autocapitalize="off" spellcheck="false">
-            <small>Used in the link to this <?php echo esc_html( strtolower( $type ? $type->labels->singular_name : 'item' ) ); ?>.</small></label>
+            <small>The end part of the link to this page. Use small letters and dashes, like my-summer-trip.</small></label>
     </div>
     <div class="osch-ps-group">
-        <label class="osch-ps-field"><span>Status</span>
+        <label class="osch-ps-field"><span>Who can see it</span>
             <select name="post_status">
-                <?php foreach ( array( 'publish' => 'Published', 'draft' => 'Draft', 'pending' => 'Pending review', 'private' => 'Private' ) as $value => $label ) :
+                <?php foreach ( array( 'publish' => 'Everyone (published)', 'draft' => 'Only me, not finished (draft)', 'pending' => 'Waiting to be checked', 'private' => 'Only logged-in editors (private)' ) as $value => $label ) :
                     if ( 'publish' === $value && ! current_user_can( $type->cap->publish_posts ) ) { continue; } ?>
                     <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $post->post_status, $value ); ?>><?php echo esc_html( $label ); ?></option>
                 <?php endforeach; ?>
-                <?php if ( 'future' === $post->post_status ) : ?><option value="future" selected>Scheduled</option><?php endif; ?>
+                <?php if ( 'future' === $post->post_status ) : ?><option value="future" selected>Going live later (scheduled)</option><?php endif; ?>
             </select></label>
-        <label class="osch-ps-field"><span>Date</span>
+        <label class="osch-ps-field"><span>Date it shows</span>
             <input type="datetime-local" name="post_date" value="<?php echo esc_attr( $date_value ); ?>"></label>
         <?php if ( current_user_can( 'edit_others_posts' ) ) : ?>
         <label class="osch-ps-field"><span>Author</span>
@@ -81,44 +81,45 @@ function ncu_osch_post_settings_form() {
     <?php if ( $is_hier ) :
         $parents = get_pages( array( 'post_type' => $post->post_type, 'exclude_tree' => $post->ID, 'sort_column' => 'menu_order,post_title', 'post_status' => array( 'publish', 'draft', 'private', 'pending' ) ) ); ?>
     <div class="osch-ps-group">
-        <label class="osch-ps-field"><span>Parent</span>
+        <label class="osch-ps-field"><span>Sits under which page</span>
             <select name="post_parent">
-                <option value="0">No parent</option>
+                <option value="0">Nothing (top level)</option>
                 <?php foreach ( $parents as $parent ) : ?>
                     <option value="<?php echo esc_attr( $parent->ID ); ?>" <?php selected( (int) $post->post_parent, (int) $parent->ID ); ?>><?php echo esc_html( $parent->post_title ); ?></option>
                 <?php endforeach; ?>
             </select></label>
-        <label class="osch-ps-field"><span>Order</span>
-            <input type="number" name="menu_order" value="<?php echo esc_attr( (int) $post->menu_order ); ?>" step="1"></label>
+        <label class="osch-ps-field"><span>Position in the list</span>
+            <input type="number" name="menu_order" value="<?php echo esc_attr( (int) $post->menu_order ); ?>" step="1"><small>Smaller numbers come first.</small></label>
     </div>
     <?php endif; ?>
     <div class="osch-ps-group">
-        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="comment_status" value="open" <?php checked( 'open', $post->comment_status ); ?>> <span>Allow comments</span></label>
-        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="ping_status" value="open" <?php checked( 'open', $post->ping_status ); ?>> <span>Allow link notifications</span></label>
-        <label class="osch-ps-field"><span>Password (blank = public)</span>
+        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="comment_status" value="open" <?php checked( 'open', $post->comment_status ); ?>> <span>Let people leave comments</span></label>
+        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="ping_status" value="open" <?php checked( 'open', $post->ping_status ); ?>> <span>Tell other sites when I link to them</span></label>
+        <label class="osch-ps-field"><span>Password to open it</span>
             <input type="text" name="post_password" value="<?php echo esc_attr( $post->post_password ); ?>" autocomplete="off"></label>
     </div>
     <?php if ( $is_post ) : ?>
     <div class="osch-ps-group">
-        <label class="osch-ps-field"><span>Format</span>
+        <label class="osch-ps-field"><span>Post style</span>
             <select name="post_format">
                 <option value="standard" <?php selected( get_post_format( $post ) ?: 'standard', 'standard' ); ?>>Standard</option>
                 <?php foreach ( get_post_format_strings() as $key => $label ) : if ( 'standard' === $key ) { continue; } ?>
                     <option value="<?php echo esc_attr( $key ); ?>" <?php selected( get_post_format( $post ), $key ); ?>><?php echo esc_html( $label ); ?></option>
                 <?php endforeach; ?>
             </select></label>
-        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="sticky" value="1" <?php checked( is_sticky( $post->ID ) ); ?>> <span>Keep at the top of the blog</span></label>
+        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="sticky" value="1" <?php checked( is_sticky( $post->ID ) ); ?>> <span>Pin to the top of the blog</span></label>
     </div>
-    <fieldset class="osch-ps-group osch-ps-terms">
-        <legend>Categories</legend>
-        <?php foreach ( get_terms( array( 'taxonomy' => 'category', 'hide_empty' => false ) ) as $cat ) : ?>
-            <label class="osch-ps-check"><input type="checkbox" name="categories[]" value="<?php echo esc_attr( $cat->term_id ); ?>" <?php checked( has_term( (int) $cat->term_id, 'category', $post->ID ) ); ?>> <span><?php echo esc_html( $cat->name ); ?></span></label>
-        <?php endforeach; ?>
+    <fieldset class="osch-ps-terms">
+        <legend>Categories (folders for posts)</legend>
+        <p class="osch-ps-hint">Tick a main folder, or a smaller folder inside it. You can tick more than one.</p>
+        <div class="osch-ps-cats"><?php
+            // WordPress's own checklist: main categories with their sub-categories indented under them.
+            wp_terms_checklist( $post->ID, array( 'taxonomy' => 'category', 'checked_ontop' => false ) ); ?></div>
     </fieldset>
     <div class="osch-ps-group">
-        <label class="osch-ps-field"><span>Tags</span>
+        <label class="osch-ps-field"><span>Tags (words that describe it)</span>
             <input type="text" name="tags" value="<?php echo esc_attr( implode( ', ', wp_get_post_terms( $post->ID, 'post_tag', array( 'fields' => 'names' ) ) ) ); ?>">
-            <small>Separate with commas.</small></label>
+            <small>Put a comma between each tag.</small></label>
     </div>
     <?php endif; ?>
     <?php if ( ncu_osch_post_settings_has_seo( $post ) ) :
@@ -128,20 +129,20 @@ function ncu_osch_post_settings_form() {
         $social_img = absint( get_post_meta( $post->ID, '_osch_social_image_id', true ) );
         $noindex    = (bool) get_post_meta( $post->ID, '_osch_noindex', true ); ?>
     <fieldset class="osch-ps-group osch-ps-seo">
-        <legend>Open Scholar SEO &amp; sharing</legend>
+        <legend>Search and share settings</legend>
         <input type="hidden" name="osch_seo_fields" value="1">
-        <label class="osch-ps-field"><span>Search description</span>
+        <label class="osch-ps-field"><span>Short summary for Google</span>
             <textarea name="ncu_osch_seo_description" rows="3" maxlength="320"><?php echo esc_textarea( $seo_desc ); ?></textarea>
-            <small>Approximately 120–160 characters. Blank uses the excerpt or content.</small></label>
-        <label class="osch-ps-field"><span>Social title</span>
+            <small>About one or two sentences. Leave empty to use the start of the text.</small></label>
+        <label class="osch-ps-field"><span>Title when shared</span>
             <input type="text" name="ncu_osch_social_title" value="<?php echo esc_attr( $social_t ); ?>" maxlength="120">
-            <small>Optional title for link previews.</small></label>
-        <label class="osch-ps-field"><span>Social description</span>
+            <small>Shown when someone shares the link. Leave empty to use the normal title.</small></label>
+        <label class="osch-ps-field"><span>Summary when shared</span>
             <textarea name="ncu_osch_social_description" rows="3" maxlength="320"><?php echo esc_textarea( $social_d ); ?></textarea></label>
-        <label class="osch-ps-field"><span>Social image (attachment ID)</span>
+        <label class="osch-ps-field"><span>Picture when shared (media number)</span>
             <input type="number" min="0" name="ncu_osch_social_image_id" value="<?php echo esc_attr( $social_img ?: "" ); ?>">
-            <small>Blank uses the featured image, then the site default.</small></label>
-        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="ncu_osch_noindex" value="1" <?php checked( $noindex ); ?>> <span>Ask search engines not to index this</span></label>
+            <small>The number of a picture in your Media Library. Leave empty to use the post picture.</small></label>
+        <label class="osch-ps-field osch-ps-check"><input type="checkbox" name="ncu_osch_noindex" value="1" <?php checked( $noindex ); ?>> <span>Hide this from Google search</span></label>
     </fieldset>
     <?php endif; ?>
     <?php
@@ -198,7 +199,7 @@ function ncu_osch_post_settings_save() {
     if ( 'post' === $post->post_type ) {
         set_post_format( $id, ( isset( $in['post_format'] ) && 'standard' !== $in['post_format'] ) ? sanitize_key( $in['post_format'] ) : '' );
         if ( ! empty( $in['sticky'] ) ) { stick_post( $id ); } else { unstick_post( $id ); }
-        $cats = isset( $in['categories'] ) ? array_map( 'absint', (array) $in['categories'] ) : array();
+        $cats = isset( $in['post_category'] ) ? array_map( 'absint', (array) $in['post_category'] ) : array();
         wp_set_post_categories( $id, $cats );
         $tags = isset( $in['tags'] ) ? array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $in['tags'] ) ) ) ) : array();
         wp_set_post_tags( $id, $tags, false );

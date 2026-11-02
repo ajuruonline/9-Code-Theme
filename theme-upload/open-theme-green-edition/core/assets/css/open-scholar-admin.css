@@ -568,3 +568,24 @@ body.profile-php .form-table td .description,body.user-edit-php .form-table td .
   body.wp-admin.edit-php .wp-list-table .row-actions span.trash a{color:#9f1d1d!important}
   body.wp-admin.edit-php .wp-list-table td.title strong a{line-height:1.2!important}
 }
+
+/* Menu & Dashboard page: one row per section, arrows to reorder, plain tick boxes. */
+body.wp-admin .osch-settings-steps{margin:6px 0 10px 0;padding-left:20px;font-size:14px;line-height:1.5;color:#17492f}
+body.wp-admin .osch-menu-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+body.wp-admin .osch-menu-row{margin:0;padding:10px 12px;background:#fff;border:1px solid #d4e5d8;border-radius:10px;display:grid;gap:8px}
+body.wp-admin .osch-menu-row-top{display:flex;align-items:center;gap:8px;min-width:0}
+body.wp-admin .osch-menu-row-top .dashicons{color:#14532d;flex:0 0 auto}
+body.wp-admin .osch-menu-name{font-weight:700;font-size:15px;color:#17492f;flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+body.wp-admin .osch-menu-arrows{display:flex;gap:6px;flex:0 0 auto}
+body.wp-admin .osch-menu-arrows button{width:44px;height:44px;border:1px solid #9fc0ab;border-radius:10px;background:#f6faf7;color:#14532d;font-size:16px;cursor:pointer}
+body.wp-admin .osch-menu-row-checks{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:14px}
+body.wp-admin .osch-menu-row-checks label{display:flex;gap:6px;align-items:center;min-height:32px}
+body.wp-admin .osch-menu-row-checks input[type=checkbox]{width:20px;height:20px;margin:0}
+body.wp-admin .osch-menu-row-checks small{color:#4b5f53;font-style:italic}
+body.wp-admin .osch-menu-where{display:grid;gap:4px;font-size:14px;font-weight:600;color:#17492f}
+body.wp-admin .osch-menu-where select{min-height:40px;font-size:15px}
+body.wp-admin .osch-menu-more{border-top:1px dashed #c9dccf;padding-top:6px}
+body.wp-admin .osch-menu-more>summary{cursor:pointer;font-weight:700;color:#14532d;min-height:36px;display:flex;align-items:center}
+body.wp-admin .osch-menu-more>label{display:grid;gap:4px;margin:8px 0;font-size:14px;font-weight:600;color:#17492f}
+body.wp-admin .osch-menu-more input[type=text],body.wp-admin .osch-menu-more select{min-height:38px;font-size:15px;width:100%}
+@media(max-width:600px){body.wp-admin .osch-menu-row{padding:10px}body.wp-admin .osch-menu-row-checks{gap:6px 12px}}

@@ -263,3 +263,12 @@ Checked: 20 admin and public loads with no JavaScript errors; editor regression 
 - Lectures and exhibitions are main-menu apps, no longer under Advanced in the menu pop-up. Lecture and exhibition apps from any plugin are grouped with the Open Scholar apps.
 - Export, import, backup and navigator tools stay under Advanced.
 - Checked: the menu classification for lecture and exhibition apps, and for the Advanced tools, on a WordPress install; PHP lint clean.
+
+## 7.1.0 — Sub-categories, simpler menu page, plain English
+
+- Post settings: categories now show as a tree. Main categories are listed with their sub-categories indented under them, and each can be ticked. Ticks save correctly.
+- Menu & Dashboard (was "Dashboard & Menus"): one list of sections. Use the arrows to move a section up or down; the order you set is the order on the menu and the Dashboard, including across groups.
+- Each section has simple tick boxes: "Show in the menu" and "Show on the Dashboard". "Where it appears" lets you choose Automatic, Main menu, or Advanced. Choosing Advanced puts it in the drawer; choosing Main menu keeps it out of the drawer. Lectures and exhibitions default to the main menu.
+- Names, icons and sub-items sit in one collapsed area per section.
+- Plain English on the post settings panel, the SEO & Sharing page, and the Menu & Dashboard page.
+- Checked at 390 px: categories tree shows and saves; reordering persists across a reload; the Advanced choice persists; the post settings panel saves and closes; no JavaScript errors; page sweep clean.
