@@ -31,6 +31,9 @@ bin/build.sh                                       # dist/*.zip
 ```
 CI runs all of the above (`.github/workflows/ci.yml`).
 
+If Playwright's own browser is not installed (`npx playwright install chromium` fixes that), point the
+end-to-end tests at any Chromium with `CHROMIUM_PATH=/path/to/chromium npm test`.
+
 ### The invariant
 On standard **Posts and Pages** in `post.php` / `post-new.php`, **Post Content and post metadata must always be directly visible and editable**.
 **Save/Save Draft and Publish/Update stay visible; every other editor/plugin top-bar action (including Edit with Elementor) belongs in the single hamburger menu at desktop and mobile widths.**

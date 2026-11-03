@@ -34,7 +34,9 @@ export function reporter(name) {
 }
 
 export async function launch(viewport = { width: 1280, height: 900 }) {
-  const browser = await chromium.launch();
+  // CHROMIUM_PATH lets a machine with a pre-installed browser skip `playwright install`.
+  const executablePath = process.env.CHROMIUM_PATH || undefined;
+  const browser = await chromium.launch({ executablePath });
   const context = await browser.newContext({ viewport });
   const page = await context.newPage();
   return { browser, context, page };

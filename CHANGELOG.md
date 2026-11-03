@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Fixed: the homepage in "latest posts" mode had no page heading; it now shows the site name as the single `h1` (matches the blog index template).
+- Tests: `CHROMIUM_PATH` selects a pre-installed Chromium for the e2e suites, so `playwright install` is not required on machines that already have a browser.
 - Posts and Pages now keep only Save/Save Draft and Publish/Update visible in the editor top bar; every other editor/plugin action, including Edit with Elementor, is routed through the existing hamburger menu on desktop and mobile.
 
 ## Theme 16.0.0 / Plugin 10.0.0 — Nine Code baseline
