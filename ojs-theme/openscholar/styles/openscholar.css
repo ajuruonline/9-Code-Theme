@@ -1,23 +1,26 @@
 /*!
- * Open Journal System theme: matched to the Open Scholar "Open Theme" (green edition) public pages.
- * Tokens, type scale, card and article layout copied from the WordPress theme's main.css and theme.json.
- * Public pages are white with black text; the green edition's green is used only where the WordPress
- * theme uses it (the admin launcher), so it is not used here.
+ * Open Journal System theme: the ePublication "Open Scholar Green" look (default preset).
+ * Source: Open Publications (ePublication) 2.6.0, assets/css/frontend.css and
+ * includes/class-alp-style-presets.php, 'open-scholar' preset.
+ * Green banners carry white text; green text sits only on white or the soft tints.
  * Distributed under the GNU GPL v3.
  */
 
 :root {
-  --ncu-accent: #000;
-  --ncu-surface: #fff;
-  --ncu-text: #000;
-  --ncu-muted: #5f6368;
-  --ncu-soft: #f6f7f8;
-  --ncu-border: #e5e7eb;
-  --ncu-max: 1180px;
-  --ncu-radius: 16px;
-  --ncu-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
-  --ncu-space: clamp(18px, 3vw, 32px);
-  --ncu-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --alp-accent: #14532d;
+  --alp-accent-deep: #123d2a;
+  --alp-accent-mid: #1a7a47;
+  --alp-ink: #182720;
+  --alp-title: #123d2a;
+  --alp-muted: #466451;
+  --alp-line: #bfd9c7;
+  --alp-page: #ffffff;
+  --alp-canvas: #f3faf5;
+  --alp-meta: #e7f3ea;
+  --alp-popup-body: #f7f7f8;
+  --alp-radius: 7px;
+  --alp-shadow: 0 8px 30px rgba(20, 37, 50, 0.1);
+  --alp-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* ---------- Layout: the page scrolls in its own area; the menu bar stays in the layout ---------- */
@@ -30,11 +33,11 @@ body.os-theme {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: var(--ncu-surface);
-  color: var(--ncu-text);
-  font-family: var(--ncu-font);
-  font-size: 16px;
-  line-height: 1.5;
+  background: var(--alp-page);
+  color: var(--alp-ink);
+  font-family: var(--alp-font);
+  font-size: 17px;
+  line-height: 1.55;
 }
 body.os-theme .os-page {
   flex: 1 1 auto;
@@ -42,37 +45,35 @@ body.os-theme .os-page {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
+  background: var(--alp-page);
 }
 
-/* ---------- Type: same scale as the WordPress theme ---------- */
-body.os-theme h1 {
-  font-size: clamp(32px, 6vw, 60px);
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  margin: 0.15em 0 0.28em;
-  font-weight: 700;
-  color: var(--ncu-text);
-  max-width: 14ch;
-}
+/* ---------- Type ---------- */
+body.os-theme h1,
 body.os-theme h2,
 body.os-theme h3,
 body.os-theme h4 {
-  color: var(--ncu-text);
+  color: var(--alp-title);
+  font-family: var(--alp-font);
   font-weight: 700;
-  letter-spacing: -0.02em;
   line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+body.os-theme h1 {
+  font-size: clamp(28px, 4.6vw, 44px);
+  margin: 0.2em 0 0.35em;
 }
 body.os-theme a {
-  color: var(--ncu-text);
+  color: var(--alp-accent);
   text-underline-offset: 3px;
 }
 body.os-theme a:hover {
-  text-decoration: underline;
+  color: var(--alp-accent-deep);
 }
 body.os-theme :focus-visible {
-  outline: 2px solid var(--ncu-accent);
+  outline: 3px solid var(--alp-accent-mid);
   outline-offset: 2px;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 /* Skip links: hidden until keyboard focus */
@@ -90,16 +91,16 @@ body.os-theme .cmp_skip_to_content a:focus {
   left: 10px;
   z-index: 3000;
   padding: 10px 16px;
-  border-radius: 12px;
-  background: var(--ncu-accent);
+  border-radius: var(--alp-radius);
+  background: var(--alp-accent);
   color: #fff;
   font-weight: 600;
 }
 
-/* ---------- Header: white, 1px border ---------- */
+/* ---------- Header: green banner, white text (the preset's "banner" header) ---------- */
 body.os-theme .os-head {
-  background: var(--ncu-surface);
-  border-bottom: 1px solid var(--ncu-border);
+  background: var(--alp-accent);
+  color: #fff;
 }
 body.os-theme .os-head__brand,
 body.os-theme .os-head__brand:hover,
@@ -110,108 +111,123 @@ body.os-theme .os-head__brand:focus {
   min-height: 64px;
   padding: 12px 16px;
   box-sizing: border-box;
-  color: var(--ncu-text);
+  color: #fff;
   text-decoration: none;
 }
 body.os-theme .os-head__cap {
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: var(--alp-radius);
+  background: #fff;
+  padding: 4px;
   object-fit: contain;
   flex: 0 0 auto;
 }
 body.os-theme .os-head__name {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  line-height: 1.25;
   overflow-wrap: anywhere;
   min-width: 0;
+  color: #fff;
 }
 
-/* ---------- Content width and spacing ---------- */
+/* ---------- Content ---------- */
 body.os-theme .pkp_structure_content {
-  max-width: var(--ncu-max);
+  max-width: 1120px;
   margin: 0 auto;
-  padding: var(--ncu-space);
+  padding: 22px 18px 18px;
   box-sizing: border-box;
 }
 body.os-theme .pkp_structure_main {
   min-width: 0;
 }
 
-/* ---------- Article page ---------- */
-body.os-theme .obj_article_details,
-body.os-theme .obj_article_details .main_entry,
-body.os-theme .obj_galley_link {
-  max-width: 100%;
-}
-body.os-theme .obj_article_details .meta,
+/* Metadata and breadcrumb panels: the preset's meta tint */
 body.os-theme .cmp_breadcrumbs,
-body.os-theme .pkp_structure_content .meta {
+body.os-theme .obj_article_details .meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 7px;
-  color: var(--ncu-muted);
-  font-size: 13px;
-}
-body.os-theme .obj_article_details img,
-body.os-theme .obj_article_details figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 14px;
-  object-fit: cover;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--alp-radius);
+  background: var(--alp-meta);
+  color: var(--alp-muted);
+  font-size: 14px;
 }
 
-/* ---------- Cards: the WordPress card (1px border, 16px radius, 16:10 media) ---------- */
+/* ---------- Cards: bordered, 7px corners (the preset's "bordered" card) ---------- */
 body.os-theme .cmp_article_list .obj_article_summary,
 body.os-theme .obj_issue_summary,
 body.os-theme .obj_announcement_summary,
+body.os-theme .obj_galley_link,
 body.os-theme .pkp_block {
-  position: relative;
-  background: var(--ncu-surface);
-  border: 1px solid var(--ncu-border);
-  border-radius: var(--ncu-radius);
-  overflow: hidden;
-  transition: transform 0.22s ease;
+  background: var(--alp-page);
+  border: 1px solid var(--alp-line);
+  border-radius: var(--alp-radius);
 }
 body.os-theme .cmp_article_list .obj_article_summary,
 body.os-theme .obj_issue_summary {
-  padding: 18px 20px;
-  margin-bottom: 16px;
+  padding: 16px 18px;
+  margin-bottom: 14px;
 }
 body.os-theme .cmp_article_list .obj_article_summary .title a,
 body.os-theme .obj_article_summary h2 a {
-  color: var(--ncu-text);
+  color: var(--alp-title);
   font-weight: 700;
   text-decoration: none;
 }
 body.os-theme .obj_article_summary h2 a:hover {
   text-decoration: underline;
 }
-body.os-theme .pkp_block {
-  padding: 16px 18px;
-  background: var(--ncu-soft);
+body.os-theme .cmp_article_list .obj_article_summary .meta,
+body.os-theme .cmp_article_list .obj_article_summary .date {
+  color: var(--alp-muted);
+  font-size: 14px;
 }
-body.os-theme .pkp_block .title {
-  color: var(--ncu-text);
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+body.os-theme .pkp_block {
+  padding: 14px 16px;
+  background: var(--alp-canvas);
 }
 
-/* ---------- Buttons and fields (black accent, as the WordPress theme) ---------- */
+/* Section headings in the preset's heading colour: green bar, white text */
+body.os-theme .pkp_block .title,
+body.os-theme .obj_article_details h2,
+body.os-theme .pkp_structure_content h2.section-title {
+  display: block;
+  padding: 8px 12px;
+  border-radius: var(--alp-radius);
+  background: var(--alp-accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+/* Resource and status labels: the preset's pills */
+body.os-theme .obj_article_details .pill,
+body.os-theme .cmp_article_list .pill,
+body.os-theme .status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--alp-accent-mid);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Buttons: the preset's CTA (green, white text) ---------- */
 body.os-theme .pkp_button,
 body.os-theme button.pkp_button,
 body.os-theme .cmp_button {
   min-height: 44px;
   padding: 10px 18px;
-  border: 1px solid var(--ncu-accent);
-  border-radius: 12px;
-  background: var(--ncu-accent);
+  border: 1px solid var(--alp-accent);
+  border-radius: var(--alp-radius);
+  background: var(--alp-accent);
   color: #fff;
   font-weight: 600;
   text-decoration: none;
@@ -220,49 +236,56 @@ body.os-theme .cmp_button {
 body.os-theme .pkp_button:hover,
 body.os-theme button.pkp_button:hover,
 body.os-theme .cmp_button:hover {
-  background: #222;
+  background: var(--alp-accent-deep);
+  border-color: var(--alp-accent-deep);
   color: #fff;
-  text-decoration: none;
 }
 body.os-theme .pkp_button--secondary,
 body.os-theme button.pkp_button--secondary {
-  background: var(--ncu-surface);
-  color: var(--ncu-text);
-  border-color: var(--ncu-border);
+  background: var(--alp-page);
+  color: var(--alp-accent);
+  border-color: var(--alp-accent);
 }
+body.os-theme .pkp_button--secondary:hover,
+body.os-theme button.pkp_button--secondary:hover {
+  background: var(--alp-meta);
+  color: var(--alp-accent-deep);
+}
+
+/* Fields and tables */
 body.os-theme input,
 body.os-theme select,
 body.os-theme textarea {
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid var(--ncu-border);
-  border-radius: 12px;
-  background: var(--ncu-surface);
-  color: var(--ncu-text);
-  font-family: var(--ncu-font);
+  border: 1px solid var(--alp-line);
+  border-radius: var(--alp-radius);
+  background: var(--alp-page);
+  color: var(--alp-ink);
+  font-family: var(--alp-font);
 }
 body.os-theme table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid var(--ncu-border);
-  border-radius: 12px;
+  border: 1px solid var(--alp-line);
+  border-radius: var(--alp-radius);
   overflow: hidden;
 }
 body.os-theme th {
-  padding: 10px 12px;
-  background: var(--ncu-soft);
-  color: var(--ncu-muted);
-  font-size: 13px;
-  font-weight: 600;
+  padding: 9px 12px;
+  background: var(--alp-meta);
+  color: var(--alp-accent-deep);
+  font-size: 14px;
+  font-weight: 700;
   text-align: left;
 }
 body.os-theme td {
-  padding: 10px 12px;
-  border-top: 1px solid var(--ncu-border);
+  padding: 9px 12px;
+  border-top: 1px solid var(--alp-line);
 }
 
-/* ---------- Dialogs and popups: white panels with the WordPress shadow ---------- */
+/* ---------- Popups and dialogs: white header, popup-body tint, preset shadow ---------- */
 body.os-theme .pkp_modal_wrapper,
 body.os-theme .pkp_modal_overlay,
 body.os-theme .ui-widget-overlay {
@@ -270,21 +293,24 @@ body.os-theme .ui-widget-overlay {
 }
 body.os-theme .pkp_modal_overlay,
 body.os-theme .ui-widget-overlay {
-  background: rgba(0, 0, 0, 0.4) !important;
+  background: rgba(20, 37, 50, 0.45) !important;
 }
 body.os-theme .pkp_modal_panel,
 body.os-theme .ui-dialog,
 body.os-theme .pkp_modal_content {
-  background: var(--ncu-surface) !important;
-  border: 1px solid var(--ncu-border);
-  border-radius: var(--ncu-radius) !important;
-  box-shadow: var(--ncu-shadow) !important;
-  color: var(--ncu-text);
+  background: var(--alp-popup-body) !important;
+  border: 1px solid var(--alp-line) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--alp-shadow) !important;
+  color: var(--alp-ink);
   overflow: hidden;
 }
+body.os-theme .pkp_modal_panel .pkp_modal_title,
 body.os-theme .pkp_modal_title,
-body.os-theme .ui-dialog-title {
-  color: var(--ncu-text) !important;
+body.os-theme .ui-dialog-titlebar {
+  background: var(--alp-page) !important;
+  color: var(--alp-title) !important;
+  border-bottom: 1px solid var(--alp-line);
   font-weight: 700;
 }
 body.os-theme .pkp_modal_close,
@@ -292,27 +318,27 @@ body.os-theme .pkp_modal_panel_close_box,
 body.os-theme .ui-dialog-titlebar-close {
   width: 36px;
   height: 36px;
-  border-radius: 12px;
-  background: var(--ncu-soft);
-  color: var(--ncu-text);
-  border: 1px solid var(--ncu-border);
+  border-radius: var(--alp-radius);
+  background: var(--alp-meta);
+  color: var(--alp-accent);
+  border: 1px solid var(--alp-line);
   cursor: pointer;
 }
 
-/* ---------- Footer: white, 1px border, same as the WordPress footer ---------- */
+/* ---------- Footer: soft meta tint with a green rule ---------- */
 body.os-theme .os-footer {
-  margin-top: 40px;
-  padding: 28px 0;
-  background: var(--ncu-surface);
-  border-top: 1px solid var(--ncu-border);
-  color: var(--ncu-text);
+  margin-top: 36px;
+  padding: 26px 0;
+  background: var(--alp-meta);
+  border-top: 3px solid var(--alp-accent);
+  color: var(--alp-ink);
 }
 body.os-theme .os-footer__inner {
   display: grid;
-  gap: 16px;
-  max-width: var(--ncu-max);
+  gap: 14px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0 var(--ncu-space);
+  padding: 0 18px;
   box-sizing: border-box;
 }
 body.os-theme .os-footer__brand {
@@ -321,38 +347,40 @@ body.os-theme .os-footer__brand {
   gap: 12px;
 }
 body.os-theme .os-footer__cap {
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--alp-radius);
+  background: var(--alp-accent);
+  padding: 5px;
   object-fit: contain;
 }
 body.os-theme .os-footer__name {
   margin: 0;
-  color: var(--ncu-text);
-  font-size: 16px;
+  color: var(--alp-title);
+  font-size: 17px;
   font-weight: 700;
 }
 body.os-theme .os-footer__by {
   margin: 0;
-  color: var(--ncu-muted);
+  color: var(--alp-muted);
   font-size: 13px;
 }
 body.os-theme .os-footer__content {
-  color: var(--ncu-text);
-  font-size: 14px;
+  color: var(--alp-ink);
+  font-size: 15px;
 }
 body.os-theme .os-footer__content a {
-  color: var(--ncu-text);
+  color: var(--alp-accent);
 }
 
-/* ---------- Menu bar: phones (bottom bar, white, 1px top border) ---------- */
+/* ---------- Menu bar: phones (bottom bar, white, green toggle) ---------- */
 body.os-theme .os-nav {
   position: relative;
   z-index: 500;
   flex: 0 0 auto;
   order: 2;
-  background: var(--ncu-surface);
-  border-top: 1px solid var(--ncu-border);
+  background: var(--alp-page);
+  border-top: 2px solid var(--alp-accent);
   padding-bottom: env(safe-area-inset-bottom);
   box-sizing: border-box;
 }
@@ -374,14 +402,17 @@ body.os-theme .os-nav__toggle {
   gap: 12px;
   min-height: 48px;
   padding: 10px 18px;
-  border: 1px solid var(--ncu-accent);
-  border-radius: 12px;
-  background: var(--ncu-accent);
+  border: 1px solid var(--alp-accent);
+  border-radius: var(--alp-radius);
+  background: var(--alp-accent);
   color: #fff;
   font: inherit;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+}
+body.os-theme .os-nav__toggle:hover {
+  background: var(--alp-accent-deep);
 }
 body.os-theme .os-nav__toggle-icon {
   display: inline-block;
@@ -400,10 +431,10 @@ body.os-theme .os-nav__search {
   min-width: 48px;
   min-height: 48px;
   padding: 0 14px;
-  border: 1px solid var(--ncu-border);
-  border-radius: 12px;
-  background: var(--ncu-surface);
-  color: var(--ncu-text);
+  border: 1px solid var(--alp-accent);
+  border-radius: var(--alp-radius);
+  background: var(--alp-page);
+  color: var(--alp-accent);
   font-weight: 600;
   text-decoration: none;
   box-sizing: border-box;
@@ -413,7 +444,7 @@ body.os-theme .os-nav__toggle-label {
   white-space: nowrap;
 }
 
-/* The menu sheet: white panel with the WordPress shadow, above the bar */
+/* Menu sheet: white panel above the bar with the preset's popup shadow */
 body.os-theme .os-nav__sheet {
   display: none;
   position: absolute;
@@ -423,10 +454,10 @@ body.os-theme .os-nav__sheet {
   max-height: 72vh;
   overflow-y: auto;
   padding: 14px 12px 16px;
-  background: var(--ncu-surface);
-  border: 1px solid var(--ncu-border);
-  border-radius: var(--ncu-radius);
-  box-shadow: var(--ncu-shadow);
+  background: var(--alp-popup-body);
+  border: 1px solid var(--alp-line);
+  border-radius: 12px;
+  box-shadow: var(--alp-shadow);
   box-sizing: border-box;
 }
 body.os-theme .pkp_site_nav_menu--isOpen .os-nav__sheet {
@@ -435,8 +466,8 @@ body.os-theme .pkp_site_nav_menu--isOpen .os-nav__sheet {
 body.os-theme .os-nav__sheet-title {
   margin: 2px 6px 10px;
   font-size: 13px;
-  font-weight: 600;
-  color: var(--ncu-muted);
+  font-weight: 700;
+  color: var(--alp-muted);
 }
 body.os-theme .os-nav__links {
   list-style: none;
@@ -444,30 +475,47 @@ body.os-theme .os-nav__links {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  counter-reset: osmenu;
 }
 body.os-theme .os-nav__links li {
+  counter-increment: osmenu;
   margin: 0;
 }
 body.os-theme .os-nav__links a {
   display: flex;
   align-items: center;
+  gap: 12px;
   min-height: 48px;
   padding: 8px 12px;
-  border-radius: 12px;
-  color: var(--ncu-text);
+  border-radius: var(--alp-radius);
+  color: var(--alp-ink);
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
 }
+body.os-theme .os-nav__links a::before {
+  content: counter(osmenu);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--alp-accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
 body.os-theme .os-nav__links a:hover,
 body.os-theme .os-nav__links a:focus-visible,
 body.os-theme .os-nav__links li.current > a {
-  background: var(--ncu-soft);
-  text-decoration: none;
+  background: var(--alp-meta);
+  color: var(--alp-accent-deep);
 }
 body.os-theme .os-nav__account {
-  border-top: 1px solid var(--ncu-border);
+  border-top: 1px solid var(--alp-line);
   padding-top: 12px;
 }
 body.os-theme .os-nav__account-menu {
@@ -481,21 +529,22 @@ body.os-theme .os-nav__account-menu {
 body.os-theme .os-nav__account-menu a {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 42px;
   padding: 8px 16px;
-  border: 1px solid var(--ncu-border);
-  border-radius: 12px;
-  background: var(--ncu-surface);
-  color: var(--ncu-text);
+  border: 1px solid var(--alp-accent);
+  border-radius: 999px;
+  background: var(--alp-accent);
+  color: #fff;
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
 }
 body.os-theme .os-nav__account-menu a:hover {
-  background: var(--ncu-soft);
+  background: var(--alp-accent-deep);
+  color: #fff;
 }
 
-/* ---------- Menu bar: desktop (white bar across the top) ---------- */
+/* ---------- Menu bar: desktop (green banner across the top, white links) ---------- */
 @media (min-width: 783px) {
   body.os-theme .os-head {
     display: none;
@@ -505,10 +554,11 @@ body.os-theme .os-nav__account-menu a:hover {
     order: -1;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 12px max(16px, calc((100% - var(--ncu-max)) / 2 + 16px));
+    gap: 12px;
+    padding: 10px max(18px, calc((100% - 1120px) / 2 + 18px));
+    background: var(--alp-accent);
     border-top: 0;
-    border-bottom: 1px solid var(--ncu-border);
+    border-bottom: 0;
   }
   body.os-theme .os-nav__bar {
     display: contents;
@@ -520,16 +570,17 @@ body.os-theme .os-nav__account-menu a:hover {
     margin-right: auto;
     order: 1;
     min-width: 0;
-    color: var(--ncu-text);
-    font-size: 17px;
+    color: #fff;
+    font-size: 18px;
     font-weight: 700;
-    letter-spacing: -0.01em;
     text-decoration: none;
   }
   body.os-theme .os-nav__brand img {
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    padding: 4px;
+    border-radius: var(--alp-radius);
+    background: #fff;
     object-fit: contain;
   }
   body.os-theme .os-nav__toggle {
@@ -547,7 +598,7 @@ body.os-theme .os-nav__account-menu a:hover {
     box-shadow: none;
     background: transparent;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
   body.os-theme .os-nav__sheet-title {
     display: none;
@@ -556,13 +607,26 @@ body.os-theme .os-nav__account-menu a:hover {
     flex-direction: row;
     flex-wrap: nowrap;
     margin: 0;
-    gap: 2px;
+    gap: 4px;
+  }
+  body.os-theme .os-nav__links li {
+    counter-increment: none;
   }
   body.os-theme .os-nav__links a {
     min-height: 40px;
     padding: 8px 12px;
     font-size: 15px;
-    font-weight: 500;
+    color: #fff;
+    border-radius: 999px;
+  }
+  body.os-theme .os-nav__links a:hover,
+  body.os-theme .os-nav__links a:focus-visible,
+  body.os-theme .os-nav__links li.current > a {
+    background: var(--alp-accent-mid);
+    color: #fff;
+  }
+  body.os-theme .os-nav__links a::before {
+    display: none;
   }
   body.os-theme .os-nav__account {
     flex: 0 0 auto;
@@ -573,125 +637,31 @@ body.os-theme .os-nav__account-menu a:hover {
     flex-wrap: nowrap;
   }
   body.os-theme .os-nav__account-menu a {
-    min-height: 40px;
+    min-height: 38px;
     padding: 6px 14px;
     font-size: 14px;
+    background: #fff;
+    color: var(--alp-accent);
+    border-color: #fff;
+  }
+  body.os-theme .os-nav__account-menu a:hover {
+    background: var(--alp-meta);
+    color: var(--alp-accent-deep);
   }
   body.os-theme .os-nav__search {
     order: 3;
-    min-height: 40px;
+    min-height: 38px;
+    background: #fff;
+    color: var(--alp-accent);
+    border-color: #fff;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.os-theme * {
+  body.os-theme *,
+  body.os-theme *::before,
+  body.os-theme *::after {
     transition: none !important;
     animation: none !important;
   }
-}
-
-/* ---------- Exact match to the WordPress Open Theme (measured in the test site) ---------- */
-:root {
-  --ncu-page: #f2f5f3;
-  --ncu-text: #191919;
-  --ncu-tile: #f6f7f8;
-  --ncu-card-radius: 0;
-}
-body.os-theme {
-  background: var(--ncu-page);
-  color: var(--ncu-text);
-}
-body.os-theme .os-head,
-body.os-theme .os-nav,
-body.os-theme .os-footer {
-  background: transparent;
-}
-body.os-theme .os-nav {
-  background: var(--ncu-surface);
-}
-body.os-theme .os-footer {
-  background: transparent;
-}
-body.os-theme .os-head {
-  background: transparent;
-  border-bottom: 0;
-}
-body.os-theme .os-head__cap,
-body.os-theme .os-footer__cap {
-  border-radius: 0;
-}
-body.os-theme h1 {
-  color: var(--ncu-text);
-}
-body.os-theme .cmp_article_list .obj_article_summary,
-body.os-theme .obj_issue_summary,
-body.os-theme .obj_announcement_summary,
-body.os-theme .pkp_block {
-  background: var(--ncu-surface);
-  border: 1px solid var(--ncu-border);
-  border-radius: var(--ncu-card-radius);
-}
-/* Article list item: grey tile on the left (cap logo), date, title and excerpt on the right. */
-body.os-theme .cmp_article_list .obj_article_summary {
-  display: grid;
-  grid-template-columns: 113px minmax(0, 1fr);
-  gap: 0;
-  padding: 0;
-  margin-bottom: 12px;
-  min-height: 107px;
-}
-body.os-theme .cmp_article_list .obj_article_summary::before {
-  content: "";
-  grid-row: 1 / span 4;
-  background: var(--ncu-tile) url("../images/open-scholar-cap.jpg") center / 44px no-repeat;
-  min-height: 100%;
-}
-body.os-theme .cmp_article_list .obj_article_summary > * {
-  grid-column: 2;
-  padding-left: 14px;
-  padding-right: 14px;
-}
-body.os-theme .cmp_article_list .obj_article_summary > :first-child {
-  padding-top: 14px;
-}
-body.os-theme .cmp_article_list .obj_article_summary .title a,
-body.os-theme .obj_article_summary h2 a {
-  font-size: 17px;
-  font-weight: 750;
-  color: var(--ncu-text);
-}
-body.os-theme .cmp_article_list .obj_article_summary .meta,
-body.os-theme .cmp_article_list .obj_article_summary .date {
-  color: #5f6368;
-  font-size: 13px;
-}
-body.os-theme .cmp_article_list .obj_article_summary p {
-  color: var(--ncu-text);
-  font-size: 15px;
-}
-@media (max-width: 782px) {
-  body.os-theme .cmp_article_list .obj_article_summary {
-    grid-template-columns: 113px minmax(0, 1fr);
-  }
-}
-
-/* List cards show the date and title only, as the WordPress list does. */
-body.os-theme .cmp_article_list .obj_article_summary p {
-  display: none;
-}
-body.os-theme .cmp_article_list .obj_article_summary .title,
-body.os-theme .cmp_article_list .obj_article_summary h2 {
-  margin: 4px 0 0;
-}
-body.os-theme .cmp_article_list .obj_article_summary .meta {
-  margin: 0;
-}
-/* Menu button: white with a grey border, as the WordPress theme's controls. */
-body.os-theme .os-nav__toggle {
-  background: var(--ncu-surface);
-  color: var(--ncu-text);
-  border: 1px solid var(--ncu-border);
-}
-body.os-theme .os-nav__toggle:hover {
-  background: var(--ncu-tile);
 }
