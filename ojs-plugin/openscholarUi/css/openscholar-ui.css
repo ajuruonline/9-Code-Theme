@@ -1,0 +1,158 @@
+/*!
+ * Open Scholar UI (OJS plugin): Open Scholar look for the public pages.
+ * White backgrounds, green used for text, outlines and solid buttons with white text.
+ * Never green behind green text. Distributed under the GNU GPL v3.
+ */
+:root {
+  --osui-green: #14532d;
+  --osui-green-2: #0f3f22;
+  --osui-text: #1f2d24;
+  --osui-muted: #5a6b61;
+  --osui-line: #d9e6dc;
+  --osui-hover: #e9f4ec;
+  --osui-radius: 12px;
+}
+
+body {
+  background: #fff !important;
+  color: var(--osui-text) !important;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Brand strip (added by the plugin) */
+.osui-brand {
+  background: #fff;
+  border-bottom: 1px solid var(--osui-line);
+  padding: 0 16px;
+}
+.osui-brand a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  color: var(--osui-green);
+  font-size: 18px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.osui-brand img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* Default header: white, green links, no green backgrounds */
+.pkp_structure_head,
+.pkp_site_nav_menu,
+.pkp_navigation_primary_row,
+.pkp_head_wrapper {
+  background: #fff !important;
+  color: var(--osui-text) !important;
+}
+.pkp_structure_head {
+  border-bottom: 1px solid var(--osui-line);
+}
+.pkp_site_name,
+.pkp_site_name a {
+  display: none !important; /* the brand strip replaces the default name */
+}
+.pkp_navigation_primary a,
+.pkp_navigation_user a,
+.pkp_site_nav_menu a,
+.pkp_search {
+  color: var(--osui-green) !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+.pkp_navigation_primary a:hover,
+.pkp_navigation_primary li.current a {
+  background: var(--osui-hover) !important;
+  color: var(--osui-green-2) !important;
+  border-radius: 10px;
+}
+.pkp_navigation_user a,
+.pkp_search {
+  border: 2px solid var(--osui-green);
+  border-radius: 999px;
+  padding: 6px 14px;
+}
+.pkp_site_nav_toggle,
+.pkp_site_nav_toggle span {
+  color: var(--osui-green) !important;
+  background: #fff !important;
+}
+
+/* Content */
+.obj_article_summary,
+.obj_issue_summary,
+.obj_announcement_summary,
+.pkp_block,
+.cmp_breadcrumbs {
+  background: #fff;
+  border: 1px solid var(--osui-line);
+  border-radius: var(--osui-radius);
+}
+h1, h2, h3, h4 {
+  color: var(--osui-green) !important;
+}
+a {
+  color: var(--osui-green);
+}
+a:hover {
+  color: var(--osui-green-2);
+}
+
+/* Buttons: solid green with white text only */
+.pkp_button,
+button.pkp_button,
+.cmp_button {
+  background: var(--osui-green) !important;
+  border: 2px solid var(--osui-green) !important;
+  border-radius: 999px !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+.pkp_button:hover,
+button.pkp_button:hover,
+.cmp_button:hover {
+  background: var(--osui-green-2) !important;
+  border-color: var(--osui-green-2) !important;
+}
+
+/* Fields and tabs: rounded */
+input, select, textarea {
+  border-radius: 8px !important;
+  color: var(--osui-text) !important;
+}
+.ui-tabs-nav li a,
+[role="tab"] {
+  border-radius: 999px !important;
+}
+table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Footer: white with a green rule; text stays dark */
+.pkp_structure_footer_wrapper,
+.pkp_structure_footer {
+  background: #fff !important;
+  color: var(--osui-text) !important;
+  border-top: 3px solid var(--osui-green);
+}
+.pkp_structure_footer a {
+  color: var(--osui-green) !important;
+}
+.osui-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  color: var(--osui-green);
+  font-weight: 800;
+}
+.osui-footer-brand img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
