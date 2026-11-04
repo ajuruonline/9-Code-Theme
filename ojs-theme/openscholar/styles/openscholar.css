@@ -1,28 +1,38 @@
 /*!
- * Open Journal System theme: Open Scholar look (1.0.2).
- * White pages, green used for text, outlines and solid buttons only.
- * Green is never placed behind green text.
- * Phones: a white menu bar at the bottom ("Menu" and "Search"), opening a numbered list.
- * Desktop: a white menu bar across the top.
+ * Open Journal System theme: Open Scholar brand, futuristic green (1.1.0).
+ *
+ * Design: a clean light base, glowing green accents, gradient rules, soft glass surfaces,
+ * generous rounding (no square corners) and clear focus rings. Green text sits only on white
+ * or mint surfaces; white text sits only on green gradients. Branding only: no functions change.
  * Distributed under the GNU GPL v3.
  */
 
 :root {
-  --os-green: #14532d;
-  --os-green-2: #0f3f22;
-  --os-text: #1f2d24;
-  --os-muted: #5a6b61;
-  --os-line: #d9e6dc;
-  --os-soft: #f5faf6;
-  --os-hover: #e9f4ec;
-  --os-focus: #22c55e;
-  --os-radius: 12px;
-  --os-pill: 999px;
+  --os-ink: #0d2818;
+  --os-text: #1d3326;
+  --os-muted: #557062;
+  --os-green-900: #0b3b20;
+  --os-green-700: #14532d;
+  --os-green-500: #16a34a;
+  --os-green-400: #22c55e;
+  --os-green-200: #bbf7d0;
+  --os-green-100: #dcfce7;
+  --os-mint: #f0fdf4;
+  --os-line: #d1ecd9;
+  --os-glow: 0 0 0 4px rgba(34, 197, 94, 0.28);
+  --os-shadow: 0 10px 30px -12px rgba(11, 59, 32, 0.22), 0 2px 6px rgba(11, 59, 32, 0.06);
+  --os-grad: linear-gradient(135deg, #0b3b20 0%, #14532d 45%, #16a34a 100%);
+  --os-grad-line: linear-gradient(90deg, transparent, #22c55e 30%, #16a34a 60%, transparent);
+  --os-radius-xl: 22px;
+  --os-radius-lg: 16px;
+  --os-radius-md: 12px;
+  --os-radius-pill: 999px;
   --os-touch: 48px;
-  --os-font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --os-font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --os-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 
-/* ---------- Layout: the page scrolls in its own area; the menu bar stays in the layout ---------- */
+/* ---------- Base ---------- */
 html,
 body.os-theme {
   height: 100%;
@@ -32,11 +42,15 @@ body.os-theme {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: #fff;
+  background:
+    radial-gradient(1200px 500px at 10% -10%, rgba(34, 197, 94, 0.08), transparent 60%),
+    radial-gradient(900px 400px at 110% 0%, rgba(22, 163, 74, 0.07), transparent 60%),
+    #fbfefc;
   color: var(--os-text);
   font-family: var(--os-font);
   font-size: 16px;
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 body.os-theme .os-page {
   flex: 1 1 auto;
@@ -44,31 +58,39 @@ body.os-theme .os-page {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  background: #fff;
 }
 
-/* ---------- Text and links: dark text, green links, no green backgrounds ---------- */
+/* Headings and links */
 body.os-theme h1,
 body.os-theme h2,
-body.os-theme h3 {
-  color: var(--os-green);
+body.os-theme h3,
+body.os-theme h4 {
+  color: var(--os-ink);
   font-family: var(--os-font);
-  font-weight: 700;
-  line-height: 1.25;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+body.os-theme h1 {
+  font-size: clamp(1.6rem, 2.4vw + 1rem, 2.4rem);
 }
 body.os-theme a {
-  color: var(--os-green);
+  color: var(--os-green-700);
+  text-decoration-color: rgba(22, 163, 74, 0.45);
   text-underline-offset: 3px;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 body.os-theme a:hover {
-  color: var(--os-green-2);
+  color: var(--os-green-500);
+  text-decoration-color: var(--os-green-500);
 }
 body.os-theme :focus-visible {
-  outline: 3px solid var(--os-focus);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--os-glow);
+  border-radius: 10px;
 }
 
-/* Skip links: hidden until a keyboard user tabs to them. */
+/* Skip links: hidden until keyboard focus */
 body.os-theme .cmp_skip_to_content a:not(:focus) {
   position: absolute;
   width: 1px;
@@ -79,170 +101,372 @@ body.os-theme .cmp_skip_to_content a:not(:focus) {
 }
 body.os-theme .cmp_skip_to_content a:focus {
   position: fixed;
-  top: 8px;
-  left: 8px;
-  z-index: 2000;
-  padding: 10px 16px;
-  border: 2px solid var(--os-green);
-  border-radius: var(--os-pill);
-  background: #fff;
-  color: var(--os-green);
+  top: 10px;
+  left: 10px;
+  z-index: 3000;
+  padding: 10px 18px;
+  border-radius: var(--os-radius-pill);
+  background: var(--os-grad);
+  color: #fff;
   font-weight: 700;
+  box-shadow: var(--os-glow);
 }
 
-/* ---------- Header: white, with the journal name in green ---------- */
+/* ---------- Header: glass strip with a glowing rule ---------- */
 body.os-theme .os-head {
-  background: #fff;
-  border-bottom: 1px solid var(--os-line);
+  position: relative;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+}
+body.os-theme .os-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--os-grad-line);
+  opacity: 0.9;
 }
 body.os-theme .os-head__brand,
 body.os-theme .os-head__brand:hover,
 body.os-theme .os-head__brand:focus {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: 64px;
-  padding: 12px 16px;
+  gap: 14px;
+  min-height: 70px;
+  padding: 12px 18px;
   box-sizing: border-box;
-  color: var(--os-green);
+  color: var(--os-ink);
   text-decoration: none;
 }
 body.os-theme .os-head__cap {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  padding: 6px;
+  border-radius: var(--os-radius-md);
+  background: var(--os-grad);
+  box-shadow: 0 6px 18px -6px rgba(22, 163, 74, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   object-fit: contain;
   flex: 0 0 auto;
+  filter: brightness(1.15) contrast(1.05);
 }
 body.os-theme .os-head__name {
   font-size: 18px;
-  font-weight: 800;
-  line-height: 1.25;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   overflow-wrap: anywhere;
   min-width: 0;
+  color: var(--os-ink);
 }
 
 /* ---------- Content ---------- */
 body.os-theme .pkp_structure_content {
-  max-width: 1100px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 20px 16px 16px;
+  padding: 24px 18px 20px;
   box-sizing: border-box;
 }
 body.os-theme .pkp_structure_main {
   min-width: 0;
 }
+
+/* Cards: frosted white panels with a soft green edge */
 body.os-theme .cmp_article_list .obj_article_summary,
 body.os-theme .obj_issue_summary,
 body.os-theme .obj_announcement_summary,
 body.os-theme .obj_galley_link,
 body.os-theme .pkp_block {
-  background: #fff;
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
   border: 1px solid var(--os-line);
-  border-radius: var(--os-radius);
+  border-radius: var(--os-radius-lg);
+  box-shadow: var(--os-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 body.os-theme .cmp_article_list .obj_article_summary,
 body.os-theme .obj_issue_summary {
-  padding: 16px 18px;
-  margin-bottom: 14px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
 }
-body.os-theme .pkp_block {
-  padding: 14px 16px;
-  background: var(--os-soft);
+body.os-theme .cmp_article_list .obj_article_summary:hover,
+body.os-theme .obj_issue_summary:hover {
+  transform: translateY(-2px);
+  border-color: var(--os-green-400);
+  box-shadow: var(--os-shadow), 0 0 0 1px rgba(34, 197, 94, 0.25);
 }
-body.os-theme .pkp_block .title {
-  color: var(--os-green);
-  font-size: 15px;
-  font-weight: 800;
-}
-
-/* ---------- Buttons and fields ---------- */
-body.os-theme .pkp_button,
-body.os-theme button.pkp_button,
-body.os-theme .cmp_button {
-  min-height: var(--os-touch);
-  padding: 10px 20px;
-  border: 2px solid var(--os-green);
-  border-radius: var(--os-pill);
-  background: var(--os-green);
-  color: #fff;
+body.os-theme .cmp_article_list .title a,
+body.os-theme .obj_article_summary h2 a {
+  color: var(--os-ink);
   font-weight: 700;
   text-decoration: none;
+}
+body.os-theme .obj_article_summary h2 a:hover {
+  color: var(--os-green-500);
+}
+body.os-theme .pkp_block {
+  padding: 16px 18px;
+  background: linear-gradient(180deg, #ffffff, var(--os-mint));
+}
+body.os-theme .pkp_block .title {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: var(--os-radius-pill);
+  background: var(--os-green-100);
+  color: var(--os-green-700);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Breadcrumbs and meta: small mono labels */
+body.os-theme .cmp_breadcrumbs,
+body.os-theme .cmp_breadcrumbs li,
+body.os-theme .obj_article_details .meta {
+  font-family: var(--os-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--os-muted);
+}
+
+/* ---------- Buttons: gradient, glowing on hover ---------- */
+body.os-theme .pkp_button,
+body.os-theme button.pkp_button,
+body.os-theme .cmp_button,
+body.os-theme .pkp_form .submit_button button {
+  position: relative;
+  min-height: var(--os-touch);
+  padding: 10px 22px;
+  border: 0;
+  border-radius: var(--os-radius-pill);
+  background: var(--os-grad);
+  background-size: 160% 160%;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
   cursor: pointer;
+  box-shadow: 0 8px 22px -10px rgba(22, 163, 74, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: background-position 0.4s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
 body.os-theme .pkp_button:hover,
 body.os-theme button.pkp_button:hover,
 body.os-theme .cmp_button:hover {
-  background: var(--os-green-2);
-  border-color: var(--os-green-2);
+  background-position: 100% 50%;
+  box-shadow: 0 10px 28px -8px rgba(34, 197, 94, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.22);
   color: #fff;
+  transform: translateY(-1px);
 }
+body.os-theme .pkp_button:active,
+body.os-theme button.pkp_button:active {
+  transform: translateY(0);
+}
+body.os-theme .pkp_button--secondary,
+body.os-theme button.pkp_button--secondary {
+  background: #fff;
+  color: var(--os-green-700);
+  box-shadow: inset 0 0 0 2px var(--os-green-400);
+}
+body.os-theme .pkp_button--secondary:hover,
+body.os-theme button.pkp_button--secondary:hover {
+  background: var(--os-green-100);
+  color: var(--os-green-900);
+}
+
+/* ---------- Fields, tabs, tables ---------- */
 body.os-theme input,
 body.os-theme select,
 body.os-theme textarea {
-  min-height: 44px;
-  border-radius: 8px;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid #b7e4c4;
+  border-radius: var(--os-radius-md);
+  background: #fff;
+  color: var(--os-ink);
   font-family: var(--os-font);
-  color: var(--os-text);
+  box-shadow: inset 0 1px 2px rgba(11, 59, 32, 0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-body.os-theme table,
-body.os-theme .pkp_table {
-  border-radius: 8px;
+body.os-theme input:focus,
+body.os-theme select:focus,
+body.os-theme textarea:focus {
+  outline: none;
+  border-color: var(--os-green-400);
+  box-shadow: var(--os-glow);
+}
+body.os-theme [role="tablist"] {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--os-radius-pill);
+  background: var(--os-green-100);
+}
+body.os-theme [role="tab"],
+body.os-theme .ui-tabs-nav li a {
+  padding: 8px 16px;
+  border-radius: var(--os-radius-pill);
+  color: var(--os-green-700);
+  font-weight: 650;
+  text-decoration: none;
+}
+body.os-theme [role="tab"][aria-selected="true"],
+body.os-theme .ui-tabs-nav li.ui-tabs-active a {
+  background: var(--os-grad);
+  color: #fff;
+  box-shadow: 0 6px 16px -8px rgba(22, 163, 74, 0.9);
+}
+body.os-theme table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
   overflow: hidden;
+  border: 1px solid var(--os-line);
+  border-radius: var(--os-radius-md);
+  background: #fff;
+}
+body.os-theme th {
+  padding: 10px 12px;
+  background: var(--os-mint);
+  color: var(--os-green-700);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+}
+body.os-theme td {
+  padding: 10px 12px;
+  border-top: 1px solid var(--os-line);
 }
 
-/* ---------- Footer: white, with a green rule and the journal name in green ---------- */
-body.os-theme .os-footer {
-  margin-top: 40px;
-  padding: 28px 0;
-  background: #fff;
-  border-top: 3px solid var(--os-green);
+/* ---------- Dialogs (OJS modals and popups): frosted panel, glowing edge ---------- */
+body.os-theme .pkp_modal_wrapper,
+body.os-theme .pkp_modal_overlay,
+body.os-theme .ui-widget-overlay {
+  z-index: 10000 !important;
+}
+body.os-theme .pkp_modal_overlay,
+body.os-theme .ui-widget-overlay {
+  background: rgba(7, 36, 20, 0.55) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+body.os-theme .pkp_modal_panel,
+body.os-theme .ui-dialog,
+body.os-theme .pkp_modal_content {
+  background: #fff !important;
+  border: 1px solid var(--os-line);
+  border-radius: var(--os-radius-xl) !important;
+  box-shadow: 0 30px 80px -20px rgba(7, 36, 20, 0.55), 0 0 0 1px rgba(34, 197, 94, 0.15) !important;
   color: var(--os-text);
+  overflow: hidden;
+}
+body.os-theme .pkp_modal_panel::before,
+body.os-theme .ui-dialog-titlebar {
+  content: "";
+  display: block;
+  height: 3px;
+  background: var(--os-grad-line);
+}
+body.os-theme .pkp_modal_title,
+body.os-theme .ui-dialog-title {
+  color: var(--os-ink) !important;
+  font-weight: 750;
+}
+body.os-theme .pkp_modal_close,
+body.os-theme .pkp_modal_panel_close_box,
+body.os-theme .ui-dialog-titlebar-close {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--os-green-100);
+  color: var(--os-green-700);
+  border: 0;
+  cursor: pointer;
+}
+body.os-theme .pkp_modal_close:hover,
+body.os-theme .pkp_modal_panel_close_box:hover {
+  background: var(--os-green-400);
+  color: #fff;
+}
+
+/* ---------- Footer: a glass panel with a glowing top rule ---------- */
+body.os-theme .os-footer {
+  position: relative;
+  margin-top: 48px;
+  padding: 34px 0 28px;
+  background: linear-gradient(180deg, rgba(240, 253, 244, 0.9), #ecfdf3);
+  border-top: 0;
+}
+body.os-theme .os-footer::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--os-grad-line);
 }
 body.os-theme .os-footer__inner {
   display: grid;
-  gap: 16px;
-  max-width: 1100px;
+  gap: 18px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 18px;
   box-sizing: border-box;
 }
 body.os-theme .os-footer__brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 body.os-theme .os-footer__cap {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
+  padding: 6px;
+  border-radius: var(--os-radius-md);
+  background: var(--os-grad);
   object-fit: contain;
+  filter: brightness(1.15);
 }
 body.os-theme .os-footer__name {
   margin: 0;
-  color: var(--os-green);
+  color: var(--os-ink);
   font-size: 17px;
   font-weight: 800;
+  letter-spacing: -0.01em;
 }
 body.os-theme .os-footer__by {
   margin: 0;
   color: var(--os-muted);
-  font-size: 13px;
+  font-family: var(--os-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 body.os-theme .os-footer__content {
   color: var(--os-text);
+  font-size: 14.5px;
 }
-body.os-theme .os-footer__powered img {
-  max-height: 34px;
-  width: auto;
+body.os-theme .os-footer__content a {
+  color: var(--os-green-700);
 }
 
-/* ---------- Menu bar: phones (default) ---------- */
+/* ---------- Menu bar: phones (bottom glass bar) ---------- */
 body.os-theme .os-nav {
   position: relative;
+  z-index: 500;
   flex: 0 0 auto;
   order: 2;
-  background: #fff;
-  border-top: 1px solid var(--os-line);
-  box-shadow: 0 -4px 14px rgba(8, 42, 27, 0.08);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: saturate(160%) blur(16px);
+  -webkit-backdrop-filter: saturate(160%) blur(16px);
+  border-top: 0;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -10px 30px -12px rgba(11, 59, 32, 0.25), 0 -1px 0 rgba(34, 197, 94, 0.35);
   padding-bottom: env(safe-area-inset-bottom);
   box-sizing: border-box;
 }
@@ -253,7 +477,7 @@ body.os-theme .os-nav__bar {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 12px 14px;
   box-sizing: border-box;
 }
 body.os-theme .os-nav__toggle {
@@ -262,20 +486,22 @@ body.os-theme .os-nav__toggle {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  min-height: var(--os-touch);
-  padding: 10px 20px;
-  border: 2px solid var(--os-green);
-  border-radius: var(--os-pill);
-  background: var(--os-green);
+  min-height: 54px;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: var(--os-radius-pill);
+  background: var(--os-grad);
+  background-size: 160% 160%;
   color: #fff;
   font: inherit;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  box-shadow: 0 10px 26px -10px rgba(22, 163, 74, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   cursor: pointer;
 }
 body.os-theme .os-nav__toggle:hover {
-  background: var(--os-green-2);
-  border-color: var(--os-green-2);
+  background-position: 100% 50%;
 }
 body.os-theme .os-nav__toggle-icon {
   display: inline-block;
@@ -291,61 +517,70 @@ body.os-theme .os-nav__search {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-width: var(--os-touch);
-  min-height: var(--os-touch);
-  padding: 0 16px;
-  border: 2px solid var(--os-green);
-  border-radius: var(--os-pill);
+  min-width: 54px;
+  min-height: 54px;
+  padding: 0 18px;
+  border: 1px solid var(--os-green-400);
+  border-radius: var(--os-radius-pill);
   background: #fff;
-  color: var(--os-green);
+  color: var(--os-green-700);
   font-weight: 700;
   text-decoration: none;
   box-sizing: border-box;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.08);
 }
 body.os-theme .os-nav__search:hover {
-  background: var(--os-hover);
+  background: var(--os-green-100);
 }
-/* Visible label on phones: "Menu" and "Search" are words, not only icons. */
 body.os-theme .os-nav__search-label,
 body.os-theme .os-nav__toggle-label {
   white-space: nowrap;
 }
 
-/* The menu sheet opens above the bar and is the only thing that covers the page, and only while open. */
+/* The menu sheet: frosted panel that rises above the bar */
 body.os-theme .os-nav__sheet {
   display: none;
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 100%;
+  left: 10px;
+  right: 10px;
+  bottom: calc(100% + 8px);
   max-height: 72vh;
   overflow-y: auto;
-  padding: 12px 12px 14px;
-  background: #fff;
-  border-top: 1px solid var(--os-line);
-  box-shadow: 0 -10px 26px rgba(8, 42, 27, 0.12);
+  padding: 14px 12px 16px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--os-line);
+  border-radius: var(--os-radius-xl);
+  box-shadow: 0 30px 60px -20px rgba(7, 36, 20, 0.45), 0 0 0 1px rgba(34, 197, 94, 0.12);
   box-sizing: border-box;
 }
 body.os-theme .pkp_site_nav_menu--isOpen .os-nav__sheet {
   display: block;
+  animation: os-rise 0.22s ease-out;
+}
+@keyframes os-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 body.os-theme .os-nav__sheet-title {
-  margin: 0 0 8px;
-  font-size: 13px;
+  margin: 2px 6px 10px;
+  font-family: var(--os-mono);
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--os-muted);
 }
 
-/* Numbered list: 1, 2, 3 ... so each item is easy to find and say. */
+/* Numbered, glowing menu items */
 body.os-theme .os-nav__links {
   list-style: none;
   margin: 0 0 12px;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   counter-reset: osmenu;
 }
 body.os-theme .os-nav__links li {
@@ -355,37 +590,41 @@ body.os-theme .os-nav__links li {
 body.os-theme .os-nav__links a {
   display: flex;
   align-items: center;
-  gap: 12px;
-  min-height: var(--os-touch);
-  padding: 8px 12px;
-  border-radius: 10px;
-  color: var(--os-text);
-  font-weight: 600;
+  gap: 14px;
+  min-height: 52px;
+  padding: 8px 14px;
+  border-radius: var(--os-radius-lg);
+  color: var(--os-ink);
+  font-weight: 650;
   text-decoration: none;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 body.os-theme .os-nav__links a::before {
-  content: counter(osmenu);
+  content: counter(osmenu, decimal-leading-zero);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 28px;
-  height: 28px;
-  border: 2px solid var(--os-green);
-  border-radius: 50%;
-  color: var(--os-green);
-  font-size: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--os-radius-md);
+  background: var(--os-grad);
+  color: #fff;
+  font-family: var(--os-mono);
+  font-size: 12px;
   font-weight: 800;
+  box-shadow: 0 6px 14px -6px rgba(22, 163, 74, 0.8);
 }
 body.os-theme .os-nav__links a:hover,
 body.os-theme .os-nav__links a:focus-visible,
 body.os-theme .os-nav__links li.current > a {
-  background: var(--os-hover);
-  color: var(--os-green);
+  background: var(--os-mint);
+  color: var(--os-green-700);
+  box-shadow: inset 0 0 0 1px var(--os-green-200);
 }
 body.os-theme .os-nav__account {
   border-top: 1px solid var(--os-line);
-  padding-top: 12px;
+  padding-top: 14px;
 }
 body.os-theme .os-nav__account-menu {
   list-style: none;
@@ -400,18 +639,19 @@ body.os-theme .os-nav__account-menu a {
   align-items: center;
   min-height: 44px;
   padding: 8px 18px;
-  border: 2px solid var(--os-green);
-  border-radius: var(--os-pill);
-  background: #fff;
-  color: var(--os-green);
+  border-radius: var(--os-radius-pill);
+  background: var(--os-grad);
+  color: #fff;
   font-weight: 700;
   text-decoration: none;
+  box-shadow: 0 8px 18px -10px rgba(22, 163, 74, 0.9);
 }
 body.os-theme .os-nav__account-menu a:hover {
-  background: var(--os-hover);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
-/* ---------- Menu bar: desktop ---------- */
+/* ---------- Menu bar: desktop (glass strip across the top) ---------- */
 @media (min-width: 783px) {
   body.os-theme .os-head {
     display: none;
@@ -421,11 +661,19 @@ body.os-theme .os-nav__account-menu a:hover {
     order: -1;
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 10px max(16px, calc((100% - 1100px) / 2 + 16px));
-    border-top: 0;
-    border-bottom: 1px solid var(--os-line);
-    box-shadow: none;
+    gap: 14px;
+    padding: 12px max(18px, calc((100% - 1120px) / 2 + 18px));
+    border-radius: 0;
+    box-shadow: 0 1px 0 rgba(34, 197, 94, 0.3), 0 8px 24px -16px rgba(11, 59, 32, 0.35);
+  }
+  body.os-theme .os-nav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 2px;
+    background: var(--os-grad-line);
   }
   body.os-theme .os-nav__bar {
     display: contents;
@@ -433,19 +681,24 @@ body.os-theme .os-nav__account-menu a:hover {
   body.os-theme .os-nav__brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     margin-right: auto;
     order: 1;
     min-width: 0;
-    color: var(--os-green);
+    color: var(--os-ink);
     font-size: 17px;
     font-weight: 800;
+    letter-spacing: -0.01em;
     text-decoration: none;
   }
   body.os-theme .os-nav__brand img {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
+    padding: 6px;
+    border-radius: var(--os-radius-md);
+    background: var(--os-grad);
     object-fit: contain;
+    filter: brightness(1.15);
   }
   body.os-theme .os-nav__toggle {
     display: none;
@@ -458,10 +711,14 @@ body.os-theme .os-nav__account-menu a:hover {
     overflow: visible;
     padding: 0;
     border: 0;
+    border-radius: 0;
     box-shadow: none;
-    align-items: center;
-    gap: 16px;
     background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    align-items: center;
+    gap: 14px;
+    animation: none;
   }
   body.os-theme .os-nav__sheet-title {
     display: none;
@@ -469,15 +726,16 @@ body.os-theme .os-nav__account-menu a:hover {
   body.os-theme .os-nav__links {
     flex-direction: row;
     margin: 0;
-    gap: 2px;
+    gap: 4px;
   }
   body.os-theme .os-nav__links li {
     counter-increment: none;
   }
   body.os-theme .os-nav__links a {
     min-height: 40px;
-    padding: 8px 12px;
+    padding: 8px 14px;
     font-size: 15px;
+    border-radius: var(--os-radius-pill);
   }
   body.os-theme .os-nav__links a::before {
     display: none;
@@ -488,19 +746,46 @@ body.os-theme .os-nav__account-menu a:hover {
   }
   body.os-theme .os-nav__account-menu a {
     min-height: 40px;
-    padding: 6px 14px;
+    padding: 6px 16px;
     font-size: 14px;
   }
   body.os-theme .os-nav__search {
     order: 3;
     min-height: 40px;
-    border-width: 2px;
+    border-width: 1px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.os-theme * {
+  body.os-theme *,
+  body.os-theme *::before,
+  body.os-theme *::after {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* Layout fixes: menu items and account buttons stay on one line; the phone sheet is solid. */
+body.os-theme .os-nav__links a,
+body.os-theme .os-nav__account-menu a,
+body.os-theme .os-nav__brand span {
+  white-space: nowrap;
+}
+@media (min-width: 783px) {
+  body.os-theme .os-nav__links {
+    flex-wrap: nowrap;
+  }
+  body.os-theme .os-nav__account {
+    flex: 0 0 auto;
+  }
+  body.os-theme .os-nav__account-menu {
+    flex-wrap: nowrap;
+  }
+  body.os-theme .os-nav__brand span {
+    white-space: normal;
+  }
+}
+body.os-theme .pkp_site_nav_menu--isOpen .os-nav__sheet {
+  background: #fff;
+  animation: none;
 }
