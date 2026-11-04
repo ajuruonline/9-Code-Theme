@@ -1,4 +1,4 @@
-# Open Scholar theme for Open Journal Systems (OJS)
+# Open Journal System theme (Open Scholar look for OJS)
 
 This theme gives a journal the Open Scholar header, footer and look. It is a theme plugin for OJS 3.5.
 It changes only the header, the footer and the styles. OJS itself is not changed.
@@ -16,7 +16,7 @@ It changes only the header, the footer and the styles. OJS itself is not changed
 
 1. Zip the `openscholar` folder so that the zip contains `openscholar/` at its top level.
 2. In OJS, open **Settings → Website → Plugins** (the Plugins tab) and choose **Upload A New Plugin**. Pick the zip and install it.
-3. Make the theme active: **Settings → Website → Appearance**, then set **Theme** to **Open Scholar**.
+3. Make the theme active: **Settings → Website → Appearance**, then set **Theme** to **Open Journal System**.
 
 Install it through the Plugins tab. Do not copy it into OJS's core folders.
 

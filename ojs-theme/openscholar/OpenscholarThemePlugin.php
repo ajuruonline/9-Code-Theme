@@ -50,7 +50,7 @@ class OpenscholarThemePlugin extends ThemePlugin
      */
     public function getDisplayName()
     {
-        return 'Open Scholar';
+        return 'Open Journal System';
     }
 
     /**
@@ -58,6 +58,6 @@ class OpenscholarThemePlugin extends ThemePlugin
      */
     public function getDescription()
     {
-        return 'The Open Scholar header, footer and look for journals. Built on the default theme; no OJS code is changed.';
+        return 'The Open Scholar header, navigation, footer and look for journals. Built on the default theme; no OJS code is changed.';
     }
 }
