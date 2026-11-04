@@ -114,12 +114,6 @@ function StylesSidebar(){
             el(c.TextControl,{label:'Text',type:'color',value:meta.ncu_ai_text_color||'#000000',onChange:function(v){setMeta('ncu_ai_text_color',v);}}),
             el(c.TextControl,{label:'Accent',type:'color',value:meta.ncu_ai_accent_color||'#000000',onChange:function(v){setMeta('ncu_ai_accent_color',v);}})
         ),
-        el(c.PanelBody,{title:'Advanced page style',initialOpen:false},
-            el(c.TextareaControl,{label:'Page-scoped CSS',help:'Small page-specific visual corrections only.',value:meta.ncu_page_css||'',onChange:function(v){setMeta('ncu_page_css',v);}}),
-            el(c.Button,{variant:'secondary',href:cfg.designUrl},'Global Design System'),
-            el(c.Button,{variant:'tertiary',href:cfg.styleAuthorityUrl},'Style Authority'),
-            el(c.Button,{variant:'tertiary',href:cfg.buildersUrl},'Builder defaults')
-        ),
         el(c.PanelBody,{title:'AI style exchange',initialOpen:false},
             el(c.Button,{variant:'secondary',onClick:function(){fetchJson(cfg.restBase+'/ai-export/'+cfg.postId).then(function(data){download((cfg.fileBase||('9code-page-'+cfg.postId))+'-ai-builder.json',data);}).catch(function(e){notice(e.message||'Export failed.','error');});}},'Export page style package'),
             el(FileImportButton,{label:'Import page style package',onRead:function(err,pkg){if(err){notice('Invalid JSON file.','error');return;}if(!window.confirm('Import this presentation package into the current page?')){return;}postJson(cfg.restBase+'/ai-import/'+cfg.postId,pkg).then(function(){applyPackageToEditor(pkg);notice('Style package imported. Save/update the post.');}).catch(function(e){notice(e.message||'Import failed.','error');});}})
