@@ -463,3 +463,28 @@ body.os-theme .os-nav__account-menu a:hover { background: var(--os-green-2); col
 @media (prefers-reduced-motion: reduce) {
   body.os-theme * { transition: none !important; animation: none !important; }
 }
+
+/* Skip links: hidden until a keyboard user tabs to them, then shown at the top of the page. */
+body.os-theme .cmp_skip_to_content {
+  position: static;
+}
+body.os-theme .cmp_skip_to_content a:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+body.os-theme .cmp_skip_to_content a:focus {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 10px 16px;
+  border-radius: var(--os-pill);
+  background: #fff;
+  color: var(--os-green);
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(8, 42, 27, 0.25);
+}
