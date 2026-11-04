@@ -305,3 +305,48 @@ body.os-theme .os-footer {
   body.os-theme .pkp_structure_content { padding: 16px 14px; }
   .os-footer__inner { padding: 0 14px; }
 }
+
+/* ---------- Navigation bar at the bottom of the screen (on every width) ---------- */
+body.os-theme .os-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  z-index: 1000;
+  border-top: 1px solid var(--os-line);
+  border-bottom: 0;
+  box-shadow: 0 -4px 14px rgba(8, 42, 27, 0.12);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+body.os-theme {
+  padding-bottom: 72px;
+}
+body.os-theme .os-nav .pkp_navigation_primary > li > a {
+  border-bottom: 0;
+  border-top: 3px solid transparent;
+  text-align: center;
+}
+body.os-theme .os-nav .pkp_navigation_primary > li > a:hover,
+body.os-theme .os-nav .pkp_navigation_primary > li.current > a {
+  border-top-color: var(--os-focus);
+}
+body.os-theme .os-nav .pkp_navigation_primary {
+  justify-content: space-around;
+}
+/* On phones the menu list opens upward, above the bar. */
+@media (max-width: 782px) {
+  body.os-theme .os-nav__inner {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  body.os-theme .os-nav .pkp_navigation_primary {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  body.os-theme .os-nav .pkp_navigation_primary > li > a {
+    border-top: 0;
+    border-bottom: 1px solid var(--os-line);
+    text-align: left;
+  }
+}
