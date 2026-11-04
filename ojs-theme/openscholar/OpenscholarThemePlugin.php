@@ -27,9 +27,23 @@ class OpenscholarThemePlugin extends ThemePlugin
     {
         $this->setParent('default');
 
+        $this->addOption('accentColour', 'FieldColor', [
+            'label' => 'Accent colour',
+            'description' => 'The main green used for the header, buttons and footer. Pick a dark colour so white text stays easy to read.',
+            'default' => '#14532d',
+        ]);
+
         // The Open Scholar navigation and footer styles, then the Open Scholar look on top.
         $this->addStyle('ninestagram', 'styles/ninestagram.css');
         $this->addStyle('openscholar', 'styles/openscholar.css');
+
+        $accent = $this->getOption('accentColour');
+        if (is_string($accent) && preg_match('/^#[0-9a-fA-F]{6}$/', $accent) && strtolower($accent) !== '#14532d') {
+            $this->addStyle('openscholarAccent', ':root{--os-green:' . $accent . ';--os-green-2:' . $accent . ';}', ['inline' => true]);
+        }
+
+        // Keeps the bottom navigation bar from covering the page.
+        $this->addScript('openscholar', 'js/openscholar.js');
     }
 
     /**
