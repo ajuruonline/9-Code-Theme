@@ -47,6 +47,11 @@ class OpenscholarUiPlugin extends GenericPlugin
         if (!is_string($output) || strpos($output, 'pkp_structure_page') === false) {
             return false;
         }
+
+        // Public pages show the journal, not the software: remove the OJS/PKP brand and its "about" links.
+        $output = preg_replace('~<div class="pkp_brand_footer">.*?</div>~s', '', $output);
+        $output = preg_replace('~<a[^>]*aboutThisPublishingSystem[^>]*>.*?</a>~s', '', $output);
+
         if (strpos($output, 'os-theme') !== false) {
             return false; // The Open Journal System theme already provides this look.
         }

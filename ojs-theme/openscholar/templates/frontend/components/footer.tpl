@@ -39,11 +39,6 @@
 				</div>
 			{/if}
 
-			<div class="os-footer__powered pkp_brand_footer">
-				<a href="{url page="about" op="aboutThisPublishingSystem"}">
-					<img alt="{translate key="about.aboutThisPublishingSystem"}" src="{$baseUrl}/{$brandImage}">
-				</a>
-			</div>
 		</div>
 	</footer><!-- .os-footer -->
 

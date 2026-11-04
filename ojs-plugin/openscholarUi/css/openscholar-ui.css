@@ -156,3 +156,9 @@ table {
   height: 32px;
   object-fit: contain;
 }
+
+/* Public pages do not show the software name or its brand image. */
+.pkp_brand_footer,
+a[href*="aboutThisPublishingSystem"] {
+  display: none !important;
+}
