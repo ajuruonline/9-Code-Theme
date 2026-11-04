@@ -1,0 +1,307 @@
+/*!
+ * Open Scholar look for Open Journal Systems.
+ * Loaded after the default theme, so these rules win where they overlap.
+ * Distributed under the GNU GPL v3.
+ */
+
+:root {
+  --os-green: #14532d;
+  --os-green-2: #17492f;
+  --os-ink: #132c20;
+  --os-muted: #4b5f53;
+  --os-soft: #f7fbf8;
+  --os-line: #d4e5d8;
+  --os-focus: #22c55e;
+  --os-radius: 12px;
+  --os-font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---------- Page base ---------- */
+body.os-theme {
+  font-family: var(--os-font);
+  color: var(--os-ink);
+  background: #fff;
+  font-size: 16px;
+  line-height: 1.55;
+}
+body.os-theme h1,
+body.os-theme h2,
+body.os-theme h3,
+body.os-theme h4 {
+  font-family: var(--os-font);
+  color: var(--os-green);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+body.os-theme a { color: var(--os-green-2); }
+body.os-theme a:hover { color: var(--os-green); }
+body.os-theme :focus-visible { outline: 3px solid var(--os-focus); outline-offset: 2px; }
+
+body.os-theme .pkp_structure_content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  box-sizing: border-box;
+}
+
+/* ---------- Header: green Open Scholar bar ---------- */
+body.os-theme .os-head {
+  background: var(--os-green);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(8, 42, 27, 0.25);
+}
+.os-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+.os-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  color: #fff;
+  text-decoration: none;
+}
+.os-brand:hover { color: #fff; }
+.os-brand__cap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #fff;
+  flex: 0 0 auto;
+}
+.os-brand__name {
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.os-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+.os-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.os-icon-link:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.os-account .pkp_navigation_user,
+.os-account .os-account__menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.os-account li a,
+.os-account li a:visited {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--os-green);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.os-account li a:hover { background: #e7f3ea; color: var(--os-green); }
+
+/* Navigation row: white, under the green bar */
+body.os-theme .os-nav {
+  display: block;
+  position: relative;
+  float: none;
+  width: auto;
+  height: auto;
+  background: #fff;
+  border-bottom: 1px solid var(--os-line);
+}
+.os-nav__toggle { display: none; }
+.os-nav__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.os-nav .pkp_navigation_primary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.os-nav .pkp_navigation_primary > li > a {
+  display: block;
+  padding: 12px 12px;
+  color: var(--os-ink);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+.os-nav .pkp_navigation_primary > li > a:hover,
+.os-nav .pkp_navigation_primary > li.current > a {
+  color: var(--os-green);
+  border-bottom-color: var(--os-focus);
+}
+
+/* ---------- Cards and lists ---------- */
+body.os-theme .cmp_article_list .obj_article_summary,
+body.os-theme .obj_issue_summary,
+body.os-theme .obj_announcement_summary,
+body.os-theme .obj_galley_link,
+body.os-theme .cmp_breadcrumbs,
+body.os-theme .pkp_block {
+  border: 1px solid var(--os-line);
+  border-radius: var(--os-radius);
+  background: #fff;
+}
+body.os-theme .cmp_article_list .obj_article_summary,
+body.os-theme .obj_issue_summary {
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 2px rgba(8, 42, 27, 0.05);
+}
+body.os-theme .pkp_block {
+  padding: 14px 16px;
+  background: var(--os-soft);
+}
+body.os-theme .pkp_block .title {
+  color: var(--os-green);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* ---------- Buttons ---------- */
+body.os-theme .pkp_button,
+body.os-theme button.pkp_button,
+body.os-theme .cmp_button {
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 1px solid var(--os-green);
+  border-radius: 999px;
+  background: var(--os-green);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+body.os-theme .pkp_button:hover,
+body.os-theme button.pkp_button:hover,
+body.os-theme .cmp_button:hover {
+  background: var(--os-green-2);
+  border-color: var(--os-green-2);
+  color: #fff;
+}
+
+/* ---------- Footer: green Open Scholar band ---------- */
+body.os-theme .os-footer {
+  background: var(--os-green);
+  color: #e6f2ea;
+  margin-top: 48px;
+  padding: 28px 0 36px;
+}
+.os-footer__inner {
+  display: grid;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.os-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.os-footer__cap {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: #fff;
+  object-fit: cover;
+}
+.os-footer__name {
+  margin: 0;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+}
+.os-footer__by {
+  margin: 0;
+  color: #b9d9c4;
+  font-size: 13px;
+}
+.os-footer__content,
+.os-footer__content a { color: #e6f2ea; }
+.os-footer__content a:hover { color: #fff; }
+.os-footer__powered img {
+  max-height: 34px;
+  width: auto;
+  padding: 4px;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* ---------- Phone: the menu opens from a full-width bar ---------- */
+@media (max-width: 782px) {
+  .os-topbar { padding: 10px 14px; }
+  .os-brand__name { font-size: 16px; }
+  .os-icon-link__label { display: none; }
+  .os-icon-link { padding: 6px 10px; min-width: 40px; justify-content: center; }
+  .os-account li a { min-height: 40px; padding: 6px 10px; }
+
+  .os-nav__toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding: 10px 14px;
+    border: 0;
+    background: #fff;
+    color: var(--os-green);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+  .os-nav__toggle-icon {
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
+    margin: 0 4px 6px 2px;
+  }
+  .os-nav__inner { display: none; padding: 0 8px 10px; }
+  .pkp_site_nav_menu--isOpen .os-nav__inner { display: block; }
+  .os-nav .pkp_navigation_primary { flex-direction: column; gap: 0; }
+  .os-nav .pkp_navigation_primary > li > a {
+    padding: 14px 10px;
+    border-bottom: 1px solid var(--os-line);
+  }
+  body.os-theme .pkp_structure_content { padding: 16px 14px; }
+  .os-footer__inner { padding: 0 14px; }
+}
