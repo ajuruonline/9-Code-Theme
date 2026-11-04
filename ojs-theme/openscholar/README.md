@@ -1,6 +1,6 @@
 # Open Scholar theme for Open Journal Systems (OJS)
 
-This theme gives a journal the Open Scholar header, footer and look. It is a theme plugin for OJS 3.4.
+This theme gives a journal the Open Scholar header, footer and look. It is a theme plugin for OJS 3.5.
 It changes only the header, the footer and the styles. OJS itself is not changed.
 
 ## What it does
@@ -32,6 +32,6 @@ Install it through the Plugins tab. Do not copy it into OJS's core folders.
 
 ## Notes
 
-- Tested: PHP syntax, the plugin XML against OJS's own DTDs, and template tag balance, against the OJS 3.4 source (`stable-3_4_0`).
+- Tested: PHP syntax, the plugin XML against OJS's own DTDs, and template tag balance, against the OJS 3.5 source (`stable-3_5_0`).
 - Not yet tested: a live journal. Check the header, footer and phone menu on a journal before publishing.
 - To change the colours, edit the `:root` block at the top of `styles/openscholar.css`.

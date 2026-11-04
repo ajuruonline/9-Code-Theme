@@ -26,7 +26,7 @@
 			{include file="frontend/components/skipLinks.tpl"}
 
 			<div class="os-topbar">
-				{capture assign="homeUrl"}{url page="index" router=\PKP\core\PKPApplication::ROUTE_PAGE}{/capture}
+				{capture assign="homeUrl"}{url page="index" router=PKP\core\PKPApplication::ROUTE_PAGE}{/capture}
 				<a class="os-brand" href="{$homeUrl}">
 					<img class="os-brand__cap" src="{$baseUrl}/plugins/themes/openscholar/images/open-scholar-cap.jpg" alt="Open Scholar" width="40" height="40">
 					<span class="os-brand__name">
