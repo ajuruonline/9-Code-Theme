@@ -1,38 +1,26 @@
 /*!
- * Open Journal System theme: Open Scholar brand, futuristic green (1.1.0).
- *
- * Design: a clean light base, glowing green accents, gradient rules, soft glass surfaces,
- * generous rounding (no square corners) and clear focus rings. Green text sits only on white
- * or mint surfaces; white text sits only on green gradients. Branding only: no functions change.
+ * Open Journal System theme: matched to the Open Scholar "Open Theme" (green edition) public pages.
+ * Tokens, type scale, card and article layout copied from the WordPress theme's main.css and theme.json.
+ * Public pages are white with black text; the green edition's green is used only where the WordPress
+ * theme uses it (the admin launcher), so it is not used here.
  * Distributed under the GNU GPL v3.
  */
 
 :root {
-  --os-ink: #0d2818;
-  --os-text: #1d3326;
-  --os-muted: #557062;
-  --os-green-900: #0b3b20;
-  --os-green-700: #14532d;
-  --os-green-500: #16a34a;
-  --os-green-400: #22c55e;
-  --os-green-200: #bbf7d0;
-  --os-green-100: #dcfce7;
-  --os-mint: #f0fdf4;
-  --os-line: #d1ecd9;
-  --os-glow: 0 0 0 4px rgba(34, 197, 94, 0.28);
-  --os-shadow: 0 10px 30px -12px rgba(11, 59, 32, 0.22), 0 2px 6px rgba(11, 59, 32, 0.06);
-  --os-grad: linear-gradient(135deg, #0b3b20 0%, #14532d 45%, #16a34a 100%);
-  --os-grad-line: linear-gradient(90deg, transparent, #22c55e 30%, #16a34a 60%, transparent);
-  --os-radius-xl: 22px;
-  --os-radius-lg: 16px;
-  --os-radius-md: 12px;
-  --os-radius-pill: 999px;
-  --os-touch: 48px;
-  --os-font: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --os-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --ncu-accent: #000;
+  --ncu-surface: #fff;
+  --ncu-text: #000;
+  --ncu-muted: #5f6368;
+  --ncu-soft: #f6f7f8;
+  --ncu-border: #e5e7eb;
+  --ncu-max: 1180px;
+  --ncu-radius: 16px;
+  --ncu-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --ncu-space: clamp(18px, 3vw, 32px);
+  --ncu-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* ---------- Base ---------- */
+/* ---------- Layout: the page scrolls in its own area; the menu bar stays in the layout ---------- */
 html,
 body.os-theme {
   height: 100%;
@@ -42,15 +30,11 @@ body.os-theme {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background:
-    radial-gradient(1200px 500px at 10% -10%, rgba(34, 197, 94, 0.08), transparent 60%),
-    radial-gradient(900px 400px at 110% 0%, rgba(22, 163, 74, 0.07), transparent 60%),
-    #fbfefc;
-  color: var(--os-text);
-  font-family: var(--os-font);
+  background: var(--ncu-surface);
+  color: var(--ncu-text);
+  font-family: var(--ncu-font);
   font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
 }
 body.os-theme .os-page {
   flex: 1 1 auto;
@@ -60,34 +44,35 @@ body.os-theme .os-page {
   overscroll-behavior: contain;
 }
 
-/* Headings and links */
-body.os-theme h1,
+/* ---------- Type: same scale as the WordPress theme ---------- */
+body.os-theme h1 {
+  font-size: clamp(32px, 6vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  margin: 0.15em 0 0.28em;
+  font-weight: 700;
+  color: var(--ncu-text);
+  max-width: 14ch;
+}
 body.os-theme h2,
 body.os-theme h3,
 body.os-theme h4 {
-  color: var(--os-ink);
-  font-family: var(--os-font);
-  font-weight: 750;
+  color: var(--ncu-text);
+  font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
 }
-body.os-theme h1 {
-  font-size: clamp(1.6rem, 2.4vw + 1rem, 2.4rem);
-}
 body.os-theme a {
-  color: var(--os-green-700);
-  text-decoration-color: rgba(22, 163, 74, 0.45);
+  color: var(--ncu-text);
   text-underline-offset: 3px;
-  transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 body.os-theme a:hover {
-  color: var(--os-green-500);
-  text-decoration-color: var(--os-green-500);
+  text-decoration: underline;
 }
 body.os-theme :focus-visible {
-  outline: none;
-  box-shadow: var(--os-glow);
-  border-radius: 10px;
+  outline: 2px solid var(--ncu-accent);
+  outline-offset: 2px;
+  border-radius: 8px;
 }
 
 /* Skip links: hidden until keyboard focus */
@@ -104,245 +89,180 @@ body.os-theme .cmp_skip_to_content a:focus {
   top: 10px;
   left: 10px;
   z-index: 3000;
-  padding: 10px 18px;
-  border-radius: var(--os-radius-pill);
-  background: var(--os-grad);
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--ncu-accent);
   color: #fff;
-  font-weight: 700;
-  box-shadow: var(--os-glow);
+  font-weight: 600;
 }
 
-/* ---------- Header: glass strip with a glowing rule ---------- */
+/* ---------- Header: white, 1px border ---------- */
 body.os-theme .os-head {
-  position: relative;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-}
-body.os-theme .os-head::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--os-grad-line);
-  opacity: 0.9;
+  background: var(--ncu-surface);
+  border-bottom: 1px solid var(--ncu-border);
 }
 body.os-theme .os-head__brand,
 body.os-theme .os-head__brand:hover,
 body.os-theme .os-head__brand:focus {
   display: flex;
   align-items: center;
-  gap: 14px;
-  min-height: 70px;
-  padding: 12px 18px;
+  gap: 12px;
+  min-height: 64px;
+  padding: 12px 16px;
   box-sizing: border-box;
-  color: var(--os-ink);
+  color: var(--ncu-text);
   text-decoration: none;
 }
 body.os-theme .os-head__cap {
-  width: 44px;
-  height: 44px;
-  padding: 6px;
-  border-radius: var(--os-radius-md);
-  background: var(--os-grad);
-  box-shadow: 0 6px 18px -6px rgba(22, 163, 74, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   object-fit: contain;
   flex: 0 0 auto;
-  filter: brightness(1.15) contrast(1.05);
 }
 body.os-theme .os-head__name {
-  font-size: 18px;
-  font-weight: 750;
+  font-size: 17px;
+  font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.2;
   overflow-wrap: anywhere;
   min-width: 0;
-  color: var(--os-ink);
 }
 
-/* ---------- Content ---------- */
+/* ---------- Content width and spacing ---------- */
 body.os-theme .pkp_structure_content {
-  max-width: 1120px;
+  max-width: var(--ncu-max);
   margin: 0 auto;
-  padding: 24px 18px 20px;
+  padding: var(--ncu-space);
   box-sizing: border-box;
 }
 body.os-theme .pkp_structure_main {
   min-width: 0;
 }
 
-/* Cards: frosted white panels with a soft green edge */
+/* ---------- Article page ---------- */
+body.os-theme .obj_article_details,
+body.os-theme .obj_article_details .main_entry,
+body.os-theme .obj_galley_link {
+  max-width: 100%;
+}
+body.os-theme .obj_article_details .meta,
+body.os-theme .cmp_breadcrumbs,
+body.os-theme .pkp_structure_content .meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  color: var(--ncu-muted);
+  font-size: 13px;
+}
+body.os-theme .obj_article_details img,
+body.os-theme .obj_article_details figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+/* ---------- Cards: the WordPress card (1px border, 16px radius, 16:10 media) ---------- */
 body.os-theme .cmp_article_list .obj_article_summary,
 body.os-theme .obj_issue_summary,
 body.os-theme .obj_announcement_summary,
-body.os-theme .obj_galley_link,
 body.os-theme .pkp_block {
   position: relative;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid var(--os-line);
-  border-radius: var(--os-radius-lg);
-  box-shadow: var(--os-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  background: var(--ncu-surface);
+  border: 1px solid var(--ncu-border);
+  border-radius: var(--ncu-radius);
+  overflow: hidden;
+  transition: transform 0.22s ease;
 }
 body.os-theme .cmp_article_list .obj_article_summary,
 body.os-theme .obj_issue_summary {
   padding: 18px 20px;
   margin-bottom: 16px;
 }
-body.os-theme .cmp_article_list .obj_article_summary:hover,
-body.os-theme .obj_issue_summary:hover {
-  transform: translateY(-2px);
-  border-color: var(--os-green-400);
-  box-shadow: var(--os-shadow), 0 0 0 1px rgba(34, 197, 94, 0.25);
-}
-body.os-theme .cmp_article_list .title a,
+body.os-theme .cmp_article_list .obj_article_summary .title a,
 body.os-theme .obj_article_summary h2 a {
-  color: var(--os-ink);
+  color: var(--ncu-text);
   font-weight: 700;
   text-decoration: none;
 }
 body.os-theme .obj_article_summary h2 a:hover {
-  color: var(--os-green-500);
+  text-decoration: underline;
 }
 body.os-theme .pkp_block {
   padding: 16px 18px;
-  background: linear-gradient(180deg, #ffffff, var(--os-mint));
+  background: var(--ncu-soft);
 }
 body.os-theme .pkp_block .title {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: var(--os-radius-pill);
-  background: var(--os-green-100);
-  color: var(--os-green-700);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  color: var(--ncu-text);
+  font-size: 13px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-/* Breadcrumbs and meta: small mono labels */
-body.os-theme .cmp_breadcrumbs,
-body.os-theme .cmp_breadcrumbs li,
-body.os-theme .obj_article_details .meta {
-  font-family: var(--os-mono);
-  font-size: 12.5px;
-  letter-spacing: 0.02em;
-  color: var(--os-muted);
-}
-
-/* ---------- Buttons: gradient, glowing on hover ---------- */
+/* ---------- Buttons and fields (black accent, as the WordPress theme) ---------- */
 body.os-theme .pkp_button,
 body.os-theme button.pkp_button,
-body.os-theme .cmp_button,
-body.os-theme .pkp_form .submit_button button {
-  position: relative;
-  min-height: var(--os-touch);
-  padding: 10px 22px;
-  border: 0;
-  border-radius: var(--os-radius-pill);
-  background: var(--os-grad);
-  background-size: 160% 160%;
+body.os-theme .cmp_button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--ncu-accent);
+  border-radius: 12px;
+  background: var(--ncu-accent);
   color: #fff;
-  font-weight: 700;
-  letter-spacing: 0.01em;
+  font-weight: 600;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 8px 22px -10px rgba(22, 163, 74, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transition: background-position 0.4s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
 body.os-theme .pkp_button:hover,
 body.os-theme button.pkp_button:hover,
 body.os-theme .cmp_button:hover {
-  background-position: 100% 50%;
-  box-shadow: 0 10px 28px -8px rgba(34, 197, 94, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  background: #222;
   color: #fff;
-  transform: translateY(-1px);
-}
-body.os-theme .pkp_button:active,
-body.os-theme button.pkp_button:active {
-  transform: translateY(0);
+  text-decoration: none;
 }
 body.os-theme .pkp_button--secondary,
 body.os-theme button.pkp_button--secondary {
-  background: #fff;
-  color: var(--os-green-700);
-  box-shadow: inset 0 0 0 2px var(--os-green-400);
+  background: var(--ncu-surface);
+  color: var(--ncu-text);
+  border-color: var(--ncu-border);
 }
-body.os-theme .pkp_button--secondary:hover,
-body.os-theme button.pkp_button--secondary:hover {
-  background: var(--os-green-100);
-  color: var(--os-green-900);
-}
-
-/* ---------- Fields, tabs, tables ---------- */
 body.os-theme input,
 body.os-theme select,
 body.os-theme textarea {
-  min-height: 46px;
-  padding: 10px 14px;
-  border: 1px solid #b7e4c4;
-  border-radius: var(--os-radius-md);
-  background: #fff;
-  color: var(--os-ink);
-  font-family: var(--os-font);
-  box-shadow: inset 0 1px 2px rgba(11, 59, 32, 0.04);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-body.os-theme input:focus,
-body.os-theme select:focus,
-body.os-theme textarea:focus {
-  outline: none;
-  border-color: var(--os-green-400);
-  box-shadow: var(--os-glow);
-}
-body.os-theme [role="tablist"] {
-  display: inline-flex;
-  gap: 4px;
-  padding: 4px;
-  border-radius: var(--os-radius-pill);
-  background: var(--os-green-100);
-}
-body.os-theme [role="tab"],
-body.os-theme .ui-tabs-nav li a {
-  padding: 8px 16px;
-  border-radius: var(--os-radius-pill);
-  color: var(--os-green-700);
-  font-weight: 650;
-  text-decoration: none;
-}
-body.os-theme [role="tab"][aria-selected="true"],
-body.os-theme .ui-tabs-nav li.ui-tabs-active a {
-  background: var(--os-grad);
-  color: #fff;
-  box-shadow: 0 6px 16px -8px rgba(22, 163, 74, 0.9);
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--ncu-border);
+  border-radius: 12px;
+  background: var(--ncu-surface);
+  color: var(--ncu-text);
+  font-family: var(--ncu-font);
 }
 body.os-theme table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  border: 1px solid var(--ncu-border);
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid var(--os-line);
-  border-radius: var(--os-radius-md);
-  background: #fff;
 }
 body.os-theme th {
   padding: 10px 12px;
-  background: var(--os-mint);
-  color: var(--os-green-700);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  background: var(--ncu-soft);
+  color: var(--ncu-muted);
+  font-size: 13px;
+  font-weight: 600;
   text-align: left;
-  text-transform: uppercase;
 }
 body.os-theme td {
   padding: 10px 12px;
-  border-top: 1px solid var(--os-line);
+  border-top: 1px solid var(--ncu-border);
 }
 
-/* ---------- Dialogs (OJS modals and popups): frosted panel, glowing edge ---------- */
+/* ---------- Dialogs and popups: white panels with the WordPress shadow ---------- */
 body.os-theme .pkp_modal_wrapper,
 body.os-theme .pkp_modal_overlay,
 body.os-theme .ui-widget-overlay {
@@ -350,123 +270,89 @@ body.os-theme .ui-widget-overlay {
 }
 body.os-theme .pkp_modal_overlay,
 body.os-theme .ui-widget-overlay {
-  background: rgba(7, 36, 20, 0.55) !important;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.4) !important;
 }
 body.os-theme .pkp_modal_panel,
 body.os-theme .ui-dialog,
 body.os-theme .pkp_modal_content {
-  background: #fff !important;
-  border: 1px solid var(--os-line);
-  border-radius: var(--os-radius-xl) !important;
-  box-shadow: 0 30px 80px -20px rgba(7, 36, 20, 0.55), 0 0 0 1px rgba(34, 197, 94, 0.15) !important;
-  color: var(--os-text);
+  background: var(--ncu-surface) !important;
+  border: 1px solid var(--ncu-border);
+  border-radius: var(--ncu-radius) !important;
+  box-shadow: var(--ncu-shadow) !important;
+  color: var(--ncu-text);
   overflow: hidden;
-}
-body.os-theme .pkp_modal_panel::before,
-body.os-theme .ui-dialog-titlebar {
-  content: "";
-  display: block;
-  height: 3px;
-  background: var(--os-grad-line);
 }
 body.os-theme .pkp_modal_title,
 body.os-theme .ui-dialog-title {
-  color: var(--os-ink) !important;
-  font-weight: 750;
+  color: var(--ncu-text) !important;
+  font-weight: 700;
 }
 body.os-theme .pkp_modal_close,
 body.os-theme .pkp_modal_panel_close_box,
 body.os-theme .ui-dialog-titlebar-close {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--os-green-100);
-  color: var(--os-green-700);
-  border: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--ncu-soft);
+  color: var(--ncu-text);
+  border: 1px solid var(--ncu-border);
   cursor: pointer;
 }
-body.os-theme .pkp_modal_close:hover,
-body.os-theme .pkp_modal_panel_close_box:hover {
-  background: var(--os-green-400);
-  color: #fff;
-}
 
-/* ---------- Footer: a glass panel with a glowing top rule ---------- */
+/* ---------- Footer: white, 1px border, same as the WordPress footer ---------- */
 body.os-theme .os-footer {
-  position: relative;
-  margin-top: 48px;
-  padding: 34px 0 28px;
-  background: linear-gradient(180deg, rgba(240, 253, 244, 0.9), #ecfdf3);
-  border-top: 0;
-}
-body.os-theme .os-footer::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 2px;
-  background: var(--os-grad-line);
+  margin-top: 40px;
+  padding: 28px 0;
+  background: var(--ncu-surface);
+  border-top: 1px solid var(--ncu-border);
+  color: var(--ncu-text);
 }
 body.os-theme .os-footer__inner {
   display: grid;
-  gap: 18px;
-  max-width: 1120px;
+  gap: 16px;
+  max-width: var(--ncu-max);
   margin: 0 auto;
-  padding: 0 18px;
+  padding: 0 var(--ncu-space);
   box-sizing: border-box;
 }
 body.os-theme .os-footer__brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 body.os-theme .os-footer__cap {
-  width: 42px;
-  height: 42px;
-  padding: 6px;
-  border-radius: var(--os-radius-md);
-  background: var(--os-grad);
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
   object-fit: contain;
-  filter: brightness(1.15);
 }
 body.os-theme .os-footer__name {
   margin: 0;
-  color: var(--os-ink);
-  font-size: 17px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
+  color: var(--ncu-text);
+  font-size: 16px;
+  font-weight: 700;
 }
 body.os-theme .os-footer__by {
   margin: 0;
-  color: var(--os-muted);
-  font-family: var(--os-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--ncu-muted);
+  font-size: 13px;
 }
 body.os-theme .os-footer__content {
-  color: var(--os-text);
-  font-size: 14.5px;
+  color: var(--ncu-text);
+  font-size: 14px;
 }
 body.os-theme .os-footer__content a {
-  color: var(--os-green-700);
+  color: var(--ncu-text);
 }
 
-/* ---------- Menu bar: phones (bottom glass bar) ---------- */
+/* ---------- Menu bar: phones (bottom bar, white, 1px top border) ---------- */
 body.os-theme .os-nav {
   position: relative;
   z-index: 500;
   flex: 0 0 auto;
   order: 2;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: saturate(160%) blur(16px);
-  -webkit-backdrop-filter: saturate(160%) blur(16px);
-  border-top: 0;
-  border-radius: 24px 24px 0 0;
-  box-shadow: 0 -10px 30px -12px rgba(11, 59, 32, 0.25), 0 -1px 0 rgba(34, 197, 94, 0.35);
+  background: var(--ncu-surface);
+  border-top: 1px solid var(--ncu-border);
   padding-bottom: env(safe-area-inset-bottom);
   box-sizing: border-box;
 }
@@ -477,7 +363,7 @@ body.os-theme .os-nav__bar {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
+  padding: 10px 12px;
   box-sizing: border-box;
 }
 body.os-theme .os-nav__toggle {
@@ -486,58 +372,48 @@ body.os-theme .os-nav__toggle {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  min-height: 54px;
-  padding: 10px 22px;
-  border: 0;
-  border-radius: var(--os-radius-pill);
-  background: var(--os-grad);
-  background-size: 160% 160%;
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 1px solid var(--ncu-accent);
+  border-radius: 12px;
+  background: var(--ncu-accent);
   color: #fff;
   font: inherit;
-  font-size: 16px;
-  font-weight: 750;
-  letter-spacing: 0.02em;
-  box-shadow: 0 10px 26px -10px rgba(22, 163, 74, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-}
-body.os-theme .os-nav__toggle:hover {
-  background-position: 100% 50%;
 }
 body.os-theme .os-nav__toggle-icon {
   display: inline-block;
-  width: 20px;
+  width: 18px;
   height: 2px;
   border-radius: 2px;
   background: currentColor;
-  box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
-  margin: 6px 0;
+  box-shadow: 0 -5px 0 currentColor, 0 5px 0 currentColor;
+  margin: 5px 0;
 }
 body.os-theme .os-nav__search {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-width: 54px;
-  min-height: 54px;
-  padding: 0 18px;
-  border: 1px solid var(--os-green-400);
-  border-radius: var(--os-radius-pill);
-  background: #fff;
-  color: var(--os-green-700);
-  font-weight: 700;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--ncu-border);
+  border-radius: 12px;
+  background: var(--ncu-surface);
+  color: var(--ncu-text);
+  font-weight: 600;
   text-decoration: none;
   box-sizing: border-box;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.08);
-}
-body.os-theme .os-nav__search:hover {
-  background: var(--os-green-100);
 }
 body.os-theme .os-nav__search-label,
 body.os-theme .os-nav__toggle-label {
   white-space: nowrap;
 }
 
-/* The menu sheet: frosted panel that rises above the bar */
+/* The menu sheet: white panel with the WordPress shadow, above the bar */
 body.os-theme .os-nav__sheet {
   display: none;
   position: absolute;
@@ -547,84 +423,52 @@ body.os-theme .os-nav__sheet {
   max-height: 72vh;
   overflow-y: auto;
   padding: 14px 12px 16px;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid var(--os-line);
-  border-radius: var(--os-radius-xl);
-  box-shadow: 0 30px 60px -20px rgba(7, 36, 20, 0.45), 0 0 0 1px rgba(34, 197, 94, 0.12);
+  background: var(--ncu-surface);
+  border: 1px solid var(--ncu-border);
+  border-radius: var(--ncu-radius);
+  box-shadow: var(--ncu-shadow);
   box-sizing: border-box;
 }
 body.os-theme .pkp_site_nav_menu--isOpen .os-nav__sheet {
   display: block;
-  animation: os-rise 0.22s ease-out;
-}
-@keyframes os-rise {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
 body.os-theme .os-nav__sheet-title {
   margin: 2px 6px 10px;
-  font-family: var(--os-mono);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--os-muted);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ncu-muted);
 }
-
-/* Numbered, glowing menu items */
 body.os-theme .os-nav__links {
   list-style: none;
   margin: 0 0 12px;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  counter-reset: osmenu;
+  gap: 2px;
 }
 body.os-theme .os-nav__links li {
-  counter-increment: osmenu;
   margin: 0;
 }
 body.os-theme .os-nav__links a {
   display: flex;
   align-items: center;
-  gap: 14px;
-  min-height: 52px;
-  padding: 8px 14px;
-  border-radius: var(--os-radius-lg);
-  color: var(--os-ink);
-  font-weight: 650;
+  min-height: 48px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: var(--ncu-text);
+  font-weight: 600;
   text-decoration: none;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
-}
-body.os-theme .os-nav__links a::before {
-  content: counter(osmenu, decimal-leading-zero);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--os-radius-md);
-  background: var(--os-grad);
-  color: #fff;
-  font-family: var(--os-mono);
-  font-size: 12px;
-  font-weight: 800;
-  box-shadow: 0 6px 14px -6px rgba(22, 163, 74, 0.8);
+  white-space: nowrap;
 }
 body.os-theme .os-nav__links a:hover,
 body.os-theme .os-nav__links a:focus-visible,
 body.os-theme .os-nav__links li.current > a {
-  background: var(--os-mint);
-  color: var(--os-green-700);
-  box-shadow: inset 0 0 0 1px var(--os-green-200);
+  background: var(--ncu-soft);
+  text-decoration: none;
 }
 body.os-theme .os-nav__account {
-  border-top: 1px solid var(--os-line);
-  padding-top: 14px;
+  border-top: 1px solid var(--ncu-border);
+  padding-top: 12px;
 }
 body.os-theme .os-nav__account-menu {
   list-style: none;
@@ -638,20 +482,20 @@ body.os-theme .os-nav__account-menu a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  padding: 8px 18px;
-  border-radius: var(--os-radius-pill);
-  background: var(--os-grad);
-  color: #fff;
-  font-weight: 700;
+  padding: 8px 16px;
+  border: 1px solid var(--ncu-border);
+  border-radius: 12px;
+  background: var(--ncu-surface);
+  color: var(--ncu-text);
+  font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 8px 18px -10px rgba(22, 163, 74, 0.9);
+  white-space: nowrap;
 }
 body.os-theme .os-nav__account-menu a:hover {
-  color: #fff;
-  transform: translateY(-1px);
+  background: var(--ncu-soft);
 }
 
-/* ---------- Menu bar: desktop (glass strip across the top) ---------- */
+/* ---------- Menu bar: desktop (white bar across the top) ---------- */
 @media (min-width: 783px) {
   body.os-theme .os-head {
     display: none;
@@ -662,18 +506,9 @@ body.os-theme .os-nav__account-menu a:hover {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 12px max(18px, calc((100% - 1120px) / 2 + 18px));
-    border-radius: 0;
-    box-shadow: 0 1px 0 rgba(34, 197, 94, 0.3), 0 8px 24px -16px rgba(11, 59, 32, 0.35);
-  }
-  body.os-theme .os-nav::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 2px;
-    background: var(--os-grad-line);
+    padding: 12px max(16px, calc((100% - var(--ncu-max)) / 2 + 16px));
+    border-top: 0;
+    border-bottom: 1px solid var(--ncu-border);
   }
   body.os-theme .os-nav__bar {
     display: contents;
@@ -685,20 +520,17 @@ body.os-theme .os-nav__account-menu a:hover {
     margin-right: auto;
     order: 1;
     min-width: 0;
-    color: var(--os-ink);
+    color: var(--ncu-text);
     font-size: 17px;
-    font-weight: 800;
+    font-weight: 700;
     letter-spacing: -0.01em;
     text-decoration: none;
   }
   body.os-theme .os-nav__brand img {
     width: 40px;
     height: 40px;
-    padding: 6px;
-    border-radius: var(--os-radius-md);
-    background: var(--os-grad);
+    border-radius: 12px;
     object-fit: contain;
-    filter: brightness(1.15);
   }
   body.os-theme .os-nav__toggle {
     display: none;
@@ -714,78 +546,152 @@ body.os-theme .os-nav__account-menu a:hover {
     border-radius: 0;
     box-shadow: none;
     background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     align-items: center;
     gap: 14px;
-    animation: none;
   }
   body.os-theme .os-nav__sheet-title {
     display: none;
   }
   body.os-theme .os-nav__links {
     flex-direction: row;
+    flex-wrap: nowrap;
     margin: 0;
-    gap: 4px;
-  }
-  body.os-theme .os-nav__links li {
-    counter-increment: none;
+    gap: 2px;
   }
   body.os-theme .os-nav__links a {
     min-height: 40px;
-    padding: 8px 14px;
+    padding: 8px 12px;
     font-size: 15px;
-    border-radius: var(--os-radius-pill);
-  }
-  body.os-theme .os-nav__links a::before {
-    display: none;
+    font-weight: 500;
   }
   body.os-theme .os-nav__account {
+    flex: 0 0 auto;
     border-top: 0;
     padding-top: 0;
   }
+  body.os-theme .os-nav__account-menu {
+    flex-wrap: nowrap;
+  }
   body.os-theme .os-nav__account-menu a {
     min-height: 40px;
-    padding: 6px 16px;
+    padding: 6px 14px;
     font-size: 14px;
   }
   body.os-theme .os-nav__search {
     order: 3;
     min-height: 40px;
-    border-width: 1px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body.os-theme *,
-  body.os-theme *::before,
-  body.os-theme *::after {
+  body.os-theme * {
     transition: none !important;
     animation: none !important;
   }
 }
 
-/* Layout fixes: menu items and account buttons stay on one line; the phone sheet is solid. */
-body.os-theme .os-nav__links a,
-body.os-theme .os-nav__account-menu a,
-body.os-theme .os-nav__brand span {
-  white-space: nowrap;
+/* ---------- Exact match to the WordPress Open Theme (measured in the test site) ---------- */
+:root {
+  --ncu-page: #f2f5f3;
+  --ncu-text: #191919;
+  --ncu-tile: #f6f7f8;
+  --ncu-card-radius: 0;
 }
-@media (min-width: 783px) {
-  body.os-theme .os-nav__links {
-    flex-wrap: nowrap;
-  }
-  body.os-theme .os-nav__account {
-    flex: 0 0 auto;
-  }
-  body.os-theme .os-nav__account-menu {
-    flex-wrap: nowrap;
-  }
-  body.os-theme .os-nav__brand span {
-    white-space: normal;
+body.os-theme {
+  background: var(--ncu-page);
+  color: var(--ncu-text);
+}
+body.os-theme .os-head,
+body.os-theme .os-nav,
+body.os-theme .os-footer {
+  background: transparent;
+}
+body.os-theme .os-nav {
+  background: var(--ncu-surface);
+}
+body.os-theme .os-footer {
+  background: transparent;
+}
+body.os-theme .os-head {
+  background: transparent;
+  border-bottom: 0;
+}
+body.os-theme .os-head__cap,
+body.os-theme .os-footer__cap {
+  border-radius: 0;
+}
+body.os-theme h1 {
+  color: var(--ncu-text);
+}
+body.os-theme .cmp_article_list .obj_article_summary,
+body.os-theme .obj_issue_summary,
+body.os-theme .obj_announcement_summary,
+body.os-theme .pkp_block {
+  background: var(--ncu-surface);
+  border: 1px solid var(--ncu-border);
+  border-radius: var(--ncu-card-radius);
+}
+/* Article list item: grey tile on the left (cap logo), date, title and excerpt on the right. */
+body.os-theme .cmp_article_list .obj_article_summary {
+  display: grid;
+  grid-template-columns: 113px minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+  margin-bottom: 12px;
+  min-height: 107px;
+}
+body.os-theme .cmp_article_list .obj_article_summary::before {
+  content: "";
+  grid-row: 1 / span 4;
+  background: var(--ncu-tile) url("../images/open-scholar-cap.jpg") center / 44px no-repeat;
+  min-height: 100%;
+}
+body.os-theme .cmp_article_list .obj_article_summary > * {
+  grid-column: 2;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+body.os-theme .cmp_article_list .obj_article_summary > :first-child {
+  padding-top: 14px;
+}
+body.os-theme .cmp_article_list .obj_article_summary .title a,
+body.os-theme .obj_article_summary h2 a {
+  font-size: 17px;
+  font-weight: 750;
+  color: var(--ncu-text);
+}
+body.os-theme .cmp_article_list .obj_article_summary .meta,
+body.os-theme .cmp_article_list .obj_article_summary .date {
+  color: #5f6368;
+  font-size: 13px;
+}
+body.os-theme .cmp_article_list .obj_article_summary p {
+  color: var(--ncu-text);
+  font-size: 15px;
+}
+@media (max-width: 782px) {
+  body.os-theme .cmp_article_list .obj_article_summary {
+    grid-template-columns: 113px minmax(0, 1fr);
   }
 }
-body.os-theme .pkp_site_nav_menu--isOpen .os-nav__sheet {
-  background: #fff;
-  animation: none;
+
+/* List cards show the date and title only, as the WordPress list does. */
+body.os-theme .cmp_article_list .obj_article_summary p {
+  display: none;
+}
+body.os-theme .cmp_article_list .obj_article_summary .title,
+body.os-theme .cmp_article_list .obj_article_summary h2 {
+  margin: 4px 0 0;
+}
+body.os-theme .cmp_article_list .obj_article_summary .meta {
+  margin: 0;
+}
+/* Menu button: white with a grey border, as the WordPress theme's controls. */
+body.os-theme .os-nav__toggle {
+  background: var(--ncu-surface);
+  color: var(--ncu-text);
+  border: 1px solid var(--ncu-border);
+}
+body.os-theme .os-nav__toggle:hover {
+  background: var(--ncu-tile);
 }
