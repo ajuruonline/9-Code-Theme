@@ -39,6 +39,9 @@ class JournalThemePlugin extends ThemePlugin
         // The Open Scholar look, loaded after the default theme's styles.
         $this->addStyle('openscholar', 'styles/openscholar.css');
 
+        // Article cards and article page, copied from the ePublication article display.
+        $this->addStyle('journalArticles', 'styles/articles.css');
+
         $accent = $this->getOption('accentColour');
         if (is_string($accent) && preg_match('/^#[0-9a-fA-F]{6}$/', $accent) && strtolower($accent) !== '#14532d') {
             $this->addStyle('openscholarAccent', ':root{--os-green:' . $accent . ';--os-green-2:' . $accent . ';}', ['inline' => true]);

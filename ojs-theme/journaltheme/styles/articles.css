@@ -1,0 +1,180 @@
+/*
+ * Journal Theme: article display copied from the ePublication (Open Publications) article cards.
+ * Same card, title, genre rail, description and button treatment as the WordPress plugin,
+ * so a journal article looks the same on the journal site as it does on the WordPress site.
+ * Distributed under the GNU GPL v3.
+ */
+
+:root {
+  --ep-ink: #15202a;
+  --ep-title: #101820;
+  --ep-muted: #3f4a53;
+  --ep-line: #aeb8c1;
+  --ep-green: #14532d;
+  --ep-green-soft: #e7f3ea;
+  --ep-green-deep: #0c3d23;
+  --ep-genre: #14532d;
+}
+
+/* ---- Article list (issue table of contents, search results, archive) ---- */
+.pkp_page_issue .cmp_article_list,
+.pkp_page_index .cmp_article_list,
+.pkp_page_search .cmp_article_list,
+.pkp_page_archive .cmp_article_list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.obj_article_summary {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  background: #fff;
+  border: 1px solid var(--ep-line);
+  border-radius: 9px;
+  padding: 12px 13px 12px 8px;
+  box-shadow: 0 2px 9px rgba(18, 32, 52, .06);
+  overflow: hidden;
+  margin: 0;
+}
+
+.obj_article_summary:nth-child(even) {
+  background: #f9fafb;
+}
+
+/* Genre rail: the card's left colour bar */
+.obj_article_summary::before {
+  content: "";
+  display: block;
+  width: 8px;
+  min-height: 74px;
+  border-radius: 999px;
+  background: var(--ep-genre);
+  grid-row: 1 / span 1;
+}
+
+.obj_article_summary > * {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.obj_article_summary > .section {
+  justify-self: start;
+  background: var(--ep-genre);
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+
+.obj_article_summary .title {
+  margin: 0 0 5px;
+  font: 850 18px/1.32 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.obj_article_summary .title a {
+  color: var(--ep-title);
+  text-decoration: none;
+}
+
+.obj_article_summary .title a:hover {
+  text-decoration: underline;
+}
+
+.obj_article_summary .authors,
+.obj_article_summary .pages {
+  color: var(--ep-muted);
+  font-size: 15px;
+  line-height: 1.58;
+}
+
+.obj_article_summary .galleys_links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+/* Buttons: rounded, green outline, same as the ePublication utility buttons */
+.obj_article_summary .obj_galley_link,
+.obj_article_details .obj_galley_link,
+.obj_article_details .item.galleys a,
+.obj_article_details a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 5px 11px;
+  border: 1px solid var(--ep-green);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ep-green);
+  font: 750 12.5px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.obj_article_summary .obj_galley_link:hover,
+.obj_article_details .obj_galley_link:hover,
+.obj_article_details .item.galleys a:hover {
+  background: var(--ep-green-soft);
+  color: var(--ep-green-deep);
+}
+
+.obj_article_summary .obj_galley_link:focus-visible,
+.obj_article_details .obj_galley_link:focus-visible,
+.obj_article_details .item.galleys a:focus-visible {
+  outline: 2px solid var(--ep-green);
+  outline-offset: 2px;
+}
+
+/* ---- Article page ---- */
+.obj_article_details h1,
+.pkp_page_article h1.page_title {
+  font: 850 clamp(22px, 4.2vw, 30px)/1.22 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ep-title);
+  margin: 0 0 12px;
+}
+
+.obj_article_details .item {
+  background: #fff;
+  border: 1px solid var(--ep-line);
+  border-radius: 9px;
+  padding: 14px 16px;
+  margin: 0 0 12px;
+  box-shadow: 0 2px 9px rgba(18, 32, 52, .06);
+  color: var(--ep-ink);
+  font-size: 16px;
+  line-height: 1.62;
+}
+
+.obj_article_details .item > h2,
+.obj_article_details .item .label {
+  font: 800 15px/1.3 system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ep-green);
+  margin: 0 0 8px;
+}
+
+.obj_article_details .item.galleys .value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+/* Smallest phones: keep cards inside the screen */
+@media (max-width: 380px) {
+  .obj_article_summary {
+    padding-right: 10px;
+  }
+  .obj_article_summary .title {
+    font-size: 17px;
+  }
+}
