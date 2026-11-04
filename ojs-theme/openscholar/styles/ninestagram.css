@@ -1,0 +1,111 @@
+/* Open Scholar navigation (from the 9stagram header, controls and footer styles).
+ * Extracted from 9stagram 0.2.2; placement and WordPress-only dialog rules removed. */
+.ninestagram-header,.ninestagram-header *,.ninestagram-modal-layer,.ninestagram-modal-layer *,.ninestagram-author-footer,.ninestagram-author-footer *{box-sizing:border-box}
+.ninestagram-header button,.ninestagram-header a,.ninestagram-dialog button,.ninestagram-dialog a,.ninestagram-author-footer a{font:inherit}
+.ninestagram-header button:focus-visible,.ninestagram-header a:focus-visible,.ninestagram-dialog button:focus-visible,.ninestagram-dialog a:focus-visible,.ninestagram-author-footer a:focus-visible{outline:3px solid var(--ninestagram-accent);outline-offset:3px}
+.ninestagram-header{position:fixed;z-index:99980;background:var(--ninestagram-header-bg);color:var(--ninestagram-header-text);border:0 solid var(--ninestagram-header-border);display:flex;align-items:center;justify-content:center;padding:0 var(--ninestagram-pad);font:var(--ninestagram-body-size)/1.45 var(--ninestagram-body-font);-webkit-font-smoothing:antialiased}
+.ninestagram-controls{display:flex;align-items:center;gap:var(--ninestagram-top-gap);margin-left:0}
+.ninestagram-control{appearance:none;border:0;background:transparent;color:inherit;width:var(--ninestagram-control);height:var(--ninestagram-control);min-width:var(--ninestagram-control);padding:0;display:inline-grid;place-items:center;text-decoration:none!important;cursor:pointer;line-height:1;border-radius:var(--ninestagram-style-radius);box-shadow:none;transition:background .14s ease,color .14s ease,transform .14s ease}
+.ninestagram-control:hover{background:var(--ninestagram-soft);color:var(--ninestagram-accent)}
+.ninestagram-control svg{width:var(--ninestagram-icon);height:var(--ninestagram-icon);display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ninestagram-control i{font-size:var(--ninestagram-icon)}
+.ninestagram-control .dashicons{width:var(--ninestagram-icon);height:var(--ninestagram-icon);font-size:var(--ninestagram-icon);line-height:1}
+.ninestagram-editorial-heading,.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading{display:flex;align-items:center;gap:6px;position:relative;min-width:0;margin:0!important;padding:var(--ninestagram-heading-pad)!important;background:transparent;color:var(--ninestagram-text)!important;border:0;border-bottom:var(--ninestagram-heading-border) solid var(--ninestagram-line);border-radius:0;font:var(--ninestagram-heading-weight) var(--ninestagram-heading-size)/1.35 var(--ninestagram-heading-font)!important;letter-spacing:var(--ninestagram-tracking);text-transform:var(--ninestagram-case);text-align:var(--ninestagram-heading-align)}
+.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading{font-size:calc(var(--ninestagram-heading-size) * .86)!important;min-height:28px}
+.ninestagram-author-footer{margin:0;background:var(--ninestagram-footer-bg);color:var(--ninestagram-footer-text);border-top:1px solid var(--ninestagram-footer-border);font:var(--ninestagram-body-size)/1.5 var(--ninestagram-body-font)}
+.ninestagram-footer-heading{border-radius:0!important;padding:6px max(8px,var(--ninestagram-style-pad))!important}
+.ninestagram-author-footer>figure{margin:0;max-height:180px;overflow:hidden;border-bottom:1px solid var(--ninestagram-footer-border);background:#fff}
+.ninestagram-author-footer>figure img{display:block;width:100%;height:auto;max-height:180px;object-fit:contain}
+.ninestagram-footer-inner{max-width:1160px;margin:0 auto;padding:var(--ninestagram-style-gap) max(10px,var(--ninestagram-style-pad))}
+.ninestagram-footer-strip{display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--ninestagram-footer-border)}
+.ninestagram-footer-strip img{width:44px;height:44px;object-fit:cover;border:1px solid var(--ninestagram-line);border-radius:var(--ninestagram-style-radius)}
+.ninestagram-footer-strip strong{display:block;font:var(--ninestagram-heading-weight) 14px/1.2 var(--ninestagram-heading-font)}
+.ninestagram-footer-strip small{display:block;font-size:11px;color:var(--ninestagram-footer-muted);margin-top:2px}
+.ninestagram-footer-bio,.ninestagram-footer-rich{font-size:var(--ninestagram-body-size);line-height:1.5;padding-top:8px;color:var(--ninestagram-footer-text)}
+.ninestagram-footer-contact{display:flex;gap:6px;flex-wrap:wrap;padding-top:8px}
+.ninestagram-footer-contact a,.ninestagram-footer-meta a{color:var(--ninestagram-footer-text)!important}
+.ninestagram-footer-contact a{border:1px solid var(--ninestagram-line);border-radius:var(--ninestagram-style-radius);padding:6px 8px;text-decoration:none;font-size:11px}
+.ninestagram-footer-contact a:hover{background:var(--ninestagram-soft);border-color:var(--ninestagram-accent)}
+.ninestagram-footer-meta{display:flex;justify-content:space-between;gap:10px;padding-top:8px;margin-top:8px;border-top:1px solid var(--ninestagram-footer-border);font-size:10px;color:var(--ninestagram-footer-muted)}
+@media(max-width:782px){.ninestagram-footer-inner{padding:8px}}
+@media(prefers-reduced-motion:reduce){.ninestagram-header *,.ninestagram-modal-layer *{scroll-behavior:auto!important;transition:none!important}}
+.ninestagram-manual-style :is(.ninestagram-editorial-heading,.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading){background:var(--ninestagram-heading-bg)!important;color:var(--ninestagram-heading-text)!important}
+.ninestagram-editorial-heading,
+.ninestagram-section>h3,
+.ninestagram-selection>h3,
+.ninestagram-details-section h3,
+.ninestagram-sales-page section>h2,
+.ninestagram-footer-heading,
+.ninestagram-profile-section>h3{
+  color:var(--ninestagram-text)!important;
+  font-weight:var(--ninestagram-heading-weight)!important;
+}
+.ninestagram-manual-style.ninestagram-heading-surface-neutral :is(.ninestagram-editorial-heading,.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading,.ninestagram-profile-section>h3),
+.ninestagram-manual-style.ninestagram-heading-surface-9stagram :is(.ninestagram-editorial-heading,.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading,.ninestagram-profile-section>h3),
+.ninestagram-manual-style.ninestagram-heading-surface-custom :is(.ninestagram-editorial-heading,.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading,.ninestagram-profile-section>h3){background:var(--ninestagram-heading-bg)!important;color:var(--ninestagram-heading-text,var(--ninestagram-text))!important}
+.ninestagram-manual-style.ninestagram-heading-surface-none :is(.ninestagram-editorial-heading,.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading,.ninestagram-profile-section>h3){background:transparent!important}
+.ninestagram-utility-zone,.ninestagram-category-zone{display:flex;align-items:center;gap:var(--ninestagram-top-gap);min-width:0}
+@media(max-width:600px){.ninestagram-editorial-heading,.ninestagram-section>h3,.ninestagram-selection>h3,.ninestagram-details-section h3,.ninestagram-sales-page section>h2,.ninestagram-footer-heading{min-width:0}}
+.ninestagram-intro,
+.ninestagram-profile-caption small,
+.ninestagram-footer-strip small{
+  font-size:max(10px,var(--ninestagram-sub-size))!important;
+  font-weight:550!important;
+  line-height:1.45!important;
+}
+.ninestagram-author-footer{
+  background:var(--ninestagram-footer-bg)!important;
+  color:var(--ninestagram-footer-text)!important;
+  border-top:0!important;
+  box-shadow:inset 0 1px 0 var(--ninestagram-footer-border);
+}
+.ninestagram-author-footer .ninestagram-footer-heading{
+  background:var(--ninestagram-footer-heading-bg)!important;
+  color:var(--ninestagram-footer-text)!important;
+  border-color:var(--ninestagram-footer-border)!important;
+  font-size:var(--ninestagram-primary-heading-size)!important;
+  font-weight:var(--ninestagram-primary-heading-weight)!important;
+}
+.ninestagram-author-footer .ninestagram-footer-heading .ninestagram-heading-sub{
+  color:var(--ninestagram-footer-muted)!important;
+}
+.ninestagram-author-footer .ninestagram-heading-accent,
+.ninestagram-author-footer .ninestagram-footer-heading::before{
+  background:var(--ninestagram-footer-text)!important;
+}
+.ninestagram-author-footer>figure{
+  background:var(--ninestagram-footer-bg)!important;
+  border-color:var(--ninestagram-footer-border)!important;
+}
+.ninestagram-author-footer .ninestagram-footer-strip,
+.ninestagram-author-footer .ninestagram-footer-meta{
+  border-color:var(--ninestagram-footer-border)!important;
+}
+.ninestagram-author-footer .ninestagram-footer-strip img{
+  border-color:var(--ninestagram-footer-border)!important;
+  background:rgba(255,255,255,.08);
+}
+.ninestagram-author-footer .ninestagram-footer-strip strong,
+.ninestagram-author-footer .ninestagram-footer-bio,
+.ninestagram-author-footer .ninestagram-footer-rich{
+  color:var(--ninestagram-footer-text)!important;
+}
+.ninestagram-author-footer .ninestagram-footer-strip small,
+.ninestagram-author-footer .ninestagram-footer-meta{
+  color:var(--ninestagram-footer-muted)!important;
+}
+.ninestagram-author-footer .ninestagram-footer-contact a,
+.ninestagram-author-footer .ninestagram-footer-meta a{
+  color:var(--ninestagram-footer-link)!important;
+}
+.ninestagram-author-footer .ninestagram-footer-contact a{
+  border-color:var(--ninestagram-footer-border)!important;
+  background:rgba(255,255,255,.04)!important;
+  font-weight:700;
+}
+.ninestagram-author-footer .ninestagram-footer-contact a:hover,
+.ninestagram-author-footer .ninestagram-footer-contact a:focus-visible{
+  background:var(--ninestagram-footer-hover)!important;
+  border-color:var(--ninestagram-footer-text)!important;
+}
+.ninestagram-author-footer a:focus-visible{outline-color:var(--ninestagram-footer-text)!important}

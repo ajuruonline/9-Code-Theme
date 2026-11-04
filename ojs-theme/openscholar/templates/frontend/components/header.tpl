@@ -22,7 +22,7 @@
 	<div class="pkp_structure_page">
 
 		{* Open Scholar header *}
-		<header class="pkp_structure_head os-head" id="headerNavigationContainer" role="banner">
+		<header class="pkp_structure_head ninestagram-header os-head" id="headerNavigationContainer" role="banner">
 			{include file="frontend/components/skipLinks.tpl"}
 
 			<div class="os-topbar">
@@ -47,7 +47,7 @@
 				</div>
 			</div>
 
-			<nav class="pkp_site_nav_menu os-nav" aria-label="{translate|escape key="common.navigation.site"}">
+			<nav class="pkp_site_nav_menu ninestagram-controls os-nav" aria-label="{translate|escape key="common.navigation.site"}">
 				<a id="siteNav"></a>
 				<button class="pkp_site_nav_toggle os-nav__toggle" type="button" aria-controls="navigationPrimary">
 					<span class="os-nav__toggle-icon" aria-hidden="true"></span>

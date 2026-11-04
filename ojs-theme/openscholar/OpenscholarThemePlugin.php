@@ -27,7 +27,8 @@ class OpenscholarThemePlugin extends ThemePlugin
     {
         $this->setParent('default');
 
-        // Loaded after the parent's styles, so these rules win where they overlap.
+        // The Open Scholar navigation and footer styles, then the Open Scholar look on top.
+        $this->addStyle('ninestagram', 'styles/ninestagram.css');
         $this->addStyle('openscholar', 'styles/openscholar.css');
     }
 

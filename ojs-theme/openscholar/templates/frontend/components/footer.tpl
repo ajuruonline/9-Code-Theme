@@ -21,11 +21,11 @@
 	{/if}
 </div><!-- pkp_structure_content -->
 
-<footer class="os-footer pkp_structure_footer_wrapper" role="contentinfo">
+<footer class="ninestagram-author-footer os-footer pkp_structure_footer_wrapper" role="contentinfo">
 	<a id="pkp_content_footer"></a>
 
-	<div class="os-footer__inner">
-		<div class="os-footer__brand">
+	<div class="ninestagram-footer-inner os-footer__inner">
+		<div class="ninestagram-footer-strip os-footer__brand">
 			<img class="os-footer__cap" src="{$baseUrl}/plugins/themes/openscholar/images/open-scholar-cap.jpg" alt="" width="36" height="36">
 			<div>
 				<p class="os-footer__name">{if $currentContext}{$displayPageHeaderTitle|escape}{else}{$siteTitle|escape}{/if}</p>
