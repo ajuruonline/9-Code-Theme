@@ -1,6 +1,8 @@
 /*!
- * Open Scholar look for Open Journal Systems.
+ * Open Scholar look for Open Journal Systems (OJS 3.5).
  * Loaded after the default theme, so these rules win where they overlap.
+ * Layout: the page scrolls in its own area; the navigation bar sits outside it, so nothing
+ * is ever covered. Phones: menu bar at the bottom with a sheet. Desktop: menu across the top.
  * Distributed under the GNU GPL v3.
  */
 
@@ -11,19 +13,42 @@
   --os-muted: #4b5f53;
   --os-soft: #f7fbf8;
   --os-line: #d4e5d8;
+  --os-hover: #e7f3ea;
   --os-focus: #22c55e;
-  --os-radius: 12px;
+  --os-radius: 14px;
+  --os-radius-sm: 10px;
+  --os-pill: 999px;
+  --os-touch: 48px;
   --os-font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-/* ---------- Page base ---------- */
+/* ---------- App layout: header and content scroll together; the bar stays in the layout ---------- */
+html,
 body.os-theme {
+  height: 100%;
+}
+body.os-theme {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   font-family: var(--os-font);
   color: var(--os-ink);
   background: #fff;
   font-size: 16px;
   line-height: 1.55;
 }
+body.os-theme .os-page {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  display: block;
+  background: #fff;
+}
+
+/* ---------- Type and focus ---------- */
 body.os-theme h1,
 body.os-theme h2,
 body.os-theme h3,
@@ -32,142 +57,57 @@ body.os-theme h4 {
   color: var(--os-green);
   font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 body.os-theme a { color: var(--os-green-2); }
 body.os-theme a:hover { color: var(--os-green); }
-body.os-theme :focus-visible { outline: 3px solid var(--os-focus); outline-offset: 2px; }
-
-body.os-theme .pkp_structure_content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 20px;
-  box-sizing: border-box;
+body.os-theme :focus-visible {
+  outline: 3px solid var(--os-focus);
+  outline-offset: 2px;
 }
 
-/* ---------- Header: green Open Scholar bar ---------- */
+/* ---------- Header (brand strip at the top of the page) ---------- */
 body.os-theme .os-head {
   background: var(--os-green);
   color: #fff;
-  box-shadow: 0 2px 12px rgba(8, 42, 27, 0.25);
 }
-.os-topbar {
+body.os-theme .os-head__brand,
+body.os-theme .os-head__brand:hover,
+body.os-theme .os-head__brand:focus {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
   min-height: 64px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 10px 20px;
+  padding: 12px 16px;
   box-sizing: border-box;
-}
-.os-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
   color: #fff;
   text-decoration: none;
 }
-.os-brand:hover { color: #fff; }
-.os-brand__cap {
+body.os-theme .os-head__cap {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: 12px;
+  background: #fff;
   object-fit: cover;
-  background: #fff;
   flex: 0 0 auto;
 }
-.os-brand__name {
-  font-weight: 800;
+body.os-theme .os-head__name {
   font-size: 18px;
-  line-height: 1.2;
+  font-weight: 800;
+  line-height: 1.25;
   overflow-wrap: anywhere;
+  min-width: 0;
 }
-.os-topbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 0 0 auto;
-}
-.os-icon-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 40px;
-  padding: 6px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 999px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-}
-.os-icon-link:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
-.os-account .pkp_navigation_user,
-.os-account .os-account__menu {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.os-account li a,
-.os-account li a:visited {
-  display: inline-flex;
-  align-items: center;
-  min-height: 40px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--os-green);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-}
-.os-account li a:hover { background: #e7f3ea; color: var(--os-green); }
 
-/* Navigation row: white, under the green bar */
-body.os-theme .os-nav {
-  display: block;
-  position: relative;
-  float: none;
-  width: auto;
-  height: auto;
-  background: #fff;
-  border-bottom: 1px solid var(--os-line);
-}
-.os-nav__toggle { display: none; }
-.os-nav__inner {
-  max-width: 1200px;
+/* ---------- Content ---------- */
+body.os-theme .pkp_structure_content {
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px 16px 16px;
   box-sizing: border-box;
 }
-.os-nav .pkp_navigation_primary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.os-nav .pkp_navigation_primary > li > a {
-  display: block;
-  padding: 12px 12px;
-  color: var(--os-ink);
-  font-weight: 600;
-  text-decoration: none;
-  border-bottom: 3px solid transparent;
-}
-.os-nav .pkp_navigation_primary > li > a:hover,
-.os-nav .pkp_navigation_primary > li.current > a {
-  color: var(--os-green);
-  border-bottom-color: var(--os-focus);
-}
+body.os-theme .pkp_structure_main { min-width: 0; }
 
-/* ---------- Cards and lists ---------- */
 body.os-theme .cmp_article_list .obj_article_summary,
 body.os-theme .obj_issue_summary,
 body.os-theme .obj_announcement_summary,
@@ -194,18 +134,19 @@ body.os-theme .pkp_block .title {
   font-weight: 800;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons, inputs, tabs (rounded everywhere) ---------- */
 body.os-theme .pkp_button,
 body.os-theme button.pkp_button,
 body.os-theme .cmp_button {
-  min-height: 40px;
-  padding: 8px 18px;
+  min-height: var(--os-touch);
+  padding: 10px 20px;
   border: 1px solid var(--os-green);
-  border-radius: 999px;
+  border-radius: var(--os-pill);
   background: var(--os-green);
   color: #fff;
   font-weight: 700;
   text-decoration: none;
+  cursor: pointer;
 }
 body.os-theme .pkp_button:hover,
 body.os-theme button.pkp_button:hover,
@@ -214,232 +155,311 @@ body.os-theme .cmp_button:hover {
   border-color: var(--os-green-2);
   color: #fff;
 }
-
-/* ---------- Footer: green Open Scholar band ---------- */
-body.os-theme .os-footer {
-  background: var(--os-green);
-  color: #e6f2ea;
-  margin-top: 48px;
-  padding: 28px 0 36px;
+body.os-theme input,
+body.os-theme select,
+body.os-theme textarea {
+  border-radius: var(--os-radius-sm);
+  font-family: var(--os-font);
+  min-height: 44px;
 }
-.os-footer__inner {
-  display: grid;
-  gap: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-.os-footer__brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.os-footer__cap {
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
-  background: #fff;
-  object-fit: cover;
-}
-.os-footer__name {
-  margin: 0;
-  color: #fff;
-  font-size: 17px;
-  font-weight: 800;
-}
-.os-footer__by {
-  margin: 0;
-  color: #b9d9c4;
-  font-size: 13px;
-}
-.os-footer__content,
-.os-footer__content a { color: #e6f2ea; }
-.os-footer__content a:hover { color: #fff; }
-.os-footer__powered img {
-  max-height: 34px;
-  width: auto;
-  padding: 4px;
-  border-radius: 6px;
-  background: #fff;
-}
-
-/* ---------- Phone: the menu opens from a full-width bar ---------- */
-@media (max-width: 782px) {
-  .os-topbar { padding: 10px 14px; }
-  .os-brand__name { font-size: 16px; }
-  .os-icon-link__label { display: none; }
-  .os-icon-link { padding: 6px 10px; min-width: 40px; justify-content: center; }
-  .os-account li a { min-height: 40px; padding: 6px 10px; }
-
-  .os-nav__toggle {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    min-height: 52px;
-    padding: 10px 14px;
-    border: 0;
-    background: #fff;
-    color: var(--os-green);
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    box-sizing: border-box;
-  }
-  .os-nav__toggle-icon {
-    width: 20px;
-    height: 2px;
-    border-radius: 2px;
-    background: currentColor;
-    box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
-    margin: 0 4px 6px 2px;
-  }
-  .os-nav__inner { display: none; padding: 0 8px 10px; }
-  .pkp_site_nav_menu--isOpen .os-nav__inner { display: block; }
-  .os-nav .pkp_navigation_primary { flex-direction: column; gap: 0; }
-  .os-nav .pkp_navigation_primary > li > a {
-    padding: 14px 10px;
-    border-bottom: 1px solid var(--os-line);
-  }
-  body.os-theme .pkp_structure_content { padding: 16px 14px; }
-  .os-footer__inner { padding: 0 14px; }
-}
-
-/* ---------- Navigation bar at the bottom of the screen (on every width) ---------- */
-body.os-theme .os-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: auto;
-  z-index: 1000;
-  border-top: 1px solid var(--os-line);
-  border-bottom: 0;
-  box-shadow: 0 -4px 14px rgba(8, 42, 27, 0.12);
-  padding-bottom: env(safe-area-inset-bottom);
-}
-body.os-theme .os-nav .pkp_navigation_primary > li > a {
-  border-bottom: 0;
-  border-top: 3px solid transparent;
-  text-align: center;
-}
-body.os-theme .os-nav .pkp_navigation_primary > li > a:hover,
-body.os-theme .os-nav .pkp_navigation_primary > li.current > a {
-  border-top-color: var(--os-focus);
-}
-body.os-theme .os-nav .pkp_navigation_primary {
-  justify-content: space-around;
-}
-/* On phones the menu list opens upward, above the bar. */
-@media (max-width: 782px) {
-  body.os-theme .os-nav__inner {
-    max-height: 60vh;
-    overflow-y: auto;
-  }
-  body.os-theme .os-nav .pkp_navigation_primary {
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  body.os-theme .os-nav .pkp_navigation_primary > li > a {
-    border-top: 0;
-    border-bottom: 1px solid var(--os-line);
-    text-align: left;
-  }
-}
-
-/* ---------- Hamburger menu (every width) ---------- */
-body.os-theme .os-nav__toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  min-height: 56px;
-  padding: 10px 16px;
-  border: 0;
-  border-radius: var(--os-radius);
-  background: #fff;
-  color: var(--os-green);
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  box-sizing: border-box;
-}
-body.os-theme .os-nav__toggle-icon {
-  display: inline-block;
-  position: relative;
-  width: 22px;
-  height: 2.5px;
-  margin: 6.75px 0;
-  border-radius: 3px;
-  background: currentColor;
-  box-shadow: 0 -6.75px 0 currentColor, 0 6.75px 0 currentColor;
-  flex: 0 0 auto;
-}
-body.os-theme .os-nav__toggle-label { flex: 1 1 auto; text-align: left; }
-body.os-theme .os-nav__inner {
-  display: none;
-  max-height: 60vh;
-  overflow-y: auto;
-  padding: 0 8px 8px;
-  border-bottom: 1px solid var(--os-line);
-}
-body.os-theme .pkp_site_nav_menu--isOpen .os-nav__inner { display: block; }
-body.os-theme .os-nav .pkp_navigation_primary {
-  flex-direction: column;
-  justify-content: flex-start;
-}
-body.os-theme .os-nav .pkp_navigation_primary > li > a {
-  border-top: 0;
-  border-bottom: 1px solid var(--os-line);
-  text-align: left;
-  border-radius: 0;
-}
-body.os-theme .os-nav {
-  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-  box-sizing: border-box;
-}
-
-/* ---------- Rounded everywhere (no square corners in the theme) ---------- */
-body.os-theme :is(
-  input, select, textarea, button, img,
-  .pkp_button, .cmp_button, .pkp_block, .pkp_form, .pkp_form .section,
-  .cmp_article_list .obj_article_summary, .obj_issue_summary, .obj_announcement_summary,
-  .obj_galley_link, .cmp_breadcrumbs, .pkp_navigation_user a, .pkp_navigation_primary a,
-  .pkp_search, .pkp_structure_footer_wrapper, .pkp_structure_head,
-  [role="tablist"], [role="tab"], .ui-tabs, .ui-tabs-nav li a, .pkp_tabs, .pkp_tabs a,
-  .ui-tabs .ui-tabs-nav, .pkp_table, table, .pkp_tabs_container, .modal, .pkp_modal_panel,
-  .pkp_modal_content, .ui-dialog, .pkp_popover, .dropdown-menu, .fieldset, fieldset, legend
-) {
+body.os-theme fieldset,
+body.os-theme legend,
+body.os-theme .pkp_form .section {
   border-radius: var(--os-radius);
 }
 body.os-theme [role="tablist"] [role="tab"],
 body.os-theme .ui-tabs-nav li a,
 body.os-theme .pkp_tabs a {
-  border-radius: 999px;
+  border-radius: var(--os-pill);
+}
+body.os-theme table,
+body.os-theme .pkp_table {
+  border-radius: var(--os-radius-sm);
+  overflow: hidden;
 }
 body.os-theme table th,
-body.os-theme table td { border-radius: 0; }
+body.os-theme table td {
+  border-radius: 0;
+}
+
+/* ---------- Footer ---------- */
+body.os-theme .os-footer {
+  background: var(--os-green);
+  color: #e6f2ea;
+  margin-top: 40px;
+  padding: 28px 0;
+}
+body.os-theme .os-footer__inner {
+  display: grid;
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+body.os-theme .os-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+body.os-theme .os-footer__cap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #fff;
+  object-fit: cover;
+}
+body.os-theme .os-footer__name {
+  margin: 0;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+}
+body.os-theme .os-footer__by {
+  margin: 0;
+  color: #b9d9c4;
+  font-size: 13px;
+}
+body.os-theme .os-footer__content,
+body.os-theme .os-footer__content a { color: #e6f2ea; }
+body.os-theme .os-footer__content a:hover { color: #fff; }
+body.os-theme .os-footer__powered img {
+  max-height: 34px;
+  width: auto;
+  padding: 4px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+/* ---------- Navigation bar: phones (default) ---------- */
 body.os-theme .os-nav {
+  position: relative;
+  flex: 0 0 auto;
+  order: 2;
+  background: #fff;
+  border-top: 1px solid var(--os-line);
   border-radius: var(--os-radius) var(--os-radius) 0 0;
+  box-shadow: 0 -6px 18px rgba(8, 42, 27, 0.1);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: border-box;
 }
-body.os-theme .os-nav__toggle { border-radius: var(--os-radius); }
+body.os-theme .os-nav__brand { display: none; }
+body.os-theme .os-nav__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  box-sizing: border-box;
+}
+body.os-theme .os-nav__toggle {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: var(--os-touch);
+  padding: 10px 20px;
+  border: 1px solid var(--os-green);
+  border-radius: var(--os-pill);
+  background: var(--os-green);
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+body.os-theme .os-nav__toggle:hover { background: var(--os-green-2); }
+body.os-theme .os-nav__toggle-icon {
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  box-shadow: 0 -6px 0 currentColor, 0 6px 0 currentColor;
+  margin: 6px 0;
+}
+body.os-theme .os-nav__search {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: var(--os-touch);
+  min-height: var(--os-touch);
+  padding: 0 16px;
+  border: 1px solid var(--os-green);
+  border-radius: var(--os-pill);
+  background: #fff;
+  color: var(--os-green);
+  font-weight: 700;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+body.os-theme .os-nav__search:hover { background: var(--os-hover); color: var(--os-green); }
+/* Screen readers still hear "Search"; sighted phone users see the icon. */
+body.os-theme .os-nav__search-label,
+body.os-theme .os-nav__toggle-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+body.os-theme .os-nav__toggle-label { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
 
-/* Top strip: the brand takes the free space; actions stay on one line. */
-body.os-theme .os-topbar { flex-wrap: nowrap; }
-body.os-theme .os-brand { flex: 1 1 auto; min-width: 0; }
-body.os-theme .os-brand__name { font-size: 16px; }
-body.os-theme .os-topbar__actions { flex: 0 0 auto; gap: 6px; }
-@media (max-width: 782px) {
-  body.os-theme .os-account li a { padding: 6px 10px; font-size: 13px; }
-  body.os-theme .os-brand__cap { width: 36px; height: 36px; }
+/* The sheet opens above the bar when the menu is open. It is the only thing that overlaps
+   the page, and only while it is open. */
+body.os-theme .os-nav__sheet {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  max-height: 72vh;
+  overflow-y: auto;
+  padding: 10px 10px 14px;
+  background: #fff;
+  border-top: 1px solid var(--os-line);
+  border-radius: var(--os-radius) var(--os-radius) 0 0;
+  box-shadow: 0 -12px 30px rgba(8, 42, 27, 0.18);
+  box-sizing: border-box;
+}
+body.os-theme .pkp_site_nav_menu--isOpen .os-nav__sheet { display: block; }
+
+body.os-theme .os-nav__links {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+body.os-theme .os-nav__links li { margin: 0; }
+body.os-theme .os-nav__links a {
+  display: flex;
+  align-items: center;
+  min-height: var(--os-touch);
+  padding: 10px 14px;
+  border-radius: var(--os-radius-sm);
+  color: var(--os-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+body.os-theme .os-nav__links a:hover,
+body.os-theme .os-nav__links a:focus-visible,
+body.os-theme .os-nav__links li.current > a {
+  background: var(--os-hover);
+  color: var(--os-green);
+}
+body.os-theme .os-nav__account {
+  border-top: 1px solid var(--os-line);
+  padding-top: 10px;
+}
+body.os-theme .os-nav__account-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+body.os-theme .os-nav__account-menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: var(--os-pill);
+  background: var(--os-green);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+body.os-theme .os-nav__account-menu a:hover { background: var(--os-green-2); color: #fff; }
+
+/* ---------- Navigation bar: desktop (wide screens) ---------- */
+@media (min-width: 783px) {
+  body.os-theme .os-head { display: none; }
+
+  body.os-theme .os-nav {
+    order: -1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px max(16px, calc((100% - 1100px) / 2 + 16px));
+    border-top: 0;
+    border-bottom: 1px solid var(--os-line);
+    border-radius: 0;
+    box-shadow: 0 2px 12px rgba(8, 42, 27, 0.08);
+  }
+  body.os-theme .os-nav__bar { display: contents; }
+  body.os-theme .os-nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: auto;
+    min-width: 0;
+    order: 1;
+    color: var(--os-green);
+    font-size: 17px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  body.os-theme .os-nav__brand img {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #fff;
+    object-fit: cover;
+  }
+  body.os-theme .os-nav__toggle { display: none; }
+  body.os-theme .os-nav .os-nav__sheet {
+    display: flex;
+    position: static;
+    order: 2;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    align-items: center;
+    gap: 16px;
+    background: transparent;
+  }
+  body.os-theme .os-nav__links {
+    flex-direction: row;
+    margin: 0;
+    gap: 2px;
+  }
+  body.os-theme .os-nav__links a {
+    min-height: 40px;
+    padding: 8px 12px;
+    font-size: 15px;
+  }
+  body.os-theme .os-nav__account {
+    border-top: 0;
+    padding-top: 0;
+  }
+  body.os-theme .os-nav__account-menu a {
+    min-height: 40px;
+    padding: 6px 14px;
+    font-size: 14px;
+  }
+  body.os-theme .os-nav__search {
+    order: 3;
+    min-height: 40px;
+    border-width: 1px;
+  }
+  body.os-theme .os-nav__search-label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
 }
 
-/* Header links stay white on the green bar (OJS link colour must not win here). */
-body.os-theme .os-brand,
-body.os-theme .os-brand:hover,
-body.os-theme .os-brand:focus,
-body.os-theme .os-icon-link,
-body.os-theme .os-icon-link:hover,
-body.os-theme .os-icon-link:focus { color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  body.os-theme * { transition: none !important; animation: none !important; }
+}

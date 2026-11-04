@@ -5,8 +5,9 @@ It changes only the header, the footer and the styles. OJS itself is not changed
 
 ## What it does
 
-- **Header:** a green Open Scholar bar with the Open Scholar cap, the journal name, a search button and the sign-in and register links. Under it is the journal's menu, which is the normal OJS menu.
-- **Phone:** the menu opens from a full-width "Menu" bar.
+- **Header:** the journal brand (Open Scholar cap and name) at the top of the page.
+- **Phone:** a navigation bar at the bottom of the screen with a Menu button (hamburger) and Search. The menu opens as a sheet above the bar. The page scrolls in its own area, so the bar never covers text.
+- **Desktop:** the menu, search and sign-in run across the top of the screen.
 - **Footer:** a green Open Scholar band with the journal name, the journal's own footer text, and the "Powered by Open Journal Systems" mark.
 - **Look:** Open Scholar colours, rounded cards and buttons, and a clear focus outline for keyboard users.
 - **Built on the default theme,** so every OJS page, form and setting keeps working.
@@ -27,7 +28,8 @@ Install it through the Plugins tab. Do not copy it into OJS's core folders.
 | `version.xml`, `settings.xml` | Plugin version and default settings. |
 | `templates/frontend/components/header.tpl` | Open Scholar header. |
 | `templates/frontend/components/footer.tpl` | Open Scholar footer. |
-| `styles/openscholar.css` | Open Scholar colours, spacing and phone layout. |
+| `styles/openscholar.css` | Open Scholar colours, layout, rounded corners and navigation. |
+| `js/openscholar.js` | Menu accessibility: Escape closes it, and the open state is announced. |
 | `images/open-scholar-cap.jpg` | The Open Scholar cap logo. |
 
 ## Notes

@@ -1,9 +1,10 @@
 {**
  * plugins/themes/openscholar/templates/frontend/components/header.tpl
  *
- * Open Scholar header. Replaces the OJS site header with the Open Scholar bar and menu.
- * The same OJS menus (primary and user), search and skip links are used, so every OJS
- * page and link keeps working. Distributed under the GNU GPL v3.
+ * Open Scholar header. Shows the journal brand at the top of the page. The menu, search and
+ * sign-in are in the navigation bar (navigation.tpl is rendered after the footer), so the page
+ * scrolls in its own area and the bar never sits on top of content. Uses the same OJS menus
+ * and skip links, so every OJS page and link keeps working. Distributed under the GNU GPL v3.
  *
  * @uses $isFullWidth bool Page-level override: hide the sidebars.
  *}
@@ -19,47 +20,15 @@
 {include file="frontend/components/headerHead.tpl"}
 <body class="pkp_page_{$requestedPage|escape|default:"index"} pkp_op_{$requestedOp|escape|default:"index"}{if $showingLogo} has_site_logo{/if} os-theme" dir="{$currentLocaleLangDir|escape|default:"ltr"}">
 
-	<div class="pkp_structure_page">
+	<div class="pkp_structure_page os-page">
 
-		{* Open Scholar header *}
-		<header class="pkp_structure_head ninestagram-header os-head" id="headerNavigationContainer" role="banner">
+		<header class="pkp_structure_head os-head" id="headerNavigationContainer" role="banner">
 			{include file="frontend/components/skipLinks.tpl"}
-
-			<div class="os-topbar">
-				{capture assign="homeUrl"}{url page="index" router=PKP\core\PKPApplication::ROUTE_PAGE}{/capture}
-				<a class="os-brand" href="{$homeUrl}">
-					<img class="os-brand__cap" src="{$baseUrl}/plugins/themes/openscholar/images/open-scholar-cap.jpg" alt="Open Scholar" width="40" height="40">
-					<span class="os-brand__name">
-						{if $currentContext}{$displayPageHeaderTitle|escape}{else}{$siteTitle|escape}{/if}
-					</span>
-				</a>
-
-				<div class="os-topbar__actions">
-					{if $currentContext && $requestedPage !== 'search'}
-						<a href="{url page="search"}" class="os-icon-link">
-							<span class="fa fa-search" aria-hidden="true"></span>
-							<span class="os-icon-link__label">{translate key="common.search"}</span>
-						</a>
-					{/if}
-					<div class="os-account" id="navigationUserWrapper">
-						{load_menu name="user" id="navigationUser" ulClass="pkp_navigation_user os-account__menu" liClass="profile"}
-					</div>
-				</div>
-			</div>
-
-			<nav class="pkp_site_nav_menu ninestagram-controls os-nav" aria-label="{translate|escape key="common.navigation.site"}">
-				<a id="siteNav"></a>
-				<button class="pkp_site_nav_toggle os-nav__toggle" type="button" aria-controls="navigationPrimary">
-					<span class="os-nav__toggle-icon" aria-hidden="true"></span>
-					<span class="os-nav__toggle-label">{translate|escape key="common.navigation.site"}</span>
-				</button>
-				<div class="os-nav__inner">
-					{capture assign="primaryMenu"}
-						{load_menu name="primary" id="navigationPrimary" ulClass="pkp_navigation_primary"}
-					{/capture}
-					{$primaryMenu}
-				</div>
-			</nav>
+			{capture assign="homeUrl"}{url page="index" router=PKP\core\PKPApplication::ROUTE_PAGE}{/capture}
+			<a class="os-head__brand" href="{$homeUrl}">
+				<img class="os-head__cap" src="{$baseUrl}/plugins/themes/openscholar/images/open-scholar-cap.jpg" alt="" width="40" height="40">
+				<span class="os-head__name">{if $currentContext}{$displayPageHeaderTitle|escape}{else}{$siteTitle|escape}{/if}</span>
+			</a>
 		</header><!-- .pkp_structure_head -->
 
 		{* Wrapper for page content and sidebars *}

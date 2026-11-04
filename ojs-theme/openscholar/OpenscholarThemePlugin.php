@@ -33,8 +33,7 @@ class OpenscholarThemePlugin extends ThemePlugin
             'default' => '#14532d',
         ]);
 
-        // The Open Scholar navigation and footer styles, then the Open Scholar look on top.
-        $this->addStyle('ninestagram', 'styles/ninestagram.css');
+        // The Open Scholar look, loaded after the default theme's styles.
         $this->addStyle('openscholar', 'styles/openscholar.css');
 
         $accent = $this->getOption('accentColour');
@@ -42,7 +41,7 @@ class OpenscholarThemePlugin extends ThemePlugin
             $this->addStyle('openscholarAccent', ':root{--os-green:' . $accent . ';--os-green-2:' . $accent . ';}', ['inline' => true]);
         }
 
-        // Keeps the bottom navigation bar from covering the page.
+        // Menu accessibility: Escape closes it, aria-expanded stays correct.
         $this->addScript('openscholar', 'js/openscholar.js');
     }
 
