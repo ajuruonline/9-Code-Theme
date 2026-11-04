@@ -27,6 +27,9 @@ class OpenscholarThemePlugin extends ThemePlugin
     {
         $this->setParent('default');
 
+        // Declare the menu areas this theme shows; OJS only renders menus for declared areas.
+        $this->addMenuArea(['primary', 'user']);
+
         $this->addOption('accentColour', 'FieldColor', [
             'label' => 'Accent colour',
             'description' => 'The main green used for the header, buttons and footer. Pick a dark colour so white text stays easy to read.',

@@ -65,9 +65,11 @@
 	</div>
 	<div class="os-nav__sheet" id="os-nav-sheet">
 		<p class="os-nav__sheet-title">Pages</p>
-		{load_menu name="primary" id="navigationPrimary" ulClass="pkp_navigation_primary os-nav__links"}
+		{capture assign="primaryMenu"}{load_menu name="primary" id="navigationPrimary" ulClass="pkp_navigation_primary os-nav__links"}{/capture}
+		{$primaryMenu}
 		<div class="os-nav__account" id="navigationUserWrapper">
-			{load_menu name="user" id="navigationUser" ulClass="pkp_navigation_user os-nav__account-menu" liClass="profile"}
+			{capture assign="userMenu"}{load_menu name="user" id="navigationUser" ulClass="pkp_navigation_user os-nav__account-menu" liClass="profile"}{/capture}
+			{$userMenu}
 		</div>
 	</div>
 </nav>
